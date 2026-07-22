@@ -1,0 +1,3 @@
+# Cloudflare Pages / static hosts: SPA fallback for Flutter Web (go_router).
+# Files under web/ are copied into build/web on `flutter build web`.
+/*    /index.html   200

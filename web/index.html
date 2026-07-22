@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="NEFES — Alışkanlıklarını anla.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NEFES">
+  <meta name="theme-color" content="#1C2B24">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>NEFES</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Instant first paint while the Flutter engine loads -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #F7F5F2;
+    }
+    #nefes-boot {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #F7F5F2;
+      color: #1C2B24;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      transition: opacity 180ms ease;
+    }
+    #nefes-boot .title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    #nefes-boot .sub {
+      margin-top: 0.4rem;
+      color: #5c675f;
+      font-size: 1rem;
+    }
+    #nefes-boot.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="nefes-boot" aria-busy="true" aria-live="polite">
+    <div class="title">NEFES</div>
+    <div class="sub">Alışkanlıklarını anla.</div>
+  </div>
+
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var boot = document.getElementById('nefes-boot');
+      if (!boot) return;
+      boot.classList.add('hidden');
+      setTimeout(function () { boot.remove(); }, 200);
+    });
+
+    // Custom shell SW (Flutter no longer ships a default PWA service worker).
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function () {
+          // Installability still works via manifest; offline cache is best-effort.
+        });
+      });
+    }
+  </script>
+</body>
+</html>
