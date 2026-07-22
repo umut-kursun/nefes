@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:nefes/core/design_system/app_card.dart';
+import 'package:nefes/core/design_system/nefes_page.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/di/providers.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
@@ -11,7 +11,7 @@ import 'package:nefes/features/habit/domain/services/history_analytics.dart';
 
 final _dateKeyFormat = DateFormat('yyyy-MM-dd');
 
-/// History screen — day list or calendar month grid.
+/// History screen — compact day list or tonal calendar.
 class HistoryPage extends ConsumerStatefulWidget {
   const HistoryPage({super.key});
 
@@ -30,6 +30,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
     final eventsAsync = ref.watch(allSmokingEventsProvider);
 
     return Scaffold(
+      backgroundColor: AppColors.canvasLight,
       appBar: AppBar(title: const Text(AppStrings.historyTitle)),
       body: SafeArea(
         child: LayoutBuilder(
@@ -44,7 +45,12 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxContentWidth),
                 child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    AppSpacing.sm,
+                    AppSpacing.lg,
+                    AppSpacing.md,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -71,7 +77,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                           loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
-                          error: (_, _) => Center(
+                          error: (_, _) => const Center(
                             child: Text(AppStrings.smokeSaveFailed),
                           ),
                         ),
@@ -101,16 +107,17 @@ class _ViewToggle extends StatelessWidget {
         ButtonSegment(
           value: _HistoryTab.list,
           label: Text(AppStrings.historyList),
-          icon: Icon(Icons.view_list_outlined),
+          icon: Icon(Icons.view_list_outlined, size: 18),
         ),
         ButtonSegment(
           value: _HistoryTab.calendar,
           label: Text(AppStrings.historyCalendar),
-          icon: Icon(Icons.calendar_month_outlined),
+          icon: Icon(Icons.calendar_month_outlined, size: 18),
         ),
       ],
       selected: {selected},
       onSelectionChanged: (values) => onChanged(values.first),
+      showSelectedIcon: false,
     );
   }
 }
@@ -123,68 +130,42 @@ class _DayListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (days.isEmpty) {
-      return const _EmptyHistory();
+      return const NefesEmptyState(
+        title: AppStrings.emptyHistory,
+        hint: AppStrings.emptyHistoryHint,
+        icon: Icons.history_toggle_off_outlined,
+      );
     }
 
     return ListView.separated(
       itemCount: days.length,
-      separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.sm),
-      itemBuilder: (context, index) => _DayTile(day: days[index]),
+      separatorBuilder: (_, _) => const Divider(height: 1),
+      itemBuilder: (context, index) => _DayRow(day: days[index]),
     );
   }
 }
 
-class _EmptyHistory extends StatelessWidget {
-  const _EmptyHistory();
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.history_toggle_off_outlined,
-            size: 40,
-            color: scheme.onSurfaceVariant,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            AppStrings.emptyHistory,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            AppStrings.emptyHistoryHint,
-            textAlign: TextAlign.center,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DayTile extends StatelessWidget {
-  const _DayTile({required this.day});
+class _DayRow extends StatelessWidget {
+  const _DayRow({required this.day});
 
   final DaySummary day;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final average = day.averageInterval;
+    final meta = [
+      AppStrings.smokeCountShort(day.smokeCount),
+      if (average != null)
+        '${AppStrings.averageIntervalLabel} ${TimeDisplay.formatIntervalShort(average)}',
+    ].join(' · ');
 
-    return AppCard(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () => context.pushNamed(
-          'historyDay',
-          pathParameters: {'date': _dateKeyFormat.format(day.localDate)},
-        ),
+    return InkWell(
+      onTap: () => context.pushNamed(
+        'historyDay',
+        pathParameters: {'date': _dateKeyFormat.format(day.localDate)},
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         child: Row(
           children: [
             Expanded(
@@ -193,26 +174,22 @@ class _DayTile extends StatelessWidget {
                 children: [
                   Text(
                     TimeDisplay.formatWeekdayDateHeader(day.localDate),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: AppSpacing.xs),
+                  const SizedBox(height: 2),
                   Text(
-                    average == null
-                        ? '${AppStrings.smokeCountLabel}: ${day.smokeCount}'
-                        : '${day.smokeCount} · ${AppStrings.averageIntervalLabel}: '
-                              '${TimeDisplay.formatIntervalShort(average)}',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: scheme.onSurfaceVariant,
+                    meta,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(
+            const Icon(
               Icons.chevron_right,
-              color: scheme.onSurfaceVariant,
+              size: 20,
+              color: AppColors.textMuted,
             ),
           ],
         ),
@@ -244,14 +221,13 @@ class _CalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final byDate = <DateTime, DaySummary>{
       for (final d in days) d.localDate: d,
     };
 
     final firstOfMonth = DateTime(month.year, month.month, 1);
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
-    final leadingBlanks = firstOfMonth.weekday - 1; // Monday-first grid.
+    final leadingBlanks = firstOfMonth.weekday - 1;
     final maxCount = days.fold<int>(
       1,
       (m, d) => d.smokeCount > m ? d.smokeCount : m,
@@ -278,9 +254,7 @@ class _CalendarView extends StatelessWidget {
               child: Text(
                 TimeDisplay.formatMonthYear(month),
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
             IconButton(
@@ -300,7 +274,7 @@ class _CalendarView extends StatelessWidget {
                   child: Text(
                     label,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ),
@@ -323,7 +297,7 @@ class _CalendarView extends StatelessWidget {
               final count = summary?.smokeCount ?? 0;
               final intensity = count == 0
                   ? 0.0
-                  : (count / maxCount).clamp(0.15, 1.0);
+                  : (count / maxCount).clamp(0.18, 0.72);
 
               return _CalendarDayCell(
                 date: date,
@@ -357,49 +331,48 @@ class _CalendarDayCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     final isToday = _isSameDay(date, DateTime.now());
-    final background = count == 0
-        ? scheme.surfaceContainerLowest
+    final hasData = count > 0;
+    final background = !hasData
+        ? Colors.transparent
         : Color.alphaBlend(
-            scheme.primary.withValues(alpha: intensity * 0.55),
-            scheme.surfaceContainerLowest,
+            AppColors.forestSoft.withValues(alpha: intensity * 0.35),
+            AppColors.surfaceMuted,
           );
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
+      borderRadius: AppRadius.smAll,
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: background,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isToday
-                ? scheme.primary
-                : scheme.outlineVariant.withValues(alpha: 0.5),
-            width: isToday ? 1.5 : 1,
-          ),
+          borderRadius: AppRadius.smAll,
+          border: isToday
+              ? Border.all(color: AppColors.forest, width: 1.5)
+              : null,
         ),
-        alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               '${date.day}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
-                color: count > 0 ? scheme.onSurface : scheme.onSurfaceVariant,
+                color: hasData ? AppColors.textPrimary : AppColors.textMuted,
               ),
             ),
-            if (count > 0)
-              Text(
-                '$count',
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: scheme.primary,
-                  fontWeight: FontWeight.w700,
+            const SizedBox(height: 2),
+            if (hasData)
+              Container(
+                width: 4,
+                height: 4,
+                decoration: const BoxDecoration(
+                  color: AppColors.forestSoft,
+                  shape: BoxShape.circle,
                 ),
-              ),
+              )
+            else
+              const SizedBox(height: 4),
           ],
         ),
       ),

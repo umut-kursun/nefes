@@ -75,6 +75,14 @@ abstract final class TimeDisplay {
       '${local.day} ${_monthNames[local.month - 1]} '
       '${_weekdayNames[local.weekday - 1]}';
 
+  /// Day + month only: `22 Temmuz`.
+  static String formatDayMonth(DateTime local) =>
+      '${local.day} ${_monthNames[local.month - 1]}';
+
+  /// Weekday only: `Çarşamba`.
+  static String formatWeekday(DateTime local) =>
+      _weekdayNames[local.weekday - 1];
+
   /// Month + year for calendar headers: `Temmuz 2026`.
   static String formatMonthYear(DateTime local) =>
       '${_monthNames[local.month - 1]} ${local.year}';

@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nefes/app.dart';
 import 'package:nefes/core/di/providers.dart';
@@ -38,7 +38,7 @@ void main() {
 
     expect(find.text(AppStrings.appName), findsOneWidget);
     expect(find.text(AppStrings.iSmoked), findsOneWidget);
-    expect(find.text(AppStrings.sinceLastCigarette), findsOneWidget);
+    expect(find.text(AppStrings.sinceLastCigarette.toUpperCase()), findsOneWidget);
     expect(find.text(AppStrings.emptyTodayHistory), findsOneWidget);
     expect(find.textContaining('/ 15'), findsOneWidget);
     expect(find.text(AppStrings.delayNow), findsOneWidget);

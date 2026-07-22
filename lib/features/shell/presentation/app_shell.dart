@@ -4,9 +4,7 @@ import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/features/shell/presentation/pwa_update_banner.dart';
 
-/// Top-level app scaffold — bottom [NavigationBar] on mobile, side
-/// [NavigationRail] on wide layouts, wrapping a go_router
-/// [StatefulNavigationShell] so each tab keeps its own navigation stack.
+/// App shell — calm bottom nav / rail with restrained selected state.
 class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.navigationShell});
 
@@ -14,23 +12,23 @@ class AppShell extends StatelessWidget {
 
   static const _destinations = <_ShellDestination>[
     _ShellDestination(
-      icon: Icons.home_outlined,
-      selectedIcon: Icons.home,
+      icon: Icons.wb_sunny_outlined,
+      selectedIcon: Icons.wb_sunny,
       label: AppStrings.navToday,
     ),
     _ShellDestination(
-      icon: Icons.history_outlined,
-      selectedIcon: Icons.history,
+      icon: Icons.calendar_today_outlined,
+      selectedIcon: Icons.calendar_today,
       label: AppStrings.navHistory,
     ),
     _ShellDestination(
-      icon: Icons.insights_outlined,
-      selectedIcon: Icons.insights,
+      icon: Icons.auto_graph_outlined,
+      selectedIcon: Icons.auto_graph,
       label: AppStrings.navInsights,
     ),
     _ShellDestination(
-      icon: Icons.settings_outlined,
-      selectedIcon: Icons.settings,
+      icon: Icons.tune_outlined,
+      selectedIcon: Icons.tune,
       label: AppStrings.navSettings,
     ),
   ];
@@ -51,12 +49,14 @@ class AppShell extends StatelessWidget {
 
           if (isWide) {
             return Scaffold(
+              backgroundColor: AppColors.canvasLight,
               body: Row(
                 children: [
                   NavigationRail(
                     selectedIndex: navigationShell.currentIndex,
                     onDestinationSelected: _onDestinationSelected,
                     labelType: NavigationRailLabelType.all,
+                    backgroundColor: AppColors.surfaceLight,
                     destinations: [
                       for (final d in _destinations)
                         NavigationRailDestination(
@@ -66,7 +66,11 @@ class AppShell extends StatelessWidget {
                         ),
                     ],
                   ),
-                  const VerticalDivider(width: 1, thickness: 1),
+                  const VerticalDivider(
+                    width: 1,
+                    thickness: 1,
+                    color: AppColors.divider,
+                  ),
                   Expanded(child: navigationShell),
                 ],
               ),
@@ -74,18 +78,30 @@ class AppShell extends StatelessWidget {
           }
 
           return Scaffold(
+            backgroundColor: AppColors.canvasLight,
             body: navigationShell,
-            bottomNavigationBar: NavigationBar(
-              selectedIndex: navigationShell.currentIndex,
-              onDestinationSelected: _onDestinationSelected,
-              destinations: [
-                for (final d in _destinations)
-                  NavigationDestination(
-                    icon: Icon(d.icon),
-                    selectedIcon: Icon(d.selectedIcon),
-                    label: d.label,
-                  ),
-              ],
+            bottomNavigationBar: DecoratedBox(
+              decoration: const BoxDecoration(
+                color: AppColors.surfaceLight,
+                border: Border(
+                  top: BorderSide(color: AppColors.divider, width: 1),
+                ),
+              ),
+              child: SafeArea(
+                top: false,
+                child: NavigationBar(
+                  selectedIndex: navigationShell.currentIndex,
+                  onDestinationSelected: _onDestinationSelected,
+                  destinations: [
+                    for (final d in _destinations)
+                      NavigationDestination(
+                        icon: Icon(d.icon),
+                        selectedIcon: Icon(d.selectedIcon),
+                        label: d.label,
+                      ),
+                  ],
+                ),
+              ),
             ),
           );
         },

@@ -75,7 +75,7 @@
     // Query param busts an outdated SW registration after broken partial deploys.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js?v=3').catch(function () {
+        navigator.serviceWorker.register('/sw.js?v=4').catch(function () {
           // Installability still works via manifest; offline cache is best-effort.
         });
       });

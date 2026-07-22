@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nefes/core/design_system/app_card.dart';
+import 'package:nefes/core/design_system/nefes_page.dart';
+import 'package:nefes/core/design_system/nefes_surface.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/di/providers.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
@@ -11,9 +12,9 @@ import 'package:nefes/features/settings/data/backup_file_io.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:uuid/uuid.dart';
 
-const _appVersion = '1.2.0';
+const _appVersion = '1.2.1';
 
-/// Settings screen — habit, daily target, backup, and app info.
+/// Settings — grouped list rows, not a wall of cards.
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
@@ -29,105 +30,105 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final settingsAsync = ref.watch(appSettingsStreamProvider);
 
     return Scaffold(
+      backgroundColor: AppColors.canvasLight,
       appBar: AppBar(title: const Text(AppStrings.settingsTitle)),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isWide =
-                constraints.maxWidth >= AppBreakpoints.dashboardWide;
-            final maxContentWidth = isWide
-                ? AppBreakpoints.desktopMaxContent
-                : AppBreakpoints.mobileMaxContent;
-
-            return Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxContentWidth),
-                child: ListView(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  children: [
-                    _SectionLabel(AppStrings.currentHabitLabel),
-                    AppCard(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.smoking_rooms_outlined,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: AppSpacing.md),
-                          Text(
-                            AppStrings.currentHabitValue,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    _SectionLabel(AppStrings.dailyTarget),
-                    AppCard(
-                      child: settingsAsync.when(
-                        data: (settings) => _TargetSection(
-                          settings: settings,
-                          busy: _busy,
-                          onEdit: () => _editTarget(context, settings),
+      body: NefesPageBody(
+        scrollable: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const NefesSectionLabel(AppStrings.habitSectionTitle),
+            NefesSurface(
+              tone: NefesSurfaceTone.raised,
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  const _SettingsRow(
+                    icon: Icons.smoking_rooms_outlined,
+                    title: AppStrings.currentHabitValue,
+                    subtitle: AppStrings.currentHabitLabel,
+                  ),
+                  const Divider(height: 1, indent: 52),
+                  settingsAsync.when(
+                    data: (settings) => _SettingsRow(
+                      icon: Icons.flag_outlined,
+                      title: AppStrings.dailyLimit,
+                      trailing: Text(
+                        '${settings.dailyTarget}',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontFeatures: const [FontFeature.tabularFigures()],
                         ),
-                        loading: () => const SizedBox(
-                          height: 48,
-                          child: Center(
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          ),
-                        ),
-                        error: (_, _) => Text(AppStrings.smokeSaveFailed),
                       ),
+                      onTap: _busy
+                          ? null
+                          : () => _editTarget(context, settings),
                     ),
-                    const SizedBox(height: AppSpacing.lg),
-                    _SectionLabel(AppStrings.backupSectionTitle),
-                    AppCard(
-                      padding: EdgeInsets.zero,
-                      child: Column(
-                        children: [
-                          _ActionTile(
-                            icon: Icons.download_outlined,
-                            title: AppStrings.exportData,
-                            subtitle: AppStrings.exportDataDesc,
-                            busy: _busy,
-                            onTap: _exportData,
-                          ),
-                          const Divider(height: 1),
-                          _ActionTile(
-                            icon: Icons.upload_outlined,
-                            title: AppStrings.importData,
-                            subtitle: AppStrings.importDataDesc,
-                            busy: _busy,
-                            onTap: () => _importData(context),
-                          ),
-                        ],
-                      ),
+                    loading: () => const Padding(
+                      padding: EdgeInsets.all(AppSpacing.lg),
+                      child: LinearProgressIndicator(minHeight: 2),
                     ),
-                    const SizedBox(height: AppSpacing.lg),
-                    _SectionLabel(AppStrings.comingSoonHabitsTitle),
-                    AppCard(
-                      padding: EdgeInsets.zero,
-                      child: ListTile(
-                        leading: const Icon(Icons.add_circle_outline),
-                        title: const Text(AppStrings.comingSoonHabits),
-                        enabled: false,
-                      ),
+                    error: (_, _) => const _SettingsRow(
+                      icon: Icons.error_outline,
+                      title: AppStrings.smokeSaveFailed,
                     ),
-                    const SizedBox(height: AppSpacing.lg),
-                    _SectionLabel(AppStrings.appInfoTitle),
-                    AppCard(
-                      padding: EdgeInsets.zero,
-                      child: ListTile(
-                        title: const Text(AppStrings.appVersionLabel),
-                        trailing: const Text(_appVersion),
-                      ),
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            const NefesSectionLabel(AppStrings.dataSectionTitle),
+            NefesSurface(
+              tone: NefesSurfaceTone.raised,
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  _SettingsRow(
+                    icon: Icons.download_outlined,
+                    title: AppStrings.exportData,
+                    subtitle: AppStrings.exportDataDesc,
+                    busy: _busy,
+                    onTap: _busy ? null : _exportData,
+                  ),
+                  const Divider(height: 1, indent: 52),
+                  _SettingsRow(
+                    icon: Icons.upload_outlined,
+                    title: AppStrings.importData,
+                    subtitle: AppStrings.importDataDesc,
+                    busy: _busy,
+                    onTap: _busy ? null : () => _importData(context),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            const NefesSectionLabel(AppStrings.comingSoonHabitsTitle),
+            const NefesSurface(
+              tone: NefesSurfaceTone.raised,
+              padding: EdgeInsets.zero,
+              child: _SettingsRow(
+                icon: Icons.add_circle_outline,
+                title: AppStrings.comingSoonHabits,
+                enabled: false,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            const NefesSectionLabel(AppStrings.appInfoTitle),
+            NefesSurface(
+              tone: NefesSurfaceTone.raised,
+              padding: EdgeInsets.zero,
+              child: _SettingsRow(
+                icon: Icons.info_outline,
+                title: AppStrings.appAbout,
+                trailing: Text(
+                  _appVersion,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textMuted,
+                  ),
                 ),
               ),
-            );
-          },
+            ),
+          ],
         ),
       ),
     );
@@ -146,9 +147,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   Future<void> _appendTargetPeriod(int target) async {
     final now = DateTime.now();
-    await ref
-        .read(targetHistoryRepositoryProvider)
-        .appendPeriod(
+    await ref.read(targetHistoryRepositoryProvider).appendPeriod(
           DailyTargetPeriod(
             id: const Uuid().v4(),
             habitType: HabitType.smoking.storageId,
@@ -228,108 +227,69 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 }
 
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel(this.label);
+class _SettingsRow extends StatelessWidget {
+  const _SettingsRow({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+    this.busy = false,
+    this.enabled = true,
+  });
 
-  final String label;
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final bool busy;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.sm, left: AppSpacing.xs),
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-          color: scheme.onSurfaceVariant,
-          fontWeight: FontWeight.w600,
+    return ListTile(
+      enabled: enabled && !busy && onTap != null,
+      onTap: enabled && !busy ? onTap : null,
+      leading: Icon(
+        icon,
+        color: enabled ? AppColors.forestMid : AppColors.textMuted,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: enabled ? AppColors.textPrimary : AppColors.textMuted,
+          fontWeight: FontWeight.w500,
         ),
+      ),
+      subtitle: subtitle == null
+          ? null
+          : Text(
+              subtitle!,
+              style: const TextStyle(color: AppColors.textSecondary),
+            ),
+      trailing: busy
+          ? const SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : trailing ??
+              (onTap == null
+                  ? null
+                  : const Icon(
+                      Icons.chevron_right,
+                      color: AppColors.textMuted,
+                      size: 20,
+                    )),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.xs,
       ),
     );
   }
 }
 
-class _TargetSection extends StatelessWidget {
-  const _TargetSection({
-    required this.settings,
-    required this.busy,
-    required this.onEdit,
-  });
-
-  final AppSettings settings;
-  final bool busy;
-  final VoidCallback onEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${settings.dailyTarget}',
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              if (settings.averagePerDay != null) ...[
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  '${AppStrings.averagePerDayLabel}: ${settings.averagePerDay}',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        TextButton(
-          onPressed: busy ? null : onEdit,
-          child: const Text(AppStrings.editTarget),
-        ),
-      ],
-    );
-  }
-}
-
-class _ActionTile extends StatelessWidget {
-  const _ActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.busy,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final bool busy;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: busy
-          ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : const Icon(Icons.chevron_right),
-      onTap: busy ? null : onTap,
-    );
-  }
-}
-
-/// Reused edit-target dialog matching the Home screen's target editor.
 Future<void> showEditTargetDialog({
   required BuildContext context,
   required int currentTarget,
@@ -351,7 +311,7 @@ Future<void> showEditTargetDialog({
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
-                labelText: AppStrings.dailyTarget,
+                labelText: AppStrings.dailyLimit,
                 errorText: error,
               ),
             ),

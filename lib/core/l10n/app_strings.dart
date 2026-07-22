@@ -8,10 +8,12 @@ abstract final class AppStrings {
   static const sinceLastCigarette = 'Son sigaradan beri';
   static const noCigaretteYet =
       'Henüz kayıt yok. İlk sigaranı işaretlediğinde süre burada başlar.';
-  static const dailyTarget = 'Günlük hedef';
+  static const dailyTarget = 'Günlük sınır';
+  static const dailyLimit = 'Günlük sınır';
+  static const usedLabel = 'kullanıldı';
   static const remaining = 'Kalan';
-  static const todayCigarettes = 'Bugünkü sigaralar';
-  static const emptyTodayHistory = 'Henüz bugün kayıt yok';
+  static const todayCigarettes = 'Bugünkü kayıtlar';
+  static const emptyTodayHistory = 'Bugün henüz kayıt yok.';
   static const undoLast = 'Son kaydı geri al';
   static const undoConfirmTitle = 'Son kayıt geri alınsın mı?';
   static const undoConfirmBody =
@@ -23,16 +25,22 @@ abstract final class AppStrings {
   static const smokeSaveFailed = 'Kaydedilemedi. Tekrar dene.';
   static const undoFailed = 'Geri alma başarısız. Tekrar dene.';
   static const loading = 'Yükleniyor…';
-  static const targetExceeded = 'Bugünkü hedef aşıldı';
-  static const editTarget = 'Hedefi düzenle';
+  static const targetExceeded = 'Bugünkü sınır aşıldı';
+  static const limitExceeded = 'Bugünkü sınır aşıldı';
+  static const editTarget = 'Sınırı düzenle';
+  static const editLimit = 'Sınırı düzenle';
   static const save = 'Kaydet';
+  static const delayHint = 'İsteği biraz ertele';
+  static const cigarettesUnit = 'sigara';
+  static const snapshotAverage = 'Ort. aralık';
+  static const snapshotLongest = 'En uzun';
 
   // Onboarding
-  static const onboardingTitle = 'Hedefini belirle';
+  static const onboardingTitle = 'Sınırını belirle';
   static const onboardingAverageLabel = 'Günde ortalama kaç sigara içiyorsun?';
-  static const onboardingTargetLabel = 'İlk günlük hedefin kaç olsun?';
+  static const onboardingTargetLabel = 'İlk günlük sınırın kaç olsun?';
   static const onboardingHint =
-      'Hedef bir rehberdir; her zaman kayıt ekleyebilirsin.';
+      'Sınır bir referanstır; her zaman kayıt ekleyebilirsin.';
   static const onboardingContinue = 'Başla';
   static const invalidNumber = 'Geçerli bir sayı gir';
 
@@ -56,14 +64,16 @@ abstract final class AppStrings {
   static const delayCompleteDone = 'Kaydedildi';
   static const delayCancelled = 'İptal edildi';
 
-  static String remainingCount(int value) => 'Kalan: $value';
+  static String remainingCount(int value) => '$value kaldı';
   static String todayProgress(int count, int target) => '$count / $target';
+  static String limitShort(int limit) => 'Sınır $limit';
   static String sequenceLabel(int n) => '#$n';
   static String afterPrevious(String interval) => '$interval sonra';
   static String delayedMinutes(int minutes) => '$minutes dakika erteledin.';
   static String todayDelayCount(int count) => 'Bugün $count kez erteledin.';
   static String todayDelayTotalMinutes(int minutes) =>
       'Bugün toplam $minutes dakika erteledin.';
+  static String smokeCountShort(int count) => '$count sigara';
 
   // Navigation
   static const navToday = 'Bugün';
@@ -77,14 +87,14 @@ abstract final class AppStrings {
   static const historyCalendar = 'Takvim';
   static const emptyHistory = 'Henüz kayıt yok.';
   static const emptyHistoryHint =
-      'Sigara kaydettikçe geçmişin burada görünecek.';
-  static const averageIntervalLabel = 'Ortalama aralık';
-  static const longestIntervalLabel = 'En uzun aralık';
-  static const smokeCountLabel = 'Sigara sayısı';
+      'Kayıtların burada gün gün görünecek.';
+  static const averageIntervalLabel = 'Ort. aralık';
+  static const longestIntervalLabel = 'En uzun';
+  static const smokeCountLabel = 'Sigara';
   static const dayDetailTitle = 'Gün detayı';
   static const delayCountLabel = 'Erteleme';
   static const noSmokesThisDay = 'Bu gün için kayıt yok.';
-  static const targetForDayLabel = 'O günkü hedef';
+  static const targetForDayLabel = 'Sınır';
   static const timelineTitle = 'Zaman çizelgesi';
   static const delayNotesTitle = 'Erteleme kayıtları';
   static const delayOutcomeSmoked = 'Sigara içildi';
@@ -92,26 +102,29 @@ abstract final class AppStrings {
   static const delayOutcomeCancelled = 'İptal edildi';
   static const previousMonth = 'Önceki ay';
   static const nextMonth = 'Sonraki ay';
+  static const smokeEventTitle = 'Sigara';
 
   // Insights
   static const insightsTitle = 'İçgörüler';
   static const period7Days = '7 Gün';
   static const period30Days = '30 Gün';
   static const periodThisMonth = 'Bu Ay';
-  static const insightsEmpty = 'Bu dönemde henüz veri yok.';
+  static const insightsEmpty = 'Henüz bir örüntü oluşmadı.';
   static const insightsEmptyHint =
-      'Kayıt eklemeye başladığında burada içgörüler görünecek.';
-  static const totalSmokesLabel = 'Toplam sigara';
-  static const dailyAverageLabel = 'Günlük ortalama';
-  static const delayAttemptsLabel = 'Erteleme denemesi';
+      'İçgörüler, birkaç günlük kayıt sonrasında burada görünmeye başlayacak.';
+  static const totalSmokesLabel = 'Toplam';
+  static const dailyAverageLabel = 'Günlük ort.';
+  static const delayAttemptsLabel = 'Erteleme';
   static const insightsListTitle = 'Gözlemler';
   static const dailyChartTitle = 'Günlük dağılım';
 
   // Settings
   static const settingsTitle = 'Ayarlar';
+  static const habitSectionTitle = 'Alışkanlık';
   static const currentHabitLabel = 'Aktif alışkanlık';
   static const currentHabitValue = 'Sigara';
-  static const editDailyTargetTitle = 'Günlük hedefi düzenle';
+  static const dataSectionTitle = 'Veriler';
+  static const editDailyTargetTitle = 'Günlük sınırı düzenle';
   static const averagePerDayLabel = 'Günlük ortalama';
   static const backupSectionTitle = 'Yedekleme';
   static const exportData = 'Verileri dışa aktar';
@@ -128,7 +141,8 @@ abstract final class AppStrings {
   static const exportFailed = 'Dışa aktarma başarısız.';
   static const comingSoonHabitsTitle = 'Diğer alışkanlıklar';
   static const comingSoonHabits = 'Yeni alışkanlık türleri yakında';
-  static const appInfoTitle = 'Uygulama bilgisi';
+  static const appInfoTitle = 'Uygulama';
+  static const appAbout = 'NEFES hakkında';
   static const appVersionLabel = 'Sürüm';
   static const updateAvailable = 'Güncelleme mevcut';
   static const updateNow = 'Şimdi güncelle';

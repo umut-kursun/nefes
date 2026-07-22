@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nefes/core/design_system/app_card.dart';
+import 'package:nefes/core/design_system/nefes_metric_strip.dart';
+import 'package:nefes/core/design_system/nefes_page.dart';
+import 'package:nefes/core/design_system/nefes_surface.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/di/providers.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/core/time/time_display.dart';
 import 'package:nefes/features/habit/domain/services/insights_engine.dart';
 
-/// Insights screen — period chips, KPI cards, a bar chart, and observations.
+/// Insights — headline observation, compact KPIs, restrained chart.
 class InsightsPage extends ConsumerStatefulWidget {
   const InsightsPage({super.key});
 
@@ -23,6 +25,7 @@ class _InsightsPageState extends ConsumerState<InsightsPage> {
     final eventsAsync = ref.watch(allSmokingEventsProvider);
 
     return Scaffold(
+      backgroundColor: AppColors.canvasLight,
       appBar: AppBar(title: const Text(AppStrings.insightsTitle)),
       body: SafeArea(
         child: LayoutBuilder(
@@ -37,7 +40,12 @@ class _InsightsPageState extends ConsumerState<InsightsPage> {
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: maxContentWidth),
                 child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    AppSpacing.sm,
+                    AppSpacing.lg,
+                    AppSpacing.md,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -56,38 +64,86 @@ class _InsightsPageState extends ConsumerState<InsightsPage> {
                               period: _period,
                             );
                             if (snapshot.totalSmokes == 0) {
-                              return const _EmptyInsights();
+                              return const NefesEmptyState(
+                                title: AppStrings.insightsEmpty,
+                                hint: AppStrings.insightsEmptyHint,
+                                icon: Icons.insights_outlined,
+                              );
                             }
                             return ListView(
                               children: [
-                                _KpiGrid(snapshot: snapshot, isWide: isWide),
-                                const SizedBox(height: AppSpacing.lg),
+                                if (snapshot.insights.isNotEmpty)
+                                  _HeadlineInsight(
+                                    text: snapshot.insights.first,
+                                  ),
+                                if (snapshot.insights.isNotEmpty)
+                                  const SizedBox(height: AppSpacing.lg),
+                                NefesSurface(
+                                  tone: NefesSurfaceTone.raised,
+                                  padding: const EdgeInsets.all(AppSpacing.lg),
+                                  child: NefesMetricStrip(
+                                    metrics: [
+                                      NefesMetric(
+                                        label: AppStrings.totalSmokesLabel,
+                                        value: '${snapshot.totalSmokes}',
+                                        emphasis: true,
+                                      ),
+                                      NefesMetric(
+                                        label: AppStrings.dailyAverageLabel,
+                                        value: _formatAverage(
+                                          snapshot.dailyAverage,
+                                        ),
+                                      ),
+                                      NefesMetric(
+                                        label: AppStrings.averageIntervalLabel,
+                                        value: snapshot.averageInterval == null
+                                            ? '—'
+                                            : TimeDisplay.formatIntervalShort(
+                                                snapshot.averageInterval!,
+                                              ),
+                                      ),
+                                      NefesMetric(
+                                        label: AppStrings.delayAttemptsLabel,
+                                        value: '${snapshot.delayAttempts}',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacing.xl),
                                 Text(
-                                  AppStrings.dailyChartTitle,
+                                  AppStrings.dailyChartTitle.toUpperCase(),
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.w600),
+                                      .labelMedium
+                                      ?.copyWith(
+                                        color: AppColors.textMuted,
+                                        letterSpacing: 0.7,
+                                      ),
                                 ),
-                                const SizedBox(height: AppSpacing.sm),
-                                AppCard(
+                                const SizedBox(height: AppSpacing.md),
+                                SizedBox(
+                                  height: 128,
+                                  width: double.infinity,
                                   child: _DailyBarChart(
                                     dailyCounts: snapshot.dailyCounts,
                                   ),
                                 ),
-                                if (snapshot.insights.isNotEmpty) ...[
-                                  const SizedBox(height: AppSpacing.lg),
+                                if (snapshot.insights.length > 1) ...[
+                                  const SizedBox(height: AppSpacing.xl),
                                   Text(
-                                    AppStrings.insightsListTitle,
+                                    AppStrings.insightsListTitle.toUpperCase(),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .titleMedium
+                                        .labelMedium
                                         ?.copyWith(
-                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.textMuted,
+                                          letterSpacing: 0.7,
                                         ),
                                   ),
                                   const SizedBox(height: AppSpacing.sm),
-                                  _InsightsList(insights: snapshot.insights),
+                                  _InsightsList(
+                                    insights: snapshot.insights.skip(1).toList(),
+                                  ),
                                 ],
                               ],
                             );
@@ -95,7 +151,7 @@ class _InsightsPageState extends ConsumerState<InsightsPage> {
                           loading: () => const Center(
                             child: CircularProgressIndicator(),
                           ),
-                          error: (_, _) => Center(
+                          error: (_, _) => const Center(
                             child: Text(AppStrings.smokeSaveFailed),
                           ),
                         ),
@@ -106,6 +162,34 @@ class _InsightsPageState extends ConsumerState<InsightsPage> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+
+  static String _formatAverage(double value) {
+    final rounded = (value * 10).round() / 10;
+    if (rounded == rounded.roundToDouble()) {
+      return rounded.round().toString();
+    }
+    return rounded.toStringAsFixed(1).replaceAll('.', ',');
+  }
+}
+
+class _HeadlineInsight extends StatelessWidget {
+  const _HeadlineInsight({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return NefesSurface(
+      tone: NefesSurfaceTone.muted,
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          height: 1.35,
+          color: AppColors.forest,
         ),
       ),
     );
@@ -137,126 +221,7 @@ class _PeriodChips extends StatelessWidget {
       ],
       selected: {selected},
       onSelectionChanged: (values) => onChanged(values.first),
-    );
-  }
-}
-
-class _EmptyInsights extends StatelessWidget {
-  const _EmptyInsights();
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.insights_outlined,
-            size: 40,
-            color: scheme.onSurfaceVariant,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            AppStrings.insightsEmpty,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            AppStrings.insightsEmptyHint,
-            textAlign: TextAlign.center,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _KpiGrid extends StatelessWidget {
-  const _KpiGrid({required this.snapshot, required this.isWide});
-
-  final InsightsSnapshot snapshot;
-  final bool isWide;
-
-  @override
-  Widget build(BuildContext context) {
-    final tiles = <_KpiTile>[
-      _KpiTile(
-        label: AppStrings.totalSmokesLabel,
-        value: '${snapshot.totalSmokes}',
-      ),
-      _KpiTile(
-        label: AppStrings.dailyAverageLabel,
-        value: _formatAverage(snapshot.dailyAverage),
-      ),
-      _KpiTile(
-        label: AppStrings.averageIntervalLabel,
-        value: snapshot.averageInterval == null
-            ? '—'
-            : TimeDisplay.formatIntervalShort(snapshot.averageInterval!),
-      ),
-      _KpiTile(
-        label: AppStrings.delayAttemptsLabel,
-        value: '${snapshot.delayAttempts}',
-      ),
-    ];
-
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: isWide ? 4 : 2,
-        mainAxisSpacing: AppSpacing.sm,
-        crossAxisSpacing: AppSpacing.sm,
-        childAspectRatio: 1.5,
-      ),
-      itemCount: tiles.length,
-      itemBuilder: (context, index) => tiles[index],
-    );
-  }
-
-  static String _formatAverage(double value) {
-    final rounded = (value * 10).round() / 10;
-    if (rounded == rounded.roundToDouble()) {
-      return rounded.round().toString();
-    }
-    return rounded.toStringAsFixed(1).replaceAll('.', ',');
-  }
-}
-
-class _KpiTile extends StatelessWidget {
-  const _KpiTile({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return AppCard(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            label,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            value,
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-          ),
-        ],
-      ),
+      showSelectedIcon: false,
     );
   }
 }
@@ -268,16 +233,11 @@ class _DailyBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return SizedBox(
-      height: 140,
-      width: double.infinity,
-      child: CustomPaint(
-        painter: _DailyBarsPainter(
-          counts: [for (final d in dailyCounts) d.count],
-          barColor: scheme.primary,
-          trackColor: scheme.surfaceContainerHighest,
-        ),
+    return CustomPaint(
+      painter: _DailyBarsPainter(
+        counts: [for (final d in dailyCounts) d.count],
+        barColor: AppColors.forestSoft,
+        trackColor: AppColors.progressTrack,
       ),
     );
   }
@@ -300,12 +260,12 @@ class _DailyBarsPainter extends CustomPainter {
 
     final maxCount = counts.fold<int>(1, (m, c) => c > m ? c : m);
     final barCount = counts.length;
-    const gap = 4.0;
+    const gap = 3.0;
     final totalGap = gap * (barCount - 1);
-    final barWidth = ((size.width - totalGap) / barCount).clamp(2.0, 40.0);
+    final barWidth = ((size.width - totalGap) / barCount).clamp(2.0, 28.0);
     final paintBar = Paint()..color = barColor;
     final paintTrack = Paint()..color = trackColor;
-    const radius = Radius.circular(6);
+    const radius = Radius.circular(3);
 
     for (var i = 0; i < barCount; i++) {
       final x = i * (barWidth + gap);
@@ -343,32 +303,20 @@ class _InsightsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (var i = 0; i < insights.length; i++) ...[
-            if (i > 0) const SizedBox(height: AppSpacing.sm),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.circle,
-                  size: 6,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Text(
-                    insights[i],
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var i = 0; i < insights.length; i++) ...[
+          if (i > 0) const Divider(height: AppSpacing.lg),
+          Text(
+            insights[i],
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              height: 1.4,
+              color: AppColors.textPrimary,
             ),
-          ],
+          ),
         ],
-      ),
+      ],
     );
   }
 }
