@@ -1,6 +1,10 @@
+import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_event_type.dart';
 
 /// Immutable habit event (append-only historical record).
+///
+/// Smoking remains the first module; [habitType] enables future modules
+/// without rewriting persistence.
 class SmokingLogEvent {
   const SmokingLogEvent({
     required this.id,
@@ -21,6 +25,7 @@ class SmokingLogEvent {
     required this.payloadJson,
     required this.insertedAtUtc,
     this.parentEventId,
+    this.habitType = HabitType.smoking,
   });
 
   final String id;
@@ -41,6 +46,9 @@ class SmokingLogEvent {
   final int schemaVersion;
   final Map<String, dynamic> payloadJson;
   final DateTime insertedAtUtc;
+  final HabitType habitType;
+
+  DateTime get localDate => DateTime(localYear, localMonth, localDay);
 
   bool get isSmoke => eventType == SmokingEventType.smoke;
 

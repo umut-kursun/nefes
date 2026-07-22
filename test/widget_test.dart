@@ -42,6 +42,10 @@ void main() {
     expect(find.text(AppStrings.emptyTodayHistory), findsOneWidget);
     expect(find.textContaining('/ 15'), findsOneWidget);
     expect(find.text(AppStrings.delayNow), findsOneWidget);
+    expect(find.text(AppStrings.navToday), findsWidgets);
+    expect(find.text(AppStrings.navHistory), findsOneWidget);
+    expect(find.text(AppStrings.navInsights), findsOneWidget);
+    expect(find.text(AppStrings.navSettings), findsOneWidget);
   });
 
   testWidgets('Home logs a smoke via primary action', (tester) async {

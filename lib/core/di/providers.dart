@@ -3,10 +3,16 @@ import 'package:nefes/core/ports/ai_coach_port.dart';
 import 'package:nefes/core/ports/export_port.dart';
 import 'package:nefes/core/ports/haptic_port.dart';
 import 'package:nefes/core/ports/sync_port.dart';
+import 'package:nefes/features/habit/data/repositories/target_history_repository_impl.dart';
+import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
+import 'package:nefes/features/habit/domain/services/backup_service.dart';
+import 'package:nefes/features/habit/repository/target_history_repository.dart';
 import 'package:nefes/features/smoking/data/datasources/smoking_local_data_source.dart';
 import 'package:nefes/features/smoking/data/repositories/settings_repository_impl.dart';
 import 'package:nefes/features/smoking/data/repositories/smoking_repository_impl.dart';
 import 'package:nefes/features/smoking/data/sembast/nefes_local_database.dart';
+import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
+import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/services/event_factory.dart';
 import 'package:nefes/features/smoking/domain/usecases/attach_smoke_trigger.dart';
 import 'package:nefes/features/smoking/domain/usecases/cancel_delay.dart';
@@ -30,7 +36,10 @@ final databaseFactoryProvider = Provider<DatabaseFactory>((ref) {
 });
 
 final nefesLocalDatabaseProvider = Provider<NefesLocalDatabase>((ref) {
-  return NefesLocalDatabase(ref.watch(databaseFactoryProvider));
+  return NefesLocalDatabase(
+    ref.watch(databaseFactoryProvider),
+    prefs: ref.watch(sharedPreferencesProvider),
+  );
 });
 
 final smokingLocalDataSourceProvider = Provider<SmokingLocalDataSource>((ref) {
@@ -43,6 +52,19 @@ final smokingRepositoryProvider = Provider<SmokingRepository>((ref) {
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   return SettingsRepositoryImpl(ref.watch(sharedPreferencesProvider));
+});
+
+final targetHistoryRepositoryProvider =
+    Provider<TargetHistoryRepository>((ref) {
+  return TargetHistoryRepositoryImpl(ref.watch(nefesLocalDatabaseProvider));
+});
+
+final backupServiceProvider = Provider<BackupService>((ref) {
+  return BackupService(
+    smokingRepository: ref.watch(smokingRepositoryProvider),
+    settingsRepository: ref.watch(settingsRepositoryProvider),
+    targetHistoryRepository: ref.watch(targetHistoryRepositoryProvider),
+  );
 });
 
 final eventFactoryProvider = Provider<EventFactory>((ref) {
@@ -119,4 +141,21 @@ final exportPortProvider = Provider<ExportPort>((ref) {
 
 final aiCoachPortProvider = Provider<AiCoachPort>((ref) {
   return const NoopAiCoachPort();
+});
+
+/// Live stream of all habit events — used by History and Insights screens.
+final allSmokingEventsProvider = StreamProvider<List<SmokingLogEvent>>((ref) {
+  return ref.watch(smokingRepositoryProvider).watchAllEvents();
+});
+
+/// Live stream of app settings — used outside the Home flow (Settings, day detail).
+final appSettingsStreamProvider = StreamProvider<AppSettings>((ref) {
+  return ref.watch(settingsRepositoryProvider).watchSettings();
+});
+
+/// Live stream of the daily-target history — used to resolve past targets.
+final targetHistoryStreamProvider = StreamProvider<List<DailyTargetPeriod>>((
+  ref,
+) {
+  return ref.watch(targetHistoryRepositoryProvider).watchAll();
 });

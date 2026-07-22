@@ -23,6 +23,11 @@ class SmokingRepositoryImpl implements SmokingRepository {
   }
 
   @override
+  Future<void> replaceAllEvents(List<SmokingLogEvent> events) {
+    return _dataSource.replaceAllEvents(events);
+  }
+
+  @override
   Stream<List<SmokingLogEvent>> watchAllEvents() {
     return _dataSource.watchAllEvents();
   }

@@ -51,6 +51,22 @@ class SmokingLocalDataSource {
     }
   }
 
+  Future<void> replaceAllEvents(List<SmokingLogEvent> events) async {
+    try {
+      final db = await _database.database;
+      await db.transaction((txn) async {
+        await NefesStores.smokingLogs.delete(txn);
+        for (final event in events) {
+          await NefesStores.smokingLogs
+              .record(event.id)
+              .put(txn, SmokingLogMapper.toRecord(event));
+        }
+      });
+    } catch (e) {
+      throw DatabaseFailure(e.toString());
+    }
+  }
+
   Stream<List<SmokingLogEvent>> watchAllEvents() async* {
     final db = await _database.database;
     final finder = Finder(sortOrders: [SortOrder('createdAtUtc')]);

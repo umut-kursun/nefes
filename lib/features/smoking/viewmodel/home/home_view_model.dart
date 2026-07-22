@@ -5,10 +5,13 @@ import 'package:nefes/core/di/providers.dart';
 import 'package:nefes/core/errors/failures.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/core/time/time_display.dart';
+import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
+import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/domain/services/home_snapshot_builder.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
+import 'package:uuid/uuid.dart';
 
 /// Home ViewModel — capture, triggers, and delay/resist (M3).
 class HomeViewModel extends StateNotifier<HomeUiState> {
@@ -247,10 +250,31 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       averagePerDay: averagePerDay,
       dailyTarget: dailyTarget,
     );
+    await _appendTargetPeriod(dailyTarget);
   }
 
   Future<void> updateDailyTarget(int value) async {
     await _ref.read(settingsRepositoryProvider).setDailyTarget(value);
+    await _appendTargetPeriod(value);
+  }
+
+  /// Records the new target as effective from today so history/insights can
+  /// resolve which target applied on any given past day.
+  Future<void> _appendTargetPeriod(int target) async {
+    final now = DateTime.now();
+    await _ref
+        .read(targetHistoryRepositoryProvider)
+        .appendPeriod(
+          DailyTargetPeriod(
+            id: const Uuid().v4(),
+            habitType: HabitType.smoking.storageId,
+            target: target,
+            effectiveFromLocalYear: now.year,
+            effectiveFromLocalMonth: now.month,
+            effectiveFromLocalDay: now.day,
+            createdAtUtc: now.toUtc(),
+          ),
+        );
   }
 
   void clearMessages() {

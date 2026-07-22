@@ -11,6 +11,9 @@ abstract class SmokingRepository {
   /// One-shot read of all events (prefer over `watchAllEvents().first`).
   Future<List<SmokingLogEvent>> getAllEvents();
 
+  /// Full replace used only by validated backup import.
+  Future<void> replaceAllEvents(List<SmokingLogEvent> events);
+
   /// Watches all events (smoke + related), oldest → newest ready.
   Stream<List<SmokingLogEvent>> watchAllEvents();
 

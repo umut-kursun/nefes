@@ -1,4 +1,5 @@
 import 'package:nefes/core/time/datetime_context.dart';
+import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_event_type.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
@@ -6,9 +7,11 @@ import 'package:uuid/uuid.dart';
 
 /// Builds immutable smoking / delay events with UTC + local timezone context.
 class EventFactory {
-  EventFactory({Uuid? uuid}) : _uuid = uuid ?? const Uuid();
+  EventFactory({Uuid? uuid, this.habitType = HabitType.smoking})
+    : _uuid = uuid ?? const Uuid();
 
   final Uuid _uuid;
+  final HabitType habitType;
 
   static const int payloadSchemaVersion = 1;
 
@@ -34,6 +37,7 @@ class EventFactory {
       schemaVersion: payloadSchemaVersion,
       payloadJson: _defaultPayload(),
       insertedAtUtc: DateTime.now().toUtc(),
+      habitType: habitType,
     );
   }
 
@@ -126,6 +130,7 @@ class EventFactory {
       schemaVersion: payloadSchemaVersion,
       payloadJson: payload,
       insertedAtUtc: DateTime.now().toUtc(),
+      habitType: habitType,
     );
   }
 

@@ -109,6 +109,30 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           color: scheme.onSurfaceVariant,
                         ),
                       ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        TimeDisplay.formatWeekdayDateHeader(DateTime.now()),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                          value: state.dailyTarget <= 0
+                              ? 0
+                              : (state.todayCount / state.dailyTarget).clamp(
+                                  0.0,
+                                  1.0,
+                                ),
+                          minHeight: 6,
+                          backgroundColor: scheme.surfaceContainerHighest,
+                          color: state.isTargetExceeded
+                              ? scheme.error
+                              : scheme.primary,
+                        ),
+                      ),
                       const SizedBox(height: AppSpacing.lg),
                       Expanded(
                         child: isWide

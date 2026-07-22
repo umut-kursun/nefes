@@ -1,3 +1,4 @@
+import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_event_type.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 
@@ -23,6 +24,7 @@ abstract final class SmokingLogMapper {
       'schemaVersion': event.schemaVersion,
       'payloadJson': event.payloadJson,
       'insertedAtUtc': event.insertedAtUtc.millisecondsSinceEpoch,
+      'habitType': event.habitType.storageId,
     };
   }
 
@@ -55,6 +57,7 @@ abstract final class SmokingLogMapper {
         record['insertedAtUtc']! as int,
         isUtc: true,
       ),
+      habitType: HabitType.fromStorage(record['habitType'] as String?),
     );
   }
 }
