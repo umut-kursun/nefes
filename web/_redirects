@@ -1,3 +1,4 @@
-# Cloudflare Pages / static hosts: SPA fallback for Flutter Web (go_router).
-# Files under web/ are copied into build/web on `flutter build web`.
-/*    /index.html   200
+# No SPA rewrite rules.
+# NEFES currently only serves the root route `/`.
+# A blanket `/* -> /index.html 200` rule triggers Cloudflare Pages
+# "Infinite loop detected" and is not required for this deployment.
