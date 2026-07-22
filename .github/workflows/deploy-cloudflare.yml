@@ -1,0 +1,44 @@
+name: Deploy NEFES to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-workers-nefes
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Build Flutter Web (release)
+        run: |
+          flutter pub get
+          flutter build web --release
+          test -f build/web/main.dart.js
+          test -f build/web/flutter.js
+          test -d build/web/canvaskit
+          test -d build/web/assets
+          echo "Asset count:" && find build/web -type f | wc -l
+
+      # Deploy only the compiled build/web tree via wrangler.toml [assets].directory
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

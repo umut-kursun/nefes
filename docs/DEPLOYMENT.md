@@ -3,35 +3,65 @@
 This document covers **public HTTPS deployment** and **Android Chrome PWA install**.
 It does **not** change app business logic, domain models, or local data architecture.
 
-## Current status (pre-publish)
+## Critical: deploy `build/web`, never `web/`
 
-| Item | Status |
-|------|--------|
-| `web/manifest.json` | Ready (`name`/`short_name` NEFES, `lang: tr`, `display: standalone`, `start_url: /`) |
-| `web/index.html` | Manifest linked; theme `#1C2B24`; canvas `#F7F5F2` |
-| Icons | **Placeholder Flutter logos** (192/512 + maskable) — replace before public brand launch |
-| Custom `web/sw.js` | Shell asset cache after first successful load (Flutter 3.44+ has no default SW) |
-| Cloudflare helpers | `web/_redirects`, `web/_headers` (copied into `build/web`) |
-| Git remote | **None yet** — repository has no commits / no remote |
-| Public deploy | **Not published** — waiting for your explicit approval |
+| Path | What it is | Deploy? |
+|------|------------|---------|
+| `web/` | Flutter **source** templates (`index.html`, manifest, icons, bootstrap template) — ~10 files | **No** |
+| `build/web/` | Flutter **release** output (`main.dart.js`, `flutter.js`, `canvaskit/`, `assets/`, …) — hundreds of files | **Yes** |
+
+If Cloudflare only uploads ~9 assets, the Worker is pointing at `web/` and the app will stick on the splash screen (`main.dart.js` → 404).
+
+Canonical Wrangler config:
+
+```toml
+# wrangler.toml
+[assets]
+directory = "./build/web"
+```
+
+## Current production URL
+
+`https://nefes321.forappsvs.workers.dev` (Cloudflare Workers)
 
 ## Production build (local)
 
 ```powershell
 cd c:\Users\ukursun\Documents\nefes
 flutter pub get
-flutter analyze
-flutter test
 flutter build web --release
 ```
 
-Output directory:
+Verify before deploy:
 
-```text
-build/web/
+```powershell
+Test-Path build\web\main.dart.js
+Test-Path build\web\flutter.js
+Test-Path build\web\canvaskit
+(Get-ChildItem build\web -Recurse -File).Count   # should be >> 9
 ```
 
-Serve that folder over **HTTPS** for installability (Chrome requires a secure context except `localhost`).
+## Cloudflare Workers (Git-connected)
+
+Repo includes:
+
+- `wrangler.toml` — `assets.directory = "./build/web"`, Worker name `nefes321`
+- `tool/ci_build_web.sh` — installs Flutter (if needed) and runs `flutter build web --release`
+- `.github/workflows/deploy-cloudflare.yml` — optional GitHub Actions deploy path
+
+### Dashboard settings to check
+
+1. Workers & Pages → **nefes321** → Settings → Build
+2. **Build command** should run Flutter (or rely on `wrangler.toml` `[build].command`)
+3. **Deploy / assets directory** must resolve to **`build/web`**, not `web`
+4. Do **not** set “assets directory” / “root directory” to `web`
+
+### GitHub Actions secrets (if using the workflow)
+
+In GitHub → Settings → Secrets and variables → Actions:
+
+- `CLOUDFLARE_API_TOKEN` — token with Workers deploy permission
+- `CLOUDFLARE_ACCOUNT_ID` — your Cloudflare account id
 
 ## Data safety (local-first)
 
@@ -43,96 +73,14 @@ NEFES stores smoking events and settings **in the browser** (IndexedDB / Sembast
 - Clearing site data / Chrome storage for that origin can **delete** local NEFES data.
 - Cloud sync / accounts / backup are **out of scope** for the current version.
 
-## Recommended host: Cloudflare Pages
+## PWA install checklist (Android Chrome)
 
-**Why**
+1. Open the **HTTPS** Workers URL.
+2. Menu → **Uygulamayı yükle** / **Ana ekrana ekle**.
+3. Icon label **NEFES**, standalone launch.
+4. Log a cigarette → reopen → data still there.
+5. After one online load, airplane mode reopen should still load cached shell assets (`sw.js`).
 
-- Free tier suitable for a static Flutter Web app
-- HTTPS by default
-- Easy Git-connected redeploys later
-- No Android SDK
-- Compatible with `build/web` static output
+## Missing brand assets
 
-**Alternatives:** GitHub Pages also works (HTTPS + static), but Cloudflare Pages is preferred here for simpler SPA headers/redirects and CDN defaults.
-
-## What you must do manually (no accounts created by the agent)
-
-### A) Create a Git repository and push (first time)
-
-1. Create a new **private or public** GitHub repository (e.g. `nefes`).
-2. On your machine (after M3 is finished and you are ready to commit):
-
-```powershell
-cd c:\Users\ukursun\Documents\nefes
-git add .
-git status
-git commit -m "Prepare NEFES Flutter Web PWA for deployment."
-git branch -M main
-git remote add origin https://github.com/<YOUR_USER>/<YOUR_REPO>.git
-git push -u origin main
-```
-
-Do **not** commit secrets. Do not force-push.
-
-### B) Connect Cloudflare Pages (after you approve public deploy)
-
-1. Sign in at [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages**.
-2. **Connect to Git** → select the NEFES repository.
-3. Build settings:
-
-| Setting | Value |
-|---------|--------|
-| Framework preset | None |
-| Build command | See note below |
-| Build output directory | `build/web` |
-| Root directory | `/` (repo root) |
-
-**Build command options**
-
-- **Preferred for CI:** install Flutter in the build environment, then:
-
-```bash
-flutter pub get && flutter build web --release
-```
-
-  (Add a Flutter install step in Cloudflare build, or use a community Flutter build image / GitHub Action that uploads `build/web`.)
-
-- **Simplest first publish:** build locally with `flutter build web --release`, then use Cloudflare Pages **Direct Upload** of the `build/web` folder (no Git build needed for the first try).
-
-4. After deploy, open the `*.pages.dev` HTTPS URL on Android Chrome.
-
-### C) Android Chrome install checklist
-
-1. Open the **HTTPS** URL in Chrome (Android).
-2. Menu → **Uygulamayı yükle** or **Ana ekrana ekle**.
-3. Confirm home-screen icon label is **NEFES**.
-4. Launch from the icon → UI should look **standalone** (minimal browser chrome).
-5. Log a cigarette, force-close, reopen → local data still present.
-6. After one successful online load, enable airplane mode and reopen → shell/assets should still open (best-effort via `sw.js`).
-7. Confirm `manifest.json` loads at `/manifest.json`.
-
-## Missing brand assets (required for production branding)
-
-Replace these Flutter placeholder files with NEFES artwork (same paths/sizes):
-
-| File | Size | Notes |
-|------|------|--------|
-| `web/favicon.png` | 32×32 (or multi) | Browser tab |
-| `web/icons/Icon-192.png` | 192×192 | Install / home screen |
-| `web/icons/Icon-512.png` | 512×512 | Splash / install |
-| `web/icons/Icon-maskable-192.png` | 192×192 | Android adaptive (safe zone) |
-| `web/icons/Icon-maskable-512.png` | 512×512 | Android adaptive (safe zone) |
-
-Do **not** ship the default Flutter logo as the public NEFES brand if you can provide real icons first.
-
-## Service worker note (Flutter 3.44+)
-
-Flutter’s built-in `flutter_service_worker.js` is now a **cleanup** worker (self-unregistering).
-NEFES uses a custom `web/sw.js` plus `web/flutter_bootstrap.js` that **does not** enable Flutter’s SW settings, so the shell cache is not wiped on the next visit.
-
-| File | Role |
-|------|------|
-| `web/sw.js` | Cache shell assets after first successful load |
-| `web/flutter_bootstrap.js` | Loads Flutter without Flutter SW settings |
-
-Rebuild after changing these files: `flutter build web --release`.
+Replace Flutter placeholder icons under `web/icons/` and `web/favicon.png` before a branded public launch (same sizes: 192 / 512 / maskable).
