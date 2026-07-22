@@ -1,6 +1,8 @@
 // NEFES shell service worker — caches core same-origin assets after first load.
 // Does not touch IndexedDB / SharedPreferences (app data stays in the browser origin).
-const CACHE_NAME = 'nefes-shell-v1';
+// Bump when the deployed shell must invalidate stale PWA caches (e.g. after
+// accidentally shipping web/ templates without build/web).
+const CACHE_NAME = 'nefes-shell-v2';
 
 const PRECACHE_URLS = [
   '/',

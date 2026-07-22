@@ -72,9 +72,10 @@
     });
 
     // Custom shell SW (Flutter no longer ships a default PWA service worker).
+    // Query param busts an outdated SW registration after broken partial deploys.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js').catch(function () {
+        navigator.serviceWorker.register('/sw.js?v=2').catch(function () {
           // Installability still works via manifest; offline cache is best-effort.
         });
       });
