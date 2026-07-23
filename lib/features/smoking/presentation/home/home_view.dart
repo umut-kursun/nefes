@@ -15,7 +15,7 @@ import 'package:nefes/features/smoking/presentation/triggers/smoking_trigger_lab
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_view_model.dart';
 
-/// Home screen — radical Today composition (capture-first, editorial density).
+/// Home screen — capture-first Today composition (editorial density).
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -312,10 +312,12 @@ class _TodayComposition extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: AppSpacing.lg),
-                _BehaviorActions(
-                  state: state,
+                TodayBehaviorActions(
+                  isBusy: state.isBusy,
+                  isSaving: state.isSaving,
+                  showDelayAction: !state.hasActiveDelay,
                   onSmoke: onSmoke,
-                  onPickDelay: onPickDelay,
+                  onDelay: onPickDelay,
                 ),
                 if (state.todayDelayInsight != null) ...[
                   const SizedBox(height: AppSpacing.sm),
@@ -326,7 +328,7 @@ class _TodayComposition extends StatelessWidget {
                     ),
                   ),
                 ],
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.lg),
                 _metrics(state),
                 const SizedBox(height: AppSpacing.md),
                 Text(
@@ -346,6 +348,8 @@ class _TodayComposition extends StatelessWidget {
                   )
                 else
                   _TodayTimeline(events: state.todayEvents),
+                // Keep last timeline items clear of bottom nav on mobile.
+                const SizedBox(height: AppSpacing.lg),
               ],
             ),
           ),
@@ -459,76 +463,6 @@ class _HeaderBar extends StatelessWidget {
 }
 
 enum _UtilityAction { earlier, undo }
-
-/// Dominant primary + compact secondary — one interaction system.
-class _BehaviorActions extends StatelessWidget {
-  const _BehaviorActions({
-    required this.state,
-    required this.onSmoke,
-    required this.onPickDelay,
-  });
-
-  final HomeUiState state;
-  final VoidCallback onSmoke;
-  final VoidCallback onPickDelay;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          height: 52,
-          child: FilledButton(
-            onPressed: state.isBusy ? null : onSmoke,
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.forest,
-              foregroundColor: AppColors.textOnForest,
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: AppRadius.mdAll),
-              textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.2,
-              ),
-            ),
-            child: state.isSaving
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.textOnForest,
-                    ),
-                  )
-                : const Text(AppStrings.iSmoked),
-          ),
-        ),
-        if (!state.hasActiveDelay) ...[
-          const SizedBox(height: AppSpacing.sm),
-          Align(
-            alignment: Alignment.center,
-            child: TextButton.icon(
-              onPressed: state.isBusy ? null : onPickDelay,
-              icon: const Icon(Icons.pause_circle_outline, size: 18),
-              label: Text(
-                AppStrings.delayNow,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: AppColors.forestMid,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.forestMid,
-                minimumSize: const Size(48, 40),
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-              ),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
 
 class _TodayTimeline extends StatelessWidget {
   const _TodayTimeline({required this.events});

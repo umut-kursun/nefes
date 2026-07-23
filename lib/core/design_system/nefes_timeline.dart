@@ -20,6 +20,8 @@ class NefesTimelineItem {
 }
 
 /// Chronological timeline — markers + vertical spine, not a card stack.
+///
+/// Hierarchy: TIME → EVENT → TRIGGER/CONTEXT → INTERVAL.
 class NefesTimeline extends StatelessWidget {
   const NefesTimeline({super.key, required this.items});
 
@@ -53,19 +55,20 @@ class _IntervalGutter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 52),
+      padding: const EdgeInsets.only(left: 52, top: 2, bottom: 2),
       child: Row(
         children: [
           Container(
             width: 1,
-            height: 22,
+            height: 18,
             color: AppColors.divider,
           ),
           const SizedBox(width: AppSpacing.md),
           Text(
             label,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AppColors.textMuted,
+              color: AppColors.textTertiary,
+              letterSpacing: 0.1,
             ),
           ),
         ],
@@ -87,7 +90,8 @@ class _TimelineRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final markerColor = item.isDelay ? AppColors.textMuted : AppColors.forestSoft;
+    final markerColor =
+        item.isDelay ? AppColors.textMuted : AppColors.forestSoft;
 
     return IntrinsicHeight(
       child: Row(
@@ -96,13 +100,14 @@ class _TimelineRow extends StatelessWidget {
           SizedBox(
             width: 44,
             child: Padding(
-              padding: const EdgeInsets.only(top: 2),
+              padding: const EdgeInsets.only(top: 1),
               child: Text(
                 item.timeLabel,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontFeatures: const [FontFeature.tabularFigures()],
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w600,
+                  height: 1.2,
                 ),
               ),
             ),
@@ -113,12 +118,12 @@ class _TimelineRow extends StatelessWidget {
             child: Column(
               children: [
                 if (!isFirst)
-                  Container(width: 1, height: 4, color: AppColors.divider)
+                  Container(width: 1, height: 3, color: AppColors.divider)
                 else
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
                 Container(
-                  width: 10,
-                  height: 10,
+                  width: 9,
+                  height: 9,
                   decoration: BoxDecoration(
                     color: item.isDelay ? AppColors.surfaceMuted : markerColor,
                     shape: BoxShape.circle,
@@ -139,7 +144,7 @@ class _TimelineRow extends StatelessWidget {
               borderRadius: AppRadius.smAll,
               child: Padding(
                 padding: EdgeInsets.only(
-                  bottom: isLast ? 0 : AppSpacing.sm,
+                  bottom: isLast ? 0 : AppSpacing.xs,
                   top: 0,
                   right: AppSpacing.sm,
                 ),
@@ -148,15 +153,21 @@ class _TimelineRow extends StatelessWidget {
                   children: [
                     Text(
                       item.title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                        height: 1.25,
+                      ),
                     ),
                     if (item.subtitle != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
                           item.subtitle!,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondary,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textTertiary,
+                            height: 1.3,
                           ),
                         ),
                       ),

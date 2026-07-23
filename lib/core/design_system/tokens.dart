@@ -49,19 +49,23 @@ abstract final class AppColors {
   static const Color forestMid = Color(0xFF2F463B);
   static const Color forestSoft = Color(0xFF3D5C4E);
   static const Color mist = Color(0xFFD5E0D8);
+  static const Color sage = Color(0xFFC9D6CE); // secondary action fill
 
   // Surfaces
   static const Color canvasLight = Color(0xFFF3F0EB);
   static const Color surfaceLight = Color(0xFFFAF8F5);
-  static const Color surfaceRaised = Color(0xFFFFFFFF);
+  static const Color surfaceRaised = Color(0xFFFCFAF7);
   static const Color surfaceMuted = Color(0xFFE8EDE8);
   static const Color surfaceInset = Color(0xFFE4E0D9);
+  static const Color surfaceSecondaryAction = Color(0xFFE3EBE5);
 
   // Text
   static const Color textPrimary = Color(0xFF1A211D);
-  static const Color textSecondary = Color(0xFF5A655E);
-  static const Color textMuted = Color(0xFF8A938C);
+  static const Color textSecondary = Color(0xFF4F5B54);
+  static const Color textMuted = Color(0xFF7A857E);
+  static const Color textTertiary = Color(0xFF9AA39C);
   static const Color textOnForest = Color(0xFFF7F5F2);
+  static const Color textOnSage = Color(0xFF1C2B24);
 
   // Lines / chrome
   static const Color divider = Color(0xFFD8DCD7);
@@ -72,6 +76,11 @@ abstract final class AppColors {
   static const Color progressTrack = Color(0xFFDCE3DC);
   static const Color exceeded = Color(0xFF8B6F4E); // warm earth, not alarm red
   static const Color info = Color(0xFF4A5F56);
+  static const Color insightAccent = Color(0xFFB7C7BC);
+  static const Color danger = Color(0xFF8B4A3A);
+  static const Color onDanger = Color(0xFFFFF8F6);
+  static const Color dangerContainer = Color(0xFFF3DDD7);
+  static const Color onDangerContainer = Color(0xFF5C2B22);
 
   // Dark canvas (system dark)
   static const Color canvasDark = Color(0xFF121512);
@@ -81,6 +90,13 @@ abstract final class AppColors {
 /// Layout breakpoints and content widths.
 abstract final class AppBreakpoints {
   static const double dashboardWide = 840;
+
+  /// Mobile content column (phone-first).
   static const double mobileMaxContent = 430;
-  static const double desktopMaxContent = 720;
+
+  /// Desktop Today / reading column — deliberately narrow companion.
+  static const double desktopMaxContent = 700;
+
+  /// Compact blocks (limit bar, action zone) stay denser than the column.
+  static const double todayDenseBlock = 400;
 }
