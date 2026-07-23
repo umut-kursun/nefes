@@ -26,15 +26,14 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Require and normalize Cloudflare secrets
-        id: cf
+      - name: Validate Cloudflare secrets
         env:
-          RAW_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          RAW_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
-          TOKEN="$(printf '%s' "$RAW_TOKEN" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
-          ACCOUNT="$(printf '%s' "$RAW_ACCOUNT" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          ACCOUNT="$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
 
           missing=0
           if [ -z "$TOKEN" ]; then
@@ -50,31 +49,40 @@ jobs:
             exit 1
           fi
 
-          # Reject clearly wrong pastes (Zone ID / email / quoted values).
-          if printf '%s' "$TOKEN" | grep -qE '^["'\'']|["'\'']$'; then
-            echo "::error::CLOUDFLARE_API_TOKEN appears quoted. Paste the raw token only."
+          if printf '%s' "$TOKEN" | grep -qE '[[:space:]]|^Bearer |^["'\'']|["'\'']$'; then
+            echo "::error::CLOUDFLARE_API_TOKEN looks malformed (spaces/Bearer/quotes). Paste the raw token only."
             exit 1
           fi
           if ! printf '%s' "$ACCOUNT" | grep -Eq '^[a-f0-9]{32}$'; then
             echo "::error::CLOUDFLARE_ACCOUNT_ID is invalid (length ${#ACCOUNT}, expected 32 hex chars)."
-            echo "::error::Open Cloudflare Dashboard → Workers & Pages → Overview → copy Account ID from the right sidebar."
-            echo "::error::Do not paste the worker name, zone name, or API token. Example format: a1b2c3d4e5f6789012345678abcdef01"
+            echo "::error::Cloudflare Dashboard → Workers & Pages → Overview → Account ID (right sidebar)."
             exit 1
           fi
 
           echo "token_len=${#TOKEN}"
-          echo "account_len=${#ACCOUNT}"
-          echo "account_prefix=${ACCOUNT:0:4}…"
+          echo "account_id_ok=yes"
 
-          {
-            echo "CLOUDFLARE_API_TOKEN=$TOKEN"
-            echo "CLOUDFLARE_ACCOUNT_ID=$ACCOUNT"
-          } >> "$GITHUB_ENV"
-
-          # Pin account_id into wrangler.toml so Wrangler never guesses via /memberships.
-          printf '\naccount_id = "%s"\n' "$ACCOUNT" >> wrangler.toml
-          echo "---- wrangler.toml ----"
-          cat wrangler.toml
+          # Inject account_id at TOP LEVEL (after name=), NEVER under [assets].
+          ACCOUNT="$ACCOUNT" python3 - <<'PY'
+          from pathlib import Path
+          import os
+          account = os.environ["ACCOUNT"]
+          path = Path("wrangler.toml")
+          lines = path.read_text(encoding="utf-8").splitlines()
+          out = []
+          inserted = False
+          for line in lines:
+              if line.strip().startswith("account_id"):
+                  continue
+              out.append(line)
+              if not inserted and line.startswith("name"):
+                  out.append(f'account_id = "{account}"')
+                  inserted = True
+          if not inserted:
+              out.insert(0, f'account_id = "{account}"')
+          path.write_text("\n".join(out) + "\n", encoding="utf-8")
+          print(path.read_text(encoding="utf-8"))
+          PY
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -91,28 +99,21 @@ jobs:
           test -f build/web/flutter.js
           test -d build/web/canvaskit
           test -d build/web/assets
-          # Drop debug-only weight that is not needed at runtime.
           find build/web -type f \( -name '*.map' -o -name '*.symbols' \) -delete
           echo "Asset count:" && find build/web -type f | wc -l
           echo "Asset bytes:" && du -sb build/web | cut -f1
 
-      - name: Verify Cloudflare auth
-        continue-on-error: true
-        run: |
-          set +e
-          npx --yes wrangler@4.40.3 whoami 2>&1 | tee whoami.log
-          code=$?
-          set -e
-          echo "whoami_exit=$code"
-          # Account-owned tokens often cannot read user email; that is OK.
-          # Only treat hard auth failures as a warning here — deploy is the real gate.
-          if grep -qiE 'not authenticated|Authentication error|code: 10000' whoami.log; then
-            echo "::warning::Wrangler whoami reported an auth problem. Deploy will still be attempted."
-          fi
-
+      # Do NOT write the API token into GITHUB_ENV — special characters corrupt
+      # the Authorization header (Cloudflare 6111 / 9106).
       - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           set -euo pipefail
+          export CLOUDFLARE_API_TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          export CLOUDFLARE_ACCOUNT_ID="$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
           echo "Deploying prebuilt build/web via wrangler 4…"
           set +e
           npx --yes wrangler@4.40.3 deploy --config wrangler.toml 2>&1 | tee wrangler-deploy.log
@@ -123,21 +124,14 @@ jobs:
             echo "::group::wrangler-deploy.log"
             cat wrangler-deploy.log
             echo "::endgroup::"
-            # Surface real Wrangler lines as annotations (readable without downloading logs).
-            # Strip ANSI color codes.
             sed 's/\x1b\[[0-9;]*m//g' wrangler-deploy.log \
               | grep -Eiv '^(npm |$)' \
               | tail -n 40 \
               | while IFS= read -r line; do
                   [ -n "$line" ] && echo "::error::wrangler: $line"
                 done
-            if [ -f whoami.log ]; then
-              sed 's/\x1b\[[0-9;]*m//g' whoami.log | tail -n 20 | while IFS= read -r line; do
-                [ -n "$line" ] && echo "::warning::whoami: $line"
-              done
-            fi
-            if grep -qiE 'Authentication error|10000|unauthorized|not authenticated' wrangler-deploy.log; then
-              echo "::error::Cloudflare rejected the API token. Recreate CLOUDFLARE_API_TOKEN using the 'Edit Cloudflare Workers' template (Account-owned token preferred) and confirm CLOUDFLARE_ACCOUNT_ID matches the nefes321 account."
+            if grep -qiE 'Authentication error|Authentication failed|10000|9106|6111|unauthorized|not authenticated' wrangler-deploy.log; then
+              echo "::error::Cloudflare rejected the API token. Recreate CLOUDFLARE_API_TOKEN with template 'Edit Cloudflare Workers' (Account API Token), paste raw token only, and keep CLOUDFLARE_ACCOUNT_ID as the 32-char Account ID."
             fi
             exit "$code"
           fi
@@ -149,7 +143,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wrangler-deploy-logs
-          path: |
-            whoami.log
-            wrangler-deploy.log
+          path: wrangler-deploy.log
           if-no-files-found: ignore
