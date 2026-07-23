@@ -3,7 +3,7 @@
 # web/ is only Flutter's source templates; the compiled app is produced by
 # `flutter build web --release` into build/web (main.dart.js, canvaskit, assets, …).
 
-name = "nefes321"
+name = "nefes123"
 compatibility_date = "2026-07-22"
 workers_dev = true
 
