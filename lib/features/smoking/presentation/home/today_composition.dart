@@ -141,10 +141,10 @@ class HeroElapsedCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl,
-                AppSpacing.xl,
-                AppSpacing.xl,
                 AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.md,
               ),
               child: hasLastSmoke
                   ? _TimerContent(
@@ -167,6 +167,7 @@ class _EmptyTimerContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           AppStrings.sinceLastCigarette.toUpperCase(),
@@ -177,12 +178,12 @@ class _EmptyTimerContent extends StatelessWidget {
             fontSize: TodayScale.heroLabelSize,
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.sm),
         Text(
           AppStrings.noCigaretteYet,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textSecondary,
-            height: 1.35,
+            height: 1.3,
           ),
         ),
       ],
@@ -218,7 +219,7 @@ class _TimerContent extends StatelessWidget {
             fontSize: TodayScale.heroLabelSize,
           ),
         ),
-        const Spacer(),
+        const Spacer(flex: 2),
         SizedBox(
           height: TodayScale.timerRowHeight,
           width: double.infinity,
@@ -257,7 +258,7 @@ class _TimerContent extends StatelessWidget {
           ),
         ),
         if (supportLine != null) ...[
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             supportLine!,
             maxLines: 1,
@@ -267,7 +268,8 @@ class _TimerContent extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-        ],
+        ] else
+          const Spacer(flex: 1),
       ],
     );
   }
@@ -342,10 +344,10 @@ class DailyStatusSection extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.xl,
         AppSpacing.lg,
-        AppSpacing.xl,
+        AppSpacing.md,
         AppSpacing.lg,
+        AppSpacing.md,
       ),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
@@ -390,7 +392,7 @@ class DailyStatusSection extends StatelessWidget {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(
                       minWidth: 44,
-                      minHeight: 44,
+                      minHeight: 40,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -425,7 +427,7 @@ class DailyStatusSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.sm),
           ClipRRect(
             borderRadius: BorderRadius.circular(AppRadius.pill),
             child: TweenAnimationBuilder<double>(
@@ -450,7 +452,7 @@ class DailyStatusSection extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             exceeded
                 ? AppStrings.limitExceeded
@@ -479,7 +481,7 @@ class InsightChipCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md + 2,
+          vertical: AppSpacing.md,
         ),
         child: Row(
           children: [
@@ -494,7 +496,7 @@ class InsightChipCard extends StatelessWidget {
                 message,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textOnSage,
-                  height: 1.35,
+                  height: 1.3,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -599,10 +601,10 @@ class _PrimaryActionCard extends StatelessWidget {
         }),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.xl,
             AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.md,
           ),
           child: isSaving
               ? const SizedBox(
@@ -635,7 +637,7 @@ class _PrimaryActionCard extends StatelessWidget {
                         color: AppColors.textOnForest,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.lg),
+                    const SizedBox(height: AppSpacing.md),
                     Text(
                       AppStrings.iSmoked,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -645,7 +647,7 @@ class _PrimaryActionCard extends StatelessWidget {
                         fontSize: TodayScale.actionTitleSize,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       AppStrings.logNowSubtitle,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -692,10 +694,10 @@ class _SecondaryActionCard extends StatelessWidget {
         }),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
-            AppSpacing.xl,
-            AppSpacing.xl,
-            AppSpacing.xl,
             AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.md,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -724,7 +726,7 @@ class _SecondaryActionCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.md),
               Text(
                 AppStrings.delayNow,
                 maxLines: 2,
@@ -732,11 +734,11 @@ class _SecondaryActionCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: titleColor,
                   fontWeight: FontWeight.w700,
-                  height: 1.15,
+                  height: 1.12,
                   fontSize: TodayScale.actionTitleSize,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 AppStrings.delayHint,
                 maxLines: 1,
@@ -774,7 +776,7 @@ class MetricSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.xl,
+        vertical: AppSpacing.lg,
       ),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,

@@ -281,7 +281,7 @@ class _TodayComposition extends StatelessWidget {
           onEarlier: onEarlier,
           onUndo: onUndo,
         ),
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.md),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -294,7 +294,7 @@ class _TodayComposition extends StatelessWidget {
                       ? null
                       : state.todayDelayInsight,
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.md),
                 DailyStatusSection(
                   used: state.todayCount,
                   limit: state.dailyTarget,
@@ -302,11 +302,11 @@ class _TodayComposition extends StatelessWidget {
                   onEditLimit: onEditTarget,
                 ),
                 if (state.contextualInsight != null) ...[
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.sm),
                   InsightChipCard(message: state.contextualInsight!),
                 ],
                 if (state.hasActiveDelay) ...[
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.sm),
                   _DelayActivePanel(
                     state: state,
                     onUrgePassed: onUrgePassed,
@@ -315,14 +315,14 @@ class _TodayComposition extends StatelessWidget {
                   ),
                 ],
                 if (state.pendingTriggerSmokeId != null) ...[
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.sm),
                   OptionalContextBar(
                     quickTriggers: state.quickTriggers,
                     onSelected: onSelectTrigger,
                     onMore: onMoreTriggers,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.lg),
                 TwinActionZone(
                   isBusy: state.isBusy,
                   isSaving: state.isSaving,
@@ -330,13 +330,13 @@ class _TodayComposition extends StatelessWidget {
                   onSmoke: onSmoke,
                   onDelay: onPickDelay,
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.lg),
                 _metrics(state),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.lg),
                 TodayTimelineHeader(
                   onViewAll: () => context.goNamed('history'),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.sm),
                 if (state.todayEvents.isEmpty)
                   Text(
                     AppStrings.emptyTodayHistory,
@@ -349,7 +349,7 @@ class _TodayComposition extends StatelessWidget {
                     events: state.todayEvents,
                     onEditEvent: onEditEvent,
                   ),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.lg),
               ],
             ),
           ),
