@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nefes/core/design_system/nefes_buttons.dart';
-import 'package:nefes/core/design_system/nefes_metric_strip.dart';
-import 'package:nefes/core/design_system/nefes_progress.dart';
 import 'package:nefes/core/design_system/nefes_surface.dart';
 import 'package:nefes/core/design_system/nefes_timeline.dart';
 import 'package:nefes/core/design_system/tokens.dart';
@@ -13,11 +10,12 @@ import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/presentation/home/capture_sheets.dart';
 import 'package:nefes/features/smoking/presentation/home/optional_context_bar.dart';
 import 'package:nefes/features/smoking/presentation/home/target_dialogs.dart';
+import 'package:nefes/features/smoking/presentation/home/today_composition.dart';
 import 'package:nefes/features/smoking/presentation/triggers/smoking_trigger_labels.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_view_model.dart';
 
-/// Home screen — capture-first logging with optional enrichment.
+/// Home screen — radical Today composition (capture-first, editorial density).
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -37,13 +35,27 @@ class _HomeViewState extends ConsumerState<HomeView> {
       if (message != null &&
           (previous?.errorMessage != next.errorMessage ||
               previous?.infoMessage != next.infoMessage)) {
+        final canUndoAction = next.canUndo &&
+            next.infoMessage == AppStrings.smokedSaved &&
+            next.errorMessage == null;
+
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
             SnackBar(
               content: Text(message),
               behavior: SnackBarBehavior.floating,
-              duration: const Duration(milliseconds: 1600),
+              duration: Duration(milliseconds: canUndoAction ? 4000 : 1600),
+              action: canUndoAction
+                  ? SnackBarAction(
+                      label: AppStrings.undoConfirmAction,
+                      onPressed: () {
+                        ref
+                            .read(homeViewModelProvider.notifier)
+                            .undoLastConfirmed();
+                      },
+                    )
+                  : null,
             ),
           );
         ref.read(homeViewModelProvider.notifier).clearMessages();
@@ -74,11 +86,10 @@ class _HomeViewState extends ConsumerState<HomeView> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final isWide =
-                constraints.maxWidth >= AppBreakpoints.dashboardWide;
-            final maxContentWidth = isWide
-                ? AppBreakpoints.desktopMaxContent
-                : AppBreakpoints.mobileMaxContent;
+            final maxContentWidth =
+                constraints.maxWidth >= AppBreakpoints.dashboardWide
+                    ? AppBreakpoints.desktopMaxContent
+                    : AppBreakpoints.mobileMaxContent;
 
             return Center(
               child: ConstrainedBox(
@@ -86,11 +97,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.lg,
-                    AppSpacing.sm,
+                    AppSpacing.xs,
                     AppSpacing.lg,
-                    AppSpacing.md,
+                    AppSpacing.sm,
                   ),
-                  child: _MobileDashboard(
+                  child: _TodayComposition(
                     state: state,
                     onSmoke: () => ref
                         .read(homeViewModelProvider.notifier)
@@ -125,7 +136,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Future<void> _pickDelay(BuildContext context) async {
     final duration = await showDelayDurationPicker(context);
     if (!mounted || duration == null) return;
-    // Duration.zero sentinel = start without planned duration.
     await ref.read(homeViewModelProvider.notifier).startDelayWithDuration(
           duration == Duration.zero ? null : duration,
         );
@@ -225,8 +235,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 }
 
-class _MobileDashboard extends StatelessWidget {
-  const _MobileDashboard({
+class _TodayComposition extends StatelessWidget {
+  const _TodayComposition({
     required this.state,
     required this.onSmoke,
     required this.onPickDelay,
@@ -257,22 +267,32 @@ class _MobileDashboard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const _BrandHeader(),
+        _HeaderBar(
+          canUndo: state.canUndo,
+          isBusy: state.isBusy,
+          onEarlier: onEarlier,
+          onUndo: onUndo,
+        ),
         const SizedBox(height: AppSpacing.md),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _TodayHero(state: state, onEditTarget: onEditTarget),
+                ElapsedTimerSignature(
+                  elapsedLabel: state.elapsedLabel,
+                  hasLastSmoke: state.hasLastSmoke,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                CompactDailyLimit(
+                  used: state.todayCount,
+                  limit: state.dailyTarget,
+                  exceeded: state.isTargetExceeded,
+                  onEditLimit: onEditTarget,
+                ),
                 if (state.contextualInsight != null) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    state.contextualInsight!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  InsightCaption(message: state.contextualInsight!),
                 ],
                 if (state.hasActiveDelay) ...[
                   const SizedBox(height: AppSpacing.md),
@@ -292,41 +312,40 @@ class _MobileDashboard extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: AppSpacing.lg),
-                _ActionArea(
+                _BehaviorActions(
                   state: state,
                   onSmoke: onSmoke,
                   onPickDelay: onPickDelay,
-                  onUndo: onUndo,
-                  onEarlier: onEarlier,
                 ),
                 if (state.todayDelayInsight != null) ...[
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     state.todayDelayInsight!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ],
-                const SizedBox(height: AppSpacing.lg),
-                _TodaySnapshot(state: state),
-                if (state.todayEvents.isNotEmpty) ...[
-                  const SizedBox(height: AppSpacing.lg),
-                  Text(
-                    AppStrings.todayCigarettes,
-                    style: Theme.of(context).textTheme.titleSmall,
+                const SizedBox(height: AppSpacing.md),
+                _metrics(state),
+                const SizedBox(height: AppSpacing.md),
+                Text(
+                  AppStrings.todayCigarettes.toUpperCase(),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: AppColors.textMuted,
+                    letterSpacing: 0.8,
                   ),
-                  const SizedBox(height: AppSpacing.sm),
-                  _TodayTimeline(events: state.todayEvents),
-                ] else ...[
-                  const SizedBox(height: AppSpacing.md),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                if (state.todayEvents.isEmpty)
                   Text(
                     AppStrings.emptyTodayHistory,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textMuted,
                     ),
-                  ),
-                ],
+                  )
+                else
+                  _TodayTimeline(events: state.todayEvents),
               ],
             ),
           ),
@@ -334,175 +353,8 @@ class _MobileDashboard extends StatelessWidget {
       ],
     );
   }
-}
 
-class _BrandHeader extends StatelessWidget {
-  const _BrandHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.appName,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.5,
-            color: AppColors.forest,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          TimeDisplay.formatWeekdayDateHeader(DateTime.now()),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _TodayHero extends StatelessWidget {
-  const _TodayHero({required this.state, required this.onEditTarget});
-
-  final HomeUiState state;
-  final VoidCallback onEditTarget;
-
-  @override
-  Widget build(BuildContext context) {
-    return NefesSurface(
-      tone: NefesSurfaceTone.raised,
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.lg,
-        AppSpacing.lg,
-        AppSpacing.lg,
-        AppSpacing.md,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.sinceLastCigarette.toUpperCase(),
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: AppColors.textMuted,
-              letterSpacing: 0.7,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          AnimatedSwitcher(
-            duration: AppMotion.fast,
-            child: state.hasLastSmoke
-                ? Text(
-                    state.elapsedLabel,
-                    key: ValueKey(state.elapsedLabel),
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                      color: AppColors.forest,
-                    ),
-                  )
-                : Text(
-                    AppStrings.noCigaretteYet,
-                    key: const ValueKey('empty-timer'),
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          NefesBudgetProgress(
-            used: state.todayCount,
-            limit: state.dailyTarget,
-            exceeded: state.isTargetExceeded,
-            onEditLimit: onEditTarget,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            AppStrings.todayProgress(state.todayCount, state.dailyTarget),
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: AppColors.textMuted,
-              fontFeatures: const [FontFeature.tabularFigures()],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActionArea extends StatelessWidget {
-  const _ActionArea({
-    required this.state,
-    required this.onSmoke,
-    required this.onPickDelay,
-    required this.onUndo,
-    required this.onEarlier,
-  });
-
-  final HomeUiState state;
-  final VoidCallback onSmoke;
-  final VoidCallback onPickDelay;
-  final VoidCallback onUndo;
-  final VoidCallback onEarlier;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        NefesPrimaryButton(
-          label: AppStrings.iSmoked,
-          isLoading: state.isSaving,
-          onPressed: state.isBusy ? null : onSmoke,
-        ),
-        if (!state.hasActiveDelay) ...[
-          const SizedBox(height: AppSpacing.sm),
-          NefesSecondaryAction(
-            label: AppStrings.delayNow,
-            subtitle: AppStrings.delayHint,
-            onPressed: state.isBusy ? null : onPickDelay,
-          ),
-        ],
-        Align(
-          alignment: Alignment.center,
-          child: TextButton(
-            onPressed: state.isBusy ? null : onEarlier,
-            child: Text(
-              AppStrings.smokedEarlier,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.textMuted,
-              ),
-            ),
-          ),
-        ),
-        if (state.canUndo)
-          Align(
-            alignment: Alignment.center,
-            child: TextButton(
-              onPressed: state.isBusy ? null : onUndo,
-              child: Text(
-                state.isUndoing ? AppStrings.loading : AppStrings.undoLast,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textMuted,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _TodaySnapshot extends StatelessWidget {
-  const _TodaySnapshot({required this.state});
-
-  final HomeUiState state;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _metrics(HomeUiState state) {
     if (state.todayEvents.isEmpty) return const SizedBox.shrink();
 
     final intervals = state.todayEvents
@@ -518,41 +370,162 @@ class _TodaySnapshot extends StatelessWidget {
       longest = intervals.reduce((a, b) => a > b ? a : b);
     }
 
-    return NefesSurface(
-      tone: NefesSurfaceTone.muted,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.today.toUpperCase(),
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: AppColors.textMuted,
-              letterSpacing: 0.7,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          NefesMetricStrip(
-            metrics: [
-              NefesMetric(
-                label: AppStrings.cigarettesUnit,
-                value: '${state.todayCount}',
-                emphasis: true,
+    return CompactTodayMetrics(
+      count: state.todayCount,
+      averageLabel: average == null
+          ? null
+          : TimeDisplay.formatIntervalShort(average),
+      longestLabel: longest == null
+          ? null
+          : TimeDisplay.formatIntervalShort(longest),
+    );
+  }
+}
+
+class _HeaderBar extends StatelessWidget {
+  const _HeaderBar({
+    required this.canUndo,
+    required this.isBusy,
+    required this.onEarlier,
+    required this.onUndo,
+  });
+
+  final bool canUndo;
+  final bool isBusy;
+  final VoidCallback onEarlier;
+  final VoidCallback onUndo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppStrings.appName,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.8,
+                  color: AppColors.forest,
+                  height: 1.1,
+                ),
               ),
-              if (average != null)
-                NefesMetric(
-                  label: AppStrings.snapshotAverage,
-                  value: TimeDisplay.formatIntervalShort(average),
+              const SizedBox(height: 2),
+              Text(
+                TimeDisplay.formatWeekdayDateHeader(DateTime.now()),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.textSecondary,
                 ),
-              if (longest != null)
-                NefesMetric(
-                  label: AppStrings.snapshotLongest,
-                  value: TimeDisplay.formatIntervalShort(longest),
-                ),
+              ),
             ],
           ),
+        ),
+        PopupMenuButton<_UtilityAction>(
+          tooltip: AppStrings.smokedEarlier,
+          padding: EdgeInsets.zero,
+          icon: const Icon(
+            Icons.more_horiz,
+            color: AppColors.textMuted,
+          ),
+          onSelected: (action) {
+            if (isBusy) return;
+            switch (action) {
+              case _UtilityAction.earlier:
+                onEarlier();
+              case _UtilityAction.undo:
+                onUndo();
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: _UtilityAction.earlier,
+              child: Text(AppStrings.smokedEarlier),
+            ),
+            if (canUndo)
+              PopupMenuItem(
+                value: _UtilityAction.undo,
+                child: Text(
+                  isBusy ? AppStrings.loading : AppStrings.undoLast,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+enum _UtilityAction { earlier, undo }
+
+/// Dominant primary + compact secondary — one interaction system.
+class _BehaviorActions extends StatelessWidget {
+  const _BehaviorActions({
+    required this.state,
+    required this.onSmoke,
+    required this.onPickDelay,
+  });
+
+  final HomeUiState state;
+  final VoidCallback onSmoke;
+  final VoidCallback onPickDelay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(
+          height: 52,
+          child: FilledButton(
+            onPressed: state.isBusy ? null : onSmoke,
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.forest,
+              foregroundColor: AppColors.textOnForest,
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.mdAll),
+              textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.2,
+              ),
+            ),
+            child: state.isSaving
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.textOnForest,
+                    ),
+                  )
+                : const Text(AppStrings.iSmoked),
+          ),
+        ),
+        if (!state.hasActiveDelay) ...[
+          const SizedBox(height: AppSpacing.sm),
+          Align(
+            alignment: Alignment.center,
+            child: TextButton.icon(
+              onPressed: state.isBusy ? null : onPickDelay,
+              icon: const Icon(Icons.pause_circle_outline, size: 18),
+              label: Text(
+                AppStrings.delayNow,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: AppColors.forestMid,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.forestMid,
+                minimumSize: const Size(48, 40),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              ),
+            ),
+          ),
         ],
-      ),
+      ],
     );
   }
 }
@@ -605,6 +578,7 @@ class _DelayActivePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return NefesSurface(
       tone: NefesSurfaceTone.muted,
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -631,16 +605,16 @@ class _DelayActivePanel extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             state.delayElapsedLabel,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontFeatures: const [FontFeature.tabularFigures()],
               fontWeight: FontWeight.w700,
               color: AppColors.forestMid,
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.sm),
           Row(
             children: [
               Expanded(

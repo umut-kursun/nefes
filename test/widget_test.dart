@@ -1,4 +1,4 @@
-﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nefes/app.dart';
 import 'package:nefes/core/di/providers.dart';
@@ -40,7 +40,7 @@ void main() {
     expect(find.text(AppStrings.iSmoked), findsOneWidget);
     expect(find.text(AppStrings.sinceLastCigarette.toUpperCase()), findsOneWidget);
     expect(find.text(AppStrings.emptyTodayHistory), findsOneWidget);
-    expect(find.textContaining('/ 15'), findsOneWidget);
+    expect(find.text(AppStrings.limitShort(15)), findsOneWidget);
     expect(find.text(AppStrings.delayNow), findsOneWidget);
     expect(find.text(AppStrings.navToday), findsWidgets);
     expect(find.text(AppStrings.navHistory), findsOneWidget);
@@ -60,8 +60,10 @@ void main() {
     // Capture-first: no mandatory trigger modal / skip button.
     expect(find.text(AppStrings.triggerSkip), findsNothing);
     expect(find.text(AppStrings.whyOptional), findsOneWidget);
-    expect(find.textContaining('1 / 15'), findsOneWidget);
+    expect(find.text(AppStrings.limitShort(15)), findsOneWidget);
+    expect(find.textContaining('1 ${AppStrings.cigarettesUnit}'), findsNWidgets(2));
     expect(find.text(AppStrings.emptyTodayHistory), findsNothing);
-    expect(find.text(AppStrings.undoLast), findsOneWidget);
+    // Undo is contextual (snackbar action), not a permanent row.
+    expect(find.text(AppStrings.undoConfirmAction), findsOneWidget);
   });
 }

@@ -71,27 +71,27 @@ abstract final class AppTheme {
         space: 1,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        height: 68,
+        height: 64,
         backgroundColor: AppColors.surfaceLight,
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: AppColors.surfaceMuted,
-        indicatorShape: RoundedRectangleBorder(borderRadius: AppRadius.smAll),
+        indicatorColor: AppColors.mist.withValues(alpha: 0.65),
+        indicatorShape: const StadiumBorder(),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return TextStyle(
             fontSize: 11,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-            letterSpacing: 0.1,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            letterSpacing: 0.05,
             color: selected ? AppColors.forest : AppColors.textMuted,
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return IconThemeData(
-            size: 22,
+            size: 20,
             color: selected ? AppColors.forest : AppColors.textMuted,
           );
         }),

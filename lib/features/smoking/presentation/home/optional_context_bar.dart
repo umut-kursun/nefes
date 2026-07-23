@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nefes/core/design_system/nefes_surface.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
@@ -21,47 +20,36 @@ class OptionalContextBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NefesSurface(
-      tone: NefesSurfaceTone.muted,
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.smokedSaved,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: AppColors.forest,
-              fontWeight: FontWeight.w700,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.whyOptional,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w600,
           ),
-          const SizedBox(height: 2),
-          Text(
-            AppStrings.whyOptional,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
-            children: [
-              for (final t in quickTriggers)
-                ActionChip(
-                  label: Text(SmokingTriggerLabels.label(t)),
-                  onPressed: () => onSelected(t),
-                  visualDensity: VisualDensity.compact,
-                ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.xs,
+          children: [
+            for (final t in quickTriggers)
               ActionChip(
-                avatar: const Icon(Icons.add, size: 16),
-                label: const Text(AppStrings.moreTriggers),
-                onPressed: onMore,
+                label: Text(SmokingTriggerLabels.label(t)),
+                onPressed: () => onSelected(t),
                 visualDensity: VisualDensity.compact,
               ),
-            ],
-          ),
-        ],
-      ),
+            ActionChip(
+              avatar: const Icon(Icons.add, size: 16),
+              label: const Text(AppStrings.moreTriggers),
+              onPressed: onMore,
+              visualDensity: VisualDensity.compact,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
