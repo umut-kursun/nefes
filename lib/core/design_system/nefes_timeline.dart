@@ -19,8 +19,7 @@ class NefesTimelineItem {
   final VoidCallback? onTap;
 }
 
-/// Chronological timeline — time, marker, event, optional context chip,
-/// interval capsule, overflow affordance.
+/// Chronological timeline — compact scannable rows for Today overview.
 class NefesTimeline extends StatelessWidget {
   const NefesTimeline({super.key, required this.items});
 
@@ -66,35 +65,35 @@ class _TimelineRow extends StatelessWidget {
           SizedBox(
             width: TodayScale.timelineTimeCol,
             child: Padding(
-              padding: const EdgeInsets.only(top: 14),
+              padding: const EdgeInsets.only(top: 8),
               child: Text(
                 item.timeLabel,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontFeatures: const [FontFeature.tabularFigures()],
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w600,
-                  height: 1.2,
+                  height: 1.15,
                   fontSize: TodayScale.timelineTimeSize,
                 ),
               ),
             ),
           ),
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: AppSpacing.xs),
           SizedBox(
-            width: 16,
+            width: 14,
             child: Column(
               children: [
                 if (!isFirst)
-                  Container(width: 1.5, height: 14, color: AppColors.divider)
+                  Container(width: 1.5, height: 8, color: AppColors.divider)
                 else
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 8),
                 Container(
-                  width: 10,
-                  height: 10,
+                  width: 8,
+                  height: 8,
                   decoration: BoxDecoration(
                     color: item.isDelay ? AppColors.surfaceMuted : markerColor,
                     shape: BoxShape.circle,
-                    border: Border.all(color: markerColor, width: 2),
+                    border: Border.all(color: markerColor, width: 1.5),
                   ),
                 ),
                 if (!isLast)
@@ -104,18 +103,18 @@ class _TimelineRow extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: AppSpacing.md),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Material(
               color: Colors.transparent,
               child: InkWell(
                 onTap: item.onTap,
-                borderRadius: AppRadius.mdAll,
+                borderRadius: AppRadius.smAll,
                 hoverColor: AppColors.forest.withValues(alpha: 0.03),
                 child: Padding(
                   padding: EdgeInsets.only(
-                    top: AppSpacing.md,
-                    bottom: isLast ? AppSpacing.md : AppSpacing.lg,
+                    top: 6,
+                    bottom: isLast ? 6 : 8,
                     right: AppSpacing.xs,
                   ),
                   child: Row(
@@ -124,26 +123,26 @@ class _TimelineRow extends StatelessWidget {
                       Expanded(
                         child: Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: AppSpacing.sm,
-                          runSpacing: AppSpacing.xs,
+                          spacing: 6,
+                          runSpacing: 2,
                           children: [
                             Text(
                               item.title,
                               style: Theme.of(context)
                                   .textTheme
-                                  .titleMedium
+                                  .titleSmall
                                   ?.copyWith(
                                     color: AppColors.textPrimary,
                                     fontWeight: FontWeight.w700,
-                                    height: 1.2,
+                                    height: 1.15,
                                     fontSize: TodayScale.timelineTitleSize,
                                   ),
                             ),
                             if (item.subtitle != null)
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: AppSpacing.sm,
-                                  vertical: 4,
+                                  horizontal: 6,
+                                  vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
                                   color: AppColors.surfaceSage,
@@ -159,6 +158,7 @@ class _TimelineRow extends StatelessWidget {
                                       ?.copyWith(
                                         color: AppColors.textOnSage,
                                         fontWeight: FontWeight.w600,
+                                        fontSize: 10,
                                       ),
                                 ),
                               ),
@@ -166,11 +166,11 @@ class _TimelineRow extends StatelessWidget {
                         ),
                       ),
                       if (item.intervalBefore != null) ...[
-                        const SizedBox(width: AppSpacing.sm),
+                        const SizedBox(width: 4),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.sm,
-                            vertical: 5,
+                            horizontal: 6,
+                            vertical: 3,
                           ),
                           decoration: BoxDecoration(
                             color: AppColors.progressTrack,
@@ -184,6 +184,7 @@ class _TimelineRow extends StatelessWidget {
                                 ?.copyWith(
                                   color: AppColors.textSecondary,
                                   fontWeight: FontWeight.w600,
+                                  fontSize: 10,
                                   fontFeatures: const [
                                     FontFeature.tabularFigures(),
                                   ],
@@ -192,10 +193,10 @@ class _TimelineRow extends StatelessWidget {
                         ),
                       ],
                       if (item.onTap != null) ...[
-                        const SizedBox(width: AppSpacing.xs),
+                        const SizedBox(width: 2),
                         const Icon(
                           Icons.more_horiz,
-                          size: 20,
+                          size: 16,
                           color: AppColors.textMuted,
                         ),
                       ],

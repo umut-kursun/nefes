@@ -281,7 +281,7 @@ class _TodayComposition extends StatelessWidget {
           onEarlier: onEarlier,
           onUndo: onUndo,
         ),
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.sm),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -290,21 +290,26 @@ class _TodayComposition extends StatelessWidget {
                 HeroElapsedCard(
                   elapsedLabel: state.elapsedLabel,
                   hasLastSmoke: state.hasLastSmoke,
-                  supportLine: state.hasActiveDelay
-                      ? null
-                      : state.todayDelayInsight,
+                  supportLine: state.hasLastSmoke
+                      ? (state.hasActiveDelay
+                          ? null
+                          : (state.todayDelayInsight ??
+                              AppStrings.heroSupportLine))
+                      : null,
                 ),
-                const SizedBox(height: AppSpacing.md),
-                DailyStatusSection(
+                const SizedBox(height: AppSpacing.sm + 2),
+                TodayDashboardPanel(
                   used: state.todayCount,
                   limit: state.dailyTarget,
                   exceeded: state.isTargetExceeded,
                   onEditLimit: onEditTarget,
+                  insight: state.contextualInsight,
+                  isBusy: state.isBusy,
+                  isSaving: state.isSaving,
+                  showDelayAction: !state.hasActiveDelay,
+                  onSmoke: onSmoke,
+                  onDelay: onPickDelay,
                 ),
-                if (state.contextualInsight != null) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  InsightChipCard(message: state.contextualInsight!),
-                ],
                 if (state.hasActiveDelay) ...[
                   const SizedBox(height: AppSpacing.sm),
                   _DelayActivePanel(
@@ -322,34 +327,52 @@ class _TodayComposition extends StatelessWidget {
                     onMore: onMoreTriggers,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.lg),
-                TwinActionZone(
-                  isBusy: state.isBusy,
-                  isSaving: state.isSaving,
-                  showDelayAction: !state.hasActiveDelay,
-                  onSmoke: onSmoke,
-                  onDelay: onPickDelay,
-                ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.sm + 2),
                 _metrics(state),
-                const SizedBox(height: AppSpacing.lg),
-                TodayTimelineHeader(
-                  onViewAll: () => context.goNamed('history'),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                if (state.todayEvents.isEmpty)
-                  Text(
-                    AppStrings.emptyTodayHistory,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  )
-                else
-                  _TodayTimeline(
-                    events: state.todayEvents,
-                    onEditEvent: onEditEvent,
+                const SizedBox(height: AppSpacing.sm + 2),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.md,
+                    AppSpacing.sm + 2,
+                    AppSpacing.sm,
+                    AppSpacing.sm,
                   ),
-                const SizedBox(height: AppSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceElevated,
+                    borderRadius: AppRadius.lgAll,
+                    border: Border.all(color: AppColors.borderSubtle),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TodayTimelineHeader(
+                        onViewAll: () => context.goNamed('history'),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      if (state.todayEvents.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: AppSpacing.sm,
+                          ),
+                          child: Text(
+                            AppStrings.emptyTodayHistory,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.textMuted,
+                                ),
+                          ),
+                        )
+                      else
+                        _TodayTimeline(
+                          events: state.todayEvents,
+                          onEditEvent: onEditEvent,
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
               ],
             ),
           ),

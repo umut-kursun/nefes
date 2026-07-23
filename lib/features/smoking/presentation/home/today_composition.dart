@@ -38,7 +38,7 @@ class TodayBrandHeader extends StatelessWidget {
                   fontSize: TodayScale.brandSize,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 dateLabel,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -141,10 +141,10 @@ class HeroElapsedCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
                 AppSpacing.md,
-                AppSpacing.lg,
+                AppSpacing.sm + 2,
                 AppSpacing.md,
+                AppSpacing.sm + 2,
               ),
               child: hasLastSmoke
                   ? _TimerContent(
@@ -258,15 +258,28 @@ class _TimerContent extends StatelessWidget {
           ),
         ),
         if (supportLine != null) ...[
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            supportLine!,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
-            ),
+          const SizedBox(height: AppSpacing.xs),
+          Row(
+            children: [
+              Icon(
+                Icons.eco_outlined,
+                size: 13,
+                color: AppColors.forestSoft.withValues(alpha: 0.9),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: Text(
+                  supportLine!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
           ),
         ] else
           const Spacer(flex: 1),
@@ -328,12 +341,14 @@ class DailyStatusSection extends StatelessWidget {
     required this.limit,
     required this.exceeded,
     this.onEditLimit,
+    this.embedded = false,
   });
 
   final int used;
   final int limit;
   final bool exceeded;
   final VoidCallback? onEditLimit;
+  final bool embedded;
 
   @override
   Widget build(BuildContext context) {
@@ -342,127 +357,128 @@ class DailyStatusSection extends StatelessWidget {
     final remaining = (limit - used).clamp(0, 999999);
     final fill = exceeded ? AppColors.exceeded : AppColors.progress;
 
+    final body = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '$used',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                        color: AppColors.forest,
+                        height: 1.05,
+                        fontSize: TodayScale.statusCountSize,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' ${AppStrings.cigarettesUnit}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onEditLimit,
+                borderRadius: AppRadius.smAll,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 40,
+                    minHeight: 36,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xs,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          AppStrings.limitShort(limit),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        if (onEditLimit != null) ...[
+                          const SizedBox(width: AppSpacing.xs),
+                          const Icon(
+                            Icons.edit_outlined,
+                            size: 15,
+                            color: AppColors.textMuted,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: ratio),
+            duration: AppMotion.normal,
+            curve: AppMotion.standard,
+            builder: (context, value, _) {
+              return SizedBox(
+                height: TodayScale.progressTrackHeight,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    const ColoredBox(color: AppColors.progressTrack),
+                    FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: value,
+                      child: ColoredBox(color: fill),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          exceeded
+              ? AppStrings.limitExceeded
+              : AppStrings.remainingCount(remaining),
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: exceeded ? AppColors.exceeded : AppColors.textMuted,
+          ),
+        ),
+      ],
+    );
+
+    if (embedded) return body;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.lg,
         AppSpacing.md,
-        AppSpacing.lg,
         AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.sm,
       ),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
         borderRadius: AppRadius.lgAll,
         border: Border.all(color: AppColors.borderSubtle),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '$used',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                          color: AppColors.forest,
-                          height: 1.1,
-                          fontSize: TodayScale.statusCountSize,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' ${AppStrings.cigarettesUnit}',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: onEditLimit,
-                  borderRadius: AppRadius.smAll,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      minWidth: 44,
-                      minHeight: 40,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            AppStrings.limitShort(limit),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                  color: AppColors.textSecondary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                          if (onEditLimit != null) ...[
-                            const SizedBox(width: AppSpacing.xs),
-                            const Icon(
-                              Icons.edit_outlined,
-                              size: 18,
-                              color: AppColors.textMuted,
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.pill),
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0, end: ratio),
-              duration: AppMotion.normal,
-              curve: AppMotion.standard,
-              builder: (context, value, _) {
-                return SizedBox(
-                  height: TodayScale.progressTrackHeight,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      const ColoredBox(color: AppColors.progressTrack),
-                      FractionallySizedBox(
-                        alignment: Alignment.centerLeft,
-                        widthFactor: value,
-                        child: ColoredBox(color: fill),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            exceeded
-                ? AppStrings.limitExceeded
-                : AppStrings.remainingCount(remaining),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: exceeded ? AppColors.exceeded : AppColors.textMuted,
-            ),
-          ),
-        ],
-      ),
+      child: body,
     );
   }
 }
@@ -477,38 +493,110 @@ class InsightChipCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.surfaceSage,
-      borderRadius: AppRadius.lgAll,
+      borderRadius: AppRadius.mdAll,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm + 2,
         ),
         child: Row(
           children: [
             const Icon(
               Icons.show_chart_rounded,
-              size: 20,
+              size: 16,
               color: AppColors.insightAccent,
             ),
-            const SizedBox(width: AppSpacing.md),
+            const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(
                 message,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: AppColors.textOnSage,
-                  height: 1.3,
+                  height: 1.25,
                   fontWeight: FontWeight.w500,
+                  fontSize: 12,
                 ),
               ),
             ),
-            const SizedBox(width: AppSpacing.sm),
+            const SizedBox(width: AppSpacing.xs),
             const Icon(
               Icons.chevron_right,
-              size: 20,
+              size: 16,
               color: AppColors.forestSoft,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Grouped daily status + insight + twin actions (mockup dashboard card).
+class TodayDashboardPanel extends StatelessWidget {
+  const TodayDashboardPanel({
+    super.key,
+    required this.used,
+    required this.limit,
+    required this.exceeded,
+    required this.onEditLimit,
+    required this.isBusy,
+    required this.isSaving,
+    required this.showDelayAction,
+    required this.onSmoke,
+    required this.onDelay,
+    this.insight,
+  });
+
+  final int used;
+  final int limit;
+  final bool exceeded;
+  final VoidCallback onEditLimit;
+  final String? insight;
+  final bool isBusy;
+  final bool isSaving;
+  final bool showDelayAction;
+  final VoidCallback onSmoke;
+  final VoidCallback onDelay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.md,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceElevated,
+        borderRadius: AppRadius.lgAll,
+        border: Border.all(color: AppColors.borderSubtle),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          DailyStatusSection(
+            used: used,
+            limit: limit,
+            exceeded: exceeded,
+            onEditLimit: onEditLimit,
+            embedded: true,
+          ),
+          if (insight != null && insight!.trim().isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.sm),
+            InsightChipCard(message: insight!),
+          ],
+          const SizedBox(height: AppSpacing.md),
+          TwinActionZone(
+            isBusy: isBusy,
+            isSaving: isSaving,
+            showDelayAction: showDelayAction,
+            onSmoke: onSmoke,
+            onDelay: onDelay,
+          ),
+        ],
       ),
     );
   }
@@ -553,7 +641,7 @@ class TwinActionZone extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(child: primary),
-            const SizedBox(width: AppSpacing.md),
+            const SizedBox(width: AppSpacing.sm),
             Expanded(child: secondary!),
           ],
         ),
@@ -601,18 +689,18 @@ class _PrimaryActionCard extends StatelessWidget {
         }),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
-            AppSpacing.lg,
-            AppSpacing.lg,
-            AppSpacing.lg,
             AppSpacing.md,
+            AppSpacing.md,
+            AppSpacing.md,
+            AppSpacing.sm + 2,
           ),
           child: isSaving
               ? const SizedBox(
                   height: TodayScale.actionMinBody,
                   child: Center(
                     child: SizedBox(
-                      width: 24,
-                      height: 24,
+                      width: 22,
+                      height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
                         color: AppColors.textOnForest,
@@ -637,17 +725,17 @@ class _PrimaryActionCard extends StatelessWidget {
                         color: AppColors.textOnForest,
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    const SizedBox(height: AppSpacing.sm),
                     Text(
                       AppStrings.iSmoked,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: AppColors.textOnForest,
                         fontWeight: FontWeight.w700,
-                        height: 1.15,
+                        height: 1.1,
                         fontSize: TodayScale.actionTitleSize,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 1),
                     Text(
                       AppStrings.logNowSubtitle,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -694,10 +782,10 @@ class _SecondaryActionCard extends StatelessWidget {
         }),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
-            AppSpacing.lg,
-            AppSpacing.lg,
-            AppSpacing.lg,
             AppSpacing.md,
+            AppSpacing.md,
+            AppSpacing.md,
+            AppSpacing.sm + 2,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -721,12 +809,12 @@ class _SecondaryActionCard extends StatelessWidget {
                   const Spacer(),
                   Icon(
                     Icons.chevron_right,
-                    size: 22,
+                    size: 18,
                     color: isBusy ? AppColors.textMuted : AppColors.forestSoft,
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 AppStrings.delayNow,
                 maxLines: 2,
@@ -734,11 +822,11 @@ class _SecondaryActionCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: titleColor,
                   fontWeight: FontWeight.w700,
-                  height: 1.12,
+                  height: 1.1,
                   fontSize: TodayScale.actionTitleSize,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 1),
               Text(
                 AppStrings.delayHint,
                 maxLines: 1,
@@ -775,8 +863,8 @@ class MetricSummaryCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.lg,
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.md,
       ),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
@@ -878,7 +966,7 @@ class _MetricColumn extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 4),
         Text(
           label,
           maxLines: 1,
@@ -909,9 +997,9 @@ class TodayTimelineHeader extends StatelessWidget {
             AppStrings.todayCigarettes.toUpperCase(),
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: AppColors.textMuted,
-              letterSpacing: 0.8,
+              letterSpacing: 0.7,
               fontWeight: FontWeight.w600,
-              fontSize: 13,
+              fontSize: 11,
             ),
           ),
         ),
@@ -923,7 +1011,7 @@ class TodayTimelineHeader extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
               visualDensity: VisualDensity.compact,
               textStyle: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -931,8 +1019,8 @@ class TodayTimelineHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(AppStrings.viewAll),
-                SizedBox(width: 2),
-                Icon(Icons.chevron_right, size: 18),
+                SizedBox(width: 1),
+                Icon(Icons.chevron_right, size: 15),
               ],
             ),
           ),

@@ -107,42 +107,41 @@ abstract final class AppBreakpoints {
   static const double todayDenseBlock = 420;
 }
 
-/// Today screen phone-first visual scale.
-/// Typography stays large; vertical chrome is density-tuned separately.
+/// Today dashboard density — proportions tuned to the 412×915 reference.
 abstract final class TodayScale {
   // Header
-  static const double brandSize = 26;
-  static const double dateSize = 14;
-  static const double overflowButton = 44;
+  static const double brandSize = 22;
+  static const double dateSize = 13;
+  static const double overflowButton = 36;
 
-  // Hero — keep timer type; compress empty vertical chrome (~−28%).
-  static const double heroHeight = 150;
-  static const double heroHeightWithSupport = 168;
-  static const double heroEmptyHeight = 152;
-  static const double heroLabelSize = 13;
-  static const double timerHhMm = 56;
-  static const double timerSs = 28;
-  static const double timerRowHeight = 62;
+  // Hero (~20% of first viewport, timer stays dominant)
+  static const double heroHeight = 126;
+  static const double heroHeightWithSupport = 146;
+  static const double heroEmptyHeight = 118;
+  static const double heroLabelSize = 11;
+  static const double timerHhMm = 44;
+  static const double timerSs = 22;
+  static const double timerRowHeight = 48;
 
   // Daily status
-  static const double statusCountSize = 26;
-  static const double progressTrackHeight = 10;
+  static const double statusCountSize = 22;
+  static const double progressTrackHeight = 8;
 
-  // Actions — moderate height trim (~−18%), titles unchanged.
-  static const double actionIconBox = 40;
-  static const double actionIconGlyph = 22;
-  static const double actionTitleSize = 17;
-  static const double actionSubtitleSize = 13;
-  static const double actionMinBody = 86;
+  // Actions — short paired cards
+  static const double actionIconBox = 30;
+  static const double actionIconGlyph = 18;
+  static const double actionTitleSize = 15;
+  static const double actionSubtitleSize = 11;
+  static const double actionMinBody = 70;
 
   // Metrics
-  static const double metricValueSize = 26;
-  static const double metricUnitSize = 13;
-  static const double metricLabelSize = 12;
-  static const double metricDividerHeight = 40;
+  static const double metricValueSize = 18;
+  static const double metricUnitSize = 12;
+  static const double metricLabelSize = 11;
+  static const double metricDividerHeight = 34;
 
-  // Timeline
-  static const double timelineTimeSize = 14;
-  static const double timelineTitleSize = 16;
-  static const double timelineTimeCol = 48;
+  // Timeline — slim scannable rows (~4–5 visible at 412×915)
+  static const double timelineTimeSize = 12;
+  static const double timelineTitleSize = 14;
+  static const double timelineTimeCol = 40;
 }

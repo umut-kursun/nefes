@@ -75,7 +75,7 @@
     // Bump ?v= whenever CACHE_NAME in sw.js changes so installs re-register.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js?v=12').then(function (reg) {
+        navigator.serviceWorker.register('/sw.js?v=13').then(function (reg) {
           // Check for a newer worker on each launch (PWA often stays open).
           try { reg.update(); } catch (_) {}
         }).catch(function () {
