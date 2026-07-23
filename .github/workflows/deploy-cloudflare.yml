@@ -138,9 +138,44 @@ jobs:
           export CLOUDFLARE_API_TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | sed 's/^["'\'']//;s/["'\'']$//' | tr -d '[:space:]' | tr -d '\240')"
           export CLOUDFLARE_ACCOUNT_ID="$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | sed 's/^["'\'']//;s/["'\'']$//' | tr -d '[:space:]' | tr -d '\240')"
 
+          echo "token_len=${#CLOUDFLARE_API_TOKEN} account_len=${#CLOUDFLARE_ACCOUNT_ID}"
+          # Prove the token is accepted by Cloudflare outside Wrangler (no secret printed).
+          set +e
+          verify_code="$(curl -sS -o /tmp/cf-token-verify.json -w '%{http_code}' \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            https://api.cloudflare.com/client/v4/user/tokens/verify)"
+          verify_curl=$?
+          set -e
+          echo "cf_token_verify_http=${verify_code} curl_exit=${verify_curl}"
+          if [ -f /tmp/cf-token-verify.json ]; then
+            # success/errors only — never dump raw token material
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          raw = Path("/tmp/cf-token-verify.json").read_text(encoding="utf-8", errors="replace")
+          try:
+              data = json.loads(raw)
+          except Exception:
+              print("cf_token_verify_body_unparsed")
+          else:
+              print("cf_token_verify_success=", data.get("success"))
+              errs = data.get("errors") or []
+              for e in errs[:5]:
+                  print(f"cf_token_verify_error code={e.get('code')} message={e.get('message')}")
+              res = data.get("result") or {}
+              if isinstance(res, dict) and res.get("status"):
+                  print("cf_token_verify_status=", res.get("status"))
+          PY
+          fi
+          if [ "$verify_code" != "200" ]; then
+            echo "::error::Cloudflare token verify failed (HTTP ${verify_code}). Recreate CLOUDFLARE_API_TOKEN using template 'Edit Cloudflare Workers' (Account API Token). Paste the raw token only — not Global API Key, not email, no Bearer prefix."
+            exit 1
+          fi
+
           echo "Deploying prebuilt build/web via wrangler 4…"
           set +e
-          npx --yes wrangler@4.40.3 deploy --config wrangler.toml 2>&1 | tee wrangler-deploy.log
+          npx --yes wrangler@4.53.0 deploy --config wrangler.toml 2>&1 | tee wrangler-deploy.log
           code=${PIPESTATUS[0]}
           set -e
           if [ "$code" -ne 0 ]; then
@@ -155,7 +190,7 @@ jobs:
                   [ -n "$line" ] && echo "::error::wrangler: $line"
                 done
             if grep -qiE 'Authentication error|Authentication failed|10000|9106|6111|unauthorized|not authenticated' wrangler-deploy.log; then
-              echo "::error::Cloudflare rejected the API token. Recreate CLOUDFLARE_API_TOKEN with template 'Edit Cloudflare Workers' (Account API Token), paste raw token only (no Bearer/quotes), and keep CLOUDFLARE_ACCOUNT_ID as the 32-char Account ID."
+              echo "::error::Cloudflare rejected the API token during deploy. Recreate CLOUDFLARE_API_TOKEN with template 'Edit Cloudflare Workers' (Account API Token), paste raw token only (no Bearer/quotes), and keep CLOUDFLARE_ACCOUNT_ID as the 32-char Account ID."
             fi
             exit "$code"
           fi
