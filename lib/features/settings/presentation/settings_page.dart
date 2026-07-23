@@ -12,7 +12,7 @@ import 'package:nefes/features/settings/data/backup_file_io.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:uuid/uuid.dart';
 
-const _appVersion = '1.4.1';
+const _appVersion = '1.4.2';
 
 /// Settings — grouped list rows, not a wall of cards.
 class SettingsPage extends ConsumerStatefulWidget {

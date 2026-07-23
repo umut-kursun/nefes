@@ -36,33 +36,22 @@ class _HomeViewState extends ConsumerState<HomeView> {
       if (message != null &&
           (previous?.errorMessage != next.errorMessage ||
               previous?.infoMessage != next.infoMessage)) {
-        final canUndoAction = next.canUndo &&
-            next.infoMessage == AppStrings.smokedSaved &&
-            next.errorMessage == null;
-
+        // Brief auto-dismiss confirmation. Undo lives in the ⋯ menu — a snackbar
+        // action / close icon can stick open on Flutter Web and force a tap.
         ScaffoldMessenger.of(context)
           ..clearSnackBars()
           ..showSnackBar(
             SnackBar(
               content: Text(message),
               behavior: SnackBarBehavior.floating,
-              // Keep confirmation brief; undo stays available in ⋯ when eligible.
-              duration: Duration(milliseconds: canUndoAction ? 3500 : 1800),
-              showCloseIcon: true,
-              closeIconColor: AppColors.textOnForest,
-              action: canUndoAction
-                  ? SnackBarAction(
-                      label: AppStrings.undoConfirmAction,
-                      textColor: AppColors.textOnForest,
-                      onPressed: () {
-                        ref
-                            .read(homeViewModelProvider.notifier)
-                            .undoLastConfirmed();
-                      },
-                    )
-                  : null,
+              duration: const Duration(milliseconds: 1000),
             ),
           );
+        // Belt-and-suspenders: Web sometimes ignores SnackBar.duration.
+        Future<void>.delayed(const Duration(milliseconds: 1000), () {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        });
         ref.read(homeViewModelProvider.notifier).clearMessages();
       }
 

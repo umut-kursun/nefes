@@ -1,7 +1,7 @@
 name: nefes
 description: "NEFES - Understand your habits."
 publish_to: "none"
-version: 1.4.1+7
+version: 1.4.2+8
 
 environment:
   sdk: ^3.12.2
