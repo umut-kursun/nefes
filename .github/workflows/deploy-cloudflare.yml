@@ -92,12 +92,17 @@ jobs:
           echo "Asset bytes:" && du -sb build/web | cut -f1
 
       - name: Verify Cloudflare auth
+        continue-on-error: true
         run: |
-          set -euo pipefail
+          set +e
           npx --yes wrangler@4.40.3 whoami 2>&1 | tee whoami.log
-          if grep -qiE 'not authenticated|error|unauthorized|10000' whoami.log; then
-            echo "::error::Wrangler authentication failed. Recreate CLOUDFLARE_API_TOKEN with the Edit Cloudflare Workers template and confirm CLOUDFLARE_ACCOUNT_ID."
-            exit 1
+          code=$?
+          set -e
+          echo "whoami_exit=$code"
+          # Account-owned tokens often cannot read user email; that is OK.
+          # Only treat hard auth failures as a warning here — deploy is the real gate.
+          if grep -qiE 'not authenticated|Authentication error|code: 10000' whoami.log; then
+            echo "::warning::Wrangler whoami reported an auth problem. Deploy will still be attempted."
           fi
 
       - name: Deploy to Cloudflare Workers
@@ -113,6 +118,9 @@ jobs:
             echo "::group::wrangler-deploy.log"
             cat wrangler-deploy.log
             echo "::endgroup::"
+            if grep -qiE 'Authentication error|10000|unauthorized|not authenticated' wrangler-deploy.log; then
+              echo "::error::Cloudflare rejected the API token. Recreate CLOUDFLARE_API_TOKEN using the 'Edit Cloudflare Workers' template (Account-owned token preferred) and confirm CLOUDFLARE_ACCOUNT_ID matches the nefes321 account."
+            fi
             exit "$code"
           fi
           echo "Deploy succeeded."
