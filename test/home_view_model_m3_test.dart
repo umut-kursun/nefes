@@ -167,7 +167,9 @@ void main() {
     final vm = container.read(homeViewModelProvider.notifier);
     await vm.onDelayPressed();
     await Future<void>.delayed(const Duration(milliseconds: 30));
+    expect(container.read(homeViewModelProvider).hasActiveDelay, isTrue);
     await vm.onISmokedPressed();
+    await Future<void>.delayed(const Duration(milliseconds: 50));
 
     final state = container.read(homeViewModelProvider);
     expect(state.hasActiveDelay, isFalse);

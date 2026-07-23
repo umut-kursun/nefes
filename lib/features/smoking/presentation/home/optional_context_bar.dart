@@ -20,36 +20,44 @@ class OptionalContextBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.whyOptional,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: AppColors.textSecondary,
-            fontWeight: FontWeight.w600,
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceMuted.withValues(alpha: 0.55),
+        borderRadius: AppRadius.lgAll,
+        border: Border.all(color: AppColors.borderSubtle),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppStrings.whyOptional,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.xs,
-          children: [
-            for (final t in quickTriggers)
+          const SizedBox(height: AppSpacing.sm),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.xs,
+            children: [
+              for (final t in quickTriggers)
+                ActionChip(
+                  label: Text(SmokingTriggerLabels.label(t)),
+                  onPressed: () => onSelected(t),
+                  visualDensity: VisualDensity.compact,
+                ),
               ActionChip(
-                label: Text(SmokingTriggerLabels.label(t)),
-                onPressed: () => onSelected(t),
+                avatar: const Icon(Icons.add, size: 16),
+                label: const Text(AppStrings.moreTriggers),
+                onPressed: onMore,
                 visualDensity: VisualDensity.compact,
               ),
-            ActionChip(
-              avatar: const Icon(Icons.add, size: 16),
-              label: const Text(AppStrings.moreTriggers),
-              onPressed: onMore,
-              visualDensity: VisualDensity.compact,
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

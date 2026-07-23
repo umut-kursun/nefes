@@ -5,14 +5,18 @@ abstract final class AppStrings {
 
   static const today = 'Bugün';
   static const iSmoked = 'Sigara İçtim';
+  static const logNowSubtitle = 'Hemen kaydet';
   static const sinceLastCigarette = 'Son sigaradan beri';
   static const noCigaretteYet =
       'Henüz kayıt yok. İlk sigaranı işaretlediğinde süre burada başlar.';
+  static const heroSupportLine = 'Nefesinle güçleniyorsun.';
   static const dailyTarget = 'Günlük sınır';
   static const dailyLimit = 'Günlük sınır';
   static const usedLabel = 'kullanıldı';
   static const remaining = 'Kalan';
   static const todayCigarettes = 'Bugünkü kayıtlar';
+  static const viewAll = 'Tümünü Gör';
+  static const metricTodayLabel = 'Bugün';
   static const emptyTodayHistory = 'Bugün henüz kayıt yok.';
   static const undoLast = 'Son kaydı geri al';
   static const undoConfirmTitle = 'Son kayıt geri alınsın mı?';
@@ -33,7 +37,7 @@ abstract final class AppStrings {
   static const delayHint = 'İsteği biraz ertele';
   static const cigarettesUnit = 'sigara';
   static const snapshotAverage = 'Ort. aralık';
-  static const snapshotLongest = 'En uzun';
+  static const snapshotLongest = 'En uzun aralık';
 
   // Onboarding
   static const onboardingTitle = 'Sınırını belirle';

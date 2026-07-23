@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nefes/core/design_system/nefes_surface.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nefes/core/design_system/nefes_timeline.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
@@ -274,24 +274,28 @@ class _TodayComposition extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _HeaderBar(
+        TodayBrandHeader(
+          dateLabel: TimeDisplay.formatWeekdayDateHeader(DateTime.now()),
           canUndo: state.canUndo,
           isBusy: state.isBusy,
           onEarlier: onEarlier,
           onUndo: onUndo,
         ),
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.lg),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ElapsedTimerSignature(
+                HeroElapsedCard(
                   elapsedLabel: state.elapsedLabel,
                   hasLastSmoke: state.hasLastSmoke,
+                  supportLine: state.hasActiveDelay
+                      ? null
+                      : state.todayDelayInsight,
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                CompactDailyLimit(
+                DailyStatusSection(
                   used: state.todayCount,
                   limit: state.dailyTarget,
                   exceeded: state.isTargetExceeded,
@@ -299,7 +303,7 @@ class _TodayComposition extends StatelessWidget {
                 ),
                 if (state.contextualInsight != null) ...[
                   const SizedBox(height: AppSpacing.md),
-                  InsightCaption(message: state.contextualInsight!),
+                  InsightChipCard(message: state.contextualInsight!),
                 ],
                 if (state.hasActiveDelay) ...[
                   const SizedBox(height: AppSpacing.md),
@@ -318,34 +322,21 @@ class _TodayComposition extends StatelessWidget {
                     onMore: onMoreTriggers,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.lg),
-                TodayBehaviorActions(
+                const SizedBox(height: AppSpacing.xl),
+                TwinActionZone(
                   isBusy: state.isBusy,
                   isSaving: state.isSaving,
                   showDelayAction: !state.hasActiveDelay,
                   onSmoke: onSmoke,
                   onDelay: onPickDelay,
                 ),
-                if (state.todayDelayInsight != null) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    state.todayDelayInsight!,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xl),
                 _metrics(state),
-                const SizedBox(height: AppSpacing.md),
-                Text(
-                  AppStrings.todayCigarettes.toUpperCase(),
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: AppColors.textMuted,
-                    letterSpacing: 0.8,
-                  ),
+                const SizedBox(height: AppSpacing.xl),
+                TodayTimelineHeader(
+                  onViewAll: () => context.goNamed('history'),
                 ),
-                const SizedBox(height: AppSpacing.sm),
+                const SizedBox(height: AppSpacing.md),
                 if (state.todayEvents.isEmpty)
                   Text(
                     AppStrings.emptyTodayHistory,
@@ -358,8 +349,7 @@ class _TodayComposition extends StatelessWidget {
                     events: state.todayEvents,
                     onEditEvent: onEditEvent,
                   ),
-                // Keep last timeline items clear of bottom nav on mobile.
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xl),
               ],
             ),
           ),
@@ -384,7 +374,7 @@ class _TodayComposition extends StatelessWidget {
       longest = intervals.reduce((a, b) => a > b ? a : b);
     }
 
-    return CompactTodayMetrics(
+    return MetricSummaryCard(
       count: state.todayCount,
       averageLabel: average == null
           ? null
@@ -395,84 +385,6 @@ class _TodayComposition extends StatelessWidget {
     );
   }
 }
-
-class _HeaderBar extends StatelessWidget {
-  const _HeaderBar({
-    required this.canUndo,
-    required this.isBusy,
-    required this.onEarlier,
-    required this.onUndo,
-  });
-
-  final bool canUndo;
-  final bool isBusy;
-  final VoidCallback onEarlier;
-  final VoidCallback onUndo;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppStrings.appName,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.8,
-                  color: AppColors.forest,
-                  height: 1.1,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                TimeDisplay.formatWeekdayDateHeader(DateTime.now()),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuButton<_UtilityAction>(
-          tooltip: AppStrings.smokedEarlier,
-          padding: EdgeInsets.zero,
-          icon: const Icon(
-            Icons.more_horiz,
-            color: AppColors.textMuted,
-          ),
-          onSelected: (action) {
-            if (isBusy) return;
-            switch (action) {
-              case _UtilityAction.earlier:
-                onEarlier();
-              case _UtilityAction.undo:
-                onUndo();
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: _UtilityAction.earlier,
-              child: Text(AppStrings.smokedEarlier),
-            ),
-            if (canUndo)
-              PopupMenuItem(
-                value: _UtilityAction.undo,
-                child: Text(
-                  isBusy ? AppStrings.loading : AppStrings.undoLast,
-                ),
-              ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-enum _UtilityAction { earlier, undo }
 
 class _TodayTimeline extends StatelessWidget {
   const _TodayTimeline({
@@ -525,9 +437,13 @@ class _DelayActivePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NefesSurface(
-      tone: NefesSurfaceTone.muted,
+    return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceElevated,
+        borderRadius: AppRadius.lgAll,
+        border: Border.all(color: AppColors.borderSubtle),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -542,6 +458,7 @@ class _DelayActivePanel extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: AppColors.textMuted,
                     letterSpacing: 0.7,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

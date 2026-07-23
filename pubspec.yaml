@@ -1,7 +1,7 @@
 name: nefes
 description: "NEFES - Understand your habits."
 publish_to: "none"
-version: 1.4.3+9
+version: 1.4.4+10
 
 environment:
   sdk: ^3.12.2
@@ -26,3 +26,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/

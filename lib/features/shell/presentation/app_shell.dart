@@ -36,6 +36,7 @@ class AppShell extends StatelessWidget {
                     onDestinationSelected: _onDestinationSelected,
                     labelType: NavigationRailLabelType.all,
                     backgroundColor: AppColors.surfaceLight,
+                    indicatorColor: AppColors.navSelectedFill,
                     selectedIconTheme: const IconThemeData(
                       color: AppColors.forest,
                       size: 22,

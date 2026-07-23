@@ -76,7 +76,7 @@ abstract final class AppTheme {
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: AppColors.mist.withValues(alpha: 0.65),
+        indicatorColor: AppColors.navSelectedFill,
         indicatorShape: const StadiumBorder(),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
@@ -98,7 +98,7 @@ abstract final class AppTheme {
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: AppColors.surfaceLight,
-        indicatorColor: AppColors.surfaceMuted,
+        indicatorColor: AppColors.navSelectedFill,
         selectedIconTheme: const IconThemeData(
           color: AppColors.forest,
           size: 22,

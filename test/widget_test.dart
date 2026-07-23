@@ -91,9 +91,16 @@ void main() {
   testWidgets('Home logs a smoke via primary action without blocking modal', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(412, 915));
+    addTearDown(() async {
+      await tester.binding.setSurfaceSize(null);
+    });
+
     await pumpHome(tester);
 
-    await tester.tap(find.text(AppStrings.iSmoked));
+    final primary = find.text(AppStrings.iSmoked);
+    await tester.ensureVisible(primary);
+    await tester.tap(primary);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -103,7 +110,7 @@ void main() {
     expect(find.text(AppStrings.limitShort(15)), findsOneWidget);
     expect(
       find.textContaining('1 ${AppStrings.cigarettesUnit}'),
-      findsOneWidget,
+      findsWidgets,
     );
     expect(find.text(AppStrings.emptyTodayHistory), findsNothing);
     // Primary action remains visible after logging.
@@ -111,6 +118,7 @@ void main() {
     // Allow snapshot stream to mark undo available; snackbar action is best-effort.
     await tester.pump(const Duration(milliseconds: 400));
     // Undo stays available via overflow menu even if snackbar action raced.
+    await tester.ensureVisible(find.byTooltip(AppStrings.smokedEarlier));
     await tester.tap(find.byTooltip(AppStrings.smokedEarlier));
     await tester.pumpAndSettle();
     expect(find.text(AppStrings.undoLast), findsWidgets);

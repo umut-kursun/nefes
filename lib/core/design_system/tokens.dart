@@ -21,26 +21,25 @@ abstract final class AppMotion {
   static const Curve emphasized = Curves.easeInOutCubic;
 }
 
-/// Restrained corner radii.
+/// Soft rounded geometry with clear hierarchy.
 abstract final class AppRadius {
   static const double xs = 6;
   static const double sm = 8;
   static const double md = 12;
   static const double lg = 16;
+  static const double xl = 24;
   static const double pill = 999;
 
   static final BorderRadius xsAll = BorderRadius.circular(xs);
   static final BorderRadius smAll = BorderRadius.circular(sm);
   static final BorderRadius mdAll = BorderRadius.circular(md);
   static final BorderRadius lgAll = BorderRadius.circular(lg);
+  static final BorderRadius xlAll = BorderRadius.circular(xl);
 }
 
-/// NEFES semantic color tokens (light).
-///
-/// Deep forest primary, warm off-white canvas, tonal surfaces —
-/// identity without glassmorphism or loud gradients.
+/// NEFES semantic color tokens (light) — warm cream / deep forest / soft sage.
 abstract final class AppColors {
-  // Brand seeds (legacy aliases used by older call sites)
+  // Brand seeds (legacy aliases)
   static const Color seedLight = forest;
   static const Color seedDark = Color(0xFFA8C3B5);
 
@@ -49,15 +48,17 @@ abstract final class AppColors {
   static const Color forestMid = Color(0xFF2F463B);
   static const Color forestSoft = Color(0xFF3D5C4E);
   static const Color mist = Color(0xFFD5E0D8);
-  static const Color sage = Color(0xFFC9D6CE); // secondary action fill
+  static const Color sage = Color(0xFFC9D6CE);
 
   // Surfaces
-  static const Color canvasLight = Color(0xFFF3F0EB);
-  static const Color surfaceLight = Color(0xFFFAF8F5);
-  static const Color surfaceRaised = Color(0xFFFCFAF7);
+  static const Color canvasLight = Color(0xFFF7F5F2);
+  static const Color surfaceLight = Color(0xFFFFFDFB);
+  static const Color surfaceRaised = Color(0xFFFFFFFF);
+  static const Color surfaceElevated = Color(0xFFFFFFFF);
   static const Color surfaceMuted = Color(0xFFE8EDE8);
   static const Color surfaceInset = Color(0xFFE4E0D9);
-  static const Color surfaceSecondaryAction = Color(0xFFE3EBE5);
+  static const Color surfaceSage = Color(0xFFE3EBE5);
+  static const Color surfaceSecondaryAction = surfaceSage;
 
   // Text
   static const Color textPrimary = Color(0xFF1A211D);
@@ -68,35 +69,79 @@ abstract final class AppColors {
   static const Color textOnSage = Color(0xFF1C2B24);
 
   // Lines / chrome
-  static const Color divider = Color(0xFFD8DCD7);
+  static const Color divider = Color(0xFFE0E4DF);
+  static const Color borderSubtle = Color(0xFFE6EAE4);
   static const Color outlineSoft = Color(0xFFC9CFC8);
 
-  // Status — calm, observational
+  // Status
   static const Color progress = forestSoft;
-  static const Color progressTrack = Color(0xFFDCE3DC);
-  static const Color exceeded = Color(0xFF8B6F4E); // warm earth, not alarm red
+  static const Color progressTrack = Color(0xFFE4EBE5);
+  static const Color exceeded = Color(0xFF8B6F4E);
   static const Color info = Color(0xFF4A5F56);
-  static const Color insightAccent = Color(0xFFB7C7BC);
+  static const Color insightAccent = Color(0xFF7A9588);
   static const Color danger = Color(0xFF8B4A3A);
   static const Color onDanger = Color(0xFFFFF8F6);
   static const Color dangerContainer = Color(0xFFF3DDD7);
   static const Color onDangerContainer = Color(0xFF5C2B22);
 
-  // Dark canvas (system dark)
+  // Dark canvas
   static const Color canvasDark = Color(0xFF121512);
   static const Color surfaceDark = Color(0xFF1A1F1B);
+
+  // Nav
+  static const Color navSelectedFill = Color(0xFFDDE7E1);
 }
 
 /// Layout breakpoints and content widths.
 abstract final class AppBreakpoints {
   static const double dashboardWide = 840;
+  static const double twinActionsMin = 380;
 
   /// Mobile content column (phone-first).
   static const double mobileMaxContent = 430;
 
-  /// Desktop Today / reading column — deliberately narrow companion.
-  static const double desktopMaxContent = 700;
+  /// Desktop Today / reading column.
+  static const double desktopMaxContent = 760;
 
-  /// Compact blocks (limit bar, action zone) stay denser than the column.
-  static const double todayDenseBlock = 400;
+  /// Compact blocks stay denser than the column when needed.
+  static const double todayDenseBlock = 420;
+}
+
+/// Today screen phone-first visual scale (mockup-matched, ~+20% vs dense pass).
+abstract final class TodayScale {
+  // Header
+  static const double brandSize = 26;
+  static const double dateSize = 14;
+  static const double overflowButton = 44;
+
+  // Hero
+  static const double heroHeight = 208;
+  static const double heroHeightWithSupport = 228;
+  static const double heroEmptyHeight = 188;
+  static const double heroLabelSize = 13;
+  static const double timerHhMm = 56;
+  static const double timerSs = 28;
+  static const double timerRowHeight = 66;
+
+  // Daily status
+  static const double statusCountSize = 26;
+  static const double progressTrackHeight = 10;
+
+  // Actions
+  static const double actionIconBox = 40;
+  static const double actionIconGlyph = 22;
+  static const double actionTitleSize = 18;
+  static const double actionSubtitleSize = 13;
+  static const double actionMinBody = 104;
+
+  // Metrics
+  static const double metricValueSize = 26;
+  static const double metricUnitSize = 13;
+  static const double metricLabelSize = 12;
+  static const double metricDividerHeight = 48;
+
+  // Timeline
+  static const double timelineTimeSize = 14;
+  static const double timelineTitleSize = 16;
+  static const double timelineTimeCol = 48;
 }
