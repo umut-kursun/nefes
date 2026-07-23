@@ -22,7 +22,7 @@ class NefesPrimaryButton extends StatelessWidget {
       fontWeight: FontWeight.w600,
       letterSpacing: 0.1,
       height: 1.1,
-      color: AppColors.textOnForest,
+      color: AppColors.textOnForest, // must beat theme onSurface
     );
 
     return SizedBox(
@@ -72,7 +72,7 @@ class NefesPrimaryButton extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (icon != null) ...[
-                      Icon(icon, size: 22),
+                      Icon(icon, size: 22, color: AppColors.textOnForest),
                       const SizedBox(width: 10),
                     ],
                     Text(label, style: labelStyle),

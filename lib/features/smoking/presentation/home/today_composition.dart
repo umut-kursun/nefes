@@ -459,10 +459,13 @@ class _PrimaryLogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Explicit on-forest color — theme titleMedium is dark and would vanish
+    // on the forest fill until hover overlays lighten the surface.
     final labelStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
       fontWeight: FontWeight.w600,
       letterSpacing: 0.1,
       height: 1.1,
+      color: AppColors.textOnForest,
     );
 
     return SizedBox(
@@ -511,7 +514,11 @@ class _PrimaryLogButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.add, size: 22),
+                    const Icon(
+                      Icons.add,
+                      size: 22,
+                      color: AppColors.textOnForest,
+                    ),
                     const SizedBox(width: 10),
                     Text(AppStrings.iSmoked, style: labelStyle),
                   ],

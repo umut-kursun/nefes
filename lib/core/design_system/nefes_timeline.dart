@@ -139,39 +139,63 @@ class _TimelineRow extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
-            child: InkWell(
-              onTap: item.onTap,
-              borderRadius: AppRadius.smAll,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  bottom: isLast ? 0 : AppSpacing.xs,
-                  top: 0,
-                  right: AppSpacing.sm,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.title,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w600,
-                        height: 1.25,
-                      ),
-                    ),
-                    if (item.subtitle != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: Text(
-                          item.subtitle!,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textTertiary,
-                            height: 1.3,
-                          ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: item.onTap,
+                borderRadius: AppRadius.smAll,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: isLast ? 0 : AppSpacing.xs,
+                    top: 0,
+                    right: AppSpacing.sm,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.25,
+                                  ),
+                            ),
+                            if (item.subtitle != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
+                                child: Text(
+                                  item.subtitle!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: AppColors.textTertiary,
+                                        height: 1.3,
+                                      ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                  ],
+                      if (item.onTap != null)
+                        const Padding(
+                          padding: EdgeInsets.only(left: AppSpacing.sm, top: 2),
+                          child: Icon(
+                            Icons.more_horiz,
+                            size: 18,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),

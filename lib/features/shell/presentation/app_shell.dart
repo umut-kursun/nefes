@@ -10,29 +10,6 @@ class AppShell extends StatelessWidget {
 
   final StatefulNavigationShell navigationShell;
 
-  static const _destinations = <_ShellDestination>[
-    _ShellDestination(
-      icon: Icons.wb_sunny_outlined,
-      selectedIcon: Icons.wb_sunny,
-      label: AppStrings.navToday,
-    ),
-    _ShellDestination(
-      icon: Icons.calendar_today_outlined,
-      selectedIcon: Icons.calendar_today,
-      label: AppStrings.navHistory,
-    ),
-    _ShellDestination(
-      icon: Icons.auto_graph_outlined,
-      selectedIcon: Icons.auto_graph,
-      label: AppStrings.navInsights,
-    ),
-    _ShellDestination(
-      icon: Icons.tune_outlined,
-      selectedIcon: Icons.tune,
-      label: AppStrings.navSettings,
-    ),
-  ];
-
   void _onDestinationSelected(int index) {
     navigationShell.goBranch(
       index,
@@ -47,6 +24,8 @@ class AppShell extends StatelessWidget {
         builder: (context, constraints) {
           final isWide = constraints.maxWidth >= AppBreakpoints.dashboardWide;
 
+          // Icons must be written as literal Icons.* here so Flutter Web
+          // tree-shaking keeps the glyphs in MaterialIcons.
           if (isWide) {
             return Scaffold(
               backgroundColor: AppColors.canvasLight,
@@ -57,13 +36,45 @@ class AppShell extends StatelessWidget {
                     onDestinationSelected: _onDestinationSelected,
                     labelType: NavigationRailLabelType.all,
                     backgroundColor: AppColors.surfaceLight,
-                    destinations: [
-                      for (final d in _destinations)
-                        NavigationRailDestination(
-                          icon: Icon(d.icon),
-                          selectedIcon: Icon(d.selectedIcon),
-                          label: Text(d.label),
-                        ),
+                    selectedIconTheme: const IconThemeData(
+                      color: AppColors.forest,
+                      size: 22,
+                    ),
+                    unselectedIconTheme: const IconThemeData(
+                      color: AppColors.textMuted,
+                      size: 22,
+                    ),
+                    selectedLabelTextStyle: const TextStyle(
+                      color: AppColors.forest,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                    unselectedLabelTextStyle: const TextStyle(
+                      color: AppColors.textMuted,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                    destinations: const [
+                      NavigationRailDestination(
+                        icon: Icon(Icons.wb_sunny_outlined),
+                        selectedIcon: Icon(Icons.wb_sunny),
+                        label: Text(AppStrings.navToday),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.calendar_today_outlined),
+                        selectedIcon: Icon(Icons.calendar_today),
+                        label: Text(AppStrings.navHistory),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.auto_graph_outlined),
+                        selectedIcon: Icon(Icons.auto_graph),
+                        label: Text(AppStrings.navInsights),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.tune_outlined),
+                        selectedIcon: Icon(Icons.tune),
+                        label: Text(AppStrings.navSettings),
+                      ),
                     ],
                   ),
                   const VerticalDivider(
@@ -92,13 +103,27 @@ class AppShell extends StatelessWidget {
                 child: NavigationBar(
                   selectedIndex: navigationShell.currentIndex,
                   onDestinationSelected: _onDestinationSelected,
-                  destinations: [
-                    for (final d in _destinations)
-                      NavigationDestination(
-                        icon: Icon(d.icon),
-                        selectedIcon: Icon(d.selectedIcon),
-                        label: d.label,
-                      ),
+                  destinations: const [
+                    NavigationDestination(
+                      icon: Icon(Icons.wb_sunny_outlined),
+                      selectedIcon: Icon(Icons.wb_sunny),
+                      label: AppStrings.navToday,
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.calendar_today_outlined),
+                      selectedIcon: Icon(Icons.calendar_today),
+                      label: AppStrings.navHistory,
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.auto_graph_outlined),
+                      selectedIcon: Icon(Icons.auto_graph),
+                      label: AppStrings.navInsights,
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.tune_outlined),
+                      selectedIcon: Icon(Icons.tune),
+                      label: AppStrings.navSettings,
+                    ),
                   ],
                 ),
               ),
@@ -108,16 +133,4 @@ class AppShell extends StatelessWidget {
       ),
     );
   }
-}
-
-class _ShellDestination {
-  const _ShellDestination({
-    required this.icon,
-    required this.selectedIcon,
-    required this.label,
-  });
-
-  final IconData icon;
-  final IconData selectedIcon;
-  final String label;
 }

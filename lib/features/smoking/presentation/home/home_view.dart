@@ -5,6 +5,7 @@ import 'package:nefes/core/design_system/nefes_timeline.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/core/time/time_display.dart';
+import 'package:nefes/features/history/presentation/event_correction_sheet.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/presentation/home/capture_sheets.dart';
@@ -40,15 +41,19 @@ class _HomeViewState extends ConsumerState<HomeView> {
             next.errorMessage == null;
 
         ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
+          ..clearSnackBars()
           ..showSnackBar(
             SnackBar(
               content: Text(message),
               behavior: SnackBarBehavior.floating,
-              duration: Duration(milliseconds: canUndoAction ? 4000 : 1600),
+              // Keep confirmation brief; undo stays available in ⋯ when eligible.
+              duration: Duration(milliseconds: canUndoAction ? 3500 : 1800),
+              showCloseIcon: true,
+              closeIconColor: AppColors.textOnForest,
               action: canUndoAction
                   ? SnackBarAction(
                       label: AppStrings.undoConfirmAction,
+                      textColor: AppColors.textOnForest,
                       onPressed: () {
                         ref
                             .read(homeViewModelProvider.notifier)
@@ -123,6 +128,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         .read(homeViewModelProvider.notifier)
                         .selectTrigger(t),
                     onMoreTriggers: () => _moreTriggers(context, state),
+                    onEditEvent: (event) => _editTodayEvent(context, event),
                   ),
                 ),
               ),
@@ -233,6 +239,16 @@ class _HomeViewState extends ConsumerState<HomeView> {
       await ref.read(homeViewModelProvider.notifier).undoLastConfirmed();
     }
   }
+
+  Future<void> _editTodayEvent(BuildContext context, HomeEventItem event) {
+    return showEventCorrectionSheet(
+      context: context,
+      ref: ref,
+      smokeEventId: event.id,
+      currentLocal: event.createdAtUtc.toLocal(),
+      currentTrigger: event.trigger,
+    );
+  }
 }
 
 class _TodayComposition extends StatelessWidget {
@@ -248,6 +264,7 @@ class _TodayComposition extends StatelessWidget {
     required this.onEarlier,
     required this.onSelectTrigger,
     required this.onMoreTriggers,
+    required this.onEditEvent,
   });
 
   final HomeUiState state;
@@ -261,6 +278,7 @@ class _TodayComposition extends StatelessWidget {
   final VoidCallback onEarlier;
   final ValueChanged<SmokingTrigger> onSelectTrigger;
   final VoidCallback onMoreTriggers;
+  final ValueChanged<HomeEventItem> onEditEvent;
 
   @override
   Widget build(BuildContext context) {
@@ -347,7 +365,10 @@ class _TodayComposition extends StatelessWidget {
                     ),
                   )
                 else
-                  _TodayTimeline(events: state.todayEvents),
+                  _TodayTimeline(
+                    events: state.todayEvents,
+                    onEditEvent: onEditEvent,
+                  ),
                 // Keep last timeline items clear of bottom nav on mobile.
                 const SizedBox(height: AppSpacing.lg),
               ],
@@ -465,9 +486,13 @@ class _HeaderBar extends StatelessWidget {
 enum _UtilityAction { earlier, undo }
 
 class _TodayTimeline extends StatelessWidget {
-  const _TodayTimeline({required this.events});
+  const _TodayTimeline({
+    required this.events,
+    required this.onEditEvent,
+  });
 
   final List<HomeEventItem> events;
+  final ValueChanged<HomeEventItem> onEditEvent;
 
   @override
   Widget build(BuildContext context) {
@@ -488,6 +513,7 @@ class _TodayTimeline extends StatelessWidget {
               : SmokingTriggerLabels.label(item.trigger!),
           intervalBefore:
               gap == null ? null : TimeDisplay.formatIntervalShort(gap),
+          onTap: () => onEditEvent(item),
         ),
       );
     }

@@ -46,6 +46,8 @@ Future<void> showEventCorrectionSheet({
                 ),
                 onTap: () async {
                   Navigator.of(sheetContext).pop();
+                  await Future<void>.delayed(Duration.zero);
+                  if (!context.mounted) return;
                   await _editTime(context, ref, smokeEventId, currentLocal);
                 },
               ),
@@ -58,6 +60,8 @@ Future<void> showEventCorrectionSheet({
                 ),
                 onTap: () async {
                   Navigator.of(sheetContext).pop();
+                  await Future<void>.delayed(Duration.zero);
+                  if (!context.mounted) return;
                   await _editTrigger(context, ref, smokeEventId);
                 },
               ),
@@ -67,6 +71,8 @@ Future<void> showEventCorrectionSheet({
                   title: const Text(AppStrings.clearTrigger),
                   onTap: () async {
                     Navigator.of(sheetContext).pop();
+                    await Future<void>.delayed(Duration.zero);
+                    if (!context.mounted) return;
                     await ref.read(smokingHabitActionsProvider).removeEventContext(
                           smokeEventId: smokeEventId,
                         );
@@ -85,6 +91,8 @@ Future<void> showEventCorrectionSheet({
                 ),
                 onTap: () async {
                   Navigator.of(sheetContext).pop();
+                  await Future<void>.delayed(Duration.zero);
+                  if (!context.mounted) return;
                   await _confirmDelete(context, ref, smokeEventId);
                 },
               ),
