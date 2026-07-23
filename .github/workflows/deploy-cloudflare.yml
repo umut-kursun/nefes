@@ -54,7 +54,10 @@ jobs:
             exit 1
           fi
           if ! printf '%s' "$ACCOUNT" | grep -Eq '^[a-f0-9]{32}$'; then
-            echo "::warning::CLOUDFLARE_ACCOUNT_ID is not a 32-char hex id (got length ${#ACCOUNT}). Deploy may fail."
+            echo "::error::CLOUDFLARE_ACCOUNT_ID is invalid (length ${#ACCOUNT}, expected 32 hex chars)."
+            echo "::error::Open Cloudflare Dashboard → Workers & Pages → Overview → copy Account ID from the right sidebar."
+            echo "::error::Do not paste the worker name, zone name, or API token. Example format: a1b2c3d4e5f6789012345678abcdef01"
+            exit 1
           fi
 
           echo "token_len=${#TOKEN}"

@@ -68,11 +68,17 @@ Repo includes:
 In GitHub → Settings → Secrets and variables → Actions, create **both**:
 
 - `CLOUDFLARE_API_TOKEN` — API token with **Edit Cloudflare Workers** permission
-- `CLOUDFLARE_ACCOUNT_ID` — your Cloudflare account id (Workers overview sidebar)
+- `CLOUDFLARE_ACCOUNT_ID` — **32-character hex** account id from Cloudflare → Workers & Pages → Overview (right sidebar)
 
-If either secret is missing, the workflow fails in **Require Cloudflare secrets**
-(or Wrangler exits with a generic `npx` code 1). The Node 20 deprecation
-notice from Actions is a warning only and is not the deploy failure.
+Invalid example values that will fail deploy:
+
+- Worker name (`nefes321`)
+- `workers.dev` subdomain (`forappsvs`)
+- Zone / site name
+- API token pasted into the account-id field
+
+If either secret is missing or the account id is not 32 hex chars, the workflow fails in
+**Require and normalize Cloudflare secrets** with an explicit error.
 
 Create the token: Cloudflare → My Profile → API Tokens → Create Token →
 “Edit Cloudflare Workers”.
