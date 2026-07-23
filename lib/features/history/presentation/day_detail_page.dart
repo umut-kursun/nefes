@@ -13,6 +13,7 @@ import 'package:nefes/features/habit/domain/services/history_analytics.dart';
 import 'package:nefes/features/habit/domain/services/target_history_resolver.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
+import 'package:nefes/features/history/presentation/event_correction_sheet.dart';
 import 'package:nefes/features/smoking/domain/services/delay_session_resolver.dart';
 import 'package:nefes/features/smoking/presentation/triggers/smoking_trigger_labels.dart';
 
@@ -86,7 +87,7 @@ class DayDetailPage extends ConsumerWidget {
   }
 }
 
-class _DayDetailBody extends StatelessWidget {
+class _DayDetailBody extends ConsumerWidget {
   const _DayDetailBody({
     required this.date,
     required this.events,
@@ -100,7 +101,7 @@ class _DayDetailBody extends StatelessWidget {
   final List<DailyTargetPeriod> targetPeriods;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final summary = HistoryAnalytics.summaryForDay(
       allEvents: events,
       localDay: date,
@@ -143,24 +144,36 @@ class _DayDetailBody extends StatelessWidget {
               ),
             )
           else
-            NefesTimeline(items: _buildTimelineItems(summary, triggers, delayEvents)),
+            NefesTimeline(
+              items: _buildTimelineItems(
+                context: context,
+                ref: ref,
+                summary: summary,
+                triggers: triggers,
+                delayEvents: delayEvents,
+              ),
+            ),
         ],
       ),
     );
   }
 
-  static List<NefesTimelineItem> _buildTimelineItems(
-    DaySummary summary,
-    Map<String, SmokingTrigger> triggers,
-    List<SmokingLogEvent> delayEvents,
-  ) {
-    final entries = <({DateTime at, NefesTimelineItem item, bool smoke})>[];
+  static List<NefesTimelineItem> _buildTimelineItems({
+    required BuildContext context,
+    required WidgetRef ref,
+    required DaySummary summary,
+    required Map<String, SmokingTrigger> triggers,
+    required List<SmokingLogEvent> delayEvents,
+  }) {
+    final entries =
+        <({DateTime at, String? smokeId, NefesTimelineItem item, bool smoke})>[];
 
     for (var i = 0; i < summary.smokesAsc.length; i++) {
       final smoke = summary.smokesAsc[i];
       final trigger = triggers[smoke.id];
       entries.add((
         at: smoke.createdAtUtc,
+        smokeId: smoke.id,
         smoke: true,
         item: NefesTimelineItem(
           timeLabel: TimeDisplay.formatLocalHm(smoke.createdAtUtc),
@@ -176,6 +189,7 @@ class _DayDetailBody extends StatelessWidget {
     for (final d in delayEvents) {
       entries.add((
         at: d.createdAtUtc,
+        smokeId: null,
         smoke: false,
         item: NefesTimelineItem(
           timeLabel: TimeDisplay.formatLocalHm(d.createdAtUtc),
@@ -196,6 +210,8 @@ class _DayDetailBody extends StatelessWidget {
         interval = TimeDisplay.formatIntervalShort(e.at.difference(lastSmokeAt));
       }
       if (e.smoke) lastSmokeAt = e.at;
+      final smokeId = e.smokeId;
+      final trigger = smokeId == null ? null : triggers[smokeId];
       items.add(
         NefesTimelineItem(
           timeLabel: e.item.timeLabel,
@@ -203,6 +219,15 @@ class _DayDetailBody extends StatelessWidget {
           subtitle: e.item.subtitle,
           intervalBefore: interval,
           isDelay: e.item.isDelay,
+          onTap: smokeId == null
+              ? null
+              : () => showEventCorrectionSheet(
+                    context: context,
+                    ref: ref,
+                    smokeEventId: smokeId,
+                    currentLocal: e.at.toLocal(),
+                    currentTrigger: trigger,
+                  ),
         ),
       );
     }

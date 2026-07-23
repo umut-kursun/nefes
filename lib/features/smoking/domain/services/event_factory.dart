@@ -44,6 +44,7 @@ class EventFactory {
   SmokingLogEvent createSmokeDeleted({
     required String parentSmokeId,
     DateTime? at,
+    String reason = 'user_undo_last',
   }) {
     return _base(
       at: at,
@@ -51,7 +52,7 @@ class EventFactory {
       parentEventId: parentSmokeId,
       payload: <String, dynamic>{
         'v': payloadSchemaVersion,
-        'reason': 'user_undo_last',
+        'reason': reason,
       },
     );
   }
@@ -72,13 +73,33 @@ class EventFactory {
     );
   }
 
-  SmokingLogEvent createDelayStarted({DateTime? at}) {
+  SmokingLogEvent createSmokeTriggerCleared({
+    required String parentSmokeId,
+    DateTime? at,
+  }) {
+    return _base(
+      at: at,
+      eventType: SmokingEventType.smokeTriggerCleared,
+      parentEventId: parentSmokeId,
+      payload: <String, dynamic>{
+        'v': payloadSchemaVersion,
+        'cleared': true,
+      },
+    );
+  }
+
+  SmokingLogEvent createDelayStarted({
+    DateTime? at,
+    Duration? intendedDuration,
+  }) {
     return _base(
       at: at,
       eventType: SmokingEventType.delayStarted,
       payload: <String, dynamic>{
         'v': payloadSchemaVersion,
         'kind': 'resist_delay',
+        if (intendedDuration != null)
+          'intendedDurationMs': intendedDuration.inMilliseconds,
       },
     );
   }
@@ -149,7 +170,7 @@ class EventFactory {
       },
       'device': <String, dynamic>{
         'platform': 'web',
-        'appVersion': '1.2.0',
+        'appVersion': '1.3.0',
       },
       'ai': <String, dynamic>{
         'features': <String, dynamic>{},

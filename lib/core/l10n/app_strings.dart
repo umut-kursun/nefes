@@ -146,4 +146,54 @@ abstract final class AppStrings {
   static const appVersionLabel = 'Sürüm';
   static const updateAvailable = 'Güncelleme mevcut';
   static const updateNow = 'Şimdi güncelle';
+
+  // Capture-first / optional context
+  static const whyOptional = 'Neden?';
+  static const moreTriggers = 'Diğer';
+  static const smokedEarlier = 'Daha önce içtim';
+  static const pickEarlierTitle = 'Ne zaman içtin?';
+  static const minutesAgo5 = '5 dk önce';
+  static const minutesAgo10 = '10 dk önce';
+  static const minutesAgo15 = '15 dk önce';
+  static const minutesAgo30 = '30 dk önce';
+  static const customTime = 'Saat seç';
+  static const invalidPastTime = 'Gelecek bir zaman seçilemez.';
+
+  // Delay durations
+  static const pickDelayTitle = 'Ne kadar erteleyeceksin?';
+  static const delayMinutes5 = '5 dakika';
+  static const delayMinutes10 = '10 dakika';
+  static const delayMinutes15 = '15 dakika';
+  static const delayMinutes30 = '30 dakika';
+  static const delayNoDuration = 'Süre seçmeden başla';
+  static const delayTimeUp = 'Süre doldu';
+  static const delayOutcomeSmoke = 'Sigara içtim';
+  static String delayIntended(int minutes) => '$minutes dk hedef';
+
+  // Event correction
+  static const editEvent = 'Düzenle';
+  static const editEventTime = 'Saati düzelt';
+  static const editEventTrigger = 'Neden ekle / değiştir';
+  static const clearTrigger = 'Nedeni kaldır';
+  static const deleteEvent = 'Kaydı sil';
+  static const deleteEventConfirmTitle = 'Kayıt silinsin mi?';
+  static const deleteEventConfirmBody =
+      'Kayıt geçmişten fiziksel olarak silinmez; aktif sayaçlardan çıkarılır.';
+  static const deleteEventConfirmAction = 'Sil';
+  static const eventUpdated = 'Kayıt güncellendi';
+  static const eventDeleted = 'Kayıt silindi';
+
+  // Contextual insights (factual, calm)
+  static String insightBusyHour(int hour) =>
+      'Bu saatlerde ($hour:00) genellikle daha sık kayıt yapıyorsun.';
+  static String insightIntervalLonger(String delta) =>
+      'Bugünkü ortalama aralığın son günlere göre $delta daha uzun.';
+  static String insightIntervalShorter(String delta) =>
+      'Bugünkü ortalama aralığın son günlere göre $delta daha kısa.';
+  static String insightFewerThanYesterday(int n) =>
+      'Bugün şu ana kadar dünkü aynı saate göre $n kayıt daha az.';
+  static String insightMoreThanYesterday(int n) =>
+      'Bugün şu ana kadar dünkü aynı saate göre $n kayıt daha fazla.';
+  static String insightTriggerToday(String trigger) =>
+      '$trigger kayıtların bugün daha sık.';
 }

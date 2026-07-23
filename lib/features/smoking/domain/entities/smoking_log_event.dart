@@ -57,6 +57,9 @@ class SmokingLogEvent {
   bool get isSmokeTriggerNoted =>
       eventType == SmokingEventType.smokeTriggerNoted;
 
+  bool get isSmokeTriggerCleared =>
+      eventType == SmokingEventType.smokeTriggerCleared;
+
   bool get isDelayStarted => eventType == SmokingEventType.delayStarted;
 
   bool get isDelayEnded => eventType == SmokingEventType.delayEnded;

@@ -48,21 +48,18 @@ void main() {
     expect(find.text(AppStrings.navSettings), findsOneWidget);
   });
 
-  testWidgets('Home logs a smoke via primary action', (tester) async {
+  testWidgets('Home logs a smoke via primary action without blocking modal', (
+    tester,
+  ) async {
     await pumpHome(tester);
 
     await tester.tap(find.text(AppStrings.iSmoked));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    // Optional trigger sheet may appear; skip if present.
-    final skip = find.text(AppStrings.triggerSkip);
-    if (skip.evaluate().isNotEmpty) {
-      await tester.tap(skip);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
-    }
-
+    // Capture-first: no mandatory trigger modal / skip button.
+    expect(find.text(AppStrings.triggerSkip), findsNothing);
+    expect(find.text(AppStrings.whyOptional), findsOneWidget);
     expect(find.textContaining('1 / 15'), findsOneWidget);
     expect(find.text(AppStrings.emptyTodayHistory), findsNothing);
     expect(find.text(AppStrings.undoLast), findsOneWidget);

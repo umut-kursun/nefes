@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nefes/core/ports/ai_coach_port.dart';
 import 'package:nefes/core/ports/export_port.dart';
 import 'package:nefes/core/ports/haptic_port.dart';
+import 'package:nefes/core/ports/product_telemetry_port.dart';
 import 'package:nefes/core/ports/sync_port.dart';
 import 'package:nefes/features/habit/data/repositories/target_history_repository_impl.dart';
 import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
@@ -14,9 +15,13 @@ import 'package:nefes/features/smoking/data/sembast/nefes_local_database.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/services/event_factory.dart';
+import 'package:nefes/features/smoking/domain/services/smoking_habit_actions.dart';
 import 'package:nefes/features/smoking/domain/usecases/attach_smoke_trigger.dart';
 import 'package:nefes/features/smoking/domain/usecases/cancel_delay.dart';
+import 'package:nefes/features/smoking/domain/usecases/clear_smoke_trigger.dart';
 import 'package:nefes/features/smoking/domain/usecases/complete_delay.dart';
+import 'package:nefes/features/smoking/domain/usecases/correct_smoke_time.dart';
+import 'package:nefes/features/smoking/domain/usecases/delete_smoke.dart';
 import 'package:nefes/features/smoking/domain/usecases/log_smoke.dart';
 import 'package:nefes/features/smoking/domain/usecases/record_smoke.dart';
 import 'package:nefes/features/smoking/domain/usecases/start_delay.dart';
@@ -71,6 +76,10 @@ final eventFactoryProvider = Provider<EventFactory>((ref) {
   return EventFactory();
 });
 
+final productTelemetryPortProvider = Provider<ProductTelemetryPort>((ref) {
+  return const NoopProductTelemetryPort();
+});
+
 final logSmokeProvider = Provider<LogSmoke>((ref) {
   return LogSmoke(
     smokingRepository: ref.watch(smokingRepositoryProvider),
@@ -87,6 +96,13 @@ final recordSmokeProvider = Provider<RecordSmoke>((ref) {
 
 final attachSmokeTriggerProvider = Provider<AttachSmokeTrigger>((ref) {
   return AttachSmokeTrigger(
+    smokingRepository: ref.watch(smokingRepositoryProvider),
+    eventFactory: ref.watch(eventFactoryProvider),
+  );
+});
+
+final clearSmokeTriggerProvider = Provider<ClearSmokeTrigger>((ref) {
+  return ClearSmokeTrigger(
     smokingRepository: ref.watch(smokingRepositoryProvider),
     eventFactory: ref.watch(eventFactoryProvider),
   );
@@ -117,6 +133,38 @@ final undoLastSmokeProvider = Provider<UndoLastSmoke>((ref) {
   return UndoLastSmoke(
     smokingRepository: ref.watch(smokingRepositoryProvider),
     eventFactory: ref.watch(eventFactoryProvider),
+  );
+});
+
+final deleteSmokeProvider = Provider<DeleteSmoke>((ref) {
+  return DeleteSmoke(
+    smokingRepository: ref.watch(smokingRepositoryProvider),
+    eventFactory: ref.watch(eventFactoryProvider),
+  );
+});
+
+final correctSmokeTimeProvider = Provider<CorrectSmokeTime>((ref) {
+  return CorrectSmokeTime(
+    smokingRepository: ref.watch(smokingRepositoryProvider),
+    eventFactory: ref.watch(eventFactoryProvider),
+    deleteSmoke: ref.watch(deleteSmokeProvider),
+    attachSmokeTrigger: ref.watch(attachSmokeTriggerProvider),
+  );
+});
+
+/// Platform-agnostic action facade — preferred entry for UI and future widgets.
+final smokingHabitActionsProvider = Provider<SmokingHabitActions>((ref) {
+  return SmokingHabitActions(
+    recordSmoke: ref.watch(recordSmokeProvider),
+    attachSmokeTrigger: ref.watch(attachSmokeTriggerProvider),
+    clearSmokeTrigger: ref.watch(clearSmokeTriggerProvider),
+    startDelay: ref.watch(startDelayProvider),
+    completeDelay: ref.watch(completeDelayProvider),
+    cancelDelay: ref.watch(cancelDelayProvider),
+    undoLastSmoke: ref.watch(undoLastSmokeProvider),
+    deleteSmoke: ref.watch(deleteSmokeProvider),
+    correctSmokeTime: ref.watch(correctSmokeTimeProvider),
+    telemetry: ref.watch(productTelemetryPortProvider),
   );
 });
 

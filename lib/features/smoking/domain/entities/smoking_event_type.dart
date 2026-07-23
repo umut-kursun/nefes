@@ -6,6 +6,9 @@ enum SmokingEventType {
   /// Related event: trigger annotation for a smoke (parent = smoke id).
   smokeTriggerNoted,
 
+  /// Related event: clears trigger context for a smoke (parent = smoke id).
+  smokeTriggerCleared,
+
   /// Start of a resist/delay session.
   delayStarted,
 

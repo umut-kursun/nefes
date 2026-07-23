@@ -5,8 +5,8 @@
 | **Product** | NEFES |
 | **Subtitle** | Understand your habits. |
 | **Document type** | Combined SRS + PRD |
-| **Version** | **1.2.1** |
-| **Status** | **APPROVED** — OD-1…OD-6 locked; Milestone M1 implementation authorized |
+| **Version** | **1.3.0** |
+| **Status** | **ACTIVE** — Capture-first logging + portable application actions |
 | **Platform (V1)** | **Flutter Web** · **Chrome (Windows)** · **installable PWA on Android Chrome** |
 | **Architecture** | Feature-first Clean Architecture · MVVM · Repository · Event-sourced · Offline-first PWA |
 | **Classification** | Commercial product design |
@@ -22,8 +22,19 @@
 | 1.1 | 2026-07-13 | Principal Software Architect | Locked D1–D20; AI/event-sourcing/design-system |
 | **1.2** | **2026-07-22** | **Principal Software Architect** | **Web-first PWA strategy; replace Drift/SQLite V1 mandate; Chrome-only toolchain; redefine Milestone 1** |
 | **1.2.1** | **2026-07-22** | **Principal Software Architect** | **Stakeholder approval: OD-1…OD-6 locked; D8/D9/D15/D18 + D21–D27 re-approved; M1 implementation authorized** |
+| **1.3.0** | **2026-07-23** | **Principal Software Architect** | **Capture-first logging; optional triggers; retroactive log; event correction; delay durations; SmokingHabitActions; widget contract docs** |
 
-**Implementation gate:** Design **approved**. Milestone **M1** implementation authorized. Do **not** start M2 until explicitly requested.
+**Delivery note:** Flutter Web/PWA is the V1 delivery platform, **not** a permanent architectural constraint. Core domain and application logic must remain portable to Flutter Android/iOS. See `docs/CAPTURE_FIRST_AND_ACTIONS.md` and `docs/ANDROID_WIDGET_ARCHITECTURE.md`.
+
+### Locked product decisions (v1.3)
+
+| ID | Decision | Locked choice |
+| --- | --- | --- |
+| **D28** | Logging friction | **Capture first** — cigarette persists on primary tap; no mandatory trigger modal |
+| **D29** | Trigger/context | Optional enrichment; missing context is valid; omit empty labels in UI |
+| **D30** | Application actions | Platform-agnostic `SmokingHabitActions` for UI + future widget/notification entry points |
+| **D31** | Android widget | Documented contract only; **not implemented** in V1 |
+| **D32** | Telemetry | `ProductTelemetryPort` no-op; no external analytics SDK |
 
 ---
 

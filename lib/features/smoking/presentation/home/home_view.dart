@@ -9,13 +9,15 @@ import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/core/time/time_display.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
+import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
+import 'package:nefes/features/smoking/presentation/home/capture_sheets.dart';
+import 'package:nefes/features/smoking/presentation/home/optional_context_bar.dart';
 import 'package:nefes/features/smoking/presentation/home/target_dialogs.dart';
 import 'package:nefes/features/smoking/presentation/triggers/smoking_trigger_labels.dart';
-import 'package:nefes/features/smoking/presentation/triggers/trigger_selector.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_view_model.dart';
 
-/// Home screen — M3 capture, triggers, and delay/resist.
+/// Home screen — capture-first logging with optional enrichment.
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -25,7 +27,6 @@ class HomeView extends ConsumerStatefulWidget {
 
 class _HomeViewState extends ConsumerState<HomeView> {
   var _onboardingShown = false;
-  var _triggerPromptOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,17 +55,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
           _showOnboarding();
-        });
-      }
-
-      final needsTrigger =
-          next.pendingTriggerSmokeId != null &&
-          next.pendingTriggerSmokeId != previous?.pendingTriggerSmokeId &&
-          !_triggerPromptOpen;
-      if (needsTrigger) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted || _triggerPromptOpen) return;
-          _openTriggerSelector();
         });
       }
     });
@@ -100,25 +90,29 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     AppSpacing.lg,
                     AppSpacing.md,
                   ),
-                  child: isWide
-                      ? _DesktopDashboard(
-                          state: state,
-                          onSmoke: _onSmoke,
-                          onDelay: _onDelay,
-                          onUrgePassed: _onUrgePassed,
-                          onCancelDelay: _onCancelDelay,
-                          onUndo: () => _confirmUndo(context),
-                          onEditTarget: () => _editTarget(context, state),
-                        )
-                      : _MobileDashboard(
-                          state: state,
-                          onSmoke: _onSmoke,
-                          onDelay: _onDelay,
-                          onUrgePassed: _onUrgePassed,
-                          onCancelDelay: _onCancelDelay,
-                          onUndo: () => _confirmUndo(context),
-                          onEditTarget: () => _editTarget(context, state),
-                        ),
+                  child: _MobileDashboard(
+                    state: state,
+                    onSmoke: () => ref
+                        .read(homeViewModelProvider.notifier)
+                        .onISmokedPressed(),
+                    onPickDelay: () => _pickDelay(context),
+                    onUrgePassed: () => ref
+                        .read(homeViewModelProvider.notifier)
+                        .onUrgePassed(),
+                    onCancelDelay: () => ref
+                        .read(homeViewModelProvider.notifier)
+                        .onCancelDelay(),
+                    onDelaySmoke: () => ref
+                        .read(homeViewModelProvider.notifier)
+                        .onDelayEndedWithSmoke(),
+                    onUndo: () => _confirmUndo(context),
+                    onEditTarget: () => _editTarget(context, state),
+                    onEarlier: () => _pickEarlier(context),
+                    onSelectTrigger: (t) => ref
+                        .read(homeViewModelProvider.notifier)
+                        .selectTrigger(t),
+                    onMoreTriggers: () => _moreTriggers(context, state),
+                  ),
                 ),
               ),
             );
@@ -128,46 +122,51 @@ class _HomeViewState extends ConsumerState<HomeView> {
     );
   }
 
-  void _onSmoke() {
-    ref.read(homeViewModelProvider.notifier).onISmokedPressed();
+  Future<void> _pickDelay(BuildContext context) async {
+    final duration = await showDelayDurationPicker(context);
+    if (!mounted || duration == null) return;
+    // Duration.zero sentinel = start without planned duration.
+    await ref.read(homeViewModelProvider.notifier).startDelayWithDuration(
+          duration == Duration.zero ? null : duration,
+        );
   }
 
-  void _onDelay() {
-    ref.read(homeViewModelProvider.notifier).onDelayPressed();
-  }
-
-  void _onUrgePassed() {
-    ref.read(homeViewModelProvider.notifier).onUrgePassed();
-  }
-
-  void _onCancelDelay() {
-    ref.read(homeViewModelProvider.notifier).onCancelDelay();
-  }
-
-  Future<void> _openTriggerSelector() async {
-    if (_triggerPromptOpen) return;
-    _triggerPromptOpen = true;
-    final isWide =
-        MediaQuery.sizeOf(context).width >= AppBreakpoints.dashboardWide;
-    var handled = false;
-
-    await showSmokeTriggerSelector(
-      context: context,
-      isWide: isWide,
-      onSelected: (trigger) async {
-        handled = true;
-        await ref.read(homeViewModelProvider.notifier).selectTrigger(trigger);
-      },
-      onSkipped: () {
-        handled = true;
-        ref.read(homeViewModelProvider.notifier).skipTrigger();
-      },
-    );
-
-    if (!handled && mounted) {
-      ref.read(homeViewModelProvider.notifier).skipTrigger();
+  Future<void> _pickEarlier(BuildContext context) async {
+    final minutes = await showEarlierMinutesPicker(context);
+    if (!context.mounted || minutes == null) return;
+    if (minutes == -1) {
+      final now = DateTime.now();
+      final picked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(now),
+      );
+      if (!context.mounted || picked == null) return;
+      var local = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        picked.hour,
+        picked.minute,
+      );
+      if (local.isAfter(now)) {
+        local = local.subtract(const Duration(days: 1));
+      }
+      await ref.read(homeViewModelProvider.notifier).logAtCustomLocal(local);
+      return;
     }
-    _triggerPromptOpen = false;
+    await ref
+        .read(homeViewModelProvider.notifier)
+        .logEarlier(minutesAgo: minutes);
+  }
+
+  Future<void> _moreTriggers(BuildContext context, HomeUiState state) async {
+    final trigger = await showMoreTriggersSheet(
+      context: context,
+      quickTriggers: state.quickTriggers,
+    );
+    if (trigger != null && mounted) {
+      await ref.read(homeViewModelProvider.notifier).selectTrigger(trigger);
+    }
   }
 
   Future<void> _editTarget(BuildContext context, HomeUiState state) {
@@ -188,15 +187,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
       builder: (context) {
         return TargetOnboardingSheet(
           onCompleted: ({required averagePerDay, required dailyTarget}) async {
-            await ref
-                .read(homeViewModelProvider.notifier)
-                .completeOnboarding(
+            await ref.read(homeViewModelProvider.notifier).completeOnboarding(
                   averagePerDay: averagePerDay,
                   dailyTarget: dailyTarget,
                 );
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
+            if (context.mounted) Navigator.of(context).pop();
           },
         );
       },
@@ -234,20 +229,28 @@ class _MobileDashboard extends StatelessWidget {
   const _MobileDashboard({
     required this.state,
     required this.onSmoke,
-    required this.onDelay,
+    required this.onPickDelay,
     required this.onUrgePassed,
     required this.onCancelDelay,
+    required this.onDelaySmoke,
     required this.onUndo,
     required this.onEditTarget,
+    required this.onEarlier,
+    required this.onSelectTrigger,
+    required this.onMoreTriggers,
   });
 
   final HomeUiState state;
   final VoidCallback onSmoke;
-  final VoidCallback onDelay;
+  final VoidCallback onPickDelay;
   final VoidCallback onUrgePassed;
   final VoidCallback onCancelDelay;
+  final VoidCallback onDelaySmoke;
   final VoidCallback onUndo;
   final VoidCallback onEditTarget;
+  final VoidCallback onEarlier;
+  final ValueChanged<SmokingTrigger> onSelectTrigger;
+  final VoidCallback onMoreTriggers;
 
   @override
   Widget build(BuildContext context) {
@@ -262,20 +265,39 @@ class _MobileDashboard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _TodayHero(state: state, onEditTarget: onEditTarget),
+                if (state.contextualInsight != null) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    state.contextualInsight!,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
                 if (state.hasActiveDelay) ...[
                   const SizedBox(height: AppSpacing.md),
                   _DelayActivePanel(
                     state: state,
                     onUrgePassed: onUrgePassed,
                     onCancel: onCancelDelay,
+                    onSmoke: onDelaySmoke,
+                  ),
+                ],
+                if (state.pendingTriggerSmokeId != null) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  OptionalContextBar(
+                    quickTriggers: state.quickTriggers,
+                    onSelected: onSelectTrigger,
+                    onMore: onMoreTriggers,
                   ),
                 ],
                 const SizedBox(height: AppSpacing.lg),
                 _ActionArea(
                   state: state,
                   onSmoke: onSmoke,
-                  onDelay: onDelay,
+                  onPickDelay: onPickDelay,
                   onUndo: onUndo,
+                  onEarlier: onEarlier,
                 ),
                 if (state.todayDelayInsight != null) ...[
                   const SizedBox(height: AppSpacing.sm),
@@ -307,89 +329,6 @@ class _MobileDashboard extends StatelessWidget {
                 ],
               ],
             ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _DesktopDashboard extends StatelessWidget {
-  const _DesktopDashboard({
-    required this.state,
-    required this.onSmoke,
-    required this.onDelay,
-    required this.onUrgePassed,
-    required this.onCancelDelay,
-    required this.onUndo,
-    required this.onEditTarget,
-  });
-
-  final HomeUiState state;
-  final VoidCallback onSmoke;
-  final VoidCallback onDelay;
-  final VoidCallback onUrgePassed;
-  final VoidCallback onCancelDelay;
-  final VoidCallback onUndo;
-  final VoidCallback onEditTarget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const _BrandHeader(),
-        const SizedBox(height: AppSpacing.md),
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    _TodayHero(state: state, onEditTarget: onEditTarget),
-                    if (state.hasActiveDelay) ...[
-                      const SizedBox(height: AppSpacing.md),
-                      _DelayActivePanel(
-                        state: state,
-                        onUrgePassed: onUrgePassed,
-                        onCancel: onCancelDelay,
-                      ),
-                    ],
-                    const SizedBox(height: AppSpacing.lg),
-                    _ActionArea(
-                      state: state,
-                      onSmoke: onSmoke,
-                      onDelay: onDelay,
-                      onUndo: onUndo,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppSpacing.xl),
-              Expanded(
-                child: ListView(
-                  children: [
-                    _TodaySnapshot(state: state),
-                    const SizedBox(height: AppSpacing.lg),
-                    Text(
-                      AppStrings.todayCigarettes,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    if (state.todayEvents.isEmpty)
-                      Text(
-                        AppStrings.emptyTodayHistory,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textMuted,
-                        ),
-                      )
-                    else
-                      _TodayTimeline(events: state.todayEvents),
-                  ],
-                ),
-              ),
-            ],
           ),
         ),
       ],
@@ -480,7 +419,6 @@ class _TodayHero extends StatelessWidget {
             exceeded: state.isTargetExceeded,
             onEditLimit: onEditTarget,
           ),
-          // Keep a compact count/limit string for quick scan + tests.
           const SizedBox(height: AppSpacing.xs),
           Text(
             AppStrings.todayProgress(state.todayCount, state.dailyTarget),
@@ -499,14 +437,16 @@ class _ActionArea extends StatelessWidget {
   const _ActionArea({
     required this.state,
     required this.onSmoke,
-    required this.onDelay,
+    required this.onPickDelay,
     required this.onUndo,
+    required this.onEarlier,
   });
 
   final HomeUiState state;
   final VoidCallback onSmoke;
-  final VoidCallback onDelay;
+  final VoidCallback onPickDelay;
   final VoidCallback onUndo;
+  final VoidCallback onEarlier;
 
   @override
   Widget build(BuildContext context) {
@@ -523,11 +463,22 @@ class _ActionArea extends StatelessWidget {
           NefesSecondaryAction(
             label: AppStrings.delayNow,
             subtitle: AppStrings.delayHint,
-            onPressed: state.isBusy ? null : onDelay,
+            onPressed: state.isBusy ? null : onPickDelay,
           ),
         ],
-        if (state.canUndo) ...[
-          const SizedBox(height: AppSpacing.xs),
+        Align(
+          alignment: Alignment.center,
+          child: TextButton(
+            onPressed: state.isBusy ? null : onEarlier,
+            child: Text(
+              AppStrings.smokedEarlier,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppColors.textMuted,
+              ),
+            ),
+          ),
+        ),
+        if (state.canUndo)
           Align(
             alignment: Alignment.center,
             child: TextButton(
@@ -540,7 +491,6 @@ class _ActionArea extends StatelessWidget {
               ),
             ),
           ),
-        ],
       ],
     );
   }
@@ -614,7 +564,6 @@ class _TodayTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Newest-first in state — reverse for chronological timeline.
     final chronological = events.reversed.toList();
     final items = <NefesTimelineItem>[];
     for (var i = 0; i < chronological.length; i++) {
@@ -630,9 +579,8 @@ class _TodayTimeline extends StatelessWidget {
           subtitle: item.trigger == null
               ? null
               : SmokingTriggerLabels.label(item.trigger!),
-          intervalBefore: gap == null
-              ? null
-              : TimeDisplay.formatIntervalShort(gap),
+          intervalBefore:
+              gap == null ? null : TimeDisplay.formatIntervalShort(gap),
         ),
       );
     }
@@ -645,11 +593,13 @@ class _DelayActivePanel extends StatelessWidget {
     required this.state,
     required this.onUrgePassed,
     required this.onCancel,
+    required this.onSmoke,
   });
 
   final HomeUiState state;
   final VoidCallback onUrgePassed;
   final VoidCallback onCancel;
+  final VoidCallback onSmoke;
 
   @override
   Widget build(BuildContext context) {
@@ -658,12 +608,28 @@ class _DelayActivePanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            AppStrings.delaying.toUpperCase(),
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: AppColors.textMuted,
-              letterSpacing: 0.7,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  (state.delayTimedOut
+                          ? AppStrings.delayTimeUp
+                          : AppStrings.delaying)
+                      .toUpperCase(),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: AppColors.textMuted,
+                    letterSpacing: 0.7,
+                  ),
+                ),
+              ),
+              if (state.delayIntendedMinutes != null)
+                Text(
+                  AppStrings.delayIntended(state.delayIntendedMinutes!),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
@@ -684,11 +650,20 @@ class _DelayActivePanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
-              TextButton(
-                onPressed: state.isBusy ? null : onCancel,
-                child: const Text(AppStrings.cancelDelay),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: state.isBusy ? null : onSmoke,
+                  child: const Text(AppStrings.delayOutcomeSmoke),
+                ),
               ),
             ],
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: state.isBusy ? null : onCancel,
+              child: const Text(AppStrings.cancelDelay),
+            ),
           ),
         ],
       ),

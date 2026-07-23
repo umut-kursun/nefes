@@ -1,8 +1,10 @@
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/core/time/time_display.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
+import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
+import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart';
 
-/// UI state for the Home screen (M3).
+/// UI state for the Home screen.
 class HomeUiState {
   const HomeUiState({
     required this.todayCount,
@@ -19,6 +21,10 @@ class HomeUiState {
     required this.todayDelayCount,
     required this.todayDelayInsight,
     this.pendingTriggerSmokeId,
+    this.quickTriggers = TriggerPersonalizer.defaultQuickOrder,
+    this.contextualInsight,
+    this.delayIntendedMinutes,
+    this.delayTimedOut = false,
     this.isSaving = false,
     this.isUndoing = false,
     this.isDelayBusy = false,
@@ -28,21 +34,21 @@ class HomeUiState {
   });
 
   factory HomeUiState.initial() => const HomeUiState(
-    todayCount: 0,
-    dailyTarget: 20,
-    remaining: 20,
-    isTargetExceeded: false,
-    todayEvents: [],
-    hasCompletedOnboarding: false,
-    elapsedLabel: '',
-    hasLastSmoke: false,
-    canUndo: false,
-    hasActiveDelay: false,
-    delayElapsedLabel: '',
-    todayDelayCount: 0,
-    todayDelayInsight: null,
-    isHydrated: false,
-  );
+        todayCount: 0,
+        dailyTarget: 20,
+        remaining: 20,
+        isTargetExceeded: false,
+        todayEvents: [],
+        hasCompletedOnboarding: false,
+        elapsedLabel: '',
+        hasLastSmoke: false,
+        canUndo: false,
+        hasActiveDelay: false,
+        delayElapsedLabel: '',
+        todayDelayCount: 0,
+        todayDelayInsight: null,
+        isHydrated: false,
+      );
 
   final int todayCount;
   final int dailyTarget;
@@ -58,6 +64,10 @@ class HomeUiState {
   final int todayDelayCount;
   final String? todayDelayInsight;
   final String? pendingTriggerSmokeId;
+  final List<SmokingTrigger> quickTriggers;
+  final String? contextualInsight;
+  final int? delayIntendedMinutes;
+  final bool delayTimedOut;
   final bool isSaving;
   final bool isUndoing;
   final bool isDelayBusy;
@@ -82,6 +92,10 @@ class HomeUiState {
     int? todayDelayCount,
     String? todayDelayInsight,
     String? pendingTriggerSmokeId,
+    List<SmokingTrigger>? quickTriggers,
+    String? contextualInsight,
+    int? delayIntendedMinutes,
+    bool? delayTimedOut,
     bool? isSaving,
     bool? isUndoing,
     bool? isDelayBusy,
@@ -91,6 +105,8 @@ class HomeUiState {
     bool clearError = false,
     bool clearInfo = false,
     bool clearPendingTrigger = false,
+    bool clearContextualInsight = false,
+    bool clearDelayIntended = false,
   }) {
     return HomeUiState(
       todayCount: todayCount ?? this.todayCount,
@@ -110,6 +126,14 @@ class HomeUiState {
       pendingTriggerSmokeId: clearPendingTrigger
           ? null
           : (pendingTriggerSmokeId ?? this.pendingTriggerSmokeId),
+      quickTriggers: quickTriggers ?? this.quickTriggers,
+      contextualInsight: clearContextualInsight
+          ? null
+          : (contextualInsight ?? this.contextualInsight),
+      delayIntendedMinutes: clearDelayIntended
+          ? null
+          : (delayIntendedMinutes ?? this.delayIntendedMinutes),
+      delayTimedOut: delayTimedOut ?? this.delayTimedOut,
       isSaving: isSaving ?? this.isSaving,
       isUndoing: isUndoing ?? this.isUndoing,
       isDelayBusy: isDelayBusy ?? this.isDelayBusy,
@@ -132,11 +156,14 @@ class HomeUiState {
     HomeSnapshot snapshot, {
     DateTime? now,
     String? pendingTriggerSmokeId,
+    List<SmokingTrigger>? quickTriggers,
+    String? contextualInsight,
   }) {
     final clock = now ?? DateTime.now();
     final last = snapshot.lastSmokeAtUtc;
     final hasLast = last != null;
     final delay = snapshot.activeDelay;
+    final intended = delay?.intendedDuration;
 
     return HomeUiState(
       todayCount: snapshot.todayCount,
@@ -157,9 +184,13 @@ class HomeUiState {
           : TimeDisplay.formatElapsedClock(
               clock.toUtc().difference(delay.startedAtUtc),
             ),
+      delayIntendedMinutes: intended?.inMinutes,
+      delayTimedOut: delay?.isElapsed(clock.toUtc()) ?? false,
       todayDelayCount: snapshot.todayDelayCount,
       todayDelayInsight: _insightFor(snapshot),
       pendingTriggerSmokeId: pendingTriggerSmokeId,
+      quickTriggers: quickTriggers ?? TriggerPersonalizer.defaultQuickOrder,
+      contextualInsight: contextualInsight,
     );
   }
 }

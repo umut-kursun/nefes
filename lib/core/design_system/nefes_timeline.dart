@@ -8,6 +8,7 @@ class NefesTimelineItem {
     this.subtitle,
     this.intervalBefore,
     this.isDelay = false,
+    this.onTap,
   });
 
   final String timeLabel;
@@ -15,6 +16,7 @@ class NefesTimelineItem {
   final String? subtitle;
   final String? intervalBefore;
   final bool isDelay;
+  final VoidCallback? onTap;
 }
 
 /// Chronological timeline — markers + vertical spine, not a card stack.
@@ -132,29 +134,34 @@ class _TimelineRow extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: isLast ? 0 : AppSpacing.sm,
-                top: 0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  if (item.subtitle != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        item.subtitle!,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
+            child: InkWell(
+              onTap: item.onTap,
+              borderRadius: AppRadius.smAll,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: isLast ? 0 : AppSpacing.sm,
+                  top: 0,
+                  right: AppSpacing.sm,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    if (item.subtitle != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          item.subtitle!,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

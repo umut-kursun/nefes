@@ -54,10 +54,24 @@ class ActiveDelaySession {
   const ActiveDelaySession({
     required this.id,
     required this.startedAtUtc,
+    this.intendedDuration,
   });
 
   final String id;
   final DateTime startedAtUtc;
+
+  /// Optional planned duration chosen when the delay started.
+  final Duration? intendedDuration;
+
+  DateTime? get plannedEndAtUtc => intendedDuration == null
+      ? null
+      : startedAtUtc.add(intendedDuration!);
+
+  bool isElapsed(DateTime nowUtc) {
+    final end = plannedEndAtUtc;
+    if (end == null) return false;
+    return !nowUtc.isBefore(end);
+  }
 }
 
 /// App settings projection (SharedPreferences).

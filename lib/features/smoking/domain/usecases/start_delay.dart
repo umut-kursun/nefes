@@ -13,16 +13,23 @@ class StartDelay {
   final SmokingRepository smokingRepository;
   final EventFactory eventFactory;
 
-  Future<ActiveDelaySession> call({DateTime? at}) async {
+  Future<ActiveDelaySession> call({
+    DateTime? at,
+    Duration? intendedDuration,
+  }) async {
     final all = await smokingRepository.getAllEvents();
     final existing = DelaySessionResolver.resolveActive(all);
     if (existing != null) return existing;
 
-    final started = eventFactory.createDelayStarted(at: at);
+    final started = eventFactory.createDelayStarted(
+      at: at,
+      intendedDuration: intendedDuration,
+    );
     await smokingRepository.append(started);
     return ActiveDelaySession(
       id: started.id,
       startedAtUtc: started.createdAtUtc,
+      intendedDuration: intendedDuration,
     );
   }
 }

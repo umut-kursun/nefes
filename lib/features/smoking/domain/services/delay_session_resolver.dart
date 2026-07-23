@@ -18,9 +18,11 @@ abstract final class DelaySessionResolver {
 
     if (open.isEmpty) return null;
     final latest = open.last;
+    final intendedMs = latest.payloadJson['intendedDurationMs'];
     return ActiveDelaySession(
       id: latest.id,
       startedAtUtc: latest.createdAtUtc,
+      intendedDuration: intendedMs is int ? Duration(milliseconds: intendedMs) : null,
     );
   }
 
@@ -58,15 +60,23 @@ abstract final class SmokeTriggerResolver {
     List<SmokingLogEvent> allEvents,
   ) {
     final map = <String, SmokingTrigger>{};
-    for (final event in allEvents) {
-      if (!event.isSmokeTriggerNoted) continue;
+    // Process in time order so the latest note/clear wins.
+    final related = allEvents
+        .where((e) => e.isSmokeTriggerNoted || e.isSmokeTriggerCleared)
+        .toList()
+      ..sort((a, b) => a.createdAtUtc.compareTo(b.createdAtUtc));
+
+    for (final event in related) {
       final parent = event.parentEventId;
       if (parent == null) continue;
+      if (event.isSmokeTriggerCleared) {
+        map.remove(parent);
+        continue;
+      }
       final trigger = SmokingTrigger.tryParse(
         event.payloadJson['trigger'] as String?,
       );
       if (trigger != null) {
-        // Latest annotation wins if multiple (should be rare).
         map[parent] = trigger;
       }
     }
