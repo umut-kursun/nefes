@@ -7,7 +7,9 @@ on:
 
 concurrency:
   group: cloudflare-workers-nefes
-  cancel-in-progress: true
+  # Never cancel an in-flight Flutter download/build — re-runs were aborting
+  # Setup Flutter mid-download ("The operation was canceled").
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -121,6 +123,19 @@ jobs:
             echo "::group::wrangler-deploy.log"
             cat wrangler-deploy.log
             echo "::endgroup::"
+            # Surface real Wrangler lines as annotations (readable without downloading logs).
+            # Strip ANSI color codes.
+            sed 's/\x1b\[[0-9;]*m//g' wrangler-deploy.log \
+              | grep -Eiv '^(npm |$)' \
+              | tail -n 40 \
+              | while IFS= read -r line; do
+                  [ -n "$line" ] && echo "::error::wrangler: $line"
+                done
+            if [ -f whoami.log ]; then
+              sed 's/\x1b\[[0-9;]*m//g' whoami.log | tail -n 20 | while IFS= read -r line; do
+                [ -n "$line" ] && echo "::warning::whoami: $line"
+              done
+            fi
             if grep -qiE 'Authentication error|10000|unauthorized|not authenticated' wrangler-deploy.log; then
               echo "::error::Cloudflare rejected the API token. Recreate CLOUDFLARE_API_TOKEN using the 'Edit Cloudflare Workers' template (Account-owned token preferred) and confirm CLOUDFLARE_ACCOUNT_ID matches the nefes321 account."
             fi
