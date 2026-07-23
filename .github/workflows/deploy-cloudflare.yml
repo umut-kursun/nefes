@@ -35,6 +35,13 @@ jobs:
           TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
           ACCOUNT="$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
 
+          # Normalize common paste mistakes (do not fail — strip instead).
+          case "$TOKEN" in
+            Bearer\ *|bearer\ *) TOKEN="${TOKEN#* }" ;;
+          esac
+          TOKEN="$(printf '%s' "$TOKEN" | sed 's/^["'\'']//;s/["'\'']$//;s/^[[:space:]]*//;s/[[:space:]]*$//')"
+          ACCOUNT="$(printf '%s' "$ACCOUNT" | sed 's/^["'\'']//;s/["'\'']$//;s/^[[:space:]]*//;s/[[:space:]]*$//')"
+
           missing=0
           if [ -z "$TOKEN" ]; then
             echo "::error::Repository secret CLOUDFLARE_API_TOKEN is missing or empty."
@@ -49,8 +56,8 @@ jobs:
             exit 1
           fi
 
-          if printf '%s' "$TOKEN" | grep -qE '[[:space:]]|^Bearer |^["'\'']|["'\'']$'; then
-            echo "::error::CLOUDFLARE_API_TOKEN looks malformed (spaces/Bearer/quotes). Paste the raw token only."
+          if printf '%s' "$TOKEN" | grep -qE '[[:space:]]'; then
+            echo "::error::CLOUDFLARE_API_TOKEN still contains whitespace after normalization. Paste the raw token only."
             exit 1
           fi
           if ! printf '%s' "$ACCOUNT" | grep -Eq '^[a-f0-9]{32}$'; then
@@ -62,7 +69,8 @@ jobs:
           echo "token_len=${#TOKEN}"
           echo "account_id_ok=yes"
 
-          # Inject account_id at TOP LEVEL (after name=), NEVER under [assets].
+          # Inject account_id as a TOP-LEVEL key (after workers_dev), NEVER under [assets].
+          # Appending to the file end used to nest account_id under [assets] and break deploy.
           ACCOUNT="$ACCOUNT" python3 - <<'PY'
           from pathlib import Path
           import os
@@ -75,9 +83,17 @@ jobs:
               if line.strip().startswith("account_id"):
                   continue
               out.append(line)
-              if not inserted and line.startswith("name"):
+              if not inserted and line.strip().startswith("workers_dev"):
                   out.append(f'account_id = "{account}"')
                   inserted = True
+          if not inserted:
+              out2 = []
+              for line in out:
+                  out2.append(line)
+                  if not inserted and line.startswith("name"):
+                      out2.append(f'account_id = "{account}"')
+                      inserted = True
+              out = out2
           if not inserted:
               out.insert(0, f'account_id = "{account}"')
           path.write_text("\n".join(out) + "\n", encoding="utf-8")
@@ -105,6 +121,8 @@ jobs:
 
       # Do NOT write the API token into GITHUB_ENV — special characters corrupt
       # the Authorization header (Cloudflare 6111 / 9106).
+      # CLOUDFLARE_ACCOUNT_ID env is the primary account selector; toml account_id
+      # is a belt-and-suspenders top-level key written above.
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -113,6 +131,11 @@ jobs:
           set -euo pipefail
           export CLOUDFLARE_API_TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
           export CLOUDFLARE_ACCOUNT_ID="$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          case "$CLOUDFLARE_API_TOKEN" in
+            Bearer\ *|bearer\ *) export CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN#* }" ;;
+          esac
+          export CLOUDFLARE_API_TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | sed 's/^["'\'']//;s/["'\'']$//;s/^[[:space:]]*//;s/[[:space:]]*$//')"
+          export CLOUDFLARE_ACCOUNT_ID="$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | sed 's/^["'\'']//;s/["'\'']$//;s/^[[:space:]]*//;s/[[:space:]]*$//')"
 
           echo "Deploying prebuilt build/web via wrangler 4…"
           set +e
@@ -131,7 +154,7 @@ jobs:
                   [ -n "$line" ] && echo "::error::wrangler: $line"
                 done
             if grep -qiE 'Authentication error|Authentication failed|10000|9106|6111|unauthorized|not authenticated' wrangler-deploy.log; then
-              echo "::error::Cloudflare rejected the API token. Recreate CLOUDFLARE_API_TOKEN with template 'Edit Cloudflare Workers' (Account API Token), paste raw token only, and keep CLOUDFLARE_ACCOUNT_ID as the 32-char Account ID."
+              echo "::error::Cloudflare rejected the API token. Recreate CLOUDFLARE_API_TOKEN with template 'Edit Cloudflare Workers' (Account API Token), paste raw token only (no Bearer/quotes), and keep CLOUDFLARE_ACCOUNT_ID as the 32-char Account ID."
             fi
             exit "$code"
           fi
