@@ -16,9 +16,16 @@ Canonical Wrangler config:
 
 ```toml
 # wrangler.toml
+name = "nefes321"
 [assets]
 directory = "./build/web"
+not_found_handling = "single-page-application"
 ```
+
+Do **not** put a Wrangler `[build]` command in `wrangler.toml`.  
+GitHub Actions already runs `flutter build web --release` before `wrangler deploy`.  
+If Cloudflare Workers Builds is also used, set the dashboard build command to  
+`bash tool/ci_build_web.sh` (or equivalent) and keep the assets directory as `build/web`.
 
 ## Current production URL
 

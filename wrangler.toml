@@ -2,6 +2,10 @@
 # IMPORTANT: assets.directory must be build/web (NOT web/).
 # web/ is only Flutter's source templates; the compiled app is produced by
 # `flutter build web --release` into build/web (main.dart.js, canvaskit, assets, …).
+#
+# Do NOT add a [build] section here. CI (GitHub Actions) and Cloudflare Workers
+# Builds must run Flutter themselves, then deploy the already-built assets.
+# A wrangler [build] that shells out to bash breaks Windows and hides real errors.
 
 name = "nefes321"
 compatibility_date = "2026-07-22"
@@ -10,7 +14,3 @@ workers_dev = true
 [assets]
 directory = "./build/web"
 not_found_handling = "single-page-application"
-
-# Used by Cloudflare Workers Builds (and local `npx wrangler deploy` after a local Flutter build).
-[build]
-command = "bash tool/ci_build_web.sh"
