@@ -24,26 +24,52 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Require Cloudflare secrets
+      - name: Require and normalize Cloudflare secrets
+        id: cf
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          RAW_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          RAW_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
+          set -euo pipefail
+          TOKEN="$(printf '%s' "$RAW_TOKEN" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          ACCOUNT="$(printf '%s' "$RAW_ACCOUNT" | tr -d '\r\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+
           missing=0
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+          if [ -z "$TOKEN" ]; then
             echo "::error::Repository secret CLOUDFLARE_API_TOKEN is missing or empty."
             missing=1
           fi
-          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+          if [ -z "$ACCOUNT" ]; then
             echo "::error::Repository secret CLOUDFLARE_ACCOUNT_ID is missing or empty."
             missing=1
           fi
           if [ "$missing" -ne 0 ]; then
             echo "Add both secrets at: Settings → Secrets and variables → Actions"
-            echo "Then re-run this workflow."
             exit 1
           fi
-          echo "Cloudflare secrets are present."
+
+          # Reject clearly wrong pastes (Zone ID / email / quoted values).
+          if printf '%s' "$TOKEN" | grep -qE '^["'\'']|["'\'']$'; then
+            echo "::error::CLOUDFLARE_API_TOKEN appears quoted. Paste the raw token only."
+            exit 1
+          fi
+          if ! printf '%s' "$ACCOUNT" | grep -Eq '^[a-f0-9]{32}$'; then
+            echo "::warning::CLOUDFLARE_ACCOUNT_ID is not a 32-char hex id (got length ${#ACCOUNT}). Deploy may fail."
+          fi
+
+          echo "token_len=${#TOKEN}"
+          echo "account_len=${#ACCOUNT}"
+          echo "account_prefix=${ACCOUNT:0:4}…"
+
+          {
+            echo "CLOUDFLARE_API_TOKEN=$TOKEN"
+            echo "CLOUDFLARE_ACCOUNT_ID=$ACCOUNT"
+          } >> "$GITHUB_ENV"
+
+          # Pin account_id into wrangler.toml so Wrangler never guesses via /memberships.
+          printf '\naccount_id = "%s"\n' "$ACCOUNT" >> wrangler.toml
+          echo "---- wrangler.toml ----"
+          cat wrangler.toml
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -53,45 +79,51 @@ jobs:
 
       - name: Build Flutter Web (release)
         run: |
+          set -euo pipefail
           flutter pub get
           flutter build web --release
           test -f build/web/main.dart.js
           test -f build/web/flutter.js
           test -d build/web/canvaskit
           test -d build/web/assets
+          # Drop debug-only weight that is not needed at runtime.
+          find build/web -type f \( -name '*.map' -o -name '*.symbols' \) -delete
           echo "Asset count:" && find build/web -type f | wc -l
+          echo "Asset bytes:" && du -sb build/web | cut -f1
 
-      # GitHub Actions already produced build/web. Strip wrangler [build] so
-      # deploy uploads assets only (no second Flutter install inside wrangler).
-      - name: Prepare wrangler for prebuilt assets
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path("wrangler.toml")
-          lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
-          out = []
-          skipping = False
-          for line in lines:
-              if line.startswith("[build]"):
-                  skipping = True
-                  continue
-              if skipping:
-                  if line.startswith("["):
-                      skipping = False
-                  else:
-                      continue
-              if not skipping:
-                  out.append(line)
-          path.write_text("".join(out), encoding="utf-8")
-          print("wrangler.toml prepared for prebuilt deploy:")
-          print(path.read_text(encoding="utf-8"))
-          PY
-
-      - name: Deploy to Cloudflare Workers
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Verify Cloudflare auth
         run: |
           set -euo pipefail
-          echo "Deploying prebuilt build/web via wrangler..."
-          npx --yes wrangler@3.90.0 deploy --config wrangler.toml
+          npx --yes wrangler@4.40.3 whoami 2>&1 | tee whoami.log
+          if grep -qiE 'not authenticated|error|unauthorized|10000' whoami.log; then
+            echo "::error::Wrangler authentication failed. Recreate CLOUDFLARE_API_TOKEN with the Edit Cloudflare Workers template and confirm CLOUDFLARE_ACCOUNT_ID."
+            exit 1
+          fi
+
+      - name: Deploy to Cloudflare Workers
+        run: |
+          set -euo pipefail
+          echo "Deploying prebuilt build/web via wrangler 4…"
+          set +e
+          npx --yes wrangler@4.40.3 deploy --config wrangler.toml 2>&1 | tee wrangler-deploy.log
+          code=${PIPESTATUS[0]}
+          set -e
+          if [ "$code" -ne 0 ]; then
+            echo "::error::Wrangler deploy failed with exit code $code"
+            echo "::group::wrangler-deploy.log"
+            cat wrangler-deploy.log
+            echo "::endgroup::"
+            exit "$code"
+          fi
+          echo "Deploy succeeded."
+          grep -E 'workers.dev|Deployed|Version' wrangler-deploy.log || true
+
+      - name: Upload wrangler logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wrangler-deploy-logs
+          path: |
+            whoami.log
+            wrangler-deploy.log
+          if-no-files-found: ignore
