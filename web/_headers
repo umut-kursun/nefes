@@ -1,5 +1,6 @@
-# Cache policy for Cloudflare Pages (and compatible static hosts).
-# HTML/SW stay fresh; hashed Flutter assets can be cached longer by the CDN.
+# Cache policy for Cloudflare Workers static assets.
+# HTML / SW / Flutter entry JS must revalidate so PWA installs pick up deploys.
+# Only truly content-hashed or vendor binaries may be immutable.
 
 /
   X-Frame-Options: DENY
@@ -8,17 +9,20 @@
 /index.html
   Cache-Control: no-cache
 
-/sw.js
-  Cache-Control: no-cache
-
-/manifest.json
+/flutter.js
   Cache-Control: no-cache
 
 /flutter_bootstrap.js
   Cache-Control: no-cache
 
 /main.dart.js
-  Cache-Control: public, max-age=3600
+  Cache-Control: no-cache
+
+/sw.js
+  Cache-Control: no-cache
+
+/manifest.json
+  Cache-Control: no-cache
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

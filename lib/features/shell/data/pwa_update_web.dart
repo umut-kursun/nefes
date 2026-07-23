@@ -5,17 +5,27 @@ import 'dart:html' as html;
 /// Emits once when a new service worker takes control (or is waiting).
 Stream<void> watchPwaUpdateAvailable() {
   final controller = StreamController<void>.broadcast();
+  var notified = false;
 
   void notify() {
-    if (!controller.isClosed) controller.add(null);
+    if (notified || controller.isClosed) return;
+    notified = true;
+    controller.add(null);
   }
 
   html.window.navigator.serviceWorker?.addEventListener('controllerchange', (_) {
     notify();
   });
 
-  // If a worker is already waiting (registered before Flutter boot).
-  html.window.navigator.serviceWorker?.ready.then((reg) {
+  Future<html.ServiceWorkerRegistration?> ready() async {
+    try {
+      return await html.window.navigator.serviceWorker?.ready;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void watchRegistration(html.ServiceWorkerRegistration reg) {
     if (reg.waiting != null) notify();
     reg.addEventListener('updatefound', (_) {
       final installing = reg.installing;
@@ -25,6 +35,26 @@ Stream<void> watchPwaUpdateAvailable() {
           notify();
         }
       });
+    });
+    // Proactively ask the browser to fetch a fresh sw.js.
+    try {
+      reg.update();
+    } catch (_) {}
+  }
+
+  ready().then((reg) {
+    if (reg != null) watchRegistration(reg);
+  });
+
+  // Re-check when the installed PWA returns to foreground.
+  html.document.addEventListener('visibilitychange', (_) {
+    if (html.document.hidden == true) return;
+    ready().then((reg) {
+      if (reg == null) return;
+      try {
+        reg.update();
+      } catch (_) {}
+      if (reg.waiting != null) notify();
     });
   });
 
