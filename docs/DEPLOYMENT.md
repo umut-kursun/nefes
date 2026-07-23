@@ -56,12 +56,21 @@ Repo includes:
 3. **Deploy / assets directory** must resolve to **`build/web`**, not `web`
 4. Do **not** set “assets directory” / “root directory” to `web`
 
-### GitHub Actions secrets (if using the workflow)
+### GitHub Actions secrets (required for this workflow)
 
-In GitHub → Settings → Secrets and variables → Actions:
+In GitHub → Settings → Secrets and variables → Actions, create **both**:
 
-- `CLOUDFLARE_API_TOKEN` — token with Workers deploy permission
-- `CLOUDFLARE_ACCOUNT_ID` — your Cloudflare account id
+- `CLOUDFLARE_API_TOKEN` — API token with **Edit Cloudflare Workers** permission
+- `CLOUDFLARE_ACCOUNT_ID` — your Cloudflare account id (Workers overview sidebar)
+
+If either secret is missing, the workflow fails in **Require Cloudflare secrets**
+(or Wrangler exits with a generic `npx` code 1). The Node 20 deprecation
+notice from Actions is a warning only and is not the deploy failure.
+
+Create the token: Cloudflare → My Profile → API Tokens → Create Token →
+“Edit Cloudflare Workers”.
+
+After adding secrets, re-run the failed workflow (Actions → Re-run jobs).
 
 ## Data safety (local-first)
 
