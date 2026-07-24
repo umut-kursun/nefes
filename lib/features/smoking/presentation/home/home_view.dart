@@ -9,6 +9,7 @@ import 'package:nefes/features/history/presentation/event_correction_sheet.dart'
 import 'package:nefes/features/motivation/presentation/delay_coach_panel.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
+import 'package:nefes/features/smoking/presentation/home/body_recovery_feed.dart';
 import 'package:nefes/features/smoking/presentation/home/capture_sheets.dart';
 import 'package:nefes/features/smoking/presentation/home/optional_context_bar.dart';
 import 'package:nefes/features/smoking/presentation/home/target_dialogs.dart';
@@ -294,6 +295,11 @@ class _TodayComposition extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
                 TodayGainDashboard(
                   tiles: state.gainTiles,
+                ),
+                const SizedBox(height: AppSpacing.md),
+                BodyRecoveryFeed(
+                  items: state.recoveryItems,
+                  nextHint: state.nextRecoveryHint,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 DailyStatusSection(

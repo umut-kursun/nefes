@@ -11,6 +11,7 @@ import 'package:nefes/features/habit/domain/services/behavior_pattern_service.da
 import 'package:nefes/features/motivation/domain/services/delay_session_manager.dart';
 import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
 import 'package:nefes/features/motivation/domain/services/personal_stats_provider.dart';
+import 'package:nefes/features/motivation/domain/services/recovery_timeline_evaluator.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
@@ -55,9 +56,12 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   double? _pricePerCigarette;
   int _expectedPerDay = 0;
   List<TodayGainTileVm> _gainTiles = const [];
+  List<RecoveryItemVm> _recoveryItems = const [];
+  String? _nextRecoveryHint;
   final Set<String> _shownMomentKeys = {};
   final Set<int> _shownMoneyBuckets = {};
   static const _stats = EventPersonalStatsProvider();
+  static const _recovery = RecoveryTimelineEvaluator();
 
   String _momentDayKey(String id) {
     final n = DateTime.now();
@@ -80,12 +84,15 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
 
   void _publishFromSnapshot(HomeSnapshot snapshot) {
     final keepMotivation = snapshot.activeDelay != null;
+    _syncRecovery(snapshot.lastSmokeAtUtc, DateTime.now().toUtc());
     state = HomeUiState.fromSnapshot(
       snapshot,
       pendingTriggerSmokeId: state.pendingTriggerSmokeId,
       quickTriggers: _quickTriggers,
       contextualInsight: _contextualInsight,
       gainTiles: _gainTiles,
+      recoveryItems: _recoveryItems,
+      nextRecoveryHint: _nextRecoveryHint,
       successMoment: state.successMoment,
       motivationMessageId:
           keepMotivation ? state.motivationMessageId : null,
@@ -97,10 +104,25 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       isDelayBusy: state.isDelayBusy,
       errorMessage: state.errorMessage,
       infoMessage: state.infoMessage,
+      clearNextRecoveryHint: _nextRecoveryHint == null,
     );
     if (!keepMotivation) {
       _coach.clear();
     }
+  }
+
+  void _syncRecovery(DateTime? lastSmokeAtUtc, DateTime nowUtc) {
+    final elapsed =
+        lastSmokeAtUtc == null ? null : nowUtc.difference(lastSmokeAtUtc);
+    final snap = _recovery.evaluate(elapsed);
+    _recoveryItems = [
+      for (final m in snap.unlocked)
+        RecoveryItemVm(id: m.id, timeLabel: m.timeLabel, body: m.body),
+    ];
+    final next = snap.next;
+    _nextRecoveryHint = next == null
+        ? null
+        : AppStrings.bodyRecoveryNext(next.timeLabel, next.body);
   }
 
   void _syncDelaySession(HomeSnapshot snapshot) {
@@ -313,7 +335,12 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       }
     }
 
-    if (!clocksUnchanged || nextGains != null) {
+    _syncRecovery(last, now.toUtc());
+    final recoveryChanged =
+        !_listEqualsRecovery(_recoveryItems, state.recoveryItems) ||
+            _nextRecoveryHint != state.nextRecoveryHint;
+
+    if (!clocksUnchanged || nextGains != null || recoveryChanged) {
       state = state.copyWith(
         elapsedLabel: nextElapsed,
         hasLastSmoke: nextHasLast,
@@ -323,6 +350,10 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
         delayIntendedMinutes: nextIntended,
         clearDelayIntended: delay == null,
         gainTiles: nextGains,
+        recoveryItems: recoveryChanged ? _recoveryItems : null,
+        nextRecoveryHint: recoveryChanged ? _nextRecoveryHint : null,
+        clearNextRecoveryHint:
+            recoveryChanged && _nextRecoveryHint == null,
       );
     }
 
@@ -330,6 +361,18 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   }
 
   static bool _listEqualsGain(List<TodayGainTileVm> a, List<TodayGainTileVm> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  static bool _listEqualsRecovery(
+    List<RecoveryItemVm> a,
+    List<RecoveryItemVm> b,
+  ) {
     if (identical(a, b)) return true;
     if (a.length != b.length) return false;
     for (var i = 0; i < a.length; i++) {

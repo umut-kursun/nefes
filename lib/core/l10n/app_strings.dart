@@ -253,4 +253,36 @@ abstract final class AppStrings {
       'Bugün şu ana kadar dünkü aynı saate göre $n kayıt daha fazla.';
   static String insightTriggerToday(String trigger) =>
       '$trigger kayıtların bugün daha sık.';
+
+  // Body recovery feed (“Vücudunda olanlar”)
+  static const bodyRecoveryTitle = 'Vücudunda olanlar';
+  static const bodyRecoveryEmpty =
+      'İlk kayıttan sonra vücudundaki değişimler burada görünecek.';
+  static String bodyRecoveryNext(String timeLabel, String body) =>
+      'Sonraki · $timeLabel — $body';
+
+  static const recoveryLabel20m = '20 dk';
+  static const recoveryBody20m =
+      'Nabız ve tansiyon normale yaklaşmaya başlar.';
+  static const recoveryLabel2h = '2 saat';
+  static const recoveryBody2h =
+      'El ve ayaklarda dolaşım iyileşmeye başlar.';
+  static const recoveryLabel8h = '8 saat';
+  static const recoveryBody8h =
+      'Kandaki nikotin seviyesi belirgin düşer.';
+  static const recoveryLabel12h = '12 saat';
+  static const recoveryBody12h =
+      'Kandaki karbonmonoksit normale yaklaşır; oksijen taşıma kapasitesi toparlanır.';
+  static const recoveryLabel24h = '24 saat';
+  static const recoveryBody24h =
+      'Kalp krizi riski düşmeye başlar.';
+  static const recoveryLabel48h = '48 saat';
+  static const recoveryBody48h =
+      'Koku ve tat duyusu toparlanmaya başlar.';
+  static const recoveryLabel72h = '72 saat';
+  static const recoveryBody72h =
+      'Nefes almak kolaylaşmaya başlar.';
+  static const recoveryLabel1w = '1 hafta';
+  static const recoveryBody1w =
+      'Dolaşım ve efor kapasitesi iyileşmeye devam eder.';
 }

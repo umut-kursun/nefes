@@ -56,6 +56,29 @@ class SuccessMomentVm {
   int get hashCode => Object.hash(id, text);
 }
 
+/// One unlocked row in the “Vücudunda olanlar” feed.
+class RecoveryItemVm {
+  const RecoveryItemVm({
+    required this.id,
+    required this.timeLabel,
+    required this.body,
+  });
+
+  final String id;
+  final String timeLabel;
+  final String body;
+
+  @override
+  bool operator ==(Object other) =>
+      other is RecoveryItemVm &&
+      other.id == id &&
+      other.timeLabel == timeLabel &&
+      other.body == body;
+
+  @override
+  int get hashCode => Object.hash(id, timeLabel, body);
+}
+
 /// UI state for the Home screen.
 class HomeUiState {
   const HomeUiState({
@@ -74,6 +97,8 @@ class HomeUiState {
     required this.todayDelayMinutes,
     required this.todayDelayInsight,
     this.gainTiles = const [],
+    this.recoveryItems = const [],
+    this.nextRecoveryHint,
     this.successMoment,
     this.pendingTriggerSmokeId,
     this.quickTriggers = TriggerPersonalizer.defaultQuickOrder,
@@ -124,6 +149,8 @@ class HomeUiState {
   final int todayDelayMinutes;
   final String? todayDelayInsight;
   final List<TodayGainTileVm> gainTiles;
+  final List<RecoveryItemVm> recoveryItems;
+  final String? nextRecoveryHint;
   final SuccessMomentVm? successMoment;
   final String? pendingTriggerSmokeId;
   final List<SmokingTrigger> quickTriggers;
@@ -157,6 +184,8 @@ class HomeUiState {
         todayDelayMinutes,
         todayDelayInsight,
         Object.hashAll(gainTiles),
+        Object.hashAll(recoveryItems),
+        nextRecoveryHint,
         successMoment,
         pendingTriggerSmokeId,
         identityHashCode(quickTriggers),
@@ -190,6 +219,8 @@ class HomeUiState {
     int? todayDelayMinutes,
     String? todayDelayInsight,
     List<TodayGainTileVm>? gainTiles,
+    List<RecoveryItemVm>? recoveryItems,
+    String? nextRecoveryHint,
     SuccessMomentVm? successMoment,
     String? pendingTriggerSmokeId,
     List<SmokingTrigger>? quickTriggers,
@@ -212,6 +243,7 @@ class HomeUiState {
     bool clearDelayIntended = false,
     bool clearMotivation = false,
     bool clearSuccessMoment = false,
+    bool clearNextRecoveryHint = false,
   }) {
     return HomeUiState(
       todayCount: todayCount ?? this.todayCount,
@@ -230,6 +262,10 @@ class HomeUiState {
       todayDelayMinutes: todayDelayMinutes ?? this.todayDelayMinutes,
       todayDelayInsight: todayDelayInsight ?? this.todayDelayInsight,
       gainTiles: gainTiles ?? this.gainTiles,
+      recoveryItems: recoveryItems ?? this.recoveryItems,
+      nextRecoveryHint: clearNextRecoveryHint
+          ? null
+          : (nextRecoveryHint ?? this.nextRecoveryHint),
       successMoment: clearSuccessMoment
           ? null
           : (successMoment ?? this.successMoment),
@@ -280,6 +316,8 @@ class HomeUiState {
     String? motivationBody,
     String? coachMoneyCaption,
     List<TodayGainTileVm>? gainTiles,
+    List<RecoveryItemVm>? recoveryItems,
+    String? nextRecoveryHint,
     SuccessMomentVm? successMoment,
   }) {
     final clock = now ?? DateTime.now();
@@ -313,6 +351,8 @@ class HomeUiState {
       todayDelayMinutes: snapshot.todayDelayTotal.inMinutes,
       todayDelayInsight: _insightFor(snapshot),
       gainTiles: gainTiles ?? const [],
+      recoveryItems: recoveryItems ?? const [],
+      nextRecoveryHint: nextRecoveryHint,
       successMoment: successMoment,
       pendingTriggerSmokeId: pendingTriggerSmokeId,
       quickTriggers: quickTriggers ?? TriggerPersonalizer.defaultQuickOrder,
