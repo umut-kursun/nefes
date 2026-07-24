@@ -1,14 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nefes/features/habit/domain/entities/habit_type.dart';
-import 'package:nefes/features/motivation/domain/entities/progress_card.dart';
 import 'package:nefes/features/motivation/domain/services/catalog_message_provider.dart';
 import 'package:nefes/features/motivation/domain/services/delay_session_manager.dart';
+import 'package:nefes/features/motivation/domain/services/health_message_provider.dart';
 import 'package:nefes/features/motivation/domain/services/milestone_evaluator.dart';
 import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
 import 'package:nefes/features/motivation/domain/services/motivation_engine.dart';
 import 'package:nefes/features/motivation/domain/services/personal_stats_provider.dart';
 import 'package:nefes/features/motivation/domain/services/personalized_message_provider.dart';
-import 'package:nefes/features/motivation/domain/services/progress_card_provider.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_event_type.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
@@ -57,9 +56,9 @@ void main() {
         statsProvider: const EventPersonalStatsProvider(),
         messageProviders: const [
           PersonalizedMessageProvider(),
+          HealthMessageProvider(),
           CatalogMessageProvider(),
         ],
-        progressCardProvider: const CatalogProgressCardProvider(),
       );
     });
 
@@ -95,14 +94,10 @@ void main() {
 
       expect(evaluation.milestone, isNull);
       expect(evaluation.message?.id, 'pre_milestone');
-      expect(evaluation.cards, isNotEmpty);
-      expect(
-        evaluation.cards.any((c) => c.kind == ProgressCardKind.nextTarget),
-        isTrue,
-      );
+      expect(evaluation.moneyCaption, isNull);
     });
 
-    test('unlocks first-minute message and progress cards', () {
+    test('session money is one cigarette at configured price', () {
       final start = DateTime.utc(2026, 7, 24, 10);
       final session = engine.openSession(
         active: ActiveDelaySession(id: 'd1', startedAtUtc: start),
@@ -118,11 +113,51 @@ void main() {
 
       expect(evaluation.milestone?.id, 'm_1');
       expect(evaluation.message?.id, 'first_minute');
-      expect(evaluation.cards.length, lessThanOrEqualTo(2));
-      expect(
-        evaluation.cards.any((c) => c.kind == ProgressCardKind.moneySaved),
-        isTrue,
+      expect(evaluation.moneyCaption, contains('Bu oturum tahmini'));
+      expect(evaluation.moneyCaption, contains('₺6'));
+    });
+
+    test('encouragement appears at three minutes', () {
+      final start = DateTime.utc(2026, 7, 24, 10);
+      final session = engine.openSession(
+        active: ActiveDelaySession(id: 'd1', startedAtUtc: start),
+        allEvents: const [],
       );
+
+      final evaluation = engine.evaluate(
+        session: session,
+        allEvents: const [],
+        nowUtc: start.add(const Duration(minutes: 3)),
+      );
+
+      expect(evaluation.milestone?.id, 'm_3');
+      expect(evaluation.message?.id, 'urge_fades');
+    });
+
+    test('today savings use urge-passed count only', () {
+      final start = DateTime.utc(2026, 7, 24, 12);
+      final earlier = start.subtract(const Duration(hours: 2));
+      final events = [
+        _delayEnded(
+          id: 'e1',
+          parentId: 'old',
+          at: earlier,
+          duration: const Duration(minutes: 8),
+        ),
+      ];
+      final session = engine.openSession(
+        active: ActiveDelaySession(id: 'd1', startedAtUtc: start),
+        allEvents: events,
+      );
+      final context = engine.buildContext(
+        session: session,
+        allEvents: events,
+        nowUtc: start.add(const Duration(seconds: 10)),
+        pricePerCigarette: 7,
+      );
+
+      expect(context.moneySaved, isNull);
+      expect(context.moneySavedToday, 7);
     });
 
     test('celebrates effort without framing failure', () {
@@ -148,17 +183,12 @@ void main() {
       expect(celebration.improvement?.inMinutes, 11);
       expect(celebration.message, contains('18 dakika'));
       expect(celebration.message.toLowerCase(), isNot(contains('başarısız')));
-      expect(celebration.message.toLowerCase(), isNot(contains('kaybettin')));
     });
   });
 
   group('DelaySessionManager', () {
-    test('rotates progress cards across milestones', () {
-      final manager = DelaySessionManager(
-        engine: MotivationEngine(
-          progressCardProvider: const CatalogProgressCardProvider(maxCards: 2),
-        ),
-      );
+    test('keeps coaching messages across milestones', () {
+      final manager = DelaySessionManager(engine: MotivationEngine());
       final start = DateTime.utc(2026, 7, 24, 10);
       manager.open(
         active: ActiveDelaySession(id: 'd1', startedAtUtc: start),
@@ -177,41 +207,8 @@ void main() {
       );
 
       expect(at1?.message, isNotNull);
-      expect(at5?.message, isNotNull);
-      expect(at1!.cards, isNotEmpty);
-      expect(at5!.cards, isNotEmpty);
-    });
-  });
-
-  group('ProgressCardProvider', () {
-    test('prefers kinds not recently shown', () {
-      final provider = const CatalogProgressCardProvider(maxCards: 2);
-      final engine = MotivationEngine();
-      final start = DateTime.utc(2026, 7, 24, 10);
-      final session = engine.openSession(
-        active: ActiveDelaySession(id: 'd1', startedAtUtc: start),
-        allEvents: const [],
-      );
-      final context = engine.buildContext(
-        session: session,
-        allEvents: const [],
-        nowUtc: start.add(const Duration(minutes: 10)),
-        pricePerCigarette: 6,
-        nextMilestone: engine.milestoneEvaluator.nextAfter(
-          const Duration(minutes: 10),
-        ),
-      );
-
-      final cards = provider.cardsFor(
-        context: context,
-        milestone: engine.milestoneEvaluator.highestReached(
-          const Duration(minutes: 10),
-        ),
-        recentlyShown: {ProgressCardKind.moneySaved, ProgressCardKind.timeSmokeFree},
-      );
-
-      expect(cards, isNotEmpty);
-      expect(cards.first.kind, isNot(ProgressCardKind.moneySaved));
+      expect(at5?.message?.id, 'health_waiting_success');
+      expect(at1!.moneyCaption, contains('Bu oturum tahmini'));
     });
   });
 }

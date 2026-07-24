@@ -5,11 +5,9 @@ import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_view_model.dart';
 
-/// Active Delay Coach surface — message + rotating progress cards.
-///
-/// Intentionally simple; visual polish can come later.
-class DelayCoachPanel extends StatelessWidget {
-  const DelayCoachPanel({
+/// Delay Coach embedded in the dashboard action area — not a separate card.
+class DelayCoachAction extends StatelessWidget {
+  const DelayCoachAction({
     super.key,
     required this.state,
     required this.onUrgePassed,
@@ -24,149 +22,134 @@ class DelayCoachPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceElevated,
-        borderRadius: AppRadius.lgAll,
-        border: Border.all(color: AppColors.borderSubtle),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  (state.delayTimedOut
-                          ? AppStrings.delayTimeUp
-                          : AppStrings.delayCoachTitle)
-                      .toUpperCase(),
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: AppColors.textMuted,
-                    letterSpacing: 0.7,
-                    fontWeight: FontWeight.w600,
-                  ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                (state.delayTimedOut
+                        ? AppStrings.delayTimeUp
+                        : AppStrings.delayCoachTitle)
+                    .toUpperCase(),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: AppColors.textMuted,
+                  letterSpacing: 0.6,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              if (state.delayIntendedMinutes != null)
-                Text(
-                  AppStrings.delayIntended(state.delayIntendedMinutes!),
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: AppColors.textSecondary,
+            ),
+            Consumer(
+              builder: (context, ref, _) {
+                final label = ref.watch(
+                  homeViewModelProvider.select((s) => s.delayElapsedLabel),
+                );
+                return AnimatedSwitcher(
+                  duration: AppMotion.fast,
+                  switchInCurve: AppMotion.standard,
+                  switchOutCurve: AppMotion.standard,
+                  transitionBuilder: (child, animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                  child: Text(
+                    label,
+                    key: ValueKey(label),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.forestMid,
+                    ),
                   ),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Consumer(
-            builder: (context, ref, _) {
-              final label = ref.watch(
-                homeViewModelProvider.select((s) => s.delayElapsedLabel),
-              );
-              return Text(
-                label,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.forestMid,
-                ),
+                );
+              },
+            ),
+          ],
+        ),
+        if (state.motivationBody != null) ...[
+          const SizedBox(height: AppSpacing.sm),
+          AnimatedSwitcher(
+            duration: AppMotion.normal,
+            switchInCurve: AppMotion.standard,
+            switchOutCurve: AppMotion.standard,
+            layoutBuilder: (currentChild, previousChildren) {
+              return Stack(
+                alignment: Alignment.topLeft,
+                children: <Widget>[
+                  ...previousChildren,
+                  ?currentChild,
+                ],
               );
             },
-          ),
-          if (state.motivationBody != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            AnimatedSwitcher(
-              duration: AppMotion.normal,
-              switchInCurve: AppMotion.standard,
-              switchOutCurve: AppMotion.standard,
-              child: Text(
-                state.motivationBody!,
-                key: ValueKey(state.motivationMessageId ?? state.motivationBody),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textPrimary,
-                  height: 1.35,
-                  fontWeight: FontWeight.w500,
-                ),
+            transitionBuilder: (child, animation) {
+              final offset = Tween<Offset>(
+                begin: const Offset(0, 0.08),
+                end: Offset.zero,
+              ).animate(animation);
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(position: offset, child: child),
+              );
+            },
+            child: Text(
+              state.motivationBody!,
+              key: ValueKey(state.motivationMessageId ?? state.motivationBody),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.textPrimary,
+                height: 1.35,
+                fontWeight: FontWeight.w500,
               ),
-            ),
-          ],
-          if (state.coachCards.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Wrap(
-              spacing: AppSpacing.sm,
-              runSpacing: AppSpacing.sm,
-              children: [
-                for (final card in state.coachCards) _ProgressChip(card: card),
-              ],
-            ),
-          ],
-          const SizedBox(height: AppSpacing.sm),
-          Row(
-            children: [
-              Expanded(
-                child: FilledButton.tonal(
-                  onPressed: state.isBusy ? null : onUrgePassed,
-                  child: const Text(AppStrings.urgePassed),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: state.isBusy ? null : onSmoke,
-                  child: const Text(AppStrings.delayOutcomeSmoke),
-                ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: state.isBusy ? null : onCancel,
-              child: const Text(AppStrings.cancelDelay),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ProgressChip extends StatelessWidget {
-  const _ProgressChip({required this.card});
-
-  final CoachCardVm card;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xs,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceSage,
-        borderRadius: AppRadius.smAll,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            card.title,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
-          Text(
-            card.value,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: AppColors.textOnSage,
-              fontWeight: FontWeight.w700,
+        if (state.coachMoneyCaption != null) ...[
+          const SizedBox(height: AppSpacing.xs),
+          AnimatedSwitcher(
+            duration: AppMotion.fast,
+            child: Text(
+              state.coachMoneyCaption!,
+              key: ValueKey(state.coachMoneyCaption),
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
-      ),
+        const SizedBox(height: AppSpacing.sm),
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton.tonal(
+                onPressed: state.isBusy ? null : onUrgePassed,
+                child: const Text(AppStrings.urgePassed),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: OutlinedButton(
+                onPressed: state.isBusy ? null : onSmoke,
+                child: const Text(AppStrings.delayOutcomeSmoke),
+              ),
+            ),
+          ],
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: state.isBusy ? null : onCancel,
+            style: TextButton.styleFrom(
+              visualDensity: VisualDensity.compact,
+              minimumSize: const Size(44, 36),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+            ),
+            child: const Text(AppStrings.cancelDelay),
+          ),
+        ),
+      ],
     );
   }
 }

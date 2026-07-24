@@ -9,10 +9,12 @@ import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
 import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/habit/domain/services/behavior_pattern_service.dart';
 import 'package:nefes/features/motivation/domain/services/delay_session_manager.dart';
+import 'package:nefes/features/motivation/domain/services/personal_stats_provider.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/domain/services/home_snapshot_builder.dart';
+import 'package:nefes/features/smoking/domain/services/today_gains_builder.dart';
 import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 import 'package:uuid/uuid.dart';
@@ -49,6 +51,8 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   DateTime? _lastInsightRefresh;
   List<SmokingLogEvent> _cachedEvents = const [];
   double? _pricePerCigarette;
+  List<TodayGainTileVm> _gainTiles = const [];
+  static const _stats = EventPersonalStatsProvider();
 
   void _publishFromSnapshot(HomeSnapshot snapshot) {
     final keepMotivation = snapshot.activeDelay != null;
@@ -57,10 +61,11 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       pendingTriggerSmokeId: state.pendingTriggerSmokeId,
       quickTriggers: _quickTriggers,
       contextualInsight: _contextualInsight,
+      gainTiles: _gainTiles,
       motivationMessageId:
           keepMotivation ? state.motivationMessageId : null,
       motivationBody: keepMotivation ? state.motivationBody : null,
-      coachCards: keepMotivation ? state.coachCards : const [],
+      coachMoneyCaption: keepMotivation ? state.coachMoneyCaption : null,
     ).copyWith(
       isSaving: state.isSaving,
       isUndoing: state.isUndoing,
@@ -80,11 +85,39 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     );
   }
 
+  List<TodayGainTileVm> _buildGainTiles({
+    required HomeSnapshot snapshot,
+    required List<SmokingLogEvent> events,
+    required DateTime nowLocal,
+  }) {
+    final day = DateTime(nowLocal.year, nowLocal.month, nowLocal.day);
+    final urgePassed = _stats.urgePassedCountOnDay(
+      allEvents: events,
+      localDay: day,
+    );
+    final active = snapshot.activeDelay;
+    final activeElapsed = active == null
+        ? null
+        : nowLocal.toUtc().difference(active.startedAtUtc);
+
+    return TodayGainsBuilder.build(
+      snapshot: snapshot,
+      pricePerCigarette: _pricePerCigarette,
+      urgePassedCount: urgePassed,
+      activeDelayElapsed: activeElapsed,
+      nowLocal: nowLocal,
+    )
+        .map(
+          (t) => TodayGainTileVm(id: t.id, label: t.label, value: t.value),
+        )
+        .toList(growable: false);
+  }
+
   void _applyMotivation(DateTime nowUtc) {
     if (_coach.activeSession == null) {
       if (state.motivationMessageId != null ||
           state.motivationBody != null ||
-          state.coachCards.isNotEmpty) {
+          state.coachMoneyCaption != null) {
         state = state.copyWith(clearMotivation: true);
       }
       return;
@@ -101,20 +134,12 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     }
 
     final message = snapshot.message;
-    final cards = snapshot.cards
-        .map(
-          (c) => CoachCardVm(
-            kind: c.kind.name,
-            title: c.title,
-            value: c.value,
-          ),
-        )
-        .toList(growable: false);
+    final moneyCaption = snapshot.moneyCaption;
 
-    if (message == null && cards.isEmpty) {
+    if (message == null && moneyCaption == null) {
       if (state.motivationMessageId != null ||
           state.motivationBody != null ||
-          state.coachCards.isNotEmpty) {
+          state.coachMoneyCaption != null) {
         state = state.copyWith(clearMotivation: true);
       }
       return;
@@ -122,24 +147,15 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
 
     if (message?.id == state.motivationMessageId &&
         message?.body == state.motivationBody &&
-        _sameCards(cards, state.coachCards)) {
+        moneyCaption == state.coachMoneyCaption) {
       return;
     }
 
     state = state.copyWith(clearMotivation: true).copyWith(
       motivationMessageId: message?.id,
       motivationBody: message?.body,
-      coachCards: cards,
+      coachMoneyCaption: moneyCaption,
     );
-  }
-
-  bool _sameCards(List<CoachCardVm> a, List<CoachCardVm> b) {
-    if (identical(a, b)) return true;
-    if (a.length != b.length) return false;
-    for (var i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) return false;
-    }
-    return true;
   }
 
   Future<void> _refreshDerived(HomeSnapshot snapshot) async {
@@ -155,6 +171,11 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     final settings = await _ref.read(settingsRepositoryProvider).getSettings();
     if (!mounted) return;
     _pricePerCigarette = settings.pricePerCigarette;
+    _gainTiles = _buildGainTiles(
+      snapshot: snapshot,
+      events: events,
+      nowLocal: now,
+    );
 
     _quickTriggers = TriggerPersonalizer.rankedQuickPicks(allEvents: events);
 
@@ -172,6 +193,9 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       quickTriggers: _quickTriggers,
       contextualInsight: _contextualInsight,
       clearContextualInsight: _contextualInsight == null,
+      gainTiles: _gainTiles,
+      todayDelayMinutes: snapshot.todayDelayTotal.inMinutes,
+      todayDelayCount: snapshot.todayDelayCount,
     );
     _applyMotivation(now.toUtc());
   }
@@ -228,7 +252,21 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
         nextHasLast == state.hasLastSmoke &&
         nextHasDelay == state.hasActiveDelay;
 
-    if (!clocksUnchanged) {
+    List<TodayGainTileVm>? nextGains;
+    if (nextHasDelay || state.gainTiles.isEmpty) {
+      nextGains = _buildGainTiles(
+        snapshot: snap,
+        events: _cachedEvents,
+        nowLocal: now,
+      );
+      if (_listEqualsGain(nextGains, state.gainTiles)) {
+        nextGains = null;
+      } else {
+        _gainTiles = nextGains;
+      }
+    }
+
+    if (!clocksUnchanged || nextGains != null) {
       state = state.copyWith(
         elapsedLabel: nextElapsed,
         hasLastSmoke: nextHasLast,
@@ -237,10 +275,20 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
         delayTimedOut: nextTimedOut,
         delayIntendedMinutes: nextIntended,
         clearDelayIntended: delay == null,
+        gainTiles: nextGains,
       );
     }
 
     _applyMotivation(now.toUtc());
+  }
+
+  static bool _listEqualsGain(List<TodayGainTileVm> a, List<TodayGainTileVm> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
   }
 
   void _scheduleContextDismiss() {

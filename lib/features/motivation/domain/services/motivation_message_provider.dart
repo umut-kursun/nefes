@@ -4,10 +4,11 @@ import 'package:nefes/features/motivation/domain/entities/motivation_message.dar
 
 /// Pluggable message source.
 ///
-/// Catalog and (later) personalized providers implement this.
-/// Return null when the provider has nothing for the requested ids.
+/// The engine walks [MilestoneRule.messageIds] in order and asks each provider
+/// for that id — first non-null wins.
 abstract class MotivationMessageProvider {
-  MotivationMessage? resolve({
+  MotivationMessage? resolveId({
+    required String messageId,
     required MilestoneRule milestone,
     required MotivationContext context,
   });

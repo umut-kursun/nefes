@@ -6,7 +6,7 @@ import 'package:nefes/features/motivation/domain/services/motivation_engine.dart
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 
-/// Owns the active Delay Coach session and card-rotation memory.
+/// Owns the active Delay Coach session and rotation memory.
 class DelaySessionManager {
   DelaySessionManager({required this.engine});
 
@@ -15,6 +15,7 @@ class DelaySessionManager {
   DelaySession? _session;
   String? _lastMilestoneId;
   final List<ProgressCardKind> _recentKinds = [];
+  final List<String> _recentMessageIds = [];
 
   DelaySession? get activeSession => _session;
 
@@ -26,6 +27,7 @@ class DelaySessionManager {
     _session = engine.openSession(active: active, allEvents: allEvents);
     _lastMilestoneId = null;
     _recentKinds.clear();
+    _recentMessageIds.clear();
     return _session!;
   }
 
@@ -54,9 +56,11 @@ class DelaySessionManager {
       nowUtc: nowUtc,
       pricePerCigarette: pricePerCigarette,
       recentlyShown: _recentKinds.toSet(),
+      recentMessageIds: _recentMessageIds.toSet(),
     );
 
     final milestoneId = evaluation.milestone?.id;
+    final messageId = evaluation.message?.id;
     if (milestoneId != null && milestoneId != _lastMilestoneId) {
       _lastMilestoneId = milestoneId;
       for (final card in evaluation.cards) {
@@ -64,6 +68,12 @@ class DelaySessionManager {
       }
       while (_recentKinds.length > 4) {
         _recentKinds.removeAt(0);
+      }
+      if (messageId != null) {
+        _recentMessageIds.add(messageId);
+        while (_recentMessageIds.length > 5) {
+          _recentMessageIds.removeAt(0);
+        }
       }
     }
 
@@ -86,5 +96,6 @@ class DelaySessionManager {
     _session = null;
     _lastMilestoneId = null;
     _recentKinds.clear();
+    _recentMessageIds.clear();
   }
 }

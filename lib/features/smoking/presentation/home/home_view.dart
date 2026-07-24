@@ -292,6 +292,8 @@ class _TodayComposition extends StatelessWidget {
               children: [
                 const _LiveHeroElapsed(),
                 const SizedBox(height: AppSpacing.sm),
+                TodayGainDashboard(tiles: state.gainTiles),
+                const SizedBox(height: AppSpacing.sm),
                 TodayDashboardPanel(
                   used: state.todayCount,
                   limit: state.dailyTarget,
@@ -303,16 +305,15 @@ class _TodayComposition extends StatelessWidget {
                   showDelayAction: !state.hasActiveDelay,
                   onSmoke: onSmoke,
                   onDelay: onPickDelay,
+                  coachSlot: state.hasActiveDelay
+                      ? DelayCoachAction(
+                          state: state,
+                          onUrgePassed: onUrgePassed,
+                          onCancel: onCancelDelay,
+                          onSmoke: onDelaySmoke,
+                        )
+                      : null,
                 ),
-                if (state.hasActiveDelay) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  DelayCoachPanel(
-                    state: state,
-                    onUrgePassed: onUrgePassed,
-                    onCancel: onCancelDelay,
-                    onSmoke: onDelaySmoke,
-                  ),
-                ],
                 if (state.pendingTriggerSmokeId != null) ...[
                   const SizedBox(height: AppSpacing.sm),
                   OptionalContextBar(
@@ -321,8 +322,6 @@ class _TodayComposition extends StatelessWidget {
                     onMore: onMoreTriggers,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.sm),
-                _metrics(state),
                 const SizedBox(height: AppSpacing.sm),
                 RepaintBoundary(
                   child: Container(
@@ -374,33 +373,6 @@ class _TodayComposition extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _metrics(HomeUiState state) {
-    if (state.todayEvents.isEmpty) return const SizedBox.shrink();
-
-    final intervals = state.todayEvents
-        .map((e) => e.intervalSincePrevious)
-        .whereType<Duration>()
-        .toList();
-
-    Duration? average;
-    Duration? longest;
-    if (intervals.isNotEmpty) {
-      final totalMs = intervals.fold<int>(0, (s, d) => s + d.inMilliseconds);
-      average = Duration(milliseconds: totalMs ~/ intervals.length);
-      longest = intervals.reduce((a, b) => a > b ? a : b);
-    }
-
-    return MetricSummaryCard(
-      count: state.todayCount,
-      averageLabel: average == null
-          ? null
-          : TimeDisplay.formatIntervalShort(average),
-      longestLabel: longest == null
-          ? null
-          : TimeDisplay.formatIntervalShort(longest),
     );
   }
 }

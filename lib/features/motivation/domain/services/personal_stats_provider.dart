@@ -45,6 +45,13 @@ abstract class PersonalStatsProvider {
     String? excludingSessionId,
   });
 
+  /// Delays ended with urge passed (not smoked / cancelled) — for savings.
+  int urgePassedCountOnDay({
+    required List<SmokingLogEvent> allEvents,
+    required DateTime localDay,
+    String? excludingSessionId,
+  });
+
   int delayStreakDaysEndingOn({
     required List<SmokingLogEvent> allEvents,
     required DateTime localDay,
@@ -221,6 +228,24 @@ class EventPersonalStatsProvider implements PersonalStatsProvider {
   }
 
   @override
+  int urgePassedCountOnDay({
+    required List<SmokingLogEvent> allEvents,
+    required DateTime localDay,
+    String? excludingSessionId,
+  }) {
+    var count = 0;
+    for (final _ in _completedDurations(
+      allEvents: allEvents,
+      onlyLocalDay: localDay,
+      excludingSessionId: excludingSessionId,
+      urgePassedOnly: true,
+    )) {
+      count += 1;
+    }
+    return count;
+  }
+
+  @override
   int delayStreakDaysEndingOn({
     required List<SmokingLogEvent> allEvents,
     required DateTime localDay,
@@ -322,6 +347,7 @@ class EventPersonalStatsProvider implements PersonalStatsProvider {
     required List<SmokingLogEvent> allEvents,
     DateTime? onlyLocalDay,
     String? excludingSessionId,
+    bool urgePassedOnly = false,
   }) sync* {
     for (final event in allEvents) {
       if (!event.isDelayEnded) continue;
@@ -340,6 +366,7 @@ class EventPersonalStatsProvider implements PersonalStatsProvider {
         event.payloadJson['outcome'] as String? ?? 'cancelled',
       );
       if (outcome == DelayOutcome.cancelled) continue;
+      if (urgePassedOnly && outcome != DelayOutcome.completed) continue;
       final ms = event.payloadJson['durationMs'];
       if (ms is int && ms > 0) {
         yield Duration(milliseconds: ms);

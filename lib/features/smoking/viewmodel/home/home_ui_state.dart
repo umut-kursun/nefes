@@ -4,27 +4,27 @@ import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart';
 
-/// Lightweight progress card for Delay Coach UI.
-class CoachCardVm {
-  const CoachCardVm({
-    required this.kind,
-    required this.title,
+/// Compact tile for the “Bugün kazandıkların” dashboard.
+class TodayGainTileVm {
+  const TodayGainTileVm({
+    required this.id,
+    required this.label,
     required this.value,
   });
 
-  final String kind;
-  final String title;
+  final String id;
+  final String label;
   final String value;
 
   @override
   bool operator ==(Object other) =>
-      other is CoachCardVm &&
-      other.kind == kind &&
-      other.title == title &&
+      other is TodayGainTileVm &&
+      other.id == id &&
+      other.label == label &&
       other.value == value;
 
   @override
-  int get hashCode => Object.hash(kind, title, value);
+  int get hashCode => Object.hash(id, label, value);
 }
 
 /// UI state for the Home screen.
@@ -42,7 +42,9 @@ class HomeUiState {
     required this.hasActiveDelay,
     required this.delayElapsedLabel,
     required this.todayDelayCount,
+    required this.todayDelayMinutes,
     required this.todayDelayInsight,
+    this.gainTiles = const [],
     this.pendingTriggerSmokeId,
     this.quickTriggers = TriggerPersonalizer.defaultQuickOrder,
     this.contextualInsight,
@@ -50,7 +52,7 @@ class HomeUiState {
     this.delayTimedOut = false,
     this.motivationMessageId,
     this.motivationBody,
-    this.coachCards = const [],
+    this.coachMoneyCaption,
     this.isSaving = false,
     this.isUndoing = false,
     this.isDelayBusy = false,
@@ -72,6 +74,7 @@ class HomeUiState {
         hasActiveDelay: false,
         delayElapsedLabel: '',
         todayDelayCount: 0,
+        todayDelayMinutes: 0,
         todayDelayInsight: null,
         isHydrated: false,
       );
@@ -88,7 +91,9 @@ class HomeUiState {
   final bool hasActiveDelay;
   final String delayElapsedLabel;
   final int todayDelayCount;
+  final int todayDelayMinutes;
   final String? todayDelayInsight;
+  final List<TodayGainTileVm> gainTiles;
   final String? pendingTriggerSmokeId;
   final List<SmokingTrigger> quickTriggers;
   final String? contextualInsight;
@@ -96,7 +101,7 @@ class HomeUiState {
   final bool delayTimedOut;
   final String? motivationMessageId;
   final String? motivationBody;
-  final List<CoachCardVm> coachCards;
+  final String? coachMoneyCaption;
   final bool isSaving;
   final bool isUndoing;
   final bool isDelayBusy;
@@ -118,7 +123,9 @@ class HomeUiState {
         canUndo,
         hasActiveDelay,
         todayDelayCount,
+        todayDelayMinutes,
         todayDelayInsight,
+        Object.hashAll(gainTiles),
         pendingTriggerSmokeId,
         identityHashCode(quickTriggers),
         contextualInsight,
@@ -127,7 +134,7 @@ class HomeUiState {
           delayTimedOut,
           motivationMessageId,
           motivationBody,
-          Object.hashAll(coachCards),
+          coachMoneyCaption,
           isSaving,
           isUndoing,
           isDelayBusy,
@@ -148,7 +155,9 @@ class HomeUiState {
     bool? hasActiveDelay,
     String? delayElapsedLabel,
     int? todayDelayCount,
+    int? todayDelayMinutes,
     String? todayDelayInsight,
+    List<TodayGainTileVm>? gainTiles,
     String? pendingTriggerSmokeId,
     List<SmokingTrigger>? quickTriggers,
     String? contextualInsight,
@@ -156,7 +165,7 @@ class HomeUiState {
     bool? delayTimedOut,
     String? motivationMessageId,
     String? motivationBody,
-    List<CoachCardVm>? coachCards,
+    String? coachMoneyCaption,
     bool? isSaving,
     bool? isUndoing,
     bool? isDelayBusy,
@@ -184,7 +193,9 @@ class HomeUiState {
       hasActiveDelay: hasActiveDelay ?? this.hasActiveDelay,
       delayElapsedLabel: delayElapsedLabel ?? this.delayElapsedLabel,
       todayDelayCount: todayDelayCount ?? this.todayDelayCount,
+      todayDelayMinutes: todayDelayMinutes ?? this.todayDelayMinutes,
       todayDelayInsight: todayDelayInsight ?? this.todayDelayInsight,
+      gainTiles: gainTiles ?? this.gainTiles,
       pendingTriggerSmokeId: clearPendingTrigger
           ? null
           : (pendingTriggerSmokeId ?? this.pendingTriggerSmokeId),
@@ -201,8 +212,9 @@ class HomeUiState {
           : (motivationMessageId ?? this.motivationMessageId),
       motivationBody:
           clearMotivation ? null : (motivationBody ?? this.motivationBody),
-      coachCards:
-          clearMotivation ? const [] : (coachCards ?? this.coachCards),
+      coachMoneyCaption: clearMotivation
+          ? null
+          : (coachMoneyCaption ?? this.coachMoneyCaption),
       isSaving: isSaving ?? this.isSaving,
       isUndoing: isUndoing ?? this.isUndoing,
       isDelayBusy: isDelayBusy ?? this.isDelayBusy,
@@ -229,7 +241,8 @@ class HomeUiState {
     String? contextualInsight,
     String? motivationMessageId,
     String? motivationBody,
-    List<CoachCardVm>? coachCards,
+    String? coachMoneyCaption,
+    List<TodayGainTileVm>? gainTiles,
   }) {
     final clock = now ?? DateTime.now();
     final last = snapshot.lastSmokeAtUtc;
@@ -259,13 +272,15 @@ class HomeUiState {
       delayIntendedMinutes: intended?.inMinutes,
       delayTimedOut: delay?.isElapsed(clock.toUtc()) ?? false,
       todayDelayCount: snapshot.todayDelayCount,
+      todayDelayMinutes: snapshot.todayDelayTotal.inMinutes,
       todayDelayInsight: _insightFor(snapshot),
+      gainTiles: gainTiles ?? const [],
       pendingTriggerSmokeId: pendingTriggerSmokeId,
       quickTriggers: quickTriggers ?? TriggerPersonalizer.defaultQuickOrder,
       contextualInsight: contextualInsight,
       motivationMessageId: delay == null ? null : motivationMessageId,
       motivationBody: delay == null ? null : motivationBody,
-      coachCards: delay == null ? const [] : (coachCards ?? const []),
+      coachMoneyCaption: delay == null ? null : coachMoneyCaption,
     );
   }
 }

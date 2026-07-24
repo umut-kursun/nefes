@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
+import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 
 /// Compact brand header — NEFES + date + circular overflow.
 class TodayBrandHeader extends StatelessWidget {
@@ -142,9 +143,9 @@ class HeroElapsedCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.md,
-                AppSpacing.sm + 2,
+                AppSpacing.sm,
                 AppSpacing.md,
-                AppSpacing.sm + 2,
+                AppSpacing.sm,
               ),
               child: hasLastSmoke
                   ? _TimerContent(
@@ -178,12 +179,15 @@ class _EmptyTimerContent extends StatelessWidget {
             fontSize: TodayScale.heroLabelSize,
           ),
         ),
-        const SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: AppSpacing.xs),
         Text(
           AppStrings.noCigaretteYet,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textSecondary,
-            height: 1.3,
+            height: 1.2,
+            fontSize: 12,
           ),
         ),
       ],
@@ -219,7 +223,7 @@ class _TimerContent extends StatelessWidget {
             fontSize: TodayScale.heroLabelSize,
           ),
         ),
-        const Spacer(flex: 2),
+        const Spacer(flex: 1),
         SizedBox(
           height: TodayScale.timerRowHeight,
           width: double.infinity,
@@ -235,13 +239,13 @@ class _TimerContent extends StatelessWidget {
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontFeatures: const [FontFeature.tabularFigures()],
                     fontWeight: FontWeight.w700,
-                    letterSpacing: -1.8,
+                    letterSpacing: -1.6,
                     height: 1.0,
                     color: AppColors.textPrimary,
                     fontSize: TodayScale.timerHhMm,
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 5),
                 Text(
                   ss,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -258,12 +262,12 @@ class _TimerContent extends StatelessWidget {
           ),
         ),
         if (supportLine != null) ...[
-          const SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: 2),
           Row(
             children: [
               Icon(
                 Icons.eco_outlined,
-                size: 13,
+                size: 12,
                 color: AppColors.forestSoft.withValues(alpha: 0.9),
               ),
               const SizedBox(width: AppSpacing.xs),
@@ -275,7 +279,7 @@ class _TimerContent extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
-                    fontSize: 12,
+                    fontSize: 11,
                   ),
                 ),
               ),
@@ -533,7 +537,7 @@ class InsightChipCard extends StatelessWidget {
   }
 }
 
-/// Grouped daily status + insight + twin actions (mockup dashboard card).
+/// Grouped daily status + insight + twin actions (or inline Delay Coach).
 class TodayDashboardPanel extends StatelessWidget {
   const TodayDashboardPanel({
     super.key,
@@ -547,6 +551,7 @@ class TodayDashboardPanel extends StatelessWidget {
     required this.onSmoke,
     required this.onDelay,
     this.insight,
+    this.coachSlot,
   });
 
   final int used;
@@ -559,6 +564,9 @@ class TodayDashboardPanel extends StatelessWidget {
   final bool showDelayAction;
   final VoidCallback onSmoke;
   final VoidCallback onDelay;
+
+  /// When set, replaces twin actions with the active Delay Coach experience.
+  final Widget? coachSlot;
 
   @override
   Widget build(BuildContext context) {
@@ -589,12 +597,30 @@ class TodayDashboardPanel extends StatelessWidget {
             InsightChipCard(message: insight!),
           ],
           const SizedBox(height: AppSpacing.sm + 2),
-          TwinActionZone(
-            isBusy: isBusy,
-            isSaving: isSaving,
-            showDelayAction: showDelayAction,
-            onSmoke: onSmoke,
-            onDelay: onDelay,
+          AnimatedSize(
+            duration: AppMotion.normal,
+            curve: AppMotion.standard,
+            alignment: Alignment.topCenter,
+            child: AnimatedSwitcher(
+              duration: AppMotion.normal,
+              switchInCurve: AppMotion.standard,
+              switchOutCurve: AppMotion.standard,
+              child: coachSlot != null
+                  ? KeyedSubtree(
+                      key: const ValueKey('coach'),
+                      child: coachSlot!,
+                    )
+                  : KeyedSubtree(
+                      key: const ValueKey('actions'),
+                      child: TwinActionZone(
+                        isBusy: isBusy,
+                        isSaving: isSaving,
+                        showDelayAction: showDelayAction,
+                        onSmoke: onSmoke,
+                        onDelay: onDelay,
+                      ),
+                    ),
+            ),
           ),
         ],
       ),
@@ -841,6 +867,136 @@ class _SecondaryActionCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Compact 2×2 “what did I gain today?” — emotional center of Today.
+class TodayGainDashboard extends StatelessWidget {
+  const TodayGainDashboard({
+    super.key,
+    required this.tiles,
+  });
+
+  final List<TodayGainTileVm> tiles;
+
+  @override
+  Widget build(BuildContext context) {
+    final safe = tiles.length >= 4
+        ? tiles.take(4).toList()
+        : [
+            ...tiles,
+            for (var i = tiles.length; i < 4; i++)
+              const TodayGainTileVm(id: 'pad', label: '—', value: '—'),
+          ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          AppStrings.todayGainsTitle,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: AppColors.textMuted,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.4,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Row(
+          children: [
+            Expanded(child: _GainTile(tile: safe[0])),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(child: _GainTile(tile: safe[1])),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Row(
+          children: [
+            Expanded(child: _GainTile(tile: safe[2])),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(child: _GainTile(tile: safe[3])),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _GainTile extends StatelessWidget {
+  const _GainTile({required this.tile});
+
+  final TodayGainTileVm tile;
+
+  IconData get _icon {
+    switch (tile.id) {
+      case 'money':
+        return Icons.payments_outlined;
+      case 'delay_time':
+      case 'active_delay':
+        return Icons.timer_outlined;
+      case 'sessions':
+        return Icons.pause_circle_outline;
+      case 'first_delay':
+        return Icons.favorite_outline;
+      case 'clean_start':
+        return Icons.wb_sunny_outlined;
+      case 'remaining':
+        return Icons.flag_outlined;
+      default:
+        return Icons.spa_outlined;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: TodayScale.gainTileMinHeight),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceElevated,
+        borderRadius: AppRadius.mdAll,
+        border: Border.all(color: AppColors.borderSubtle),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Icon(_icon, size: 14, color: AppColors.forestSoft),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  tile.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: TodayScale.gainLabelSize,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Text(
+            tile.value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: AppColors.forestMid,
+              fontWeight: FontWeight.w700,
+              fontFeatures: const [FontFeature.tabularFigures()],
+              fontSize: TodayScale.gainValueSize,
+              height: 1.1,
+            ),
+          ),
+        ],
       ),
     );
   }

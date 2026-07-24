@@ -11,6 +11,7 @@ class CoachSnapshot {
     this.milestone,
     this.nextMilestone,
     this.message,
+    this.moneyCaption,
     this.cards = const [],
   });
 
@@ -19,6 +20,7 @@ class CoachSnapshot {
   final MilestoneRule? milestone;
   final MilestoneRule? nextMilestone;
   final MotivationMessage? message;
+  final String? moneyCaption;
   final List<ProgressCard> cards;
 
   String? get messageId => message?.id;

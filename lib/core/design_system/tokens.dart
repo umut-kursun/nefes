@@ -114,14 +114,14 @@ abstract final class TodayScale {
   static const double dateSize = 13;
   static const double overflowButton = 36;
 
-  // Hero (~20% of first viewport, timer stays dominant)
-  static const double heroHeight = 126;
-  static const double heroHeightWithSupport = 146;
-  static const double heroEmptyHeight = 118;
-  static const double heroLabelSize = 11;
-  static const double timerHhMm = 44;
-  static const double timerSs = 22;
-  static const double timerRowHeight = 48;
+  // Hero (~20% of first viewport, timer stays dominant; ~22% shorter than prior)
+  static const double heroHeight = 98;
+  static const double heroHeightWithSupport = 114;
+  static const double heroEmptyHeight = 108;
+  static const double heroLabelSize = 10;
+  static const double timerHhMm = 36;
+  static const double timerSs = 18;
+  static const double timerRowHeight = 38;
 
   // Daily status
   static const double statusCountSize = 22;
@@ -134,7 +134,12 @@ abstract final class TodayScale {
   static const double actionSubtitleSize = 11;
   static const double actionMinBody = 70;
 
-  // Metrics
+  // Gain dashboard tiles
+  static const double gainValueSize = 16;
+  static const double gainLabelSize = 10;
+  static const double gainTileMinHeight = 52;
+
+  // Metrics (legacy)
   static const double metricValueSize = 18;
   static const double metricUnitSize = 12;
   static const double metricLabelSize = 11;

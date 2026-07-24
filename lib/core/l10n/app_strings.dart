@@ -64,6 +64,24 @@ abstract final class AppStrings {
   static const delaying = 'Direniyorsun';
   static const delayCoachTitle = 'Direnç koçu';
   static const urgePassed = 'İstek geçti';
+
+  // Today gains dashboard
+  static const todayGainsTitle = 'Bugün kazandıkların';
+  static const gainCigarettes = 'Sigara';
+  static const gainDelays = 'Erteleme oturumu';
+  static const gainDelayedTime = 'Toplam erteleme';
+  static const gainSavedToday = 'Bugün biriken';
+  static const gainFirstCigaretteDelay = 'İlk sigara gecikmesi';
+  static const gainActiveDelay = 'Şu anki erteleme';
+  static const gainCleanStart = 'Güne başlama';
+  static const gainCleanStartValue = 'Temiz';
+  static const gainRemaining = 'Kalan hak';
+  static const gainJustStarted = 'Az önce';
+  static const gainSavedUnset = '—';
+  static String gainMinutes(int minutes) => '$minutes dk';
+  static String sessionMoneyEstimate(String amount) =>
+      'Bu oturum tahmini · $amount';
+  static String todayMoneyTotal(String amount) => 'Bugünkü toplam · $amount';
   static const cancelDelay = 'İptal';
   static const delayStartFailed = 'Başlatılamadı. Tekrar dene.';
   static const delayCompleteDone = 'Kaydedildi';
@@ -83,7 +101,7 @@ abstract final class AppStrings {
   // Navigation
   static const navToday = 'Bugün';
   static const navHistory = 'Geçmiş';
-  static const navInsights = 'İçgörüler';
+  static const navInsights = 'Alışkanlıklar';
   static const navSettings = 'Ayarlar';
 
   // History
@@ -109,14 +127,14 @@ abstract final class AppStrings {
   static const nextMonth = 'Sonraki ay';
   static const smokeEventTitle = 'Sigara';
 
-  // Insights
-  static const insightsTitle = 'İçgörüler';
+  // Habits (formerly Insights)
+  static const insightsTitle = 'Alışkanlıklar';
   static const period7Days = '7 Gün';
   static const period30Days = '30 Gün';
   static const periodThisMonth = 'Bu Ay';
   static const insightsEmpty = 'Henüz bir örüntü oluşmadı.';
   static const insightsEmptyHint =
-      'İçgörüler, birkaç günlük kayıt sonrasında burada görünmeye başlayacak.';
+      'Birkaç günlük kayıttan sonra alışkanlık örüntülerin burada görünür.';
   static const totalSmokesLabel = 'Toplam';
   static const dailyAverageLabel = 'Günlük ort.';
   static const delayAttemptsLabel = 'Erteleme';

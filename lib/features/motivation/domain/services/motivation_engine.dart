@@ -1,3 +1,4 @@
+import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/features/motivation/domain/entities/coach_snapshot.dart';
 import 'package:nefes/features/motivation/domain/entities/delay_session.dart';
 import 'package:nefes/features/motivation/domain/entities/effort_celebration.dart';
@@ -7,6 +8,7 @@ import 'package:nefes/features/motivation/domain/entities/motivation_message.dar
 import 'package:nefes/features/motivation/domain/entities/progress_card.dart';
 import 'package:nefes/features/motivation/domain/services/catalog_message_provider.dart';
 import 'package:nefes/features/motivation/domain/services/default_milestones.dart';
+import 'package:nefes/features/motivation/domain/services/health_message_provider.dart';
 import 'package:nefes/features/motivation/domain/services/milestone_evaluator.dart';
 import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
 import 'package:nefes/features/motivation/domain/services/motivation_message_provider.dart';
@@ -24,6 +26,7 @@ class MotivationEvaluation {
     this.milestone,
     this.nextMilestone,
     this.message,
+    this.moneyCaption,
     this.cards = const [],
   });
 
@@ -32,6 +35,7 @@ class MotivationEvaluation {
   final MilestoneRule? milestone;
   final MilestoneRule? nextMilestone;
   final MotivationMessage? message;
+  final String? moneyCaption;
   final List<ProgressCard> cards;
 
   String? get messageId => message?.id;
@@ -42,6 +46,7 @@ class MotivationEvaluation {
         milestone: milestone,
         nextMilestone: nextMilestone,
         message: message,
+        moneyCaption: moneyCaption,
         cards: cards,
       );
 }
@@ -54,17 +59,18 @@ class MotivationEngine {
     List<MotivationMessageProvider>? messageProviders,
     ProgressCardProvider? progressCardProvider,
   })  : statsProvider = statsProvider ?? const EventPersonalStatsProvider(),
-        milestoneEvaluator =
-            milestoneEvaluator ?? MilestoneEvaluator(milestones: DefaultMilestones.rules),
+        milestoneEvaluator = milestoneEvaluator ??
+            MilestoneEvaluator(milestones: DefaultMilestones.rules),
         messageProviders = List.unmodifiable(
           messageProviders ??
               const [
                 PersonalizedMessageProvider(),
+                HealthMessageProvider(),
                 CatalogMessageProvider(),
               ],
         ),
         progressCardProvider =
-            progressCardProvider ?? const CatalogProgressCardProvider();
+            progressCardProvider ?? const CatalogProgressCardProvider(maxCards: 1);
 
   final PersonalStatsProvider statsProvider;
   final MilestoneEvaluator milestoneEvaluator;
@@ -89,6 +95,7 @@ class MotivationEngine {
     required DateTime nowUtc,
     double? pricePerCigarette,
     Set<ProgressCardKind> recentlyShown = const {},
+    Set<String> recentMessageIds = const {},
   }) {
     final elapsed = session.elapsedAt(nowUtc);
     final milestone = milestoneEvaluator.highestReached(elapsed);
@@ -101,21 +108,43 @@ class MotivationEngine {
       nextMilestone: next,
     );
 
-    MotivationMessage? message;
-    if (milestone != null) {
-      for (final provider in messageProviders) {
-        message = provider.resolve(milestone: milestone, context: context);
-        if (message != null) break;
-      }
-    } else {
-      message = const CatalogMessageProvider().resolve(
-        milestone: const MilestoneRule(
+    final ids = milestone?.messageIds ?? const ['pre_milestone'];
+    final rule = milestone ??
+        const MilestoneRule(
           id: 'm_0',
           at: Duration.zero,
           messageIds: ['pre_milestone'],
-        ),
-        context: context,
-      );
+        );
+
+    MotivationMessage? message;
+    for (final messageId in ids) {
+      if (recentMessageIds.contains(messageId) && ids.length > 1) {
+        continue;
+      }
+      for (final provider in messageProviders) {
+        message = provider.resolveId(
+          messageId: messageId,
+          milestone: rule,
+          context: context,
+        );
+        if (message != null) break;
+      }
+      if (message != null) break;
+    }
+
+    // If everything was filtered by recent history, allow a repeat fallback.
+    if (message == null) {
+      for (final messageId in ids) {
+        for (final provider in messageProviders) {
+          message = provider.resolveId(
+            messageId: messageId,
+            milestone: rule,
+            context: context,
+          );
+          if (message != null) break;
+        }
+        if (message != null) break;
+      }
     }
 
     final cards = progressCardProvider.cardsFor(
@@ -130,8 +159,23 @@ class MotivationEngine {
       milestone: milestone,
       nextMilestone: next,
       message: message,
+      moneyCaption: _moneyCaption(context),
       cards: cards,
     );
+  }
+
+  String? _moneyCaption(MotivationContext context) {
+    final sessionMoney = context.moneySaved;
+    if (sessionMoney != null) {
+      return AppStrings.sessionMoneyEstimate(
+        MoneyCalculator.formatTry(sessionMoney),
+      );
+    }
+    final today = context.moneySavedToday;
+    if (today != null) {
+      return AppStrings.todayMoneyTotal(MoneyCalculator.formatTry(today));
+    }
+    return null;
   }
 
   EffortCelebration celebrateEffort({
@@ -157,11 +201,9 @@ class MotivationEngine {
       message =
           '$minutes dakika direndin.\nDün ${yesterdayBest.inMinutes} dakikaydın.\nBugün ${improvement.inMinutes} dk daha uzun.';
     } else if (yesterdayBest != null) {
-      message =
-          '$minutes dakika direndin.\nHer deneme seni güçlendirir.';
+      message = '$minutes dakika direndin.\nHer deneme seni güçlendirir.';
     } else if (minutes >= 1) {
-      message =
-          '$minutes dakika direndin.\nBu çaba kayda değer.';
+      message = '$minutes dakika direndin.\nBu çaba kayda değer.';
     } else {
       message = 'Kısa da olsa direndin.\nBu bir başlangıç.';
     }
@@ -190,25 +232,21 @@ class MotivationEngine {
       localDay: day,
       lookbackDays: 7,
     );
-    final cigarettesDelayed = statsProvider.estimatedCigarettesAvoided(
-      elapsed: elapsed,
-      averageInterSmokeInterval: interval,
-    );
 
-    final money = MoneyCalculator.moneyNotSpent(
-      cigarettesDelayed: cigarettesDelayed < 1 && elapsed.inMinutes >= 1
-          ? 1
-          : cigarettesDelayed,
+    // One active urge = at most one cigarette for session money (never inflate).
+    final sessionCigarettes = elapsed.inSeconds >= 30 ? 1 : 0;
+    final moneySession = MoneyCalculator.moneyNotSpent(
+      cigarettesDelayed: sessionCigarettes,
       pricePerCigarette: pricePerCigarette,
     );
 
-    final completedToday = statsProvider.completedDelayCountOnDay(
+    final urgePassedToday = statsProvider.urgePassedCountOnDay(
       allEvents: allEvents,
       localDay: day,
       excludingSessionId: session.sessionId,
     );
-    final moneyTodayBase = MoneyCalculator.moneyNotSpent(
-      cigarettesDelayed: completedToday + (elapsed.inMinutes >= 1 ? 1 : 0),
+    final moneyToday = MoneyCalculator.moneyNotSpent(
+      cigarettesDelayed: urgePassedToday,
       pricePerCigarette: pricePerCigarette,
     );
 
@@ -224,12 +262,10 @@ class MotivationEngine {
     return MotivationContext(
       session: session,
       elapsed: elapsed,
-      cigarettesDelayed: cigarettesDelayed < 1 && elapsed.inMinutes >= 1
-          ? 1
-          : cigarettesDelayed,
+      cigarettesDelayed: sessionCigarettes,
       pricePerCigarette: pricePerCigarette,
-      moneySaved: money,
-      moneySavedToday: moneyTodayBase,
+      moneySaved: moneySession,
+      moneySavedToday: moneyToday,
       longestDelayToday: statsProvider.longestCompletedDelay(
         allEvents: allEvents,
         onlyLocalDay: day,
