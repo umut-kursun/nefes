@@ -1,12 +1,9 @@
 import 'package:nefes/features/motivation/domain/entities/milestone_rule.dart';
 import 'package:nefes/features/motivation/domain/entities/motivation_context.dart';
 import 'package:nefes/features/motivation/domain/entities/motivation_message.dart';
-import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
 import 'package:nefes/features/motivation/domain/services/motivation_message_provider.dart';
 
-/// Milestone catalog — static templates plus dynamic fact lines.
-///
-/// Personalized copy belongs in a separate [MotivationMessageProvider].
+/// Short, friendly milestone catalog — never preachy, never guilt.
 class CatalogMessageProvider implements MotivationMessageProvider {
   const CatalogMessageProvider();
 
@@ -27,103 +24,91 @@ class CatalogMessageProvider implements MotivationMessageProvider {
     MilestoneRule milestone,
     MotivationContext context,
   ) {
-    final facts = _factsFor(context);
     switch (messageId) {
       case 'first_minute':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
           body: 'Harika.\nİlk dakikayı geçtin.',
-          facts: facts,
         );
       case 'urge_fades':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Çoğu istek birkaç dakika içinde zayıflar.',
-          facts: facts,
+          body: 'İlk istek dalgasını atlattın.',
         );
       case 'money_saved':
-        final money = context.moneySaved;
-        if (money == null) return null;
+        if (context.moneySaved == null) return null;
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Bugün yaklaşık ${MoneyCalculator.formatTry(money)} cebinde kaldı.',
-          facts: facts,
+          body: 'Biraz daha devam et.',
         );
       case 'five_minutes':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Beş dakika direndin. İstek hafifliyor.',
-          facts: facts,
+          body: 'Beş dakika.\nİstek hafifliyor.',
         );
       case 'best_today':
         if (!context.isPersonalBestToday) return null;
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Bugünkü en uzun bekleme süren.',
-          facts: facts,
+          body: 'Bugün gerçekten iyi gidiyorsun.',
         );
       case 'ten_minutes':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'On dakika. Bu isteği geride bırakıyorsun.',
-          facts: facts,
+          body: 'On dakika.\nMomentum sende.',
         );
       case 'vs_yesterday':
-        if (!context.isAheadOfYesterday) return null;
+        if (!context.isAheadOfYesterday &&
+            context.improvementVsYesterdayBest == null) {
+          return null;
+        }
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Dünkü aynı saate göre daha iyi gidiyorsun.',
-          facts: facts,
+          body: 'Dünkü aynı saate göre daha iyi.',
         );
       case 'fifteen_minutes':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'On beş dakika bekledin. Güçlü bir tercih.',
-          facts: facts,
+          body: 'On beş dakika.\nGüçlü bir tercih.',
         );
       case 'duration_fact':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Yirmi dakikadır bekliyorsun.',
-          facts: facts,
+          body: 'Yirmi dakika.\nDevam et.',
         );
       case 'twenty_minutes':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Yirmi dakika. Nefesine tutunmaya devam.',
-          facts: facts,
+          body: 'Yirmi dakika.\nNefesine tutun.',
         );
       case 'above_average':
         if (!context.isAboveAverageDelay) return null;
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Bugün ortalamandan daha uzun bekliyorsun.',
-          facts: facts,
+          body: 'Bugün ortalamanın üzerindesin.',
         );
       case 'thirty_minutes':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Yarım saat. Bu bir zafer.',
-          facts: facts,
+          body: 'Yarım saat.\nBu büyük bir adım.',
         );
       case 'forty_five_minutes':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Kırk beş dakika. İstek büyük ölçüde geçti.',
-          facts: facts,
+          body: 'Kırk beş dakika.\nİstek geçiyor.',
         );
       case 'personal_record':
         if (!context.isPersonalBestAllTime) return null;
@@ -131,71 +116,27 @@ class CatalogMessageProvider implements MotivationMessageProvider {
           id: messageId,
           milestoneAt: milestone.at,
           body: 'Yeni kişisel rekor.',
-          facts: facts,
         );
       case 'sixty_minutes':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Bir saat bekledin. Bu senin gücün.',
-          facts: facts,
+          body: 'Bir saat.\nBu senin gücün.',
         );
       case 'generic_keep_going':
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Devam et. Her dakika sayılır.',
-          facts: facts,
+          body: 'Devam et.\nHer dakika sayılır.',
+        );
+      case 'pre_milestone':
+        return MotivationMessage(
+          id: messageId,
+          milestoneAt: Duration.zero,
+          body: 'Nefesine tutun.\nİlk dakika geliyor.',
         );
       default:
         return null;
     }
-  }
-
-  List<MotivationFact> _factsFor(MotivationContext context) {
-    final facts = <MotivationFact>[];
-    final minutes = context.elapsed.inMinutes;
-    if (minutes >= 1) {
-      facts.add(
-        MotivationFact(
-          kind: MotivationFactKind.delayDuration,
-          label: '$minutes dk',
-        ),
-      );
-    }
-    if (context.cigarettesDelayed > 0) {
-      facts.add(
-        MotivationFact(
-          kind: MotivationFactKind.cigarettesDelayed,
-          label: '${context.cigarettesDelayed} sigara ertelendi',
-        ),
-      );
-    }
-    final money = context.moneySaved;
-    if (money != null) {
-      facts.add(
-        MotivationFact(
-          kind: MotivationFactKind.moneySaved,
-          label: MoneyCalculator.formatTry(money),
-        ),
-      );
-    }
-    if (context.isPersonalBestToday || context.isPersonalBestAllTime) {
-      facts.add(
-        const MotivationFact(
-          kind: MotivationFactKind.personalBest,
-          label: 'Kişisel en iyi',
-        ),
-      );
-    }
-    if (context.isAheadOfYesterday) {
-      facts.add(
-        const MotivationFact(
-          kind: MotivationFactKind.todayVsYesterday,
-          label: 'Dünden daha iyi',
-        ),
-      );
-    }
-    return facts;
   }
 }

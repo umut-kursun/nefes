@@ -4,6 +4,29 @@ import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart';
 
+/// Lightweight progress card for Delay Coach UI.
+class CoachCardVm {
+  const CoachCardVm({
+    required this.kind,
+    required this.title,
+    required this.value,
+  });
+
+  final String kind;
+  final String title;
+  final String value;
+
+  @override
+  bool operator ==(Object other) =>
+      other is CoachCardVm &&
+      other.kind == kind &&
+      other.title == title &&
+      other.value == value;
+
+  @override
+  int get hashCode => Object.hash(kind, title, value);
+}
+
 /// UI state for the Home screen.
 class HomeUiState {
   const HomeUiState({
@@ -27,7 +50,7 @@ class HomeUiState {
     this.delayTimedOut = false,
     this.motivationMessageId,
     this.motivationBody,
-    this.motivationFacts = const [],
+    this.coachCards = const [],
     this.isSaving = false,
     this.isUndoing = false,
     this.isDelayBusy = false,
@@ -73,7 +96,7 @@ class HomeUiState {
   final bool delayTimedOut;
   final String? motivationMessageId;
   final String? motivationBody;
-  final List<String> motivationFacts;
+  final List<CoachCardVm> coachCards;
   final bool isSaving;
   final bool isUndoing;
   final bool isDelayBusy;
@@ -104,7 +127,7 @@ class HomeUiState {
           delayTimedOut,
           motivationMessageId,
           motivationBody,
-          Object.hashAll(motivationFacts),
+          Object.hashAll(coachCards),
           isSaving,
           isUndoing,
           isDelayBusy,
@@ -133,7 +156,7 @@ class HomeUiState {
     bool? delayTimedOut,
     String? motivationMessageId,
     String? motivationBody,
-    List<String>? motivationFacts,
+    List<CoachCardVm>? coachCards,
     bool? isSaving,
     bool? isUndoing,
     bool? isDelayBusy,
@@ -178,8 +201,8 @@ class HomeUiState {
           : (motivationMessageId ?? this.motivationMessageId),
       motivationBody:
           clearMotivation ? null : (motivationBody ?? this.motivationBody),
-      motivationFacts:
-          clearMotivation ? const [] : (motivationFacts ?? this.motivationFacts),
+      coachCards:
+          clearMotivation ? const [] : (coachCards ?? this.coachCards),
       isSaving: isSaving ?? this.isSaving,
       isUndoing: isUndoing ?? this.isUndoing,
       isDelayBusy: isDelayBusy ?? this.isDelayBusy,
@@ -206,7 +229,7 @@ class HomeUiState {
     String? contextualInsight,
     String? motivationMessageId,
     String? motivationBody,
-    List<String>? motivationFacts,
+    List<CoachCardVm>? coachCards,
   }) {
     final clock = now ?? DateTime.now();
     final last = snapshot.lastSmokeAtUtc;
@@ -242,7 +265,7 @@ class HomeUiState {
       contextualInsight: contextualInsight,
       motivationMessageId: delay == null ? null : motivationMessageId,
       motivationBody: delay == null ? null : motivationBody,
-      motivationFacts: delay == null ? const [] : (motivationFacts ?? const []),
+      coachCards: delay == null ? const [] : (coachCards ?? const []),
     );
   }
 }

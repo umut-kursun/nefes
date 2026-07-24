@@ -8,7 +8,7 @@ import 'package:nefes/core/time/time_display.dart';
 import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
 import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/habit/domain/services/behavior_pattern_service.dart';
-import 'package:nefes/features/motivation/domain/entities/delay_session.dart';
+import 'package:nefes/features/motivation/domain/services/delay_session_manager.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
@@ -17,9 +17,12 @@ import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 import 'package:uuid/uuid.dart';
 
-/// Home ViewModel — capture-first logging, optional enrichment, delay.
+/// Home ViewModel — capture-first logging, optional enrichment, Delay Coach.
 class HomeViewModel extends StateNotifier<HomeUiState> {
   HomeViewModel(this._ref) : super(HomeUiState.initial()) {
+    _coach = DelaySessionManager(
+      engine: _ref.read(motivationEngineProvider),
+    );
     _subscription = _ref.read(watchHomeSnapshotProvider)().listen(
       (snapshot) {
         _latestSnapshot = snapshot;
@@ -35,6 +38,7 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   }
 
   final Ref _ref;
+  late final DelaySessionManager _coach;
   StreamSubscription<HomeSnapshot>? _subscription;
   Timer? _ticker;
   Timer? _contextDismissTimer;
@@ -44,7 +48,6 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   String? _contextualInsight;
   DateTime? _lastInsightRefresh;
   List<SmokingLogEvent> _cachedEvents = const [];
-  DelaySession? _delaySession;
   double? _pricePerCigarette;
 
   void _publishFromSnapshot(HomeSnapshot snapshot) {
@@ -57,7 +60,7 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       motivationMessageId:
           keepMotivation ? state.motivationMessageId : null,
       motivationBody: keepMotivation ? state.motivationBody : null,
-      motivationFacts: keepMotivation ? state.motivationFacts : const [],
+      coachCards: keepMotivation ? state.coachCards : const [],
     ).copyWith(
       isSaving: state.isSaving,
       isUndoing: state.isUndoing,
@@ -66,61 +69,71 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       infoMessage: state.infoMessage,
     );
     if (!keepMotivation) {
-      _delaySession = null;
+      _coach.clear();
     }
   }
 
   void _syncDelaySession(HomeSnapshot snapshot) {
-    final active = snapshot.activeDelay;
-    if (active == null) {
-      _delaySession = null;
-      return;
-    }
-    if (_delaySession?.sessionId == active.id) return;
-    _delaySession = _ref.read(motivationEngineProvider).openSession(
-          active: active,
-          allEvents: _cachedEvents,
-        );
-  }
-
-  void _applyMotivation(DateTime nowUtc) {
-    final session = _delaySession;
-    if (session == null) {
-      if (state.motivationMessageId != null || state.motivationBody != null) {
-        state = state.copyWith(clearMotivation: true);
-      }
-      return;
-    }
-
-    final evaluation = _ref.read(motivationEngineProvider).evaluate(
-          session: session,
-          allEvents: _cachedEvents,
-          nowUtc: nowUtc,
-          pricePerCigarette: _pricePerCigarette,
-        );
-    final message = evaluation.message;
-    if (message == null) {
-      if (state.motivationMessageId != null || state.motivationBody != null) {
-        state = state.copyWith(clearMotivation: true);
-      }
-      return;
-    }
-
-    final facts = message.facts.map((f) => f.label).toList(growable: false);
-    if (message.id == state.motivationMessageId &&
-        message.body == state.motivationBody &&
-        _sameFacts(facts, state.motivationFacts)) {
-      return;
-    }
-
-    state = state.copyWith(
-      motivationMessageId: message.id,
-      motivationBody: message.body,
-      motivationFacts: facts,
+    _coach.sync(
+      active: snapshot.activeDelay,
+      allEvents: _cachedEvents,
     );
   }
 
-  bool _sameFacts(List<String> a, List<String> b) {
+  void _applyMotivation(DateTime nowUtc) {
+    if (_coach.activeSession == null) {
+      if (state.motivationMessageId != null ||
+          state.motivationBody != null ||
+          state.coachCards.isNotEmpty) {
+        state = state.copyWith(clearMotivation: true);
+      }
+      return;
+    }
+
+    final snapshot = _coach.evaluate(
+      allEvents: _cachedEvents,
+      nowUtc: nowUtc,
+      pricePerCigarette: _pricePerCigarette,
+    );
+    if (snapshot == null) {
+      state = state.copyWith(clearMotivation: true);
+      return;
+    }
+
+    final message = snapshot.message;
+    final cards = snapshot.cards
+        .map(
+          (c) => CoachCardVm(
+            kind: c.kind.name,
+            title: c.title,
+            value: c.value,
+          ),
+        )
+        .toList(growable: false);
+
+    if (message == null && cards.isEmpty) {
+      if (state.motivationMessageId != null ||
+          state.motivationBody != null ||
+          state.coachCards.isNotEmpty) {
+        state = state.copyWith(clearMotivation: true);
+      }
+      return;
+    }
+
+    if (message?.id == state.motivationMessageId &&
+        message?.body == state.motivationBody &&
+        _sameCards(cards, state.coachCards)) {
+      return;
+    }
+
+    state = state.copyWith(clearMotivation: true).copyWith(
+      motivationMessageId: message?.id,
+      motivationBody: message?.body,
+      coachCards: cards,
+    );
+  }
+
+  bool _sameCards(List<CoachCardVm> a, List<CoachCardVm> b) {
     if (identical(a, b)) return true;
     if (a.length != b.length) return false;
     for (var i = 0; i < a.length; i++) {
@@ -249,16 +262,23 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       await _ref.read(hapticPortProvider).lightImpact();
       if (!mounted) return;
 
-      final delayMsg = result.closedDelayDuration == null
-          ? null
-          : AppStrings.delayedMinutes(
-              result.closedDelayDuration!.inMinutes.clamp(0, 24 * 60),
-            );
+      final closed = result.closedDelayDuration;
+      String? delayMsg;
+      if (closed != null) {
+        final celebration = _coach.celebrateSmoke(
+          resisted: closed,
+          allEvents: _cachedEvents,
+          nowLocal: DateTime.now(),
+        );
+        delayMsg = celebration.message;
+        _coach.clear();
+      }
 
       state = state.copyWith(
         isSaving: false,
         infoMessage: delayMsg ?? AppStrings.smokedSaved,
         pendingTriggerSmokeId: result.smokeId,
+        clearMotivation: true,
       );
       _scheduleContextDismiss();
     } on Failure {

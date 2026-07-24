@@ -10,6 +10,8 @@ class DelaySession {
     required this.localMonth,
     required this.localDay,
     this.intendedDuration,
+    this.completedDelaysToday = 0,
+    this.delayStreakDays = 0,
   });
 
   final String sessionId;
@@ -20,8 +22,13 @@ class DelaySession {
   final int localDay;
   final Duration? intendedDuration;
 
-  DateTime get localDayDate =>
-      DateTime(localYear, localMonth, localDay);
+  /// Completed (non-cancelled) delays earlier today, at session open.
+  final int completedDelaysToday;
+
+  /// Consecutive local days with at least one completed delay (including today).
+  final int delayStreakDays;
+
+  DateTime get localDayDate => DateTime(localYear, localMonth, localDay);
 
   Duration elapsedAt(DateTime nowUtc) {
     final elapsed = nowUtc.difference(startedAtUtc);

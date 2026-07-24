@@ -163,7 +163,7 @@ void main() {
     expect(container.read(homeViewModelProvider).todayDelayCount, 1);
   });
 
-  test('smoking during delay closes delay with neutral duration message', () async {
+  test('smoking during delay closes delay with effort celebration', () async {
     final vm = container.read(homeViewModelProvider.notifier);
     await vm.onDelayPressed();
     await Future<void>.delayed(const Duration(milliseconds: 30));
@@ -174,7 +174,7 @@ void main() {
     final state = container.read(homeViewModelProvider);
     expect(state.hasActiveDelay, isFalse);
     expect(state.todayCount, 1);
-    expect(state.infoMessage, contains('erteledin'));
+    expect(state.infoMessage, contains('direndin'));
     expect(state.pendingTriggerSmokeId, isNotNull);
   });
 }

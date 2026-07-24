@@ -62,6 +62,7 @@ abstract final class AppStrings {
   // M3 — delay / resist
   static const delayNow = 'Şimdi içmeyeceğim';
   static const delaying = 'Direniyorsun';
+  static const delayCoachTitle = 'Direnç koçu';
   static const urgePassed = 'İstek geçti';
   static const cancelDelay = 'İptal';
   static const delayStartFailed = 'Başlatılamadı. Tekrar dene.';
