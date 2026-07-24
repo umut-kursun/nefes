@@ -170,7 +170,7 @@ class EventFactory {
       },
       'device': <String, dynamic>{
         'platform': 'web',
-        'appVersion': '1.5.2',
+        'appVersion': '1.5.3',
       },
       'ai': <String, dynamic>{
         'features': <String, dynamic>{},

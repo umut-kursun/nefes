@@ -5,17 +5,19 @@ abstract final class AppStrings {
 
   static const today = 'Bugün';
   static const iSmoked = 'Sigara İçtim';
-  static const logNowSubtitle = 'Hemen kaydet';
+  static const logNowSubtitle = 'Kaydet';
   static const sinceLastCigarette = 'Son sigaradan beri';
   static const noCigaretteYet =
       'Henüz kayıt yok. İlk sigaranı işaretlediğinde süre burada başlar.';
   static const heroSupportLine = 'Küçük kazanımlar alışkanlık olur.';
+  static String heroMinutesGained(int minutes) =>
+      'Bugün kendine $minutes dakika kazandırdın.';
   static const dailyTarget = 'Günlük sınır';
-  static const dailyLimit = 'Günlük sınır';
+  static const dailyLimit = 'Günlük sınırın';
   static const usedLabel = 'kullanıldı';
   static const remaining = 'Kalan';
   static const todayCigarettes = 'Bugünkü kayıtlar';
-  static const viewAll = 'Tümünü Gör';
+  static const viewAll = 'Tümünü gör';
   static const metricTodayLabel = 'Bugün';
   static const emptyTodayHistory = 'Bugün henüz kayıt yok.';
   static const undoLast = 'Son kaydı geri al';
@@ -34,8 +36,10 @@ abstract final class AppStrings {
   static const editTarget = 'Sınırı düzenle';
   static const editLimit = 'Sınırı düzenle';
   static const save = 'Kaydet';
-  static const delayHint = 'İsteği biraz ertele';
+  static const delayHint = 'İsteği ertele';
   static const cigarettesUnit = 'sigara';
+  static const thisSession = 'Bu oturum';
+  static const coachNextTargetPrefix = 'Sonraki hedef:';
   static const snapshotAverage = 'Ort. aralık';
   static const snapshotLongest = 'En uzun aralık';
 
@@ -60,17 +64,17 @@ abstract final class AppStrings {
   static const triggerOther = 'Diğer';
 
   // M3 — delay / resist
-  static const delayNow = 'Şimdi içmeyeceğim';
+  static const delayNow = 'Biraz Bekle';
   static const delaying = 'Direniyorsun';
-  static const delayCoachTitle = 'Direnç koçu';
+  static const delayCoachTitle = 'Koç modu aktif';
   static const urgePassed = 'İstek geçti';
 
   // Today gains dashboard
-  static const todayGainsTitle = 'Bugün kazandıkların';
+  static const todayGainsTitle = 'Bugünkü kazanımların';
   static const gainCigarettes = 'Sigara';
   static const gainDelays = 'Erteleme oturumu';
-  static const gainDelayedTime = 'Erteleme süresi';
-  static const gainSavedToday = 'Bugün biriken';
+  static const gainDelayedTime = 'Toplam erteleme';
+  static const gainSavedToday = 'Bugün cebinde kaldı';
   static const gainFirstCigaretteDelay = 'İlk sigara gecikmesi';
   static const gainActiveDelay = 'Şu anki erteleme';
   static const gainCleanStart = 'Güne başlama';
@@ -98,12 +102,13 @@ abstract final class AppStrings {
   static String momentLongerThanYesterday(int minutes) =>
       '🌿 Dünden $minutes dk daha uzun';
   static String momentLaterThanYesterday(int minutes) =>
-      '🌿 Bugün dünden $minutes dk daha geç başladı';
+      'İlk sigaranı dünden $minutes dakika daha geç içtin.';
   static String momentMoneySaved(String amount) =>
       '💰 Bugün $amount birikti';
 
-  static String remainingCount(int value) => '$value kaldı';
-  static String todayProgress(int count, int target) => '$count / $target';
+  static String remainingCount(int value) => '$value hakkın kaldı.';
+  static String todayProgress(int count, int target) =>
+      '$count / $target sigara';
   static String limitShort(int limit) => 'Sınır $limit';
   static String sequenceLabel(int n) => '#$n';
   static String afterPrevious(String interval) => '$interval sonra';

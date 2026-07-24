@@ -291,18 +291,20 @@ class _TodayComposition extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const _LiveHeroElapsed(),
-                const SizedBox(height: AppSpacing.sm),
+                const SizedBox(height: AppSpacing.md),
                 TodayGainDashboard(
                   tiles: state.gainTiles,
-                  successMoment: state.successMoment,
                 ),
-                const SizedBox(height: AppSpacing.sm),
-                TodayDashboardPanel(
+                const SizedBox(height: AppSpacing.md),
+                DailyStatusSection(
                   used: state.todayCount,
                   limit: state.dailyTarget,
                   exceeded: state.isTargetExceeded,
                   onEditLimit: onEditTarget,
                   insight: state.contextualInsight,
+                ),
+                const SizedBox(height: AppSpacing.md),
+                TodayDashboardPanel(
                   isBusy: state.isBusy,
                   isSaving: state.isSaving,
                   showDelayAction: !state.hasActiveDelay,
@@ -325,49 +327,36 @@ class _TodayComposition extends StatelessWidget {
                     onMore: onMoreTriggers,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.sm),
+                const SizedBox(height: AppSpacing.md),
                 RepaintBoundary(
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.md,
-                      AppSpacing.sm,
-                      AppSpacing.sm,
-                      AppSpacing.sm,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceElevated,
-                      borderRadius: AppRadius.lgAll,
-                      border: Border.all(color: AppColors.borderSubtle),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TodayTimelineHeader(
-                          onViewAll: () => context.goNamed('history'),
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        if (state.todayEvents.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: AppSpacing.sm,
-                            ),
-                            child: Text(
-                              AppStrings.emptyTodayHistory,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: AppColors.textMuted,
-                                  ),
-                            ),
-                          )
-                        else
-                          _TodayTimeline(
-                            events: state.todayEvents,
-                            onEditEvent: onEditEvent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TodayTimelineHeader(
+                        onViewAll: () => context.goNamed('history'),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      if (state.todayEvents.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: AppSpacing.sm,
                           ),
-                      ],
-                    ),
+                          child: Text(
+                            AppStrings.emptyTodayHistory,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.textMuted,
+                                ),
+                          ),
+                        )
+                      else
+                        _TodayTimeline(
+                          events: state.todayEvents,
+                          onEditEvent: onEditEvent,
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
@@ -391,21 +380,25 @@ class _LiveHeroElapsed extends ConsumerWidget {
         (s) => (
           elapsed: s.elapsedLabel,
           hasLast: s.hasLastSmoke,
-          hasDelay: s.hasActiveDelay,
+          delayMinutes: s.todayDelayMinutes,
           delayInsight: s.todayDelayInsight,
+          moment: s.successMoment,
         ),
       ),
     );
+
+    final support = !tick.hasLast
+        ? null
+        : (tick.delayMinutes > 0
+            ? AppStrings.heroMinutesGained(tick.delayMinutes)
+            : (tick.delayInsight ?? AppStrings.heroSupportLine));
 
     return RepaintBoundary(
       child: HeroElapsedCard(
         elapsedLabel: tick.elapsed,
         hasLastSmoke: tick.hasLast,
-        supportLine: tick.hasLast
-            ? (tick.hasDelay
-                ? null
-                : (tick.delayInsight ?? AppStrings.heroSupportLine))
-            : null,
+        supportLine: support,
+        achievementChip: tick.moment,
       ),
     );
   }
@@ -433,7 +426,7 @@ class _TodayTimeline extends StatelessWidget {
       items.add(
         NefesTimelineItem(
           timeLabel: TimeDisplay.formatLocalHm(item.createdAtUtc),
-          title: AppStrings.smokeEventTitle,
+          title: AppStrings.iSmoked,
           subtitle: item.trigger == null
               ? null
               : SmokingTriggerLabels.label(item.trigger!),
@@ -443,6 +436,6 @@ class _TodayTimeline extends StatelessWidget {
         ),
       );
     }
-    return NefesTimeline(items: items);
+    return NefesTimeline(items: items, axis: Axis.horizontal);
   }
 }

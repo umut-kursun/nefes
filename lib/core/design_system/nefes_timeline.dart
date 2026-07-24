@@ -19,15 +19,41 @@ class NefesTimelineItem {
   final VoidCallback? onTap;
 }
 
-/// Chronological timeline — compact scannable rows for Today overview.
+/// Timeline — horizontal bubbles (Today) or vertical rows (History).
 class NefesTimeline extends StatelessWidget {
-  const NefesTimeline({super.key, required this.items});
+  const NefesTimeline({
+    super.key,
+    required this.items,
+    this.axis = Axis.vertical,
+  });
 
   final List<NefesTimelineItem> items;
+  final Axis axis;
 
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) return const SizedBox.shrink();
+
+    if (axis == Axis.horizontal) {
+      return SizedBox(
+        height: 96,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: items.length,
+          separatorBuilder: (_, _) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+            child: Icon(
+              Icons.chevron_right,
+              size: 16,
+              color: AppColors.textMuted.withValues(alpha: 0.55),
+            ),
+          ),
+          itemBuilder: (context, index) {
+            return _TimelineBubble(item: items[index]);
+          },
+        ),
+      );
+    }
 
     return Column(
       children: [
@@ -38,6 +64,70 @@ class NefesTimeline extends StatelessWidget {
             isLast: i == items.length - 1,
           ),
       ],
+    );
+  }
+}
+
+class _TimelineBubble extends StatelessWidget {
+  const _TimelineBubble({required this.item});
+
+  final NefesTimelineItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final iconColor =
+        item.isDelay ? AppColors.forestSoft : AppColors.achievementChipFg;
+    final iconBg =
+        item.isDelay ? AppColors.badgeSessionsBg : AppColors.dangerContainer;
+    final icon =
+        item.isDelay ? Icons.pause_rounded : Icons.smoking_rooms_outlined;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: item.onTap,
+        borderRadius: AppRadius.mdAll,
+        child: SizedBox(
+          width: TodayScale.timelineBubble + 24,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                item.timeLabel,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: TodayScale.timelineTimeSize,
+                    ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 18, color: iconColor),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                item.title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: TodayScale.timelineTitleSize,
+                      height: 1.15,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -69,36 +159,35 @@ class _TimelineRow extends StatelessWidget {
               child: Text(
                 item.timeLabel,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w600,
-                  height: 1.15,
-                  fontSize: TodayScale.timelineTimeSize,
-                ),
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w600,
+                      height: 1.15,
+                      fontSize: TodayScale.timelineTimeSize,
+                    ),
               ),
             ),
           ),
-          const SizedBox(width: AppSpacing.xs),
           SizedBox(
-            width: 14,
+            width: 20,
             child: Column(
               children: [
-                if (!isFirst)
-                  Container(width: 1.5, height: 8, color: AppColors.divider)
-                else
-                  const SizedBox(height: 8),
                 Container(
-                  width: 8,
-                  height: 8,
+                  width: 10,
+                  height: 10,
+                  margin: const EdgeInsets.only(top: 10),
                   decoration: BoxDecoration(
-                    color: item.isDelay ? AppColors.surfaceMuted : markerColor,
+                    color: markerColor,
                     shape: BoxShape.circle,
-                    border: Border.all(color: markerColor, width: 1.5),
                   ),
                 ),
                 if (!isLast)
                   Expanded(
-                    child: Container(width: 1.5, color: AppColors.divider),
+                    child: Container(
+                      width: 2,
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      color: AppColors.divider,
+                    ),
                   ),
               ],
             ),
@@ -109,95 +198,42 @@ class _TimelineRow extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: item.onTap,
-                borderRadius: AppRadius.smAll,
-                hoverColor: AppColors.forest.withValues(alpha: 0.03),
+                borderRadius: AppRadius.mdAll,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    top: 6,
-                    bottom: isLast ? 6 : 8,
+                    top: isFirst ? 4 : 8,
+                    bottom: isLast ? 4 : 12,
                     right: AppSpacing.xs,
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 6,
-                          runSpacing: 2,
-                          children: [
-                            Text(
-                              item.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                    color: AppColors.textPrimary,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.15,
-                                    fontSize: TodayScale.timelineTitleSize,
-                                  ),
+                      Text(
+                        item.title,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: TodayScale.timelineTitleSize + 2,
                             ),
-                            if (item.subtitle != null)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.surfaceSage,
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadius.pill,
-                                  ),
-                                ),
-                                child: Text(
-                                  item.subtitle!,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall
-                                      ?.copyWith(
-                                        color: AppColors.textOnSage,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 10,
-                                      ),
-                                ),
-                              ),
-                          ],
-                        ),
                       ),
-                      if (item.intervalBefore != null) ...[
-                        const SizedBox(width: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.progressTrack,
-                            borderRadius: BorderRadius.circular(AppRadius.pill),
-                          ),
-                          child: Text(
-                            item.intervalBefore!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                  color: AppColors.textSecondary,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 10,
-                                  fontFeatures: const [
-                                    FontFeature.tabularFigures(),
-                                  ],
-                                ),
-                          ),
+                      if (item.subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          item.subtitle!,
+                          style:
+                              Theme.of(context).textTheme.labelMedium?.copyWith(
+                                    color: AppColors.textMuted,
+                                  ),
                         ),
                       ],
-                      if (item.onTap != null) ...[
-                        const SizedBox(width: 2),
-                        const Icon(
-                          Icons.more_horiz,
-                          size: 16,
-                          color: AppColors.textMuted,
+                      if (item.intervalBefore != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          item.intervalBefore!,
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: AppColors.textTertiary,
+                                  ),
                         ),
                       ],
                     ],

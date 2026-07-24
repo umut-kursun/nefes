@@ -96,6 +96,11 @@ abstract final class AppColors {
   static const Color badgeDefaultBg = Color(0xFFECEEEA);
   static const Color badgeDefaultFg = Color(0xFF3D5C4E);
 
+  // Hero achievement chip (reference pink pill)
+  static const Color achievementChipBg = Color(0xFFF3E4E2);
+  static const Color achievementChipFg = Color(0xFF9B4A4A);
+  static const Color actionBeige = Color(0xFFEDE6DC);
+
   // Soft elevation (Apple Health–like)
   static const Color shadowSoft = Color(0x14000000);
 
@@ -122,39 +127,39 @@ abstract final class AppBreakpoints {
   static const double todayDenseBlock = 420;
 }
 
-/// Today dashboard density — proportions tuned to the 412×915 reference.
+/// Today dashboard density — tuned to the approved design reference (~412×915).
 abstract final class TodayScale {
   // Header
   static const double brandSize = 22;
   static const double dateSize = 13;
   static const double overflowButton = 36;
 
-  // Hero (~20% of first viewport, timer stays dominant; ~22% shorter than prior)
-  static const double heroHeight = 98;
-  static const double heroHeightWithSupport = 114;
-  static const double heroEmptyHeight = 108;
-  static const double heroLabelSize = 10;
-  static const double timerHhMm = 36;
-  static const double timerSs = 18;
-  static const double timerRowHeight = 38;
+  // Hero (~30% of viewport; timer stays dominant)
+  static const double heroViewportFraction = 0.30;
+  static const double heroMinHeight = 200;
+  static const double heroMaxHeight = 280;
+  static const double heroEmptyHeight = 160;
+  static const double heroLabelSize = 11;
+  static const double timerHhMm = 48;
+  static const double timerSs = 26;
+  static const double timerRowHeight = 52;
 
-  // Daily status
-  static const double statusCountSize = 22;
-  static const double progressTrackHeight = 8;
+  // Daily status — lighter, less dominant
+  static const double statusCountSize = 18;
+  static const double progressTrackHeight = 6;
 
-  // Actions — short paired cards
-  static const double actionIconBox = 30;
-  static const double actionIconGlyph = 18;
+  // Actions — equal visual weight square cards
+  static const double actionIconBox = 32;
+  static const double actionIconGlyph = 20;
   static const double actionTitleSize = 15;
   static const double actionSubtitleSize = 11;
-  static const double actionMinBody = 70;
+  static const double actionMinBody = 88;
 
-  // Gain dashboard tiles — value is the hero
-  static const double gainValueSize = 22;
+  // Gains — one grouped card (primary + secondary row)
+  static const double gainPrimaryValue = 28;
+  static const double gainSecondaryValue = 16;
   static const double gainLabelSize = 11;
-  static const double gainTileMinHeight = 76;
-  static const double gainBadgeSize = 22;
-  static const double gainBadgeIcon = 12;
+  static const double gainPrimaryIcon = 40;
 
   // Metrics (legacy)
   static const double metricValueSize = 18;
@@ -162,8 +167,9 @@ abstract final class TodayScale {
   static const double metricLabelSize = 11;
   static const double metricDividerHeight = 34;
 
-  // Timeline — slim scannable rows (~4–5 visible at 412×915)
-  static const double timelineTimeSize = 12;
-  static const double timelineTitleSize = 14;
+  // Timeline — horizontal bubbles
+  static const double timelineTimeSize = 11;
+  static const double timelineTitleSize = 12;
   static const double timelineTimeCol = 40;
+  static const double timelineBubble = 72;
 }

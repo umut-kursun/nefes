@@ -44,7 +44,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text(AppStrings.emptyTodayHistory), findsOneWidget);
-    expect(find.text(AppStrings.limitShort(15)), findsOneWidget);
+    expect(find.text(AppStrings.todayProgress(0, 15)), findsOneWidget);
     expect(find.text(AppStrings.delayNow), findsOneWidget);
     expect(find.text(AppStrings.delayHint), findsOneWidget);
     expect(find.text(AppStrings.navToday), findsWidgets);
@@ -107,14 +107,10 @@ void main() {
     // Capture-first: no mandatory trigger modal / skip button.
     expect(find.text(AppStrings.triggerSkip), findsNothing);
     expect(find.text(AppStrings.whyOptional), findsOneWidget);
-    expect(find.text(AppStrings.limitShort(15)), findsOneWidget);
-    expect(
-      find.textContaining('1 ${AppStrings.cigarettesUnit}'),
-      findsWidgets,
-    );
+    expect(find.text(AppStrings.todayProgress(1, 15)), findsOneWidget);
     expect(find.text(AppStrings.emptyTodayHistory), findsNothing);
-    // Primary action remains visible after logging.
-    expect(find.text(AppStrings.iSmoked), findsOneWidget);
+    // Primary action remains visible after logging (timeline also uses the label).
+    expect(find.text(AppStrings.iSmoked), findsWidgets);
     // Allow snapshot stream to mark undo available; snackbar action is best-effort.
     await tester.pump(const Duration(milliseconds: 400));
     // Undo stays available via overflow menu even if snackbar action raced.

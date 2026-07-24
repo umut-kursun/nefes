@@ -5,7 +5,7 @@ import 'package:nefes/features/motivation/domain/services/money_calculator.dart'
 import 'package:nefes/features/smoking/domain/services/today_gains_builder.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 
-/// Compact brand header — NEFES + date + circular overflow.
+/// Compact brand header — leaf + NEFES + date + circular overflow.
 class TodayBrandHeader extends StatelessWidget {
   const TodayBrandHeader({
     super.key,
@@ -31,62 +31,69 @@ class TodayBrandHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                AppStrings.appName,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.6,
-                  color: AppColors.forest,
-                  height: 1.1,
-                  fontSize: TodayScale.brandSize,
-                ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.eco,
+                    size: 22,
+                    color: AppColors.forestSoft,
+                  ),
+                  const SizedBox(width: AppSpacing.xs),
+                  Text(
+                    AppStrings.appName,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.6,
+                      color: AppColors.forest,
+                      height: 1.1,
+                      fontSize: TodayScale.brandSize,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 2),
-              Text(
-                dateLabel,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                  fontSize: TodayScale.dateSize,
+              Padding(
+                padding: const EdgeInsets.only(left: 26),
+                child: Text(
+                  dateLabel,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: TodayScale.dateSize,
+                  ),
                 ),
               ),
             ],
           ),
         ),
-        Material(
-          color: AppColors.surfaceElevated,
-          shape: const CircleBorder(),
-          elevation: 0.5,
-          shadowColor: AppColors.forest.withValues(alpha: 0.08),
-          child: PopupMenuButton<_UtilityAction>(
-            tooltip: AppStrings.smokedEarlier,
-            padding: EdgeInsets.zero,
-            onSelected: (action) {
-              if (isBusy) return;
-              switch (action) {
-                case _UtilityAction.earlier:
-                  onEarlier();
-                case _UtilityAction.undo:
-                  onUndo();
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: _UtilityAction.earlier,
-                child: Text(AppStrings.smokedEarlier),
-              ),
-              if (canUndo)
-                PopupMenuItem(
-                  value: _UtilityAction.undo,
-                  child: Text(
-                    isBusy ? AppStrings.loading : AppStrings.undoLast,
-                  ),
-                ),
-            ],
-            child: SizedBox(
-              width: TodayScale.overflowButton,
-              height: TodayScale.overflowButton,
-              child: const Icon(Icons.more_horiz, color: AppColors.textMuted),
+        PopupMenuButton<_UtilityAction>(
+          tooltip: AppStrings.smokedEarlier,
+          padding: EdgeInsets.zero,
+          onSelected: (action) {
+            if (isBusy) return;
+            switch (action) {
+              case _UtilityAction.earlier:
+                onEarlier();
+              case _UtilityAction.undo:
+                onUndo();
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: _UtilityAction.earlier,
+              child: Text(AppStrings.smokedEarlier),
             ),
+            if (canUndo)
+              PopupMenuItem(
+                value: _UtilityAction.undo,
+                child: Text(
+                  isBusy ? AppStrings.loading : AppStrings.undoLast,
+                ),
+              ),
+          ],
+          child: SizedBox(
+            width: TodayScale.overflowButton,
+            height: TodayScale.overflowButton,
+            child: const Icon(Icons.more_vert, color: AppColors.textMuted),
           ),
         ),
       ],
@@ -96,13 +103,14 @@ class TodayBrandHeader extends StatelessWidget {
 
 enum _UtilityAction { earlier, undo }
 
-/// Hero elapsed-time surface with optional landscape asset + painter fallback.
+/// Hero elapsed-time surface (~30% viewport) with support line + achievement chip.
 class HeroElapsedCard extends StatelessWidget {
   const HeroElapsedCard({
     super.key,
     required this.elapsedLabel,
     required this.hasLastSmoke,
     this.supportLine,
+    this.achievementChip,
   });
 
   final String elapsedLabel;
@@ -111,18 +119,24 @@ class HeroElapsedCard extends StatelessWidget {
   /// Optional supportive line from real UI state only (omit when null).
   final String? supportLine;
 
-  static const _heroAsset = 'assets/images/hero_landscape.webp';
+  /// Secondary achievement pill at the bottom of the hero (omit when null).
+  final SuccessMomentVm? achievementChip;
+
+  static const _heroAsset = 'assets/images/hero_landscape.jpg';
 
   @override
   Widget build(BuildContext context) {
     final showSupport =
         hasLastSmoke && supportLine != null && supportLine!.trim().isNotEmpty;
+    final showChip = hasLastSmoke &&
+        achievementChip != null &&
+        achievementChip!.text.trim().isNotEmpty;
 
+    final viewportH = MediaQuery.sizeOf(context).height;
     final height = !hasLastSmoke
         ? TodayScale.heroEmptyHeight
-        : (showSupport
-            ? TodayScale.heroHeightWithSupport
-            : TodayScale.heroHeight);
+        : (viewportH * TodayScale.heroViewportFraction)
+            .clamp(TodayScale.heroMinHeight, TodayScale.heroMaxHeight);
 
     return ClipRRect(
       borderRadius: AppRadius.xlAll,
@@ -138,21 +152,39 @@ class HeroElapsedCard extends StatelessWidget {
               child: Image.asset(
                 _heroAsset,
                 fit: BoxFit.cover,
-                opacity: const AlwaysStoppedAnimation(0.28),
+                alignment: Alignment.center,
+                opacity: const AlwaysStoppedAnimation(0.55),
                 errorBuilder: (_, _, _) => const SizedBox.shrink(),
+              ),
+            ),
+            // Soft veil so timer text stays readable over the landscape.
+            IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFFF7F5F2).withValues(alpha: 0.55),
+                      const Color(0xFFF7F5F2).withValues(alpha: 0.22),
+                      const Color(0xFFF7F5F2).withValues(alpha: 0.45),
+                    ],
+                  ),
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
                 AppSpacing.md,
-                AppSpacing.sm,
+                AppSpacing.lg,
                 AppSpacing.md,
-                AppSpacing.sm,
               ),
               child: hasLastSmoke
                   ? _TimerContent(
                       elapsedLabel: elapsedLabel,
                       supportLine: showSupport ? supportLine : null,
+                      achievementChip: showChip ? achievementChip : null,
                     )
                   : const _EmptyTimerContent(),
             ),
@@ -201,10 +233,12 @@ class _TimerContent extends StatelessWidget {
   const _TimerContent({
     required this.elapsedLabel,
     this.supportLine,
+    this.achievementChip,
   });
 
   final String elapsedLabel;
   final String? supportLine;
+  final SuccessMomentVm? achievementChip;
 
   @override
   Widget build(BuildContext context) {
@@ -220,12 +254,12 @@ class _TimerContent extends StatelessWidget {
           AppStrings.sinceLastCigarette.toUpperCase(),
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
             color: AppColors.textMuted,
-            letterSpacing: 1.1,
+            letterSpacing: 1.2,
             fontWeight: FontWeight.w600,
             fontSize: TodayScale.heroLabelSize,
           ),
         ),
-        const Spacer(flex: 1),
+        const SizedBox(height: AppSpacing.sm),
         SizedBox(
           height: TodayScale.timerRowHeight,
           width: double.infinity,
@@ -233,30 +267,31 @@ class _TimerContent extends StatelessWidget {
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '$hh:$mm',
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontFeatures: const [FontFeature.tabularFigures()],
                     fontWeight: FontWeight.w700,
-                    letterSpacing: -1.6,
+                    letterSpacing: -1.8,
                     height: 1.0,
                     color: AppColors.textPrimary,
                     fontSize: TodayScale.timerHhMm,
                   ),
                 ),
-                const SizedBox(width: 5),
-                Text(
-                  ss,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -0.4,
-                    height: 1.0,
-                    color: AppColors.textSecondary,
-                    fontSize: TodayScale.timerSs,
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(
+                    ':$ss',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -0.4,
+                      height: 1.0,
+                      color: AppColors.textSecondary,
+                      fontSize: TodayScale.timerSs,
+                    ),
                   ),
                 ),
               ],
@@ -264,32 +299,89 @@ class _TimerContent extends StatelessWidget {
           ),
         ),
         if (supportLine != null) ...[
-          const SizedBox(height: 2),
+          const SizedBox(height: AppSpacing.sm),
           Row(
             children: [
               Icon(
-                Icons.eco_outlined,
-                size: 12,
-                color: AppColors.forestSoft.withValues(alpha: 0.9),
+                Icons.eco,
+                size: 14,
+                color: AppColors.forestSoft.withValues(alpha: 0.95),
               ),
               const SizedBox(width: AppSpacing.xs),
               Expanded(
                 child: Text(
                   supportLine!,
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w500,
-                    fontSize: 11,
+                    fontSize: 12,
+                    height: 1.25,
                   ),
                 ),
               ),
             ],
           ),
-        ] else
-          const Spacer(flex: 1),
+        ],
+        const Spacer(),
+        if (achievementChip != null) _HeroAchievementChip(moment: achievementChip!),
       ],
+    );
+  }
+}
+
+class _HeroAchievementChip extends StatelessWidget {
+  const _HeroAchievementChip({required this.moment});
+
+  final SuccessMomentVm moment;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: AppMotion.slow,
+      switchInCurve: AppMotion.standard,
+      switchOutCurve: AppMotion.standard,
+      child: Material(
+        key: ValueKey(moment.id),
+        color: AppColors.achievementChipBg,
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
+          ),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.favorite,
+                size: 14,
+                color: AppColors.achievementChipFg,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: Text(
+                  moment.text,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: AppColors.achievementChipFg,
+                    fontWeight: FontWeight.w600,
+                    height: 1.2,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              const Icon(
+                Icons.chevron_right,
+                size: 16,
+                color: AppColors.achievementChipFg,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -339,7 +431,7 @@ class _HeroMistPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// Daily limit status — budget framing under the hero.
+/// Daily limit status — lighter split card (limit left, insight right).
 class DailyStatusSection extends StatelessWidget {
   const DailyStatusSection({
     super.key,
@@ -347,6 +439,7 @@ class DailyStatusSection extends StatelessWidget {
     required this.limit,
     required this.exceeded,
     this.onEditLimit,
+    this.insight,
     this.embedded = false,
   });
 
@@ -354,6 +447,7 @@ class DailyStatusSection extends StatelessWidget {
   final int limit;
   final bool exceeded;
   final VoidCallback? onEditLimit;
+  final String? insight;
   final bool embedded;
 
   @override
@@ -362,76 +456,40 @@ class DailyStatusSection extends StatelessWidget {
     final ratio = (used / safeLimit).clamp(0.0, 1.0);
     final remaining = (limit - used).clamp(0, 999999);
     final fill = exceeded ? AppColors.exceeded : AppColors.progress;
+    final hasInsight = insight != null && insight!.trim().isNotEmpty;
 
-    final body = Column(
+    final left = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '$used',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                        color: AppColors.forest,
-                        height: 1.05,
-                        fontSize: TodayScale.statusCountSize,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' ${AppStrings.cigarettesUnit}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onEditLimit,
+            borderRadius: AppRadius.smAll,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Text(
+                AppStrings.dailyLimit.toUpperCase(),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: AppColors.textMuted,
+                  letterSpacing: 0.7,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 10,
                 ),
               ),
             ),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onEditLimit,
-                borderRadius: AppRadius.smAll,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 40,
-                    minHeight: 36,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xs,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          AppStrings.limitShort(limit),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        if (onEditLimit != null) ...[
-                          const SizedBox(width: AppSpacing.xs),
-                          const Icon(
-                            Icons.edit_outlined,
-                            size: 15,
-                            color: AppColors.textMuted,
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          AppStrings.todayProgress(used, limit),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+            fontFeatures: const [FontFeature.tabularFigures()],
+            color: AppColors.textPrimary,
+            height: 1.1,
+            fontSize: TodayScale.statusCountSize,
+          ),
         ),
         const SizedBox(height: AppSpacing.sm),
         ClipRRect(
@@ -465,26 +523,84 @@ class DailyStatusSection extends StatelessWidget {
               : AppStrings.remainingCount(remaining),
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
             color: exceeded ? AppColors.exceeded : AppColors.textMuted,
+            fontSize: 11,
           ),
         ),
       ],
     );
 
+    final body = hasInsight
+        ? IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(flex: 5, child: left),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  flex: 5,
+                  child: _DailyInsightBox(message: insight!),
+                ),
+              ],
+            ),
+          )
+        : left;
+
     if (embedded) return body;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.sm,
-      ),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
         borderRadius: AppRadius.lgAll,
         border: Border.all(color: AppColors.borderSubtle),
       ),
       child: body,
+    );
+  }
+}
+
+class _DailyInsightBox extends StatelessWidget {
+  const _DailyInsightBox({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceMuted.withValues(alpha: 0.55),
+        borderRadius: AppRadius.mdAll,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.trending_up_rounded,
+                size: 16,
+                color: AppColors.forestSoft,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: Text(
+                  message,
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: AppColors.textOnSage,
+                    height: 1.3,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 11,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -539,28 +655,18 @@ class InsightChipCard extends StatelessWidget {
   }
 }
 
-/// Grouped daily status + insight + twin actions (or inline Delay Coach).
+/// Action area — twin equal-weight cards, or Delay Coach in the same slot.
 class TodayDashboardPanel extends StatelessWidget {
   const TodayDashboardPanel({
     super.key,
-    required this.used,
-    required this.limit,
-    required this.exceeded,
-    required this.onEditLimit,
     required this.isBusy,
     required this.isSaving,
     required this.showDelayAction,
     required this.onSmoke,
     required this.onDelay,
-    this.insight,
     this.coachSlot,
   });
 
-  final int used;
-  final int limit;
-  final bool exceeded;
-  final VoidCallback onEditLimit;
-  final String? insight;
   final bool isBusy;
   final bool isSaving;
   final bool showDelayAction;
@@ -572,59 +678,29 @@ class TodayDashboardPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.md,
-        AppSpacing.sm + 2,
-        AppSpacing.md,
-        AppSpacing.sm + 2,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceElevated,
-        borderRadius: AppRadius.lgAll,
-        border: Border.all(color: AppColors.borderSubtle),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          DailyStatusSection(
-            used: used,
-            limit: limit,
-            exceeded: exceeded,
-            onEditLimit: onEditLimit,
-            embedded: true,
-          ),
-          if (insight != null && insight!.trim().isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
-            InsightChipCard(message: insight!),
-          ],
-          const SizedBox(height: AppSpacing.sm + 2),
-          AnimatedSize(
-            duration: AppMotion.normal,
-            curve: AppMotion.standard,
-            alignment: Alignment.topCenter,
-            child: AnimatedSwitcher(
-              duration: AppMotion.normal,
-              switchInCurve: AppMotion.standard,
-              switchOutCurve: AppMotion.standard,
-              child: coachSlot != null
-                  ? KeyedSubtree(
-                      key: const ValueKey('coach'),
-                      child: coachSlot!,
-                    )
-                  : KeyedSubtree(
-                      key: const ValueKey('actions'),
-                      child: TwinActionZone(
-                        isBusy: isBusy,
-                        isSaving: isSaving,
-                        showDelayAction: showDelayAction,
-                        onSmoke: onSmoke,
-                        onDelay: onDelay,
-                      ),
-                    ),
-            ),
-          ),
-        ],
+    return AnimatedSize(
+      duration: AppMotion.normal,
+      curve: AppMotion.standard,
+      alignment: Alignment.topCenter,
+      child: AnimatedSwitcher(
+        duration: AppMotion.normal,
+        switchInCurve: AppMotion.standard,
+        switchOutCurve: AppMotion.standard,
+        child: coachSlot != null
+            ? KeyedSubtree(
+                key: const ValueKey('coach'),
+                child: coachSlot!,
+              )
+            : KeyedSubtree(
+                key: const ValueKey('actions'),
+                child: TwinActionZone(
+                  isBusy: isBusy,
+                  isSaving: isSaving,
+                  showDelayAction: showDelayAction,
+                  onSmoke: onSmoke,
+                  onDelay: onDelay,
+                ),
+              ),
       ),
     );
   }
@@ -795,7 +871,7 @@ class _SecondaryActionCard extends StatelessWidget {
     final iconColor = isBusy ? AppColors.textMuted : AppColors.forestMid;
 
     return Material(
-      color: AppColors.surfaceSage,
+      color: AppColors.actionBeige,
       borderRadius: AppRadius.lgAll,
       child: InkWell(
         onTap: isBusy ? null : onPressed,
@@ -814,34 +890,24 @@ class _SecondaryActionCard extends StatelessWidget {
             AppSpacing.md,
             AppSpacing.md,
             AppSpacing.md,
-            AppSpacing.sm + 2,
+            AppSpacing.md,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: TodayScale.actionIconBox,
-                    height: TodayScale.actionIconBox,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.forest.withValues(alpha: 0.08),
-                    ),
-                    child: Icon(
-                      Icons.pause_rounded,
-                      size: TodayScale.actionIconGlyph,
-                      color: iconColor,
-                    ),
-                  ),
-                  const Spacer(),
-                  Icon(
-                    Icons.chevron_right,
-                    size: 18,
-                    color: isBusy ? AppColors.textMuted : AppColors.forestSoft,
-                  ),
-                ],
+              Container(
+                width: TodayScale.actionIconBox,
+                height: TodayScale.actionIconBox,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.forest.withValues(alpha: 0.08),
+                ),
+                child: Icon(
+                  Icons.pause_rounded,
+                  size: TodayScale.actionIconGlyph,
+                  color: iconColor,
+                ),
               ),
               const SizedBox(height: AppSpacing.sm),
               Text(
@@ -874,16 +940,14 @@ class _SecondaryActionCard extends StatelessWidget {
   }
 }
 
-/// Compact 2×2 “what did I gain today?” — emotional center of Today.
+/// Single grouped “Bugünkü kazanımların” card — primary metric + 3 secondaries.
 class TodayGainDashboard extends StatelessWidget {
   const TodayGainDashboard({
     super.key,
     required this.tiles,
-    this.successMoment,
   });
 
   final List<TodayGainTileVm> tiles;
-  final SuccessMomentVm? successMoment;
 
   @override
   Widget build(BuildContext context) {
@@ -895,115 +959,162 @@ class TodayGainDashboard extends StatelessWidget {
               const TodayGainTileVm(id: 'pad', label: '—', value: '—'),
           ];
 
+    final primary = safe[0];
+    final secondary = safe.sublist(1, 4);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          AppStrings.todayGainsTitle,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.4,
-          ),
-        ),
-        AnimatedSize(
-          duration: AppMotion.normal,
-          curve: AppMotion.standard,
-          alignment: Alignment.topCenter,
-          child: successMoment == null
-              ? const SizedBox(height: AppSpacing.xs)
-              : Padding(
-                  padding: const EdgeInsets.only(
-                    top: AppSpacing.xs,
-                    bottom: AppSpacing.xs,
-                  ),
-                  child: _SuccessMomentLine(moment: successMoment!),
-                ),
-        ),
         Row(
           children: [
-            Expanded(child: _GainTile(tile: safe[0])),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(child: _GainTile(tile: safe[1])),
+            const Icon(
+              Icons.auto_awesome,
+              size: 14,
+              color: Color(0xFFC47A3A),
+            ),
+            const SizedBox(width: AppSpacing.xs),
+            Text(
+              AppStrings.todayGainsTitle.toUpperCase(),
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: AppColors.textMuted,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+                fontSize: 11,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
-        Row(
-          children: [
-            Expanded(child: _GainTile(tile: safe[2])),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(child: _GainTile(tile: safe[3])),
-          ],
+        Container(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.md,
+            AppSpacing.md,
+            AppSpacing.md,
+            AppSpacing.sm,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceElevated,
+            borderRadius: AppRadius.xlAll,
+            border: Border.all(
+              color: AppColors.borderSubtle.withValues(alpha: 0.85),
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: AppColors.shadowSoft,
+                blurRadius: 14,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              _GainPrimaryRow(tile: primary),
+              const SizedBox(height: AppSpacing.md),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.divider.withValues(alpha: 0.85),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Row(
+                children: [
+                  for (var i = 0; i < secondary.length; i++) ...[
+                    if (i > 0)
+                      Container(
+                        width: 1,
+                        height: 44,
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.xs,
+                        ),
+                        color: AppColors.divider,
+                      ),
+                    Expanded(child: _GainSecondaryMetric(tile: secondary[i])),
+                  ],
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 }
 
-class _SuccessMomentLine extends StatelessWidget {
-  const _SuccessMomentLine({required this.moment});
-
-  final SuccessMomentVm moment;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: AppMotion.slow,
-      switchInCurve: AppMotion.standard,
-      switchOutCurve: AppMotion.standard,
-      transitionBuilder: (child, animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.12),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        );
-      },
-      child: Container(
-        key: ValueKey(moment.id),
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.sm,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceSage.withValues(alpha: 0.55),
-          borderRadius: AppRadius.mdAll,
-        ),
-        child: Text(
-          moment.text,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-            color: AppColors.forestMid,
-            fontWeight: FontWeight.w600,
-            height: 1.25,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _GainTile extends StatelessWidget {
-  const _GainTile({required this.tile});
+class _GainPrimaryRow extends StatelessWidget {
+  const _GainPrimaryRow({required this.tile});
 
   final TodayGainTileVm tile;
 
   IconData get _icon {
     switch (tile.id) {
       case 'money':
-        return Icons.payments_outlined;
+        return Icons.account_balance_wallet_outlined;
+      case 'remaining':
+        return Icons.flag_outlined;
+      default:
+        return Icons.spa_outlined;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: TodayScale.gainPrimaryIcon,
+          height: TodayScale.gainPrimaryIcon,
+          decoration: const BoxDecoration(
+            color: AppColors.badgeMoneyBg,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            _icon,
+            size: 22,
+            color: AppColors.badgeMoneyFg,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _AnimatedGainValue(
+                tile: tile,
+                fontSize: TodayScale.gainPrimaryValue,
+              ),
+              const SizedBox(height: 2),
+              Text(
+                tile.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: AppColors.textMuted,
+                  fontSize: TodayScale.gainLabelSize,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GainSecondaryMetric extends StatelessWidget {
+  const _GainSecondaryMetric({required this.tile});
+
+  final TodayGainTileVm tile;
+
+  IconData get _icon {
+    switch (tile.id) {
       case 'delay_time':
       case 'active_delay':
-        return Icons.timer_outlined;
+        return Icons.schedule_outlined;
       case 'sessions':
-        return Icons.pause_circle_outline;
+        return Icons.timer_outlined;
       case 'first_delay':
-        return Icons.favorite_outline;
+        return Icons.favorite;
       case 'clean_start':
         return Icons.wb_sunny_outlined;
       case 'remaining':
@@ -1015,15 +1126,13 @@ class _GainTile extends StatelessWidget {
 
   (Color, Color) get _badgeColors {
     switch (tile.id) {
-      case 'money':
-        return (AppColors.badgeMoneyBg, AppColors.badgeMoneyFg);
       case 'delay_time':
       case 'active_delay':
         return (AppColors.badgeTimeBg, AppColors.badgeTimeFg);
       case 'sessions':
         return (AppColors.badgeSessionsBg, AppColors.badgeSessionsFg);
       case 'first_delay':
-        return (AppColors.badgeHeartBg, AppColors.badgeHeartFg);
+        return (AppColors.badgeHeartBg, AppColors.achievementChipFg);
       default:
         return (AppColors.badgeDefaultBg, AppColors.badgeDefaultFg);
     }
@@ -1033,58 +1142,35 @@ class _GainTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final (badgeBg, badgeFg) = _badgeColors;
 
-    return AnimatedContainer(
-      duration: AppMotion.normal,
-      curve: AppMotion.standard,
-      constraints: const BoxConstraints(minHeight: TodayScale.gainTileMinHeight),
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        AppSpacing.sm,
-        AppSpacing.sm,
-        AppSpacing.md,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceElevated,
-        borderRadius: AppRadius.lgAll,
-        border: Border.all(color: AppColors.borderSubtle.withValues(alpha: 0.85)),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColors.shadowSoft,
-            blurRadius: 14,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Container(
-                width: TodayScale.gainBadgeSize,
-                height: TodayScale.gainBadgeSize,
-                decoration: BoxDecoration(
-                  color: badgeBg,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(_icon, size: TodayScale.gainBadgeIcon, color: badgeFg),
-              ),
-              const Spacer(),
-            ],
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: badgeBg,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(_icon, size: 14, color: badgeFg),
           ),
-          const SizedBox(height: AppSpacing.sm),
-          _AnimatedGainValue(tile: tile),
+          const SizedBox(height: AppSpacing.xs),
+          _AnimatedGainValue(
+            tile: tile,
+            fontSize: TodayScale.gainSecondaryValue,
+          ),
           const SizedBox(height: 2),
           Text(
             tile.label,
-            maxLines: 1,
+            textAlign: TextAlign.center,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
               color: AppColors.textMuted,
-              fontSize: TodayScale.gainLabelSize,
+              fontSize: 10,
               fontWeight: FontWeight.w500,
-              letterSpacing: 0.1,
+              height: 1.15,
             ),
           ),
         ],
@@ -1094,9 +1180,13 @@ class _GainTile extends StatelessWidget {
 }
 
 class _AnimatedGainValue extends StatefulWidget {
-  const _AnimatedGainValue({required this.tile});
+  const _AnimatedGainValue({
+    required this.tile,
+    this.fontSize = TodayScale.gainSecondaryValue,
+  });
 
   final TodayGainTileVm tile;
+  final double fontSize;
 
   @override
   State<_AnimatedGainValue> createState() => _AnimatedGainValueState();
@@ -1147,7 +1237,7 @@ class _AnimatedGainValueState extends State<_AnimatedGainValue> {
       color: AppColors.forestMid,
       fontWeight: FontWeight.w700,
       fontFeatures: const [FontFeature.tabularFigures()],
-      fontSize: TodayScale.gainValueSize,
+      fontSize: widget.fontSize,
       height: 1.05,
       letterSpacing: -0.3,
     );
