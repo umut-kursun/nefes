@@ -536,6 +536,25 @@ class _DelayActivePanel extends StatelessWidget {
               );
             },
           ),
+          if (state.motivationBody != null) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              state.motivationBody!,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.textPrimary,
+                height: 1.35,
+              ),
+            ),
+            if (state.motivationFacts.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                state.motivationFacts.join(' · '),
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ],
           const SizedBox(height: AppSpacing.sm),
           Row(
             children: [

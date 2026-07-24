@@ -80,11 +80,23 @@ class AppSettings {
     required this.hasCompletedOnboarding,
     required this.dailyTarget,
     this.averagePerDay,
+    this.packPrice,
+    this.pricePerCigarette,
+    this.cigarettesPerPack = 20,
   });
 
   final bool hasCompletedOnboarding;
   final int dailyTarget;
   final int? averagePerDay;
+
+  /// Optional pack price entered by the user (UI input).
+  final double? packPrice;
+
+  /// Canonical unit price used by savings calculations.
+  final double? pricePerCigarette;
+
+  /// Pack size used when normalizing [packPrice] → [pricePerCigarette].
+  final int cigarettesPerPack;
 }
 
 /// Result of logging a smoke (may close an active delay).

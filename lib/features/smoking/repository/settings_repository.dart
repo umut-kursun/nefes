@@ -12,4 +12,11 @@ abstract class SettingsRepository {
   });
 
   Future<void> setDailyTarget(int value);
+
+  /// Stores pack and/or cigarette price; always normalizes to [pricePerCigarette].
+  Future<void> setCigarettePricing({
+    double? packPrice,
+    double? cigarettePrice,
+    int cigarettesPerPack = 20,
+  });
 }

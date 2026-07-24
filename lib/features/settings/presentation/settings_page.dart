@@ -8,11 +8,12 @@ import 'package:nefes/core/di/providers.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
 import 'package:nefes/features/habit/domain/entities/habit_type.dart';
+import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
 import 'package:nefes/features/settings/data/backup_file_io.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:uuid/uuid.dart';
 
-const _appVersion = '1.4.7';
+const _appVersion = '1.4.8';
 
 /// Settings — grouped list rows, not a wall of cards.
 class SettingsPage extends ConsumerStatefulWidget {
@@ -72,6 +73,38 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       icon: Icons.error_outline,
                       title: AppStrings.smokeSaveFailed,
                     ),
+                  ),
+                  const Divider(height: 1, indent: 52),
+                  settingsAsync.when(
+                    data: (settings) => _SettingsRow(
+                      icon: Icons.payments_outlined,
+                      title: AppStrings.packPriceTitle,
+                      subtitle: settings.pricePerCigarette == null
+                          ? AppStrings.packPriceSubtitle
+                          : AppStrings.pricePerCigaretteLabel(
+                              MoneyCalculator.formatTry(
+                                settings.pricePerCigarette!,
+                              ),
+                            ),
+                      trailing: Text(
+                        settings.packPrice != null
+                            ? MoneyCalculator.formatTry(settings.packPrice!)
+                            : (settings.pricePerCigarette != null
+                                ? MoneyCalculator.formatTry(
+                                    settings.pricePerCigarette!,
+                                  )
+                                : AppStrings.priceNotSet),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                      onTap: _busy
+                          ? null
+                          : () => _editPricing(context, settings),
+                    ),
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, _) => const SizedBox.shrink(),
                   ),
                 ],
               ),
@@ -141,6 +174,26 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       onSave: (value) async {
         await ref.read(settingsRepositoryProvider).setDailyTarget(value);
         await _appendTargetPeriod(value);
+      },
+    );
+  }
+
+  Future<void> _editPricing(BuildContext context, AppSettings settings) {
+    return showEditPricingDialog(
+      context: context,
+      packPrice: settings.packPrice,
+      cigarettePrice: settings.pricePerCigarette,
+      cigarettesPerPack: settings.cigarettesPerPack,
+      onSave: ({
+        packPrice,
+        cigarettePrice,
+        required cigarettesPerPack,
+      }) async {
+        await ref.read(settingsRepositoryProvider).setCigarettePricing(
+              packPrice: packPrice,
+              cigarettePrice: cigarettePrice,
+              cigarettesPerPack: cigarettesPerPack,
+            );
       },
     );
   }
@@ -342,4 +395,126 @@ Future<void> showEditTargetDialog({
   );
 
   controller.dispose();
+}
+
+Future<void> showEditPricingDialog({
+  required BuildContext context,
+  required double? packPrice,
+  required double? cigarettePrice,
+  required int cigarettesPerPack,
+  required Future<void> Function({
+    double? packPrice,
+    double? cigarettePrice,
+    required int cigarettesPerPack,
+  }) onSave,
+}) async {
+  final packController = TextEditingController(
+    text: packPrice == null ? '' : _priceDraft(packPrice),
+  );
+  final cigaretteController = TextEditingController(
+    text: cigarettePrice == null ? '' : _priceDraft(cigarettePrice),
+  );
+  final packSizeController = TextEditingController(text: '$cigarettesPerPack');
+  String? error;
+
+  await showDialog<void>(
+    context: context,
+    builder: (dialogContext) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: const Text(AppStrings.packPriceDialogTitle),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: packController,
+                  autofocus: true,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: AppStrings.packPriceLabel,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                TextField(
+                  controller: cigaretteController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: AppStrings.cigarettePriceLabel,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                TextField(
+                  controller: packSizeController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    labelText: AppStrings.cigarettesPerPackLabel,
+                    errorText: error,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text(AppStrings.cancel),
+              ),
+              FilledButton(
+                onPressed: () async {
+                  final pack = _parsePrice(packController.text);
+                  final cigarette = _parsePrice(cigaretteController.text);
+                  final size = int.tryParse(packSizeController.text.trim());
+                  if ((pack == null || pack <= 0) &&
+                      (cigarette == null || cigarette <= 0)) {
+                    setState(() => error = AppStrings.invalidNumber);
+                    return;
+                  }
+                  if (size == null || size <= 0) {
+                    setState(() => error = AppStrings.invalidNumber);
+                    return;
+                  }
+                  await onSave(
+                    packPrice: pack != null && pack > 0 ? pack : null,
+                    cigarettePrice:
+                        cigarette != null && cigarette > 0 ? cigarette : null,
+                    cigarettesPerPack: size,
+                  );
+                  if (dialogContext.mounted) {
+                    Navigator.of(dialogContext).pop();
+                  }
+                },
+                child: const Text(AppStrings.save),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+
+  packController.dispose();
+  cigaretteController.dispose();
+  packSizeController.dispose();
+}
+
+String _priceDraft(double value) {
+  if (value == value.roundToDouble()) return '${value.round()}';
+  return value.toStringAsFixed(2);
+}
+
+double? _parsePrice(String raw) {
+  final normalized = raw.trim().replaceAll(',', '.');
+  if (normalized.isEmpty) return null;
+  return double.tryParse(normalized);
 }

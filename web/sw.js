@@ -2,7 +2,7 @@
 // Does not touch IndexedDB / SharedPreferences (app data stays in the browser origin).
 // Bump when the deployed shell must invalidate stale PWA caches (e.g. after
 // accidentally shipping web/ templates without build/web).
-const CACHE_NAME = 'nefes-shell-v14';
+const CACHE_NAME = 'nefes-shell-v15';
 
 const PRECACHE_URLS = [
   '/',

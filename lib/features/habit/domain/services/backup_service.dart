@@ -34,6 +34,9 @@ class NefesBackupDocument {
           'hasCompletedOnboarding': settings.hasCompletedOnboarding,
           'dailyTarget': settings.dailyTarget,
           'averagePerDay': settings.averagePerDay,
+          'packPrice': settings.packPrice,
+          'pricePerCigarette': settings.pricePerCigarette,
+          'cigarettesPerPack': settings.cigarettesPerPack,
         },
         'events': events,
         'targets': targets,
@@ -64,6 +67,10 @@ class NefesBackupDocument {
           settingsMap['hasCompletedOnboarding'] as bool? ?? false,
       dailyTarget: settingsMap['dailyTarget'] as int? ?? 20,
       averagePerDay: settingsMap['averagePerDay'] as int?,
+      packPrice: (settingsMap['packPrice'] as num?)?.toDouble(),
+      pricePerCigarette:
+          (settingsMap['pricePerCigarette'] as num?)?.toDouble(),
+      cigarettesPerPack: settingsMap['cigarettesPerPack'] as int? ?? 20,
     );
 
     final exported = DateTime.tryParse(map['exportedAtUtc'] as String? ?? '') ??
@@ -126,6 +133,16 @@ class BackupService {
       );
     } else {
       await settingsRepository.setDailyTarget(doc.settings.dailyTarget);
+    }
+
+    final cigarettePrice = doc.settings.pricePerCigarette;
+    final packPrice = doc.settings.packPrice;
+    if (cigarettePrice != null || packPrice != null) {
+      await settingsRepository.setCigarettePricing(
+        packPrice: packPrice,
+        cigarettePrice: cigarettePrice,
+        cigarettesPerPack: doc.settings.cigarettesPerPack,
+      );
     }
   }
 }

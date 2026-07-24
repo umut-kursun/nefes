@@ -8,7 +8,9 @@ import 'package:nefes/core/time/time_display.dart';
 import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
 import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/habit/domain/services/behavior_pattern_service.dart';
+import 'package:nefes/features/motivation/domain/entities/delay_session.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
+import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/domain/services/home_snapshot_builder.dart';
 import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart';
@@ -41,13 +43,21 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   List<SmokingTrigger> _quickTriggers = TriggerPersonalizer.defaultQuickOrder;
   String? _contextualInsight;
   DateTime? _lastInsightRefresh;
+  List<SmokingLogEvent> _cachedEvents = const [];
+  DelaySession? _delaySession;
+  double? _pricePerCigarette;
 
   void _publishFromSnapshot(HomeSnapshot snapshot) {
+    final keepMotivation = snapshot.activeDelay != null;
     state = HomeUiState.fromSnapshot(
       snapshot,
       pendingTriggerSmokeId: state.pendingTriggerSmokeId,
       quickTriggers: _quickTriggers,
       contextualInsight: _contextualInsight,
+      motivationMessageId:
+          keepMotivation ? state.motivationMessageId : null,
+      motivationBody: keepMotivation ? state.motivationBody : null,
+      motivationFacts: keepMotivation ? state.motivationFacts : const [],
     ).copyWith(
       isSaving: state.isSaving,
       isUndoing: state.isUndoing,
@@ -55,6 +65,68 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       errorMessage: state.errorMessage,
       infoMessage: state.infoMessage,
     );
+    if (!keepMotivation) {
+      _delaySession = null;
+    }
+  }
+
+  void _syncDelaySession(HomeSnapshot snapshot) {
+    final active = snapshot.activeDelay;
+    if (active == null) {
+      _delaySession = null;
+      return;
+    }
+    if (_delaySession?.sessionId == active.id) return;
+    _delaySession = _ref.read(motivationEngineProvider).openSession(
+          active: active,
+          allEvents: _cachedEvents,
+        );
+  }
+
+  void _applyMotivation(DateTime nowUtc) {
+    final session = _delaySession;
+    if (session == null) {
+      if (state.motivationMessageId != null || state.motivationBody != null) {
+        state = state.copyWith(clearMotivation: true);
+      }
+      return;
+    }
+
+    final evaluation = _ref.read(motivationEngineProvider).evaluate(
+          session: session,
+          allEvents: _cachedEvents,
+          nowUtc: nowUtc,
+          pricePerCigarette: _pricePerCigarette,
+        );
+    final message = evaluation.message;
+    if (message == null) {
+      if (state.motivationMessageId != null || state.motivationBody != null) {
+        state = state.copyWith(clearMotivation: true);
+      }
+      return;
+    }
+
+    final facts = message.facts.map((f) => f.label).toList(growable: false);
+    if (message.id == state.motivationMessageId &&
+        message.body == state.motivationBody &&
+        _sameFacts(facts, state.motivationFacts)) {
+      return;
+    }
+
+    state = state.copyWith(
+      motivationMessageId: message.id,
+      motivationBody: message.body,
+      motivationFacts: facts,
+    );
+  }
+
+  bool _sameFacts(List<String> a, List<String> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
   }
 
   Future<void> _refreshDerived(HomeSnapshot snapshot) async {
@@ -65,6 +137,11 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
 
     final events = await _ref.read(smokingRepositoryProvider).getAllEvents();
     if (!mounted) return;
+    _cachedEvents = events;
+
+    final settings = await _ref.read(settingsRepositoryProvider).getSettings();
+    if (!mounted) return;
+    _pricePerCigarette = settings.pricePerCigarette;
 
     _quickTriggers = TriggerPersonalizer.rankedQuickPicks(allEvents: events);
 
@@ -77,11 +154,13 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     }
 
     if (!mounted) return;
+    _syncDelaySession(snapshot);
     state = state.copyWith(
       quickTriggers: _quickTriggers,
       contextualInsight: _contextualInsight,
       clearContextualInsight: _contextualInsight == null,
     );
+    _applyMotivation(now.toUtc());
   }
 
   Future<void> _onTick() async {
@@ -126,25 +205,29 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     final nextHasLast = last != null;
     final nextHasDelay = delay != null;
 
+    _syncDelaySession(snap);
+
     // Avoid notifying listeners when the visible clocks did not change.
-    if (nextElapsed == state.elapsedLabel &&
+    final clocksUnchanged = nextElapsed == state.elapsedLabel &&
         nextDelayElapsed == state.delayElapsedLabel &&
         nextTimedOut == state.delayTimedOut &&
         nextIntended == state.delayIntendedMinutes &&
         nextHasLast == state.hasLastSmoke &&
-        nextHasDelay == state.hasActiveDelay) {
-      return;
+        nextHasDelay == state.hasActiveDelay;
+
+    if (!clocksUnchanged) {
+      state = state.copyWith(
+        elapsedLabel: nextElapsed,
+        hasLastSmoke: nextHasLast,
+        hasActiveDelay: nextHasDelay,
+        delayElapsedLabel: nextDelayElapsed,
+        delayTimedOut: nextTimedOut,
+        delayIntendedMinutes: nextIntended,
+        clearDelayIntended: delay == null,
+      );
     }
 
-    state = state.copyWith(
-      elapsedLabel: nextElapsed,
-      hasLastSmoke: nextHasLast,
-      hasActiveDelay: nextHasDelay,
-      delayElapsedLabel: nextDelayElapsed,
-      delayTimedOut: nextTimedOut,
-      delayIntendedMinutes: nextIntended,
-      clearDelayIntended: delay == null,
-    );
+    _applyMotivation(now.toUtc());
   }
 
   void _scheduleContextDismiss() {

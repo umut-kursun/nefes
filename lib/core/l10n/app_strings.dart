@@ -130,6 +130,15 @@ abstract final class AppStrings {
   static const dataSectionTitle = 'Veriler';
   static const editDailyTargetTitle = 'Günlük sınırı düzenle';
   static const averagePerDayLabel = 'Günlük ortalama';
+  static const packPriceTitle = 'Paket fiyatı';
+  static const packPriceSubtitle = 'Tasarruf hesabı için';
+  static const packPriceDialogTitle = 'Sigara fiyatı';
+  static const packPriceLabel = 'Paket fiyatı (₺)';
+  static const cigarettePriceLabel = 'Tek sigara fiyatı (₺)';
+  static const cigarettesPerPackLabel = 'Paketteki sigara';
+  static const priceNotSet = 'Belirlenmedi';
+  static String pricePerCigaretteLabel(String amount) =>
+      'Sigara başı $amount';
   static const backupSectionTitle = 'Yedekleme';
   static const exportData = 'Verileri dışa aktar';
   static const exportDataDesc = 'Tüm kayıtlarını JSON olarak indir.';

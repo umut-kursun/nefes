@@ -25,6 +25,9 @@ class HomeUiState {
     this.contextualInsight,
     this.delayIntendedMinutes,
     this.delayTimedOut = false,
+    this.motivationMessageId,
+    this.motivationBody,
+    this.motivationFacts = const [],
     this.isSaving = false,
     this.isUndoing = false,
     this.isDelayBusy = false,
@@ -68,6 +71,9 @@ class HomeUiState {
   final String? contextualInsight;
   final int? delayIntendedMinutes;
   final bool delayTimedOut;
+  final String? motivationMessageId;
+  final String? motivationBody;
+  final List<String> motivationFacts;
   final bool isSaving;
   final bool isUndoing;
   final bool isDelayBusy;
@@ -93,12 +99,17 @@ class HomeUiState {
         pendingTriggerSmokeId,
         identityHashCode(quickTriggers),
         contextualInsight,
-        delayIntendedMinutes,
-        delayTimedOut,
-        isSaving,
-        isUndoing,
-        isDelayBusy,
-        isHydrated,
+        Object.hash(
+          delayIntendedMinutes,
+          delayTimedOut,
+          motivationMessageId,
+          motivationBody,
+          Object.hashAll(motivationFacts),
+          isSaving,
+          isUndoing,
+          isDelayBusy,
+          isHydrated,
+        ),
       );
 
   HomeUiState copyWith({
@@ -120,6 +131,9 @@ class HomeUiState {
     String? contextualInsight,
     int? delayIntendedMinutes,
     bool? delayTimedOut,
+    String? motivationMessageId,
+    String? motivationBody,
+    List<String>? motivationFacts,
     bool? isSaving,
     bool? isUndoing,
     bool? isDelayBusy,
@@ -131,6 +145,7 @@ class HomeUiState {
     bool clearPendingTrigger = false,
     bool clearContextualInsight = false,
     bool clearDelayIntended = false,
+    bool clearMotivation = false,
   }) {
     return HomeUiState(
       todayCount: todayCount ?? this.todayCount,
@@ -158,6 +173,13 @@ class HomeUiState {
           ? null
           : (delayIntendedMinutes ?? this.delayIntendedMinutes),
       delayTimedOut: delayTimedOut ?? this.delayTimedOut,
+      motivationMessageId: clearMotivation
+          ? null
+          : (motivationMessageId ?? this.motivationMessageId),
+      motivationBody:
+          clearMotivation ? null : (motivationBody ?? this.motivationBody),
+      motivationFacts:
+          clearMotivation ? const [] : (motivationFacts ?? this.motivationFacts),
       isSaving: isSaving ?? this.isSaving,
       isUndoing: isUndoing ?? this.isUndoing,
       isDelayBusy: isDelayBusy ?? this.isDelayBusy,
@@ -182,6 +204,9 @@ class HomeUiState {
     String? pendingTriggerSmokeId,
     List<SmokingTrigger>? quickTriggers,
     String? contextualInsight,
+    String? motivationMessageId,
+    String? motivationBody,
+    List<String>? motivationFacts,
   }) {
     final clock = now ?? DateTime.now();
     final last = snapshot.lastSmokeAtUtc;
@@ -215,6 +240,9 @@ class HomeUiState {
       pendingTriggerSmokeId: pendingTriggerSmokeId,
       quickTriggers: quickTriggers ?? TriggerPersonalizer.defaultQuickOrder,
       contextualInsight: contextualInsight,
+      motivationMessageId: delay == null ? null : motivationMessageId,
+      motivationBody: delay == null ? null : motivationBody,
+      motivationFacts: delay == null ? const [] : (motivationFacts ?? const []),
     );
   }
 }

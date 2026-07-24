@@ -8,6 +8,7 @@ import 'package:nefes/features/habit/data/repositories/target_history_repository
 import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
 import 'package:nefes/features/habit/domain/services/backup_service.dart';
 import 'package:nefes/features/habit/repository/target_history_repository.dart';
+import 'package:nefes/features/motivation/domain/services/motivation_engine.dart';
 import 'package:nefes/features/smoking/data/datasources/smoking_local_data_source.dart';
 import 'package:nefes/features/smoking/data/repositories/settings_repository_impl.dart';
 import 'package:nefes/features/smoking/data/repositories/smoking_repository_impl.dart';
@@ -74,6 +75,11 @@ final backupServiceProvider = Provider<BackupService>((ref) {
 
 final eventFactoryProvider = Provider<EventFactory>((ref) {
   return EventFactory();
+});
+
+/// Motivation engine — delay milestones and pluggable message providers.
+final motivationEngineProvider = Provider<MotivationEngine>((ref) {
+  return MotivationEngine();
 });
 
 final productTelemetryPortProvider = Provider<ProductTelemetryPort>((ref) {

@@ -87,5 +87,28 @@ void main() {
       await repo.setDailyTarget(12);
       expect((await repo.getSettings()).dailyTarget, 12);
     });
+
+    test('normalizes pack price to pricePerCigarette', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final repo = SettingsRepositoryImpl(prefs);
+
+      await repo.setCigarettePricing(packPrice: 120, cigarettesPerPack: 20);
+      final settings = await repo.getSettings();
+      expect(settings.packPrice, 120);
+      expect(settings.pricePerCigarette, 6);
+      expect(settings.cigarettesPerPack, 20);
+    });
+
+    test('accepts direct cigarette price', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final repo = SettingsRepositoryImpl(prefs);
+
+      await repo.setCigarettePricing(cigarettePrice: 7.5);
+      final settings = await repo.getSettings();
+      expect(settings.pricePerCigarette, 7.5);
+      expect(settings.packPrice, isNull);
+    });
   });
 }
