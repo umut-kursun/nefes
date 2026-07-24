@@ -29,7 +29,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(homeViewModelProvider);
+    // Rebuild on structural changes only — 1Hz clocks live in leaf Consumers.
+    ref.watch(homeViewModelProvider.select((s) => s.structureKey));
+    final state = ref.read(homeViewModelProvider);
 
     ref.listen(homeViewModelProvider, (previous, next) {
       final message = next.errorMessage ?? next.infoMessage;
@@ -287,17 +289,8 @@ class _TodayComposition extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                HeroElapsedCard(
-                  elapsedLabel: state.elapsedLabel,
-                  hasLastSmoke: state.hasLastSmoke,
-                  supportLine: state.hasLastSmoke
-                      ? (state.hasActiveDelay
-                          ? null
-                          : (state.todayDelayInsight ??
-                              AppStrings.heroSupportLine))
-                      : null,
-                ),
-                const SizedBox(height: AppSpacing.sm + 2),
+                const _LiveHeroElapsed(),
+                const SizedBox(height: AppSpacing.sm),
                 TodayDashboardPanel(
                   used: state.todayCount,
                   limit: state.dailyTarget,
@@ -327,49 +320,51 @@ class _TodayComposition extends StatelessWidget {
                     onMore: onMoreTriggers,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.sm + 2),
+                const SizedBox(height: AppSpacing.sm),
                 _metrics(state),
-                const SizedBox(height: AppSpacing.sm + 2),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.md,
-                    AppSpacing.sm + 2,
-                    AppSpacing.sm,
-                    AppSpacing.sm,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceElevated,
-                    borderRadius: AppRadius.lgAll,
-                    border: Border.all(color: AppColors.borderSubtle),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TodayTimelineHeader(
-                        onViewAll: () => context.goNamed('history'),
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      if (state.todayEvents.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: AppSpacing.sm,
-                          ),
-                          child: Text(
-                            AppStrings.emptyTodayHistory,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: AppColors.textMuted,
-                                ),
-                          ),
-                        )
-                      else
-                        _TodayTimeline(
-                          events: state.todayEvents,
-                          onEditEvent: onEditEvent,
+                const SizedBox(height: AppSpacing.sm),
+                RepaintBoundary(
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.md,
+                      AppSpacing.sm,
+                      AppSpacing.sm,
+                      AppSpacing.sm,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceElevated,
+                      borderRadius: AppRadius.lgAll,
+                      border: Border.all(color: AppColors.borderSubtle),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TodayTimelineHeader(
+                          onViewAll: () => context.goNamed('history'),
                         ),
-                    ],
+                        const SizedBox(height: AppSpacing.xs),
+                        if (state.todayEvents.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: AppSpacing.sm,
+                            ),
+                            child: Text(
+                              AppStrings.emptyTodayHistory,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: AppColors.textMuted,
+                                  ),
+                            ),
+                          )
+                        else
+                          _TodayTimeline(
+                            events: state.todayEvents,
+                            onEditEvent: onEditEvent,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
@@ -405,6 +400,37 @@ class _TodayComposition extends StatelessWidget {
       longestLabel: longest == null
           ? null
           : TimeDisplay.formatIntervalShort(longest),
+    );
+  }
+}
+
+/// Hero clock leaf — rebuilds on 1Hz ticks without rebuilding the dashboard.
+class _LiveHeroElapsed extends ConsumerWidget {
+  const _LiveHeroElapsed();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tick = ref.watch(
+      homeViewModelProvider.select(
+        (s) => (
+          elapsed: s.elapsedLabel,
+          hasLast: s.hasLastSmoke,
+          hasDelay: s.hasActiveDelay,
+          delayInsight: s.todayDelayInsight,
+        ),
+      ),
+    );
+
+    return RepaintBoundary(
+      child: HeroElapsedCard(
+        elapsedLabel: tick.elapsed,
+        hasLastSmoke: tick.hasLast,
+        supportLine: tick.hasLast
+            ? (tick.hasDelay
+                ? null
+                : (tick.delayInsight ?? AppStrings.heroSupportLine))
+            : null,
+      ),
     );
   }
 }
@@ -495,13 +521,20 @@ class _DelayActivePanel extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.xs),
-          Text(
-            state.delayElapsedLabel,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontFeatures: const [FontFeature.tabularFigures()],
-              fontWeight: FontWeight.w700,
-              color: AppColors.forestMid,
-            ),
+          Consumer(
+            builder: (context, ref, _) {
+              final label = ref.watch(
+                homeViewModelProvider.select((s) => s.delayElapsedLabel),
+              );
+              return Text(
+                label,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.forestMid,
+                ),
+              );
+            },
           ),
           const SizedBox(height: AppSpacing.sm),
           Row(

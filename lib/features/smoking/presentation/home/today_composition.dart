@@ -565,9 +565,9 @@ class TodayDashboardPanel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.md,
+        AppSpacing.sm + 2,
         AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.md,
+        AppSpacing.sm + 2,
       ),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
@@ -588,7 +588,7 @@ class TodayDashboardPanel extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
             InsightChipCard(message: insight!),
           ],
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.sm + 2),
           TwinActionZone(
             isBusy: isBusy,
             isSaving: isSaving,
@@ -731,11 +731,12 @@ class _PrimaryActionCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: AppColors.textOnForest,
                         fontWeight: FontWeight.w700,
-                        height: 1.1,
+                        height: 1.15,
+                        letterSpacing: -0.2,
                         fontSize: TodayScale.actionTitleSize,
                       ),
                     ),
-                    const SizedBox(height: 1),
+                    const SizedBox(height: 2),
                     Text(
                       AppStrings.logNowSubtitle,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -822,11 +823,12 @@ class _SecondaryActionCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: titleColor,
                   fontWeight: FontWeight.w700,
-                  height: 1.1,
+                  height: 1.15,
+                  letterSpacing: -0.2,
                   fontSize: TodayScale.actionTitleSize,
                 ),
               ),
-              const SizedBox(height: 1),
+              const SizedBox(height: 2),
               Text(
                 AppStrings.delayHint,
                 maxLines: 1,

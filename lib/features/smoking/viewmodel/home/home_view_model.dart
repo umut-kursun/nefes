@@ -113,19 +113,36 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
 
     final last = snap.lastSmokeAtUtc;
     final delay = snap.activeDelay;
+    final nextElapsed = last == null
+        ? state.elapsedLabel
+        : TimeDisplay.formatElapsedClock(now.toUtc().difference(last));
+    final nextDelayElapsed = delay == null
+        ? ''
+        : TimeDisplay.formatElapsedClock(
+            now.toUtc().difference(delay.startedAtUtc),
+          );
+    final nextTimedOut = delay?.isElapsed(now.toUtc()) ?? false;
+    final nextIntended = delay?.intendedDuration?.inMinutes;
+    final nextHasLast = last != null;
+    final nextHasDelay = delay != null;
+
+    // Avoid notifying listeners when the visible clocks did not change.
+    if (nextElapsed == state.elapsedLabel &&
+        nextDelayElapsed == state.delayElapsedLabel &&
+        nextTimedOut == state.delayTimedOut &&
+        nextIntended == state.delayIntendedMinutes &&
+        nextHasLast == state.hasLastSmoke &&
+        nextHasDelay == state.hasActiveDelay) {
+      return;
+    }
+
     state = state.copyWith(
-      elapsedLabel: last == null
-          ? state.elapsedLabel
-          : TimeDisplay.formatElapsedClock(now.toUtc().difference(last)),
-      hasLastSmoke: last != null,
-      hasActiveDelay: delay != null,
-      delayElapsedLabel: delay == null
-          ? ''
-          : TimeDisplay.formatElapsedClock(
-              now.toUtc().difference(delay.startedAtUtc),
-            ),
-      delayTimedOut: delay?.isElapsed(now.toUtc()) ?? false,
-      delayIntendedMinutes: delay?.intendedDuration?.inMinutes,
+      elapsedLabel: nextElapsed,
+      hasLastSmoke: nextHasLast,
+      hasActiveDelay: nextHasDelay,
+      delayElapsedLabel: nextDelayElapsed,
+      delayTimedOut: nextTimedOut,
+      delayIntendedMinutes: nextIntended,
       clearDelayIntended: delay == null,
     );
   }

@@ -77,6 +77,30 @@ class HomeUiState {
 
   bool get isBusy => isSaving || isUndoing || isDelayBusy;
 
+  /// Rebuild key for Today chrome excluding 1Hz clock labels.
+  Object get structureKey => Object.hash(
+        todayCount,
+        dailyTarget,
+        remaining,
+        isTargetExceeded,
+        identityHashCode(todayEvents),
+        hasCompletedOnboarding,
+        hasLastSmoke,
+        canUndo,
+        hasActiveDelay,
+        todayDelayCount,
+        todayDelayInsight,
+        pendingTriggerSmokeId,
+        identityHashCode(quickTriggers),
+        contextualInsight,
+        delayIntendedMinutes,
+        delayTimedOut,
+        isSaving,
+        isUndoing,
+        isDelayBusy,
+        isHydrated,
+      );
+
   HomeUiState copyWith({
     int? todayCount,
     int? dailyTarget,
