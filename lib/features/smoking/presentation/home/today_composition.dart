@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nefes/core/design_system/tokens.dart';
 import 'package:nefes/core/l10n/app_strings.dart';
+import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
+import 'package:nefes/features/smoking/domain/services/today_gains_builder.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
 
 /// Compact brand header — NEFES + date + circular overflow.
@@ -877,9 +879,11 @@ class TodayGainDashboard extends StatelessWidget {
   const TodayGainDashboard({
     super.key,
     required this.tiles,
+    this.successMoment,
   });
 
   final List<TodayGainTileVm> tiles;
+  final SuccessMomentVm? successMoment;
 
   @override
   Widget build(BuildContext context) {
@@ -902,7 +906,20 @@ class TodayGainDashboard extends StatelessWidget {
             letterSpacing: 0.4,
           ),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        AnimatedSize(
+          duration: AppMotion.normal,
+          curve: AppMotion.standard,
+          alignment: Alignment.topCenter,
+          child: successMoment == null
+              ? const SizedBox(height: AppSpacing.xs)
+              : Padding(
+                  padding: const EdgeInsets.only(
+                    top: AppSpacing.xs,
+                    bottom: AppSpacing.xs,
+                  ),
+                  child: _SuccessMomentLine(moment: successMoment!),
+                ),
+        ),
         Row(
           children: [
             Expanded(child: _GainTile(tile: safe[0])),
@@ -919,6 +936,54 @@ class TodayGainDashboard extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _SuccessMomentLine extends StatelessWidget {
+  const _SuccessMomentLine({required this.moment});
+
+  final SuccessMomentVm moment;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: AppMotion.slow,
+      switchInCurve: AppMotion.standard,
+      switchOutCurve: AppMotion.standard,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.12),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        key: ValueKey(moment.id),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceSage.withValues(alpha: 0.55),
+          borderRadius: AppRadius.mdAll,
+        ),
+        child: Text(
+          moment.text,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: AppColors.forestMid,
+            fontWeight: FontWeight.w600,
+            height: 1.25,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -948,18 +1013,47 @@ class _GainTile extends StatelessWidget {
     }
   }
 
+  (Color, Color) get _badgeColors {
+    switch (tile.id) {
+      case 'money':
+        return (AppColors.badgeMoneyBg, AppColors.badgeMoneyFg);
+      case 'delay_time':
+      case 'active_delay':
+        return (AppColors.badgeTimeBg, AppColors.badgeTimeFg);
+      case 'sessions':
+        return (AppColors.badgeSessionsBg, AppColors.badgeSessionsFg);
+      case 'first_delay':
+        return (AppColors.badgeHeartBg, AppColors.badgeHeartFg);
+      default:
+        return (AppColors.badgeDefaultBg, AppColors.badgeDefaultFg);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final (badgeBg, badgeFg) = _badgeColors;
+
+    return AnimatedContainer(
+      duration: AppMotion.normal,
+      curve: AppMotion.standard,
       constraints: const BoxConstraints(minHeight: TodayScale.gainTileMinHeight),
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.sm,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        AppSpacing.sm,
+        AppSpacing.sm,
+        AppSpacing.md,
       ),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
-        borderRadius: AppRadius.mdAll,
-        border: Border.all(color: AppColors.borderSubtle),
+        borderRadius: AppRadius.lgAll,
+        border: Border.all(color: AppColors.borderSubtle.withValues(alpha: 0.85)),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.shadowSoft,
+            blurRadius: 14,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -967,37 +1061,128 @@ class _GainTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(_icon, size: 14, color: AppColors.forestSoft),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  tile.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: AppColors.textSecondary,
-                    fontSize: TodayScale.gainLabelSize,
-                    fontWeight: FontWeight.w500,
-                  ),
+              Container(
+                width: TodayScale.gainBadgeSize,
+                height: TodayScale.gainBadgeSize,
+                decoration: BoxDecoration(
+                  color: badgeBg,
+                  shape: BoxShape.circle,
                 ),
+                child: Icon(_icon, size: TodayScale.gainBadgeIcon, color: badgeFg),
               ),
+              const Spacer(),
             ],
           ),
+          const SizedBox(height: AppSpacing.sm),
+          _AnimatedGainValue(tile: tile),
           const SizedBox(height: 2),
           Text(
-            tile.value,
+            tile.label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AppColors.forestMid,
-              fontWeight: FontWeight.w700,
-              fontFeatures: const [FontFeature.tabularFigures()],
-              fontSize: TodayScale.gainValueSize,
-              height: 1.1,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: AppColors.textMuted,
+              fontSize: TodayScale.gainLabelSize,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.1,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AnimatedGainValue extends StatefulWidget {
+  const _AnimatedGainValue({required this.tile});
+
+  final TodayGainTileVm tile;
+
+  @override
+  State<_AnimatedGainValue> createState() => _AnimatedGainValueState();
+}
+
+class _AnimatedGainValueState extends State<_AnimatedGainValue> {
+  double _from = 0;
+  double _to = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _to = widget.tile.numericValue ?? 0;
+    _from = 0;
+  }
+
+  @override
+  void didUpdateWidget(covariant _AnimatedGainValue oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final next = widget.tile.numericValue;
+    final prev = oldWidget.tile.numericValue;
+    if (next != prev) {
+      _from = prev ?? _to;
+      _to = next ?? _to;
+    }
+  }
+
+  String _format(double value) {
+    final tile = widget.tile;
+    switch (tile.format) {
+      case GainValueFormat.money:
+        return MoneyCalculator.formatTry(value);
+      case GainValueFormat.minutes:
+        final mins = value.round();
+        return tile.showPlus
+            ? AppStrings.gainMinutesPlus(mins)
+            : AppStrings.gainMinutes(mins);
+      case GainValueFormat.count:
+        return '${value.round()}';
+      case GainValueFormat.plain:
+        return tile.value;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.titleMedium?.copyWith(
+      color: AppColors.forestMid,
+      fontWeight: FontWeight.w700,
+      fontFeatures: const [FontFeature.tabularFigures()],
+      fontSize: TodayScale.gainValueSize,
+      height: 1.05,
+      letterSpacing: -0.3,
+    );
+
+    if (widget.tile.numericValue == null) {
+      return AnimatedSwitcher(
+        duration: AppMotion.normal,
+        switchInCurve: AppMotion.standard,
+        switchOutCurve: AppMotion.standard,
+        transitionBuilder: (child, animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: Text(
+          widget.tile.value,
+          key: ValueKey(widget.tile.value),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: style,
+        ),
+      );
+    }
+
+    return TweenAnimationBuilder<double>(
+      key: ValueKey('${widget.tile.id}-$_to'),
+      tween: Tween(begin: _from, end: _to),
+      duration: const Duration(milliseconds: 720),
+      curve: AppMotion.standard,
+      builder: (context, value, _) {
+        return Text(
+          _format(value),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: style,
+        );
+      },
     );
   }
 }

@@ -9,7 +9,7 @@ abstract final class AppStrings {
   static const sinceLastCigarette = 'Son sigaradan beri';
   static const noCigaretteYet =
       'Henüz kayıt yok. İlk sigaranı işaretlediğinde süre burada başlar.';
-  static const heroSupportLine = 'Nefesinle güçleniyorsun.';
+  static const heroSupportLine = 'Küçük kazanımlar alışkanlık olur.';
   static const dailyTarget = 'Günlük sınır';
   static const dailyLimit = 'Günlük sınır';
   static const usedLabel = 'kullanıldı';
@@ -29,8 +29,8 @@ abstract final class AppStrings {
   static const smokeSaveFailed = 'Kaydedilemedi. Tekrar dene.';
   static const undoFailed = 'Geri alma başarısız. Tekrar dene.';
   static const loading = 'Yükleniyor…';
-  static const targetExceeded = 'Bugünkü sınır aşıldı';
-  static const limitExceeded = 'Bugünkü sınır aşıldı';
+  static const targetExceeded = 'Bugün sınır dolu. Yarın yeni bir sayfa.';
+  static const limitExceeded = 'Bugün sınır dolu. Yarın yeni bir sayfa.';
   static const editTarget = 'Sınırı düzenle';
   static const editLimit = 'Sınırı düzenle';
   static const save = 'Kaydet';
@@ -69,7 +69,7 @@ abstract final class AppStrings {
   static const todayGainsTitle = 'Bugün kazandıkların';
   static const gainCigarettes = 'Sigara';
   static const gainDelays = 'Erteleme oturumu';
-  static const gainDelayedTime = 'Toplam erteleme';
+  static const gainDelayedTime = 'Erteleme süresi';
   static const gainSavedToday = 'Bugün biriken';
   static const gainFirstCigaretteDelay = 'İlk sigara gecikmesi';
   static const gainActiveDelay = 'Şu anki erteleme';
@@ -79,23 +79,40 @@ abstract final class AppStrings {
   static const gainJustStarted = 'Az önce';
   static const gainSavedUnset = '—';
   static String gainMinutes(int minutes) => '$minutes dk';
+  static String gainMinutesPlus(int minutes) => '+$minutes dk';
   static String sessionMoneyEstimate(String amount) =>
       'Bu oturum tahmini · $amount';
   static String todayMoneyTotal(String amount) => 'Bugünkü toplam · $amount';
   static const cancelDelay = 'İptal';
   static const delayStartFailed = 'Başlatılamadı. Tekrar dene.';
-  static const delayCompleteDone = 'Kaydedildi';
+  static const delayCompleteDone = 'İstek geçti. Birkaç dakika kazandın.';
   static const delayCancelled = 'İptal edildi';
+
+  // Success moments — elegant, never shame
+  static const momentPersonalBest = '✨ Yeni kişisel rekor';
+  static const momentFirstDelay = '✨ İlk ertelemen. Her erteleme önemli.';
+  static const momentFirstEffort = '✨ Kısa da olsa bir kazanım';
+  static const momentUrgePassed = '🌿 İstek geçti. Bugün daha sakin.';
+  static String momentMinutesEarned(int minutes) =>
+      '🌿 $minutes dakika kazandın';
+  static String momentLongerThanYesterday(int minutes) =>
+      '🌿 Dünden $minutes dk daha uzun';
+  static String momentLaterThanYesterday(int minutes) =>
+      '🌿 Bugün dünden $minutes dk daha geç başladı';
+  static String momentMoneySaved(String amount) =>
+      '💰 Bugün $amount birikti';
 
   static String remainingCount(int value) => '$value kaldı';
   static String todayProgress(int count, int target) => '$count / $target';
   static String limitShort(int limit) => 'Sınır $limit';
   static String sequenceLabel(int n) => '#$n';
   static String afterPrevious(String interval) => '$interval sonra';
-  static String delayedMinutes(int minutes) => '$minutes dakika erteledin.';
-  static String todayDelayCount(int count) => 'Bugün $count kez erteledin.';
+  static String delayedMinutes(int minutes) =>
+      'Birkaç dakika daha kazandın — $minutes dk.';
+  static String todayDelayCount(int count) =>
+      'Bugün $count küçük kazanım.';
   static String todayDelayTotalMinutes(int minutes) =>
-      'Bugün toplam $minutes dakika erteledin.';
+      'Bugün $minutes dakika kazandın.';
   static String smokeCountShort(int count) => '$count sigara';
 
   // Navigation

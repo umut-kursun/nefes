@@ -292,7 +292,10 @@ class _TodayComposition extends StatelessWidget {
               children: [
                 const _LiveHeroElapsed(),
                 const SizedBox(height: AppSpacing.sm),
-                TodayGainDashboard(tiles: state.gainTiles),
+                TodayGainDashboard(
+                  tiles: state.gainTiles,
+                  successMoment: state.successMoment,
+                ),
                 const SizedBox(height: AppSpacing.sm),
                 TodayDashboardPanel(
                   used: state.todayCount,

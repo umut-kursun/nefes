@@ -199,11 +199,11 @@ class MotivationEngine {
     final String message;
     if (yesterdayBest != null && improvement != null) {
       message =
-          '$minutes dakika direndin.\nDün ${yesterdayBest.inMinutes} dakikaydın.\nBugün ${improvement.inMinutes} dk daha uzun.';
+          '$minutes dakika kazandın.\nDünden ${improvement.inMinutes} dk daha uzun.';
     } else if (yesterdayBest != null) {
-      message = '$minutes dakika direndin.\nHer deneme seni güçlendirir.';
+      message = '$minutes dakika kazandın.\nHer deneme seni güçlendirir.';
     } else if (minutes >= 1) {
-      message = '$minutes dakika direndin.\nBu çaba kayda değer.';
+      message = '$minutes dakika kazandın.\nBu çaba kayda değer.';
     } else {
       message = 'Kısa da olsa direndin.\nBu bir başlangıç.';
     }

@@ -84,6 +84,21 @@ abstract final class AppColors {
   static const Color dangerContainer = Color(0xFFF3DDD7);
   static const Color onDangerContainer = Color(0xFF5C2B22);
 
+  // Gain tile badge tints — soft, never loud
+  static const Color badgeMoneyBg = Color(0xFFE7EFE9);
+  static const Color badgeMoneyFg = Color(0xFF3D5C4E);
+  static const Color badgeTimeBg = Color(0xFFE8EEF2);
+  static const Color badgeTimeFg = Color(0xFF4A5F6A);
+  static const Color badgeSessionsBg = Color(0xFFE4EBE5);
+  static const Color badgeSessionsFg = Color(0xFF2F463B);
+  static const Color badgeHeartBg = Color(0xFFF0EBE6);
+  static const Color badgeHeartFg = Color(0xFF6B5344);
+  static const Color badgeDefaultBg = Color(0xFFECEEEA);
+  static const Color badgeDefaultFg = Color(0xFF3D5C4E);
+
+  // Soft elevation (Apple Health–like)
+  static const Color shadowSoft = Color(0x14000000);
+
   // Dark canvas
   static const Color canvasDark = Color(0xFF121512);
   static const Color surfaceDark = Color(0xFF1A1F1B);
@@ -134,10 +149,12 @@ abstract final class TodayScale {
   static const double actionSubtitleSize = 11;
   static const double actionMinBody = 70;
 
-  // Gain dashboard tiles
-  static const double gainValueSize = 16;
-  static const double gainLabelSize = 10;
-  static const double gainTileMinHeight = 52;
+  // Gain dashboard tiles — value is the hero
+  static const double gainValueSize = 22;
+  static const double gainLabelSize = 11;
+  static const double gainTileMinHeight = 76;
+  static const double gainBadgeSize = 22;
+  static const double gainBadgeIcon = 12;
 
   // Metrics (legacy)
   static const double metricValueSize = 18;

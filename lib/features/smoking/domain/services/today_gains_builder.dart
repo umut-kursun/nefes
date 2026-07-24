@@ -2,17 +2,33 @@ import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 
+/// How the gain tile value should animate and format.
+enum GainValueFormat {
+  plain,
+  money,
+  minutes,
+  count,
+}
+
 /// One compact tile in the “Bugün kazandıkların” dashboard.
 class TodayGainTile {
   const TodayGainTile({
     required this.id,
     required this.label,
     required this.value,
+    this.numericValue,
+    this.format = GainValueFormat.plain,
+    this.showPlus = false,
   });
 
   final String id;
   final String label;
   final String value;
+
+  /// Target for count-up animation; null = fade-only.
+  final double? numericValue;
+  final GainValueFormat format;
+  final bool showPlus;
 }
 
 /// Builds the emotional center of Today — progress first, never empty tiles.
@@ -38,23 +54,31 @@ abstract final class TodayGainsBuilder {
             id: 'money',
             label: AppStrings.gainSavedToday,
             value: MoneyCalculator.formatTry(money),
+            numericValue: money,
+            format: GainValueFormat.money,
           )
         : TodayGainTile(
             id: 'remaining',
             label: AppStrings.gainRemaining,
             value: '${snapshot.remaining}',
+            numericValue: snapshot.remaining.toDouble(),
+            format: GainValueFormat.count,
           );
 
     final delayTimeTile = TodayGainTile(
       id: 'delay_time',
       label: AppStrings.gainDelayedTime,
       value: AppStrings.gainMinutes(delayedMinutes),
+      numericValue: delayedMinutes.toDouble(),
+      format: GainValueFormat.minutes,
     );
 
     final sessionsTile = TodayGainTile(
       id: 'sessions',
       label: AppStrings.gainDelays,
       value: '$sessions',
+      numericValue: sessions.toDouble(),
+      format: GainValueFormat.count,
     );
 
     final fourth = _fourthTile(
@@ -76,7 +100,10 @@ abstract final class TodayGainsBuilder {
       return TodayGainTile(
         id: 'first_delay',
         label: AppStrings.gainFirstCigaretteDelay,
-        value: AppStrings.gainMinutes(firstDelay),
+        value: AppStrings.gainMinutesPlus(firstDelay),
+        numericValue: firstDelay.toDouble(),
+        format: GainValueFormat.minutes,
+        showPlus: true,
       );
     }
 
@@ -86,11 +113,13 @@ abstract final class TodayGainsBuilder {
         id: 'active_delay',
         label: AppStrings.gainActiveDelay,
         value: mins < 1 ? AppStrings.gainJustStarted : AppStrings.gainMinutes(mins),
+        numericValue: mins < 1 ? null : mins.toDouble(),
+        format: mins < 1 ? GainValueFormat.plain : GainValueFormat.minutes,
       );
     }
 
     if (snapshot.todayCount == 0) {
-      return TodayGainTile(
+      return const TodayGainTile(
         id: 'clean_start',
         label: AppStrings.gainCleanStart,
         value: AppStrings.gainCleanStartValue,
@@ -101,6 +130,8 @@ abstract final class TodayGainsBuilder {
       id: 'remaining',
       label: AppStrings.gainRemaining,
       value: '${snapshot.remaining}',
+      numericValue: snapshot.remaining.toDouble(),
+      format: GainValueFormat.count,
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:nefes/core/l10n/app_strings.dart';
 import 'package:nefes/core/time/time_display.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
+import 'package:nefes/features/smoking/domain/services/today_gains_builder.dart';
 import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart';
 
 /// Compact tile for the “Bugün kazandıkların” dashboard.
@@ -10,21 +11,49 @@ class TodayGainTileVm {
     required this.id,
     required this.label,
     required this.value,
+    this.numericValue,
+    this.format = GainValueFormat.plain,
+    this.showPlus = false,
   });
 
   final String id;
   final String label;
   final String value;
+  final double? numericValue;
+  final GainValueFormat format;
+  final bool showPlus;
 
   @override
   bool operator ==(Object other) =>
       other is TodayGainTileVm &&
       other.id == id &&
       other.label == label &&
-      other.value == value;
+      other.value == value &&
+      other.numericValue == numericValue &&
+      other.format == format &&
+      other.showPlus == showPlus;
 
   @override
-  int get hashCode => Object.hash(id, label, value);
+  int get hashCode =>
+      Object.hash(id, label, value, numericValue, format, showPlus);
+}
+
+/// Subtle in-UI celebration line.
+class SuccessMomentVm {
+  const SuccessMomentVm({
+    required this.id,
+    required this.text,
+  });
+
+  final String id;
+  final String text;
+
+  @override
+  bool operator ==(Object other) =>
+      other is SuccessMomentVm && other.id == id && other.text == text;
+
+  @override
+  int get hashCode => Object.hash(id, text);
 }
 
 /// UI state for the Home screen.
@@ -45,6 +74,7 @@ class HomeUiState {
     required this.todayDelayMinutes,
     required this.todayDelayInsight,
     this.gainTiles = const [],
+    this.successMoment,
     this.pendingTriggerSmokeId,
     this.quickTriggers = TriggerPersonalizer.defaultQuickOrder,
     this.contextualInsight,
@@ -94,6 +124,7 @@ class HomeUiState {
   final int todayDelayMinutes;
   final String? todayDelayInsight;
   final List<TodayGainTileVm> gainTiles;
+  final SuccessMomentVm? successMoment;
   final String? pendingTriggerSmokeId;
   final List<SmokingTrigger> quickTriggers;
   final String? contextualInsight;
@@ -126,6 +157,7 @@ class HomeUiState {
         todayDelayMinutes,
         todayDelayInsight,
         Object.hashAll(gainTiles),
+        successMoment,
         pendingTriggerSmokeId,
         identityHashCode(quickTriggers),
         contextualInsight,
@@ -158,6 +190,7 @@ class HomeUiState {
     int? todayDelayMinutes,
     String? todayDelayInsight,
     List<TodayGainTileVm>? gainTiles,
+    SuccessMomentVm? successMoment,
     String? pendingTriggerSmokeId,
     List<SmokingTrigger>? quickTriggers,
     String? contextualInsight,
@@ -178,6 +211,7 @@ class HomeUiState {
     bool clearContextualInsight = false,
     bool clearDelayIntended = false,
     bool clearMotivation = false,
+    bool clearSuccessMoment = false,
   }) {
     return HomeUiState(
       todayCount: todayCount ?? this.todayCount,
@@ -196,6 +230,9 @@ class HomeUiState {
       todayDelayMinutes: todayDelayMinutes ?? this.todayDelayMinutes,
       todayDelayInsight: todayDelayInsight ?? this.todayDelayInsight,
       gainTiles: gainTiles ?? this.gainTiles,
+      successMoment: clearSuccessMoment
+          ? null
+          : (successMoment ?? this.successMoment),
       pendingTriggerSmokeId: clearPendingTrigger
           ? null
           : (pendingTriggerSmokeId ?? this.pendingTriggerSmokeId),
@@ -243,6 +280,7 @@ class HomeUiState {
     String? motivationBody,
     String? coachMoneyCaption,
     List<TodayGainTileVm>? gainTiles,
+    SuccessMomentVm? successMoment,
   }) {
     final clock = now ?? DateTime.now();
     final last = snapshot.lastSmokeAtUtc;
@@ -275,6 +313,7 @@ class HomeUiState {
       todayDelayMinutes: snapshot.todayDelayTotal.inMinutes,
       todayDelayInsight: _insightFor(snapshot),
       gainTiles: gainTiles ?? const [],
+      successMoment: successMoment,
       pendingTriggerSmokeId: pendingTriggerSmokeId,
       quickTriggers: quickTriggers ?? TriggerPersonalizer.defaultQuickOrder,
       contextualInsight: contextualInsight,

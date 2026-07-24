@@ -30,7 +30,7 @@ class CatalogMessageProvider implements MotivationMessageProvider {
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Bugün kendine birkaç dakika daha kazandırdın.',
+          body: 'Birkaç dakika daha kazandın.',
         );
       case 'five_minutes':
         return MotivationMessage(
@@ -78,7 +78,7 @@ class CatalogMessageProvider implements MotivationMessageProvider {
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Bugünkü ortalamanın üzerindesin.',
+          body: 'Bugün ortalamanın üzerinde ilerliyorsun.',
         );
       case 'thirty_minutes':
         return MotivationMessage(
@@ -97,7 +97,7 @@ class CatalogMessageProvider implements MotivationMessageProvider {
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Yeni kişisel rekor.',
+          body: 'Yeni kişisel rekor.\nBunu hak ettin.',
         );
       case 'sixty_minutes':
         return MotivationMessage(

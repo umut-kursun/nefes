@@ -174,7 +174,9 @@ void main() {
     final state = container.read(homeViewModelProvider);
     expect(state.hasActiveDelay, isFalse);
     expect(state.todayCount, 1);
-    expect(state.infoMessage, contains('direndin'));
+    expect(state.infoMessage, AppStrings.smokedSaved);
+    expect(state.successMoment, isNotNull);
+    expect(state.successMoment!.text.toLowerCase(), isNot(contains('başarısız')));
     expect(state.pendingTriggerSmokeId, isNotNull);
   });
 }

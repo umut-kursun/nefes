@@ -9,11 +9,13 @@ import 'package:nefes/features/habit/domain/entities/daily_target_period.dart';
 import 'package:nefes/features/habit/domain/entities/habit_type.dart';
 import 'package:nefes/features/habit/domain/services/behavior_pattern_service.dart';
 import 'package:nefes/features/motivation/domain/services/delay_session_manager.dart';
+import 'package:nefes/features/motivation/domain/services/money_calculator.dart';
 import 'package:nefes/features/motivation/domain/services/personal_stats_provider.dart';
 import 'package:nefes/features/smoking/domain/entities/home_snapshot.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_log_event.dart';
 import 'package:nefes/features/smoking/domain/entities/smoking_trigger.dart';
 import 'package:nefes/features/smoking/domain/services/home_snapshot_builder.dart';
+import 'package:nefes/features/smoking/domain/services/success_moment_builder.dart';
 import 'package:nefes/features/smoking/domain/services/today_gains_builder.dart';
 import 'package:nefes/features/smoking/domain/services/trigger_personalizer.dart';
 import 'package:nefes/features/smoking/viewmodel/home/home_ui_state.dart';
@@ -52,7 +54,28 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   List<SmokingLogEvent> _cachedEvents = const [];
   double? _pricePerCigarette;
   List<TodayGainTileVm> _gainTiles = const [];
+  final Set<String> _shownMomentKeys = {};
+  final Set<int> _shownMoneyBuckets = {};
   static const _stats = EventPersonalStatsProvider();
+
+  String _momentDayKey(String id) {
+    final n = DateTime.now();
+    return '${n.year}-${n.month}-${n.day}:$id';
+  }
+
+  void _offerSuccessMoment(SuccessMoment? moment) {
+    if (moment == null) return;
+    final key = _momentDayKey(moment.id);
+    if (_shownMomentKeys.contains(key)) return;
+    _shownMomentKeys.add(key);
+    if (moment.id.startsWith('money_')) {
+      final bucket = int.tryParse(moment.id.split('_').last);
+      if (bucket != null) _shownMoneyBuckets.add(bucket);
+    }
+    state = state.copyWith(
+      successMoment: SuccessMomentVm(id: moment.id, text: moment.text),
+    );
+  }
 
   void _publishFromSnapshot(HomeSnapshot snapshot) {
     final keepMotivation = snapshot.activeDelay != null;
@@ -62,6 +85,7 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       quickTriggers: _quickTriggers,
       contextualInsight: _contextualInsight,
       gainTiles: _gainTiles,
+      successMoment: state.successMoment,
       motivationMessageId:
           keepMotivation ? state.motivationMessageId : null,
       motivationBody: keepMotivation ? state.motivationBody : null,
@@ -108,7 +132,14 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       nowLocal: nowLocal,
     )
         .map(
-          (t) => TodayGainTileVm(id: t.id, label: t.label, value: t.value),
+          (t) => TodayGainTileVm(
+            id: t.id,
+            label: t.label,
+            value: t.value,
+            numericValue: t.numericValue,
+            format: t.format,
+            showPlus: t.showPlus,
+          ),
         )
         .toList(growable: false);
   }
@@ -198,6 +229,28 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       todayDelayCount: snapshot.todayDelayCount,
     );
     _applyMotivation(now.toUtc());
+
+    _offerSuccessMoment(
+      SuccessMomentBuilder.laterFirstCigarette(
+        snapshot: snapshot,
+        allEvents: events,
+        nowLocal: now,
+      ),
+    );
+
+    final money = MoneyCalculator.moneyNotSpent(
+      cigarettesDelayed: _stats.urgePassedCountOnDay(
+        allEvents: events,
+        localDay: DateTime(now.year, now.month, now.day),
+      ),
+      pricePerCigarette: _pricePerCigarette,
+    );
+    _offerSuccessMoment(
+      SuccessMomentBuilder.moneyMilestone(
+        amountTry: money,
+        alreadyShown: _shownMoneyBuckets,
+      ),
+    );
   }
 
   Future<void> _onTick() async {
@@ -311,22 +364,36 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       if (!mounted) return;
 
       final closed = result.closedDelayDuration;
-      String? delayMsg;
+      SuccessMomentVm? momentVm;
       if (closed != null) {
         final celebration = _coach.celebrateSmoke(
           resisted: closed,
           allEvents: _cachedEvents,
           nowLocal: DateTime.now(),
         );
-        delayMsg = celebration.message;
+        final allTime = _stats.longestCompletedDelay(
+          allEvents: _cachedEvents,
+        );
+        final moment = SuccessMomentBuilder.fromClosedDelay(
+          celebration: celebration,
+          allTimeBest: allTime,
+        );
+        if (moment != null) {
+          final key = _momentDayKey(moment.id);
+          if (!_shownMomentKeys.contains(key)) {
+            _shownMomentKeys.add(key);
+            momentVm = SuccessMomentVm(id: moment.id, text: moment.text);
+          }
+        }
         _coach.clear();
       }
 
       state = state.copyWith(
         isSaving: false,
-        infoMessage: delayMsg ?? AppStrings.smokedSaved,
+        infoMessage: AppStrings.smokedSaved,
         pendingTriggerSmokeId: result.smokeId,
         clearMotivation: true,
+        successMoment: momentVm,
       );
       _scheduleContextDismiss();
     } on Failure {
@@ -407,6 +474,8 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
 
   Future<void> startDelayWithDuration(Duration? intended) async {
     if (state.isBusy) return;
+    final firstToday =
+        !state.hasActiveDelay && state.todayDelayCount == 0;
     state = state.copyWith(isDelayBusy: true, clearError: true, clearInfo: true);
     try {
       await _ref.read(smokingHabitActionsProvider).beginDelay(
@@ -416,6 +485,9 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
       await _ref.read(hapticPortProvider).lightImpact();
       if (!mounted) return;
       state = state.copyWith(isDelayBusy: false);
+      _offerSuccessMoment(
+        SuccessMomentBuilder.firstDelayOfDay(isFirstToday: firstToday),
+      );
     } on Failure {
       if (!mounted) return;
       state = state.copyWith(
@@ -435,13 +507,26 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
 
   Future<void> onUrgePassed() async {
     if (state.isBusy || !state.hasActiveDelay) return;
+    final minutes = state.todayDelayMinutes;
+    // Prefer active delay elapsed if labeled — fall back to session minutes.
+    final elapsedLabel = state.delayElapsedLabel;
+    final activeMinutes = _parseRoughMinutes(elapsedLabel) ?? minutes;
     state = state.copyWith(isDelayBusy: true, clearError: true, clearInfo: true);
     try {
       await _ref.read(smokingHabitActionsProvider).finishDelayUrgePassed();
       if (!mounted) return;
+      final moment = SuccessMomentBuilder.urgePassed(minutes: activeMinutes);
+      final key = _momentDayKey(moment.id);
+      SuccessMomentVm? momentVm;
+      if (!_shownMomentKeys.contains(key)) {
+        _shownMomentKeys.add(key);
+        momentVm = SuccessMomentVm(id: moment.id, text: moment.text);
+      }
       state = state.copyWith(
         isDelayBusy: false,
         infoMessage: AppStrings.delayCompleteDone,
+        successMoment: momentVm,
+        clearMotivation: true,
       );
     } catch (_) {
       if (!mounted) return;
@@ -450,6 +535,20 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
         errorMessage: AppStrings.delayStartFailed,
       );
     }
+  }
+
+  static int? _parseRoughMinutes(String label) {
+    // Elapsed clock is typically HH:MM:SS or MM:SS — use total minutes approx.
+    final parts = label.split(':');
+    if (parts.length == 3) {
+      final h = int.tryParse(parts[0]) ?? 0;
+      final m = int.tryParse(parts[1]) ?? 0;
+      return h * 60 + m;
+    }
+    if (parts.length == 2) {
+      return int.tryParse(parts[0]);
+    }
+    return null;
   }
 
   Future<void> onCancelDelay() async {

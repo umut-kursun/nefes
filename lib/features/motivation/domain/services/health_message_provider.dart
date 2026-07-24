@@ -36,7 +36,7 @@ class HealthMessageProvider implements MotivationMessageProvider {
         return MotivationMessage(
           id: messageId,
           milestoneAt: milestone.at,
-          body: 'Her dakika önemlidir.',
+          body: 'Her erteleme önemli.',
         );
       case 'health_pace':
         return MotivationMessage(
