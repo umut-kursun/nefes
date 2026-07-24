@@ -114,8 +114,8 @@ void main() {
     // Allow snapshot stream to mark undo available; snackbar action is best-effort.
     await tester.pump(const Duration(milliseconds: 400));
     // Undo stays available via overflow menu even if snackbar action raced.
-    await tester.ensureVisible(find.byTooltip(AppStrings.smokedEarlier));
-    await tester.tap(find.byTooltip(AppStrings.smokedEarlier));
+    await tester.ensureVisible(find.byTooltip(AppStrings.more));
+    await tester.tap(find.byTooltip(AppStrings.more));
     await tester.pumpAndSettle();
     expect(find.text(AppStrings.undoLast), findsWidgets);
   });

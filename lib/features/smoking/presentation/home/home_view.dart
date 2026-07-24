@@ -436,6 +436,6 @@ class _TodayTimeline extends StatelessWidget {
         ),
       );
     }
-    return NefesTimeline(items: items, axis: Axis.horizontal);
+    return NefesTimeline(items: items, axis: Axis.vertical);
   }
 }

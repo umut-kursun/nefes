@@ -65,8 +65,24 @@ class TodayBrandHeader extends StatelessWidget {
             ],
           ),
         ),
-        PopupMenuButton<_UtilityAction>(
+        _HeaderIconButton(
+          icon: Icons.notifications_none_rounded,
+          tooltip: AppStrings.notifications,
+          onTap: () {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(content: Text(AppStrings.noNotifications)),
+              );
+          },
+        ),
+        _HeaderIconButton(
+          icon: Icons.schedule,
           tooltip: AppStrings.smokedEarlier,
+          onTap: isBusy ? null : onEarlier,
+        ),
+        PopupMenuButton<_UtilityAction>(
+          tooltip: AppStrings.more,
           padding: EdgeInsets.zero,
           onSelected: (action) {
             if (isBusy) return;
@@ -98,6 +114,38 @@ class TodayBrandHeader extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+/// Circular, low-contrast header action used for the bell / clock cluster.
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.onTap,
+    this.tooltip,
+  });
+
+  final IconData icon;
+  final VoidCallback? onTap;
+  final String? tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    final button = Material(
+      color: Colors.transparent,
+      shape: const CircleBorder(),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          width: TodayScale.overflowButton,
+          height: TodayScale.overflowButton,
+          child: Icon(icon, size: 22, color: AppColors.textMuted),
+        ),
+      ),
+    );
+    if (tooltip == null) return button;
+    return Tooltip(message: tooltip!, child: button);
   }
 }
 
@@ -274,9 +322,9 @@ class _TimerContent extends StatelessWidget {
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontFeatures: const [FontFeature.tabularFigures()],
                     fontWeight: FontWeight.w700,
-                    letterSpacing: -1.8,
+                    letterSpacing: -2.0,
                     height: 1.0,
-                    color: AppColors.textPrimary,
+                    color: AppColors.forest,
                     fontSize: TodayScale.timerHhMm,
                   ),
                 ),
@@ -551,8 +599,8 @@ class DailyStatusSection extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surfaceElevated,
-        borderRadius: AppRadius.lgAll,
-        border: Border.all(color: AppColors.borderSubtle),
+        borderRadius: AppRadius.cardAll,
+        boxShadow: kCardShadow,
       ),
       child: body,
     );
@@ -778,10 +826,10 @@ class _PrimaryActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.forest,
-      borderRadius: AppRadius.lgAll,
+      borderRadius: AppRadius.cardAll,
       child: InkWell(
         onTap: isBusy ? null : onPressed,
-        borderRadius: AppRadius.lgAll,
+        borderRadius: AppRadius.cardAll,
         overlayColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.pressed)) {
             return AppColors.textOnForest.withValues(alpha: 0.12);
@@ -872,10 +920,10 @@ class _SecondaryActionCard extends StatelessWidget {
 
     return Material(
       color: AppColors.actionBeige,
-      borderRadius: AppRadius.lgAll,
+      borderRadius: AppRadius.cardAll,
       child: InkWell(
         onTap: isBusy ? null : onPressed,
-        borderRadius: AppRadius.lgAll,
+        borderRadius: AppRadius.cardAll,
         overlayColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.pressed)) {
             return AppColors.forest.withValues(alpha: 0.08);
@@ -968,9 +1016,9 @@ class TodayGainDashboard extends StatelessWidget {
         Row(
           children: [
             const Icon(
-              Icons.auto_awesome,
-              size: 14,
-              color: Color(0xFFC47A3A),
+              Icons.trending_up_rounded,
+              size: 16,
+              color: AppColors.forest,
             ),
             const SizedBox(width: AppSpacing.xs),
             Text(
@@ -994,17 +1042,8 @@ class TodayGainDashboard extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: AppColors.surfaceElevated,
-            borderRadius: AppRadius.xlAll,
-            border: Border.all(
-              color: AppColors.borderSubtle.withValues(alpha: 0.85),
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.shadowSoft,
-                blurRadius: 14,
-                offset: Offset(0, 4),
-              ),
-            ],
+            borderRadius: AppRadius.cardAll,
+            boxShadow: kCardShadow,
           ),
           child: Column(
             children: [
@@ -1069,11 +1108,11 @@ class _GainPrimaryRow extends StatelessWidget {
           ),
           child: Icon(
             _icon,
-            size: 22,
+            size: 28,
             color: AppColors.badgeMoneyFg,
           ),
         ),
-        const SizedBox(width: AppSpacing.md),
+        const SizedBox(width: AppSpacing.lg),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1081,6 +1120,7 @@ class _GainPrimaryRow extends StatelessWidget {
               _AnimatedGainValue(
                 tile: tile,
                 fontSize: TodayScale.gainPrimaryValue,
+                emphasize: true,
               ),
               const SizedBox(height: 2),
               Text(
@@ -1183,10 +1223,12 @@ class _AnimatedGainValue extends StatefulWidget {
   const _AnimatedGainValue({
     required this.tile,
     this.fontSize = TodayScale.gainSecondaryValue,
+    this.emphasize = false,
   });
 
   final TodayGainTileVm tile;
   final double fontSize;
+  final bool emphasize;
 
   @override
   State<_AnimatedGainValue> createState() => _AnimatedGainValueState();
@@ -1234,12 +1276,12 @@ class _AnimatedGainValueState extends State<_AnimatedGainValue> {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.titleMedium?.copyWith(
-      color: AppColors.forestMid,
+      color: widget.emphasize ? AppColors.forest : AppColors.textPrimary,
       fontWeight: FontWeight.w700,
       fontFeatures: const [FontFeature.tabularFigures()],
       fontSize: widget.fontSize,
       height: 1.05,
-      letterSpacing: -0.3,
+      letterSpacing: widget.emphasize ? -0.6 : -0.3,
     );
 
     if (widget.tile.numericValue == null) {

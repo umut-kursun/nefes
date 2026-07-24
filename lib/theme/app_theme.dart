@@ -127,7 +127,7 @@ abstract final class AppTheme {
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.md,
           ),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.mdAll),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.lgAll),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(

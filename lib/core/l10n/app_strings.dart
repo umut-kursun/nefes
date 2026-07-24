@@ -205,6 +205,9 @@ abstract final class AppStrings {
   static const whyOptional = 'Neden?';
   static const moreTriggers = 'Diğer';
   static const smokedEarlier = 'Daha önce içtim';
+  static const more = 'Daha fazla';
+  static const notifications = 'Bildirimler';
+  static const noNotifications = 'Şimdilik bildirim yok.';
   static const pickEarlierTitle = 'Ne zaman içtin?';
   static const minutesAgo5 = '5 dk önce';
   static const minutesAgo10 = '10 dk önce';

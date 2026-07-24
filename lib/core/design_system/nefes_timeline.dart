@@ -145,8 +145,9 @@ class _TimelineRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Smoke entries read as a soft-red marker; delays read as calm green.
     final markerColor =
-        item.isDelay ? AppColors.textMuted : AppColors.forestSoft;
+        item.isDelay ? AppColors.success : AppColors.badgeHeartFg;
 
     return IntrinsicHeight(
       child: Row(
@@ -155,7 +156,7 @@ class _TimelineRow extends StatelessWidget {
           SizedBox(
             width: TodayScale.timelineTimeCol,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: 10),
               child: Text(
                 item.timeLabel,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -173,12 +174,16 @@ class _TimelineRow extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  width: 10,
-                  height: 10,
-                  margin: const EdgeInsets.only(top: 10),
+                  width: 12,
+                  height: 12,
+                  margin: const EdgeInsets.only(top: 11),
                   decoration: BoxDecoration(
                     color: markerColor,
                     shape: BoxShape.circle,
+                    border: Border.all(
+                      color: markerColor.withValues(alpha: 0.18),
+                      width: 3,
+                    ),
                   ),
                 ),
                 if (!isLast)
@@ -201,41 +206,57 @@ class _TimelineRow extends StatelessWidget {
                 borderRadius: AppRadius.mdAll,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    top: isFirst ? 4 : 8,
-                    bottom: isLast ? 4 : 12,
+                    top: isFirst ? 6 : 10,
+                    bottom: isLast ? 6 : 14,
                     right: AppSpacing.xs,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        item.title,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: TodayScale.timelineTitleSize + 2,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                    color: AppColors.textPrimary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: TodayScale.timelineTitleSize + 2,
+                                  ),
                             ),
+                            if (item.subtitle != null) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                item.subtitle!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(color: AppColors.textMuted),
+                              ),
+                            ],
+                            if (item.intervalBefore != null) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                item.intervalBefore!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelSmall
+                                    ?.copyWith(color: AppColors.textTertiary),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
-                      if (item.subtitle != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          item.subtitle!,
-                          style:
-                              Theme.of(context).textTheme.labelMedium?.copyWith(
-                                    color: AppColors.textMuted,
-                                  ),
-                        ),
-                      ],
-                      if (item.intervalBefore != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          item.intervalBefore!,
-                          style:
-                              Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: AppColors.textTertiary,
-                                  ),
-                        ),
-                      ],
+                      const SizedBox(width: AppSpacing.xs),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 20,
+                        color: AppColors.textMuted.withValues(alpha: 0.6),
+                      ),
                     ],
                   ),
                 ),
