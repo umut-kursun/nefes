@@ -134,11 +134,11 @@ abstract final class TodayScale {
   static const double dateSize = 13;
   static const double overflowButton = 36;
 
-  // Hero (~30% of viewport; timer stays dominant)
-  static const double heroViewportFraction = 0.30;
-  static const double heroMinHeight = 200;
-  static const double heroMaxHeight = 280;
-  static const double heroEmptyHeight = 160;
+  // Hero (~24% of viewport, matching the approved reference proportions)
+  static const double heroViewportFraction = 0.24;
+  static const double heroMinHeight = 180;
+  static const double heroMaxHeight = 230;
+  static const double heroEmptyHeight = 150;
   static const double heroLabelSize = 11;
   static const double timerHhMm = 48;
   static const double timerSs = 26;
