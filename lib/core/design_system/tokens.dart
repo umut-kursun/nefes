@@ -170,11 +170,11 @@ abstract final class TodayScale {
   static const double actionSubtitleSize = 11;
   static const double actionMinBody = 88;
 
-  // Gains — one grouped card (primary + secondary row)
-  static const double gainPrimaryValue = 32;
-  static const double gainSecondaryValue = 16;
-  static const double gainLabelSize = 12;
-  static const double gainPrimaryIcon = 60;
+  // Gains — one grouped card (primary + secondary row), ~20% shorter
+  static const double gainPrimaryValue = 26;
+  static const double gainSecondaryValue = 15;
+  static const double gainLabelSize = 11;
+  static const double gainPrimaryIcon = 46;
 
   // Metrics (legacy)
   static const double metricValueSize = 18;

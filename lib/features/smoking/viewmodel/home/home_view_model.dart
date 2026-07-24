@@ -53,6 +53,7 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
   DateTime? _lastInsightRefresh;
   List<SmokingLogEvent> _cachedEvents = const [];
   double? _pricePerCigarette;
+  int _expectedPerDay = 0;
   List<TodayGainTileVm> _gainTiles = const [];
   final Set<String> _shownMomentKeys = {};
   final Set<int> _shownMoneyBuckets = {};
@@ -111,14 +112,8 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
 
   List<TodayGainTileVm> _buildGainTiles({
     required HomeSnapshot snapshot,
-    required List<SmokingLogEvent> events,
     required DateTime nowLocal,
   }) {
-    final day = DateTime(nowLocal.year, nowLocal.month, nowLocal.day);
-    final urgePassed = _stats.urgePassedCountOnDay(
-      allEvents: events,
-      localDay: day,
-    );
     final active = snapshot.activeDelay;
     final activeElapsed = active == null
         ? null
@@ -127,7 +122,7 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     return TodayGainsBuilder.build(
       snapshot: snapshot,
       pricePerCigarette: _pricePerCigarette,
-      urgePassedCount: urgePassed,
+      expectedPerDay: _expectedPerDay,
       activeDelayElapsed: activeElapsed,
       nowLocal: nowLocal,
     )
@@ -202,9 +197,9 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     final settings = await _ref.read(settingsRepositoryProvider).getSettings();
     if (!mounted) return;
     _pricePerCigarette = settings.pricePerCigarette;
+    _expectedPerDay = settings.averagePerDay ?? settings.dailyTarget;
     _gainTiles = _buildGainTiles(
       snapshot: snapshot,
-      events: events,
       nowLocal: now,
     );
 
@@ -309,7 +304,6 @@ class HomeViewModel extends StateNotifier<HomeUiState> {
     if (nextHasDelay || state.gainTiles.isEmpty) {
       nextGains = _buildGainTiles(
         snapshot: snap,
-        events: _cachedEvents,
         nowLocal: now,
       );
       if (_listEqualsGain(nextGains, state.gainTiles)) {

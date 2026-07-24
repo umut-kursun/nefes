@@ -29,7 +29,8 @@ void main() {
           todayDelayTotal: const Duration(minutes: 13),
         ),
         pricePerCigarette: 7,
-        urgePassedCount: 3,
+        // Expected 4/day, smoked 1 today → 3 cigarettes kept → 3 * 7 = 21.
+        expectedPerDay: 4,
         activeDelayElapsed: null,
         nowLocal: DateTime(2026, 7, 24, 12),
       );

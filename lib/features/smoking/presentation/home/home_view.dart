@@ -415,6 +415,8 @@ class _TodayTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Compute intervals in chronological order (oldest → newest) so each
+    // "önceki kayıttan beri" label stays correct…
     final chronological = events.reversed.toList();
     final items = <NefesTimelineItem>[];
     for (var i = 0; i < chronological.length; i++) {
@@ -436,6 +438,10 @@ class _TodayTimeline extends StatelessWidget {
         ),
       );
     }
-    return NefesTimeline(items: items, axis: Axis.vertical);
+    // …then present newest-first (last → first) per the requested order.
+    return NefesTimeline(
+      items: items.reversed.toList(),
+      axis: Axis.vertical,
+    );
   }
 }

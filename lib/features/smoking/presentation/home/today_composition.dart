@@ -1036,7 +1036,7 @@ class TodayGainDashboard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.md,
-            AppSpacing.md,
+            AppSpacing.sm,
             AppSpacing.md,
             AppSpacing.sm,
           ),
@@ -1048,20 +1048,20 @@ class TodayGainDashboard extends StatelessWidget {
           child: Column(
             children: [
               _GainPrimaryRow(tile: primary),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
               Divider(
                 height: 1,
                 thickness: 1,
                 color: AppColors.divider.withValues(alpha: 0.85),
               ),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: AppSpacing.xs),
               Row(
                 children: [
                   for (var i = 0; i < secondary.length; i++) ...[
                     if (i > 0)
                       Container(
                         width: 1,
-                        height: 44,
+                        height: 36,
                         margin: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.xs,
                         ),
@@ -1108,11 +1108,11 @@ class _GainPrimaryRow extends StatelessWidget {
           ),
           child: Icon(
             _icon,
-            size: 28,
+            size: 22,
             color: AppColors.badgeMoneyFg,
           ),
         ),
-        const SizedBox(width: AppSpacing.lg),
+        const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1183,19 +1183,19 @@ class _GainSecondaryMetric extends StatelessWidget {
     final (badgeBg, badgeFg) = _badgeColors;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Column(
         children: [
           Container(
-            width: 28,
-            height: 28,
+            width: 24,
+            height: 24,
             decoration: BoxDecoration(
               color: badgeBg,
               shape: BoxShape.circle,
             ),
-            child: Icon(_icon, size: 14, color: badgeFg),
+            child: Icon(_icon, size: 13, color: badgeFg),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: 3),
           _AnimatedGainValue(
             tile: tile,
             fontSize: TodayScale.gainSecondaryValue,

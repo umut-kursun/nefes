@@ -36,7 +36,7 @@ abstract final class TodayGainsBuilder {
   static List<TodayGainTile> build({
     required HomeSnapshot snapshot,
     required double? pricePerCigarette,
-    required int urgePassedCount,
+    required int expectedPerDay,
     required Duration? activeDelayElapsed,
     DateTime? nowLocal,
   }) {
@@ -44,8 +44,10 @@ abstract final class TodayGainsBuilder {
     final delayedMinutes = snapshot.todayDelayTotal.inMinutes;
     final sessions = snapshot.todayDelayCount;
 
-    final money = MoneyCalculator.moneyNotSpent(
-      cigarettesDelayed: urgePassedCount,
+    // "Bugün cebinde kaldı" — kept money vs the expected daily cigarette count.
+    final money = MoneyCalculator.moneySavedVsExpected(
+      expectedPerDay: expectedPerDay,
+      smokedToday: snapshot.todayCount,
       pricePerCigarette: pricePerCigarette,
     );
 
