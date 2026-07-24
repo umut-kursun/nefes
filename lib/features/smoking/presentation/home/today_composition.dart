@@ -224,9 +224,9 @@ class HeroElapsedCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.lg,
-                AppSpacing.md,
+                AppSpacing.sm,
                 AppSpacing.lg,
-                AppSpacing.md,
+                AppSpacing.sm,
               ),
               child: hasLastSmoke
                   ? _TimerContent(
@@ -264,7 +264,7 @@ class _EmptyTimerContent extends StatelessWidget {
         const SizedBox(height: AppSpacing.xs),
         Text(
           AppStrings.noCigaretteYet,
-          maxLines: 3,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textSecondary,
@@ -307,7 +307,7 @@ class _TimerContent extends StatelessWidget {
             fontSize: TodayScale.heroLabelSize,
           ),
         ),
-        const SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: AppSpacing.xs),
         SizedBox(
           height: TodayScale.timerRowHeight,
           width: double.infinity,
@@ -347,7 +347,7 @@ class _TimerContent extends StatelessWidget {
           ),
         ),
         if (supportLine != null) ...[
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
           Row(
             children: [
               Icon(
@@ -359,7 +359,7 @@ class _TimerContent extends StatelessWidget {
               Expanded(
                 child: Text(
                   supportLine!,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: AppColors.textSecondary,
@@ -397,7 +397,7 @@ class _HeroAchievementChip extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
+            vertical: AppSpacing.xs,
           ),
           child: Row(
             children: [
@@ -410,7 +410,7 @@ class _HeroAchievementChip extends StatelessWidget {
               Expanded(
                 child: Text(
                   moment.text,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                     color: AppColors.achievementChipFg,
