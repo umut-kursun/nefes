@@ -68,11 +68,17 @@ export class ReceiptEngine {
 
       finalizeDebugTrace(ctx.trace);
 
+      const ocrRawText =
+        (typeof l1.output?.rawText === "string" && l1.output.rawText.trim()) ||
+        l8.output.provenance.rawTexts.filter(Boolean).join("\n") ||
+        "";
+
       return {
         success: true,
         expense: l9.output,
         purchase: l8.output,
         validation: l7.output,
+        ocrRawText,
         debug: ctx.trace,
       };
     } catch (cause) {

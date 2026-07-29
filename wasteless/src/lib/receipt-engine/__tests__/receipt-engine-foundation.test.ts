@@ -82,6 +82,7 @@ describe("Receipt Engine v2 foundation", () => {
     expect(result.expense.id).toBe("stub-exp-v2");
     expect(result.purchase.products).toEqual([]);
     expect(result.validation.score).toBeGreaterThanOrEqual(0);
+    expect(typeof result.ocrRawText).toBe("string");
   });
 
   it("records full debug snapshots when debug=true", async () => {

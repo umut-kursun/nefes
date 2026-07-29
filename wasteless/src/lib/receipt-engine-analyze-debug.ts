@@ -109,11 +109,17 @@ export async function analyzeReceiptEngineWithDebug(
       ocrDurationMs: trace.timings.ocrMs,
     });
 
+    const ocrRawText =
+      debugExport.ocr?.rawText?.trim() ||
+      purchase.provenance.rawTexts.filter(Boolean).join("\n") ||
+      "";
+
     return {
       purchase,
       validation,
       imageDataUrl: displayDataUrl,
       debugExport,
+      ocrRawText,
     };
   } catch (cause) {
     return {

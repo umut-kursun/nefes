@@ -13,6 +13,8 @@ export type ReceiptEngineAnalyzeSuccess = {
   purchase: PurchaseDraft;
   validation: ValidationReportGolden;
   imageDataUrl: string;
+  /** Verbatim OCR text for review / detail UI. */
+  ocrRawText: string;
 };
 
 export type ReceiptEngineAnalyzeFailure = {
@@ -107,5 +109,6 @@ export async function analyzeReceiptEngineFormData(
     purchase: result.validation.validatedPurchase,
     validation: stripValidatedPurchase(result.validation),
     imageDataUrl: displayDataUrl,
+    ocrRawText: result.ocrRawText,
   };
 }

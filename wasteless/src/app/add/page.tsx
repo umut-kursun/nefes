@@ -20,7 +20,7 @@ import {
   toAliasEntries,
 } from "@/lib/product-knowledge";
 import { createId } from "@/lib/utils";
-import { analysisToExpenseDraft, createManualExpense } from "@/lib/expense-factory";
+import { analysisToExpenseDraft, createManualExpense, purchaseDraftToExpenseDraft } from "@/lib/expense-factory";
 import {
   applyCorrectionsToExpense,
   buildCorrectionRecords,
@@ -149,7 +149,51 @@ export default function AddPage() {
           ? (json.debugExport as ReceiptDebugExport)
           : null
       );
-      setMode("engine-result");
+
+      const ocrRawText =
+        typeof json.ocrRawText === "string"
+          ? json.ocrRawText
+          : (json.purchase as PurchaseDraft)?.provenance?.rawTexts
+              ?.filter(Boolean)
+              .join("\n") ?? "";
+
+      const next = purchaseDraftToExpenseDraft(json.purchase as PurchaseDraft, {
+        imageDataUrl:
+          typeof json.imageDataUrl === "string"
+            ? json.imageDataUrl
+            : originalDataUrl,
+        ocrRawText,
+        categories,
+      });
+
+      const rawBaseline = JSON.parse(JSON.stringify(next)) as Expense;
+      setOcrBaseline(rawBaseline);
+      setCorrectionsApplied(0);
+
+      const consistency = checkReceiptConsistency(
+        next.items,
+        next.totalAmount,
+        next.charges,
+        next.discounts
+      );
+      const issues = findLineItemIssues(
+        next.items,
+        next.totalAmount,
+        next.charges,
+        next.discounts
+      );
+      setOcrSummary({
+        productCount: next.items.filter((i) => i.name.trim()).length,
+        reviewCount: next.items.filter(
+          (i) => (i.confidence ?? 1) < ITEM_CONFIRM_THRESHOLD
+        ).length,
+        totalVerified: !consistency.inconsistent,
+        issues,
+      });
+
+      setDraft(next);
+      // Review form shows OCR summary + editable fields (PWA production path).
+      setMode("review");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
@@ -474,6 +518,7 @@ export default function AddPage() {
           validation={engineValidation}
           imageDataUrl={engineImageUrl ?? undefined}
           debugExport={engineDebugExport ?? undefined}
+          ocrRawText={draft?.rawText ?? undefined}
           onBack={() => {
             setMode("chooser");
             setEnginePurchase(null);
@@ -494,6 +539,16 @@ export default function AddPage() {
               totalVerified={ocrSummary.totalVerified}
               issues={ocrSummary.issues}
             />
+          )}
+          {mode === "review" && draft.rawText?.trim() && (
+            <details className="rounded-2xl border border-white/70 bg-white/75 p-4 open:pb-3">
+              <summary className="cursor-pointer text-sm font-semibold text-teal-900">
+                OCR metni
+              </summary>
+              <pre className="mt-3 max-h-56 overflow-auto whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground/85">
+                {draft.rawText}
+              </pre>
+            </details>
           )}
           {mode === "review" && (
             <div className="rounded-2xl border border-white/70 bg-white/75 p-3 text-sm text-muted-foreground">

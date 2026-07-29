@@ -44,6 +44,8 @@ export interface EngineSuccessResult {
   expense: Expense;
   purchase: EnrichedPurchase;
   validation: ValidationReport;
+  /** Verbatim Layer-1 OCR text for review UI (always populated when OCR ran). */
+  ocrRawText: string;
   debug: EngineDebugTrace;
 }
 
