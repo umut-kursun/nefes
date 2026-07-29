@@ -3,6 +3,7 @@ import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import type { ReceiptDebugExport } from "@/lib/receipt-engine-debug/exportSchema";
 import { Button } from "@/components/ui/button";
+import { OcrTextPanel } from "@/components/ocr-text-panel";
 
 const ReceiptEngineDebugExportButtons = dynamic(
   () =>
@@ -89,12 +90,7 @@ export function ReceiptEngineResult({
       )}
 
       {ocrText ? (
-        <div className="rounded-2xl border border-white/70 bg-white/75 p-4">
-          <h3 className="font-semibold">OCR metni</h3>
-          <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground/85">
-            {ocrText}
-          </pre>
-        </div>
+        <OcrTextPanel text={ocrText} maxHeightClassName="max-h-64" />
       ) : (
         <div className="rounded-2xl border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm text-amber-950">
           OCR metni alınamadı.
