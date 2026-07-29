@@ -17,6 +17,8 @@ type Props = {
   validation: ValidationReportGolden;
   imageDataUrl?: string;
   debugExport?: ReceiptDebugExport;
+  /** Verbatim OCR text from Layer 1 (preferred over provenance join). */
+  ocrRawText?: string;
   onBack: () => void;
 };
 
@@ -36,9 +38,14 @@ export function ReceiptEngineResult({
   validation,
   imageDataUrl,
   debugExport,
+  ocrRawText,
   onBack,
 }: Props) {
   const issues = [...validation.errors, ...validation.warnings];
+  const ocrText =
+    ocrRawText?.trim() ||
+    purchase.provenance.rawTexts.filter(Boolean).join("\n").trim() ||
+    "";
 
   return (
     <div className="space-y-4">
@@ -78,6 +85,19 @@ export function ReceiptEngineResult({
             alt="Receipt"
             className="mx-auto max-h-64 w-auto rounded-lg"
           />
+        </div>
+      )}
+
+      {ocrText ? (
+        <div className="rounded-2xl border border-white/70 bg-white/75 p-4">
+          <h3 className="font-semibold">OCR metni</h3>
+          <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground/85">
+            {ocrText}
+          </pre>
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm text-amber-950">
+          OCR metni alınamadı.
         </div>
       )}
 

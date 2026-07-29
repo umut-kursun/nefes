@@ -99,6 +99,21 @@ export default function SettingsPage() {
     try {
       const remote = await fetchRemoteVersion();
       if (remote?.version) setRemoteVersion(remote.version);
+
+      if (!remote?.version) {
+        setUpdating(false);
+        setMessage("Sunucu sürümü okunamadı. Bağlantını kontrol et.");
+        return;
+      }
+
+      if (remote.version === APP_VERSION) {
+        // Still force a shell refresh — clears stale SW even when versions match.
+        setMessage(`Zaten ${APP_VERSION}. Önbellek yenileniyor…`);
+        await applyAppUpdate();
+        return;
+      }
+
+      setMessage(`Yeni sürüm ${remote.version} indiriliyor…`);
       await applyAppUpdate();
     } catch {
       setUpdating(false);
@@ -120,10 +135,8 @@ export default function SettingsPage() {
           <div>
             <p className="font-semibold">Sürüm</p>
             <p className="text-sm text-muted-foreground tabular-nums">
-              {APP_VERSION}
-              {remoteVersion && remoteVersion !== APP_VERSION
-                ? ` · sunucu ${remoteVersion}`
-                : ""}
+              Yerel {APP_VERSION}
+              {remoteVersion ? ` · sunucu ${remoteVersion}` : ""}
             </p>
           </div>
           <Button
@@ -136,7 +149,9 @@ export default function SettingsPage() {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Yeni sürüm yayınlandığında Güncelle ile uygulamayı yenile.
+          {remoteVersion && remoteVersion !== APP_VERSION
+            ? `Sunucuda ${remoteVersion} var — Güncelle ile yükle.`
+            : "Yeni sürüm yayınlandığında Güncelle ile uygulamayı yenile."}
         </p>
       </section>
 

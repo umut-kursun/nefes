@@ -15,6 +15,15 @@ import { displayProductName } from "@/lib/product-name-cleaner";
 import { analysisHasCorruptedPrices } from "@/lib/receipt-quality";
 import { createId, todayISO } from "@/lib/utils";
 import { isFuelCategory } from "@/lib/categories";
+import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
+import {
+  ChargeType,
+  DiscountType,
+  PaymentType,
+  normalizeChargeLine,
+  normalizeDiscountLine,
+  normalizePaymentLine,
+} from "@/lib/receipt-model";
 
 function resolveFuelSubcategory(
   fuel: AnalysisResult["fuel"],
@@ -192,5 +201,118 @@ export function createManualExpense(partial?: Partial<Expense>): Expense {
     discounts: partial?.discounts ?? [],
     payments: partial?.payments ?? [],
     unknownLines: partial?.unknownLines ?? [],
+  };
+}
+
+/**
+ * Map Receipt Engine PurchaseDraft → editable Expense draft for Add/Review.
+ * Preserves verbatim OCR on expense.rawText and each item.rawText.
+ */
+export function purchaseDraftToExpenseDraft(
+  purchase: PurchaseDraft,
+  options: {
+    imageDataUrl?: string | null;
+    ocrRawText?: string | null;
+    categories?: UserCategory[];
+  } = {}
+): Expense {
+  const expenseId = createId("exp");
+  const now = new Date().toISOString();
+  const categories = options.categories ?? [];
+  const merchantRaw = purchase.merchant?.trim() || null;
+  const category =
+    categories.find((c) => c.id === "market")?.id ??
+    categories.find((c) => c.id === "other")?.id ??
+    categories[0]?.id ??
+    "other";
+
+  const ocrRawText =
+    (options.ocrRawText?.trim() ||
+      purchase.provenance.rawTexts.filter(Boolean).join("\n").trim() ||
+      "") ||
+    null;
+
+  const items: ReceiptItem[] = purchase.products.map((line) => {
+    const rawLine =
+      line.provenance.ocrTexts.filter(Boolean).join(" ").trim() ||
+      line.provenance.rawTexts.filter(Boolean).join(" ").trim() ||
+      line.name;
+    const cleaned = displayProductName(line.name || rawLine);
+    const unitInfo = computeUnitPrice({
+      totalPrice: line.lineTotal,
+      quantity: line.quantity,
+      unit: line.unit,
+      name: cleaned,
+      existingUnitPrice: line.unitPrice,
+    });
+    return {
+      id: createId("item"),
+      expenseId,
+      name: cleaned,
+      normalizedName: normalizeProductName(cleaned),
+      quantity:
+        line.quantity != null && line.quantity > 0
+          ? line.quantity
+          : (unitInfo.packAmount ?? 1),
+      unit: line.unit ?? unitInfo.packUnit ?? null,
+      unitPrice: unitInfo.unitPrice ?? line.unitPrice ?? null,
+      totalPrice: line.lineTotal ?? null,
+      categoryGuess: category,
+      rawText: rawLine || cleaned || null,
+      confidence: line.confidence ?? null,
+    };
+  });
+
+  const charges = purchase.charges.map((c) =>
+    normalizeChargeLine({
+      label: c.label,
+      amount: c.amount ?? 0,
+      type: ChargeType.Other,
+    })
+  );
+  const discounts = purchase.discounts.map((d) =>
+    normalizeDiscountLine({
+      label: d.label,
+      amount: d.amount ?? 0,
+      type: DiscountType.Other,
+    })
+  );
+  const payments = purchase.payments.map((p) =>
+    normalizePaymentLine({
+      label: p.label,
+      amount: p.amount ?? null,
+      type: PaymentType.Other,
+    })
+  );
+
+  return {
+    id: expenseId,
+    sourceType: "receipt",
+    date: purchase.purchaseDate?.normalized || purchase.purchaseDate?.raw || todayISO(),
+    time: normalizeTime(
+      purchase.purchaseTime?.normalized || purchase.purchaseTime?.raw || null
+    ),
+    merchantName: normalizeMerchantName(merchantRaw),
+    merchantRaw,
+    category,
+    subcategory: null,
+    tagIds: [],
+    totalAmount: purchase.total?.amount ?? 0,
+    currency: purchase.currency?.normalized || purchase.currency?.raw || "TRY",
+    notes: null,
+    createdAt: now,
+    updatedAt: now,
+    rawText: ocrRawText,
+    confidence: purchase.confidence ?? null,
+    imageDataUrl: options.imageDataUrl ?? null,
+    aiResponseJson: null,
+    fuel: null,
+    packCount: items.length || null,
+    quickButtonId: null,
+    items,
+    charges,
+    discounts,
+    payments,
+    unknownLines: [],
   };
 }

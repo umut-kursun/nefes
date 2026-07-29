@@ -18,29 +18,36 @@ export interface Layer9Input {
 
 export type Layer9Output = Expense;
 
-function emptyStubExpense(engineInput: ReceiptEngineInput): Expense {
+function emptyStubExpense(
+  engineInput: ReceiptEngineInput,
+  purchase: EnrichedPurchase
+): Expense {
   const now = new Date().toISOString();
+  const ocrRawText =
+    purchase.provenance.rawTexts.filter(Boolean).join("\n").trim() ||
+    engineInput.sourceHint ||
+    null;
   return {
     id: "stub-exp-v2",
     sourceType: "receipt",
     date: now.slice(0, 10),
     time: null,
-    merchantName: null,
-    merchantRaw: null,
+    merchantName: purchase.merchant,
+    merchantRaw: purchase.merchant,
     category: "other",
     subcategory: null,
     tagIds: [],
-    totalAmount: 0,
+    totalAmount: purchase.total?.amount ?? 0,
     currency: "TRY",
     notes: null,
     createdAt: now,
     updatedAt: now,
-    rawText: engineInput.sourceHint || null,
-    confidence: 0,
+    rawText: ocrRawText,
+    confidence: purchase.confidence ?? 0,
     imageDataUrl: engineInput.imageDataUrl ?? engineInput.imagePrimary.dataUrl,
     aiResponseJson: engineInput.aiResponseJson ?? null,
     fuel: null,
-    packCount: null,
+    packCount: purchase.products.length || null,
     quickButtonId: null,
     items: [],
     charges: [],
@@ -56,7 +63,7 @@ export const layer9Expense: ReceiptEngineLayer<Layer9Input, Layer9Output> = {
   async run(input, ctx): Promise<LayerResult<Layer9Output>> {
     void ctx;
     return {
-      output: emptyStubExpense(input.engineInput),
+      output: emptyStubExpense(input.engineInput, input.purchase),
       issues: [createLayerStubIssue("L9_EXPENSE")],
       metrics: createLayerMetrics(0, CONFIDENCE.none),
     };
