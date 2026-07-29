@@ -1,0 +1,19 @@
+# WasteLess — Cloudflare Workers
+# Static Next.js export in ./out + Worker for /api/analyze
+# Mirrors Nefes pattern: build first, then wrangler deploy.
+
+name = "wasteless"
+main = "worker/index.ts"
+compatibility_date = "2026-07-24"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[assets]
+directory = "./out"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[kv_namespaces]]
+binding = "KB_CATALOG"
+id = "427b35a14d514d0ebe637a2544445cb2"
+preview_id = "834beff526174d52be3bf0b98f03a6a4"

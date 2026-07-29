@@ -1,0 +1,84 @@
+{
+  "merchant": "BIM",
+  "purchaseDate": null,
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "0,744 kg x Domates",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L1",
+        "graphNodeIds": [
+          "raw:L1",
+          "frag:L1:name",
+          "amt:L1",
+          "qty:L1",
+          "uprice:L1",
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L3"
+        ],
+        "layoutLineIndices": [
+          1,
+          2,
+          3
+        ],
+        "rawTexts": [
+          "0,744 kg x 89,90",
+          "Domates",
+          "66,89"
+        ],
+        "ocrTexts": [
+          "0,744 kg x 89,90",
+          "Domates",
+          "66,89"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "quantity": 0.744,
+      "unit": "kg",
+      "unitPrice": 89.9,
+      "lineTotal": 66.89
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 66.89
+  },
+  "confidence": 0.7,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.7,
+    "rawTexts": [
+      "0,744 kg x 89,90",
+      "Domates",
+      "66,89",
+      "TOPLAM 66,89",
+      "BIM"
+    ]
+  }
+}

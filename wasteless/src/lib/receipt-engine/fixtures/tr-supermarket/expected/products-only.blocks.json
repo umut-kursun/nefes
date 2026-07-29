@@ -1,0 +1,218 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L1",
+      "kind": "product",
+      "label": "Peynir 500g",
+      "quantity": "500g",
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 89.9,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L1"
+      ],
+      "rawLines": [
+        "Peynir 500g %1 89,90"
+      ],
+      "groupIds": [
+        "raw:L1",
+        "frag:L1:name",
+        "amt:L1",
+        "vat:L1",
+        "qty:L1"
+      ],
+      "nodeRefs": [
+        "raw:L1",
+        "frag:L1:name",
+        "amt:L1",
+        "vat:L1",
+        "qty:L1"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L1",
+          "frag:L1:name",
+          "amt:L1",
+          "vat:L1",
+          "qty:L1"
+        ],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "Peynir 500g %1 89,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "product:raw:L2",
+      "kind": "product",
+      "label": "Zeytin 250g",
+      "quantity": "250g",
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 34.5,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L2"
+      ],
+      "rawLines": [
+        "Zeytin 250g %1 34,50"
+      ],
+      "groupIds": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2",
+        "qty:L2"
+      ],
+      "nodeRefs": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2",
+        "qty:L2"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2",
+          "qty:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Zeytin 250g %1 34,50"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L3",
+      "frag:L3:name",
+      "amt:L3"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3"
+      ],
+      "layoutLineIndices": [
+        3
+      ],
+      "rawTexts": [
+        "TOPLAM 124,40"
+      ],
+      "classificationRules": [
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label"
+      ],
+      "confidence": 0.85
+    },
+    "confidence": 0.85,
+    "charges": [],
+    "discounts": [],
+    "payments": [],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 124.4,
+        "nodeRefs": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": []
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "frag:L0:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "frag:L0:name"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "CARREFOURSA"
+      ],
+      "classificationRules": [
+        "headerClassifier:merchant"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "merchant": "CARREFOURSA",
+    "date": null,
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "CARREFOURSA"
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "CARREFOURSA",
+        "semanticKind": "header",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.69
+}

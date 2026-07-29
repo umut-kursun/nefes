@@ -1,0 +1,92 @@
+{
+  "isValid": true,
+  "consistent": true,
+  "score": 85,
+  "errors": [],
+  "warnings": [
+    {
+      "id": "DateValidator:DATE_MISSING:purchaseDate",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "DATE_MISSING",
+      "message": "Purchase date is not present.",
+      "location": {
+        "path": "purchaseDate"
+      },
+      "provenance": {
+        "validatorId": "DateValidator",
+        "purchaseConfidence": 0.69
+      }
+    },
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.69
+      }
+    },
+    {
+      "id": "MetadataCompletenessValidator:METADATA_SPARSE:metadata",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "METADATA_SPARSE",
+      "message": "Receipt metadata is sparse (missing: purchaseDate, purchaseTime, receiptNumber, currency).",
+      "location": {
+        "path": "metadata"
+      },
+      "provenance": {
+        "validatorId": "MetadataCompletenessValidator",
+        "purchaseConfidence": 0.69
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "ReceiptNumberValidator:RECEIPT_NUMBER_MISSING:receiptNumber",
+      "severity": "INFO",
+      "category": "business",
+      "code": "RECEIPT_NUMBER_MISSING",
+      "message": "Receipt number is not present.",
+      "location": {
+        "path": "receiptNumber"
+      },
+      "provenance": {
+        "validatorId": "ReceiptNumberValidator",
+        "purchaseConfidence": 0.69
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.15000000000000002,
+  "overallConfidence": 0.5399999999999999,
+  "provenance": {
+    "purchaseConfidence": 0.69,
+    "structuralValidators": [
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 4
+  },
+  "blocking": false
+}

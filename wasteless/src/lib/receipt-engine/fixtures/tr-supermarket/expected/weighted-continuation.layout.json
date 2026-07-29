@@ -1,0 +1,133 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "BIM",
+      "rawText": "BIM",
+      "region": "header",
+      "columns": {
+        "name": "BIM"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "0,744 kg x 89,90",
+      "rawText": "0,744 kg x 89,90",
+      "region": "body",
+      "columns": {
+        "amount": "89,90",
+        "name": "0,744 kg x"
+      },
+      "trailingAmount": 89.9,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": true,
+        "hasQuantityToken": true,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "quantity": "0,744 kg"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 2,
+      "text": "Domates",
+      "rawText": "Domates",
+      "region": "body",
+      "columns": {
+        "name": "Domates"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": true,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 3,
+      "text": "66,89",
+      "rawText": "66,89",
+      "region": "footer",
+      "columns": {
+        "amount": "66,89",
+        "vat": "66,89"
+      },
+      "trailingAmount": 66.89,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": true,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": true
+      },
+      "tokens": {
+        "vat": "66,89"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "TOPLAM 66,89",
+      "rawText": "TOPLAM 66,89",
+      "region": "footer",
+      "columns": {
+        "amount": "66,89",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 66.89,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "regions": {
+    "header": [
+      0
+    ],
+    "body": [
+      1,
+      2
+    ],
+    "footer": [
+      3,
+      4
+    ]
+  },
+  "confidence": 0.77
+}

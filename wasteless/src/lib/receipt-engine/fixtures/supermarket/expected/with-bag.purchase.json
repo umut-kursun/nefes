@@ -1,0 +1,123 @@
+{
+  "merchant": "MIGROS A.S.",
+  "purchaseDate": null,
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Sut 1 L",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L2",
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2",
+          "qty:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Sut 1 L %1 45,90"
+        ],
+        "ocrTexts": [
+          "Sut 1 L %1 45,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "quantity": 1,
+      "unit": "L",
+      "lineTotal": 45.9,
+      "vatRate": 1
+    },
+    {
+      "name": "Ekmek",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L3",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "Ekmek %1 15,00"
+        ],
+        "ocrTexts": [
+          "Ekmek %1 15,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 15,
+      "vatRate": 1
+    }
+  ],
+  "charges": [
+    {
+      "label": "Alisveris Poseti",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ],
+        "semanticKind": "charge",
+        "confidence": 0.85
+      },
+      "amount": 0.5
+    }
+  ],
+  "discounts": [],
+  "payments": [],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 61.4
+  },
+  "confidence": 0.69,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.69,
+    "rawTexts": [
+      "Sut 1 L %1 45,90",
+      "Ekmek %1 15,00",
+      "Alisveris Poseti 0,50",
+      "TOPLAM 61,40",
+      "MIGROS A.S.",
+      "ISTANBUL"
+    ]
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L1",
+      "kind": "product",
+      "label": "Su 1.5 L",
+      "quantity": "1.5 L",
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 8.9,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L1"
+      ],
+      "rawLines": [
+        "Su 1.5 L %1 8,90"
+      ],
+      "groupIds": [
+        "raw:L1",
+        "frag:L1:name",
+        "amt:L1",
+        "vat:L1",
+        "qty:L1"
+      ],
+      "nodeRefs": [
+        "raw:L1",
+        "frag:L1:name",
+        "amt:L1",
+        "vat:L1",
+        "qty:L1"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L1",
+          "frag:L1:name",
+          "amt:L1",
+          "vat:L1",
+          "qty:L1"
+        ],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "Su 1.5 L %1 8,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L2",
+      "frag:L2:name",
+      "amt:L2",
+      "raw:L3",
+      "frag:L3:name",
+      "amt:L3",
+      "raw:L4",
+      "frag:L4:name",
+      "amt:L4"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4"
+      ],
+      "layoutLineIndices": [
+        2,
+        3,
+        4
+      ],
+      "rawTexts": [
+        "Nakit 50,00",
+        "Kredi Kart 8,90",
+        "TOPLAM 8,90"
+      ],
+      "classificationRules": [
+        "paymentClassifier:label",
+        "amountClassifier:payment_label",
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label"
+      ],
+      "confidence": 0.8499999999999999
+    },
+    "confidence": 0.8499999999999999,
+    "charges": [],
+    "discounts": [],
+    "payments": [
+      {
+        "label": "Nakit",
+        "amount": 50,
+        "nodeRefs": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      {
+        "label": "Kredi Kart",
+        "amount": 8.9,
+        "nodeRefs": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      }
+    ],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 8.9,
+        "nodeRefs": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": []
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "frag:L0:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "frag:L0:name"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "A101"
+      ],
+      "classificationRules": [
+        "headerClassifier:merchant"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "merchant": "A101",
+    "date": null,
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "A101"
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "A101",
+        "semanticKind": "header",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.7
+}

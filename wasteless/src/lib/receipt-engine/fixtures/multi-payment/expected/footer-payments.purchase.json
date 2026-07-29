@@ -1,0 +1,107 @@
+{
+  "merchant": "A101",
+  "purchaseDate": null,
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Su 1.5 L",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L1",
+        "graphNodeIds": [
+          "raw:L1",
+          "frag:L1:name",
+          "amt:L1",
+          "vat:L1",
+          "qty:L1"
+        ],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "Su 1.5 L %1 8,90"
+        ],
+        "ocrTexts": [
+          "Su 1.5 L %1 8,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "quantity": 1.5,
+      "unit": "L",
+      "lineTotal": 8.9,
+      "vatRate": 1
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "Nakit",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      "amount": 50
+    },
+    {
+      "label": "Kredi Kart",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      "amount": 8.9
+    }
+  ],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 8.9
+  },
+  "confidence": 0.7,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.7,
+    "rawTexts": [
+      "Su 1.5 L %1 8,90",
+      "Nakit 50,00",
+      "Kredi Kart 8,90",
+      "TOPLAM 8,90",
+      "A101"
+    ]
+  }
+}

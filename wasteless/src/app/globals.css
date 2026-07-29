@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 150 20% 97%;
+    --foreground: 160 20% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 160 20% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 20% 10%;
+    --primary: 173 58% 26%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 14% 92%;
+    --secondary-foreground: 160 18% 18%;
+    --muted: 150 12% 93%;
+    --muted-foreground: 160 8% 40%;
+    --accent: 150 14% 92%;
+    --accent-foreground: 160 18% 18%;
+    --destructive: 0 72% 48%;
+    --border: 150 12% 86%;
+    --input: 150 12% 86%;
+    --ring: 173 58% 26%;
+    --radius: 0.9rem;
+    --surface: #f4f7f5;
+    --ink: #10231f;
+  }
+
+  .dark {
+    --background: 160 18% 8%;
+    --foreground: 150 15% 96%;
+    --card: 160 16% 12%;
+    --card-foreground: 150 15% 96%;
+    --popover: 160 16% 12%;
+    --popover-foreground: 150 15% 96%;
+    --primary: 172 45% 45%;
+    --primary-foreground: 160 20% 8%;
+    --secondary: 160 12% 18%;
+    --secondary-foreground: 150 15% 96%;
+    --muted: 160 12% 18%;
+    --muted-foreground: 150 8% 68%;
+    --accent: 160 12% 18%;
+    --accent-foreground: 150 15% 96%;
+    --destructive: 0 62% 50%;
+    --border: 160 10% 20%;
+    --input: 160 10% 20%;
+    --ring: 172 45% 45%;
+    --surface: #101816;
+    --ink: #edf6f3;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply bg-background text-foreground antialiased;
+    overflow-x: hidden;
+    font-family: var(--font-body), "Segoe UI", sans-serif;
+    /* App-like: no iOS callout / text selection menu on long-press */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+
+  /* Keep typing usable */
+  input,
+  textarea,
+  [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
+
+  img,
+  a {
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+  }
+
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+  }
+
+  /* Wordmark — soft geometric Outfit, slightly condensed. */
+  .font-brand {
+    font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", sans-serif;
+    letter-spacing: -0.035em;
+    font-feature-settings: "ss01" on;
+  }
+
+  /* Hero / summary money — same family, strict tabular figures. */
+  .font-amount {
+    font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.045em;
+    font-feature-settings: "tnum" on, "lnum" on;
+  }
+}
+
+@layer utilities {
+  .animate-fade-up {
+    animation: fade-up 0.45s ease both;
+  }
+  .delay-1 {
+    animation-delay: 0.05s;
+  }
+  .delay-2 {
+    animation-delay: 0.1s;
+  }
+  .delay-3 {
+    animation-delay: 0.15s;
+  }
+  .delay-4 {
+    animation-delay: 0.2s;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Calendar Memory — react-day-picker */
+.wl-calendar.rdp-root {
+  --rdp-accent-color: hsl(173 58% 26%);
+  --rdp-accent-background-color: hsl(173 40% 92%);
+  --rdp-day-height: 2.85rem;
+  --rdp-day-width: 2.85rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.wl-calendar .rdp-months {
+  width: 100%;
+  max-width: 100%;
+}
+
+.wl-calendar .rdp-month {
+  width: 100%;
+}
+
+.wl-calendar .rdp-month_caption {
+  display: none;
+}
+
+.wl-calendar .rdp-weekday {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  opacity: 0.9;
+}
+
+.wl-calendar .rdp-day_button,
+.wl-calendar .wl-day-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.wl-calendar .wl-day-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.wl-calendar .wl-day-badge {
+  min-width: 1rem;
+  height: 0.9rem;
+  padding: 0 0.28rem;
+  border-radius: 999px;
+  background: hsl(173 58% 32%);
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 0.9rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.wl-calendar .rdp-today .wl-day-btn {
+  border: 1.5px solid hsl(173 58% 26%);
+  font-weight: 700;
+}
+
+.wl-calendar .rdp-selected .wl-day-btn {
+  background: hsl(173 58% 26%);
+  color: white;
+}
+
+.wl-calendar .rdp-selected .wl-day-badge {
+  background: rgba(255, 255, 255, 0.95);
+  color: hsl(173 58% 26%);
+}
+
+.wl-month-pane {
+  overflow: hidden;
+}
+
+.wl-month-enter-left {
+  animation: wl-month-from-right 0.28s ease both;
+}
+
+.wl-month-enter-right {
+  animation: wl-month-from-left 0.28s ease both;
+}
+
+.wl-month-idle {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@keyframes wl-month-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes wl-month-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+

@@ -1,0 +1,159 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "MIGROS A.S.",
+      "rawText": "MIGROS A.S.",
+      "region": "header",
+      "columns": {
+        "name": "MIGROS A.S."
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "ISTANBUL",
+      "rawText": "ISTANBUL",
+      "region": "header",
+      "columns": {
+        "name": "ISTANBUL"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "Sut 1 L %1 45,90",
+      "rawText": "Sut 1 L %1 45,90",
+      "region": "body",
+      "columns": {
+        "vat": "%1",
+        "amount": "45,90",
+        "name": "Sut 1 L"
+      },
+      "trailingAmount": 45.9,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": true,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "quantity": "1 L",
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 3,
+      "text": "Ekmek %1 15,00",
+      "rawText": "Ekmek %1 15,00",
+      "region": "body",
+      "columns": {
+        "vat": "%1",
+        "amount": "15,00",
+        "name": "Ekmek"
+      },
+      "trailingAmount": 15,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "Alisveris Poseti 0,50",
+      "rawText": "Alisveris Poseti 0,50",
+      "region": "body",
+      "columns": {
+        "amount": "0,50",
+        "name": "Alisveris Poseti"
+      },
+      "trailingAmount": 0.5,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "TOPLAM 61,40",
+      "rawText": "TOPLAM 61,40",
+      "region": "footer",
+      "columns": {
+        "amount": "61,40",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 61.4,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "regions": {
+    "header": [
+      0,
+      1
+    ],
+    "body": [
+      2,
+      3,
+      4
+    ],
+    "footer": [
+      5
+    ]
+  },
+  "confidence": 0.7833333333333333
+}

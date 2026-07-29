@@ -1,0 +1,272 @@
+[
+  {
+    "id": "pepsi-cola-330ml",
+    "brand": "Pepsi",
+    "name": "Cola",
+    "variant": "",
+    "size": "330",
+    "unit": "ml",
+    "category": "market-drink-carbonated",
+    "barcode": null
+  },
+  {
+    "id": "pepsi-cola-1l",
+    "brand": "Pepsi",
+    "name": "Cola",
+    "variant": "",
+    "size": "1",
+    "unit": "L",
+    "category": "market-drink-carbonated",
+    "barcode": null
+  },
+  {
+    "id": "pepsi-cola-1-5l",
+    "brand": "Pepsi",
+    "name": "Cola",
+    "variant": "",
+    "size": "1.5",
+    "unit": "L",
+    "category": "market-drink-carbonated",
+    "barcode": null
+  },
+  {
+    "id": "coca-cola-330ml",
+    "brand": "Coca-Cola",
+    "name": "Cola",
+    "variant": "",
+    "size": "330",
+    "unit": "ml",
+    "category": "market-drink-carbonated",
+    "barcode": null
+  },
+  {
+    "id": "coca-cola-1l",
+    "brand": "Coca-Cola",
+    "name": "Cola",
+    "variant": "",
+    "size": "1",
+    "unit": "L",
+    "category": "market-drink-carbonated",
+    "barcode": null
+  },
+  {
+    "id": "coca-cola-1-5l",
+    "brand": "Coca-Cola",
+    "name": "Cola",
+    "variant": "",
+    "size": "1.5",
+    "unit": "L",
+    "category": "market-drink-carbonated",
+    "barcode": null
+  },
+  {
+    "id": "cola-turka-1-5l",
+    "brand": "Cola Turka",
+    "name": "Cola",
+    "variant": "",
+    "size": "1.5",
+    "unit": "L",
+    "category": "market-drink-carbonated",
+    "barcode": null
+  },
+  {
+    "id": "abant-dogal-kaynak-suyu-1-5l",
+    "brand": "Abant",
+    "name": "Doğal Kaynak Suyu",
+    "variant": "",
+    "size": "1.5",
+    "unit": "L",
+    "category": "market-drink-water",
+    "barcode": null
+  },
+  {
+    "id": "damla-su-1-5l",
+    "brand": "Damla",
+    "name": "Su",
+    "variant": "",
+    "size": "1.5",
+    "unit": "L",
+    "category": "market-drink-water",
+    "barcode": null
+  },
+  {
+    "id": "erikli-su-1-5l",
+    "brand": "Erikli",
+    "name": "Su",
+    "variant": "",
+    "size": "1.5",
+    "unit": "L",
+    "category": "market-drink-water",
+    "barcode": null
+  },
+  {
+    "id": "sutas-sut-1l",
+    "brand": "Sütaş",
+    "name": "Süt",
+    "variant": "",
+    "size": "1",
+    "unit": "L",
+    "category": "market-dairy-milk",
+    "barcode": null
+  },
+  {
+    "id": "laktozsuz-sut-200ml",
+    "brand": "Sütaş",
+    "name": "Süt",
+    "variant": "Laktozsuz",
+    "size": "200",
+    "unit": "ml",
+    "category": "market-dairy-milk",
+    "barcode": null
+  },
+  {
+    "id": "pinar-sut-1l",
+    "brand": "Pınar",
+    "name": "Süt",
+    "variant": "",
+    "size": "1",
+    "unit": "L",
+    "category": "market-dairy-milk",
+    "barcode": null
+  },
+  {
+    "id": "icim-sut-1l",
+    "brand": "İçim",
+    "name": "Süt",
+    "variant": "",
+    "size": "1",
+    "unit": "L",
+    "category": "market-dairy-milk",
+    "barcode": null
+  },
+  {
+    "id": "sutas-yogurt-1kg",
+    "brand": "Sütaş",
+    "name": "Yoğurt",
+    "variant": "",
+    "size": "1",
+    "unit": "kg",
+    "category": "market-dairy-yogurt",
+    "barcode": null
+  },
+  {
+    "id": "kasar-peynir-400g",
+    "brand": "",
+    "name": "Kaşar Peynir",
+    "variant": "",
+    "size": "400",
+    "unit": "g",
+    "category": "market-dairy-cheese",
+    "barcode": null
+  },
+  {
+    "id": "kasar-peynir-700g",
+    "brand": "",
+    "name": "Kaşar Peynir",
+    "variant": "",
+    "size": "700",
+    "unit": "g",
+    "category": "market-dairy-cheese",
+    "barcode": null
+  },
+  {
+    "id": "ekmek-750g",
+    "brand": "",
+    "name": "Ekmek",
+    "variant": "",
+    "size": "750",
+    "unit": "g",
+    "category": "market-bakery",
+    "barcode": null
+  },
+  {
+    "id": "lays-cips-170g",
+    "brand": "Lay's",
+    "name": "Cips",
+    "variant": "Klasik",
+    "size": "170",
+    "unit": "g",
+    "category": "market-snacks",
+    "barcode": null
+  },
+  {
+    "id": "doritos-150g",
+    "brand": "Doritos",
+    "name": "Cips",
+    "variant": "Nacho",
+    "size": "150",
+    "unit": "g",
+    "category": "market-snacks",
+    "barcode": null
+  },
+  {
+    "id": "ulker-cikolata-80g",
+    "brand": "Ülker",
+    "name": "Çikolata",
+    "variant": "",
+    "size": "80",
+    "unit": "g",
+    "category": "market-confectionery",
+    "barcode": null
+  },
+  {
+    "id": "nescafe-gold-100g",
+    "brand": "Nescafe",
+    "name": "Gold",
+    "variant": "",
+    "size": "100",
+    "unit": "g",
+    "category": "market-coffee",
+    "barcode": null
+  },
+  {
+    "id": "marlboro-touch-blue",
+    "brand": "Marlboro",
+    "name": "Touch Blue",
+    "variant": "",
+    "size": "",
+    "unit": "adet",
+    "category": "sigara",
+    "barcode": null
+  },
+  {
+    "id": "ariel-deterjan-4kg",
+    "brand": "Ariel",
+    "name": "Deterjan",
+    "variant": "Toz",
+    "size": "4",
+    "unit": "kg",
+    "category": "market-cleaning",
+    "barcode": null
+  },
+  {
+    "id": "fairy-bulasik-750ml",
+    "brand": "Fairy",
+    "name": "Bulaşık Deterjanı",
+    "variant": "",
+    "size": "750",
+    "unit": "ml",
+    "category": "market-cleaning",
+    "barcode": null
+  },
+  {
+    "id": "kuru-kayisi-500g",
+    "brand": "Tatım",
+    "name": "Kuru Kayısı",
+    "variant": "",
+    "size": "500",
+    "unit": "g",
+    "category": "market-snacks",
+    "barcode": null
+  },
+  {
+    "id": "tatim-kabak-cekirdegi-180g",
+    "brand": "Tatım",
+    "name": "Kabak Çekirdeği",
+    "variant": "",
+    "size": "180",
+    "unit": "g",
+    "category": "market-snacks",
+    "barcode": null
+  }
+]

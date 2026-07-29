@@ -1,0 +1,82 @@
+[
+  {
+    "id": "pepsi",
+    "name": "Pepsi",
+    "aliases": ["PEPSI", "PEPS", "PEPSI COLA"]
+  },
+  {
+    "id": "coca-cola",
+    "name": "Coca-Cola",
+    "aliases": ["COCA COLA", "COCACOLA", "COKE", "COCA-COLA"]
+  },
+  {
+    "id": "cola-turka",
+    "name": "Cola Turka",
+    "aliases": ["COLA TURKA", "COLATURKA"]
+  },
+  {
+    "id": "abant",
+    "name": "Abant",
+    "aliases": ["ABANT", "ABANT DGL", "ABANT DOGAL"]
+  },
+  {
+    "id": "damla",
+    "name": "Damla",
+    "aliases": ["DAMLA", "DAMLA SU"]
+  },
+  {
+    "id": "erikli",
+    "name": "Erikli",
+    "aliases": ["ERIKLI", "ERİKLİ"]
+  },
+  {
+    "id": "sutas",
+    "name": "Sütaş",
+    "aliases": ["SUTAS", "SÜTAŞ", "SUTAS SUT"]
+  },
+  {
+    "id": "pinar",
+    "name": "Pınar",
+    "aliases": ["PINAR", "PİNAR"]
+  },
+  {
+    "id": "icim",
+    "name": "İçim",
+    "aliases": ["ICIM", "İÇİM"]
+  },
+  {
+    "id": "lays",
+    "name": "Lay's",
+    "aliases": ["LAYS", "LAY'S"]
+  },
+  {
+    "id": "ulker",
+    "name": "Ülker",
+    "aliases": ["ULKER", "ÜLKER"]
+  },
+  {
+    "id": "nescafe",
+    "name": "Nescafe",
+    "aliases": ["NESCAFE", "NESCAFÉ"]
+  },
+  {
+    "id": "ariel",
+    "name": "Ariel",
+    "aliases": ["ARIEL"]
+  },
+  {
+    "id": "fairy",
+    "name": "Fairy",
+    "aliases": ["FAIRY"]
+  },
+  {
+    "id": "marlboro",
+    "name": "Marlboro",
+    "aliases": ["MARLBORO", "MLR"]
+  },
+  {
+    "id": "tatim",
+    "name": "Tatım",
+    "aliases": ["TATIM", "TATIM"]
+  }
+]

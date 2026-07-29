@@ -1,0 +1,9 @@
+export type EngineFailureCode =
+  | "IMAGE_INVALID"
+  | "OCR_FAILED"
+  | "OCR_EMPTY"
+  | "LAYOUT_EMPTY"
+  | "NO_PRODUCTS"
+  | "VALIDATION_BLOCKED"
+  | "AI_UNAVAILABLE"
+  | "INTERNAL_ERROR";

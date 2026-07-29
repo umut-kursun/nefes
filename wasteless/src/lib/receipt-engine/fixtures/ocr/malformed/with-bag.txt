@@ -1,0 +1,6 @@
+MIGROS A.S.
+ISTANBUL
+Sut  1 L %1 45,90
+Ekmek %1 15,00
+Alisveris Poseti ₺0,50
+TOPLAM 61,40

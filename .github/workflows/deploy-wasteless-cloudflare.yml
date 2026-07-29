@@ -1,0 +1,103 @@
+name: Deploy WasteLess to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "wasteless/**"
+      - ".github/workflows/deploy-wasteless-cloudflare.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-workers-wasteless
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: wasteless
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: wasteless/package-lock.json
+
+      - name: Validate Cloudflare secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          TOKEN="$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n[:space:]')"
+          ACCOUNT="$(printf '%s' "$CLOUDFLARE_ACCOUNT_ID" | tr -d '\r\n[:space:]')"
+          if [ -z "$TOKEN" ] || [ -z "$ACCOUNT" ]; then
+            echo "::error::Need CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (same as Nefes)."
+            exit 1
+          fi
+          if ! printf '%s' "$ACCOUNT" | grep -Eq '^[a-f0-9]{32}$'; then
+            echo "::error::CLOUDFLARE_ACCOUNT_ID must be 32 hex chars."
+            exit 1
+          fi
+          # Inject account_id into wrangler.toml
+          ACCOUNT="$ACCOUNT" python3 - <<'PY'
+          from pathlib import Path
+          import os
+          account = os.environ["ACCOUNT"]
+          path = Path("wrangler.toml")
+          text = path.read_text(encoding="utf-8")
+          lines = [ln for ln in text.splitlines() if not ln.strip().startswith("account_id")]
+          out = []
+          inserted = False
+          for line in lines:
+              out.append(line)
+              if not inserted and line.strip().startswith("workers_dev"):
+                  out.append(f'account_id = "{account}"')
+                  inserted = True
+          if not inserted:
+              out.insert(0, f'account_id = "{account}"')
+          path.write_text("\n".join(out) + "\n", encoding="utf-8")
+          PY
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build static export
+        run: |
+          set -euo pipefail
+          if [ -d src/app/api ]; then
+            mv src/app/api src/app/_api_dev_only
+          fi
+          export DEPLOY_TARGET=cloudflare
+          export NODE_ENV=production
+          npm run build
+          if [ -d src/app/_api_dev_only ]; then
+            mv src/app/_api_dev_only src/app/api
+          fi
+
+      - name: Deploy with Wrangler
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler@4.53.0 deploy --config wrangler.toml
+
+      - name: Sync OPENAI_API_KEY secret (if provided)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -n "${OPENAI_API_KEY:-}" ]; then
+            printf '%s' "$OPENAI_API_KEY" | npx wrangler@4.53.0 secret put OPENAI_API_KEY --config wrangler.toml
+          else
+            echo "OPENAI_API_KEY repo secret not set — set Worker secret manually if needed."
+          fi

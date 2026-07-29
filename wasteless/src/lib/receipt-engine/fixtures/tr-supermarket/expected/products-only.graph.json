@@ -1,0 +1,452 @@
+{
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "kind": "raw_line",
+      "text": "CARREFOURSA",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "CARREFOURSA",
+        "rawText": "CARREFOURSA",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "raw:L1",
+      "kind": "raw_line",
+      "text": "Peynir 500g %1 89,90",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "Peynir 500g %1 89,90",
+        "rawText": "Peynir 500g %1 89,90",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "raw:L2",
+      "kind": "raw_line",
+      "text": "Zeytin 250g %1 34,50",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Zeytin 250g %1 34,50",
+        "rawText": "Zeytin 250g %1 34,50",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "raw:L3",
+      "kind": "raw_line",
+      "text": "TOPLAM 124,40",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "TOPLAM 124,40",
+        "rawText": "TOPLAM 124,40",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "frag:L0:name",
+      "kind": "text_fragment",
+      "text": "CARREFOURSA",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "CARREFOURSA",
+        "rawText": "CARREFOURSA",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "frag:L1:name",
+      "kind": "text_fragment",
+      "text": "Peynir 500g",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "Peynir 500g",
+        "rawText": "Peynir 500g %1 89,90",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "amt:L1",
+      "kind": "amount",
+      "text": "89,90",
+      "amount": 89.9,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "89,90",
+        "rawText": "Peynir 500g %1 89,90",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "frag:L2:name",
+      "kind": "text_fragment",
+      "text": "Zeytin 250g",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Zeytin 250g",
+        "rawText": "Zeytin 250g %1 34,50",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "amt:L2",
+      "kind": "amount",
+      "text": "34,50",
+      "amount": 34.5,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "34,50",
+        "rawText": "Zeytin 250g %1 34,50",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "frag:L3:name",
+      "kind": "label",
+      "text": "TOPLAM",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 124,40",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "amt:L3",
+      "kind": "amount",
+      "text": "124,40",
+      "amount": 124.4,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "124,40",
+        "rawText": "TOPLAM 124,40",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "vat:L1",
+      "kind": "vat_token",
+      "text": "%1",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "%1",
+        "rawText": "Peynir 500g %1 89,90",
+        "creationRule": "passTokens:vat",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "qty:L1",
+      "kind": "quantity_token",
+      "text": "500g",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "500g",
+        "rawText": "Peynir 500g %1 89,90",
+        "creationRule": "passTokens:quantity",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "vat:L2",
+      "kind": "vat_token",
+      "text": "%1",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "%1",
+        "rawText": "Zeytin 250g %1 34,50",
+        "creationRule": "passTokens:vat",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "qty:L2",
+      "kind": "quantity_token",
+      "text": "250g",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "250g",
+        "rawText": "Zeytin 250g %1 34,50",
+        "creationRule": "passTokens:quantity",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:same_row:frag:L0:name->raw:L0",
+      "from": "frag:L0:name",
+      "to": "raw:L0",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:frag:L1:name->raw:L1",
+      "from": "frag:L1:name",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L1->raw:L1",
+      "from": "amt:L1",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L2:name->raw:L2",
+      "from": "frag:L2:name",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L2->raw:L2",
+      "from": "amt:L2",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L3:name->raw:L3",
+      "from": "frag:L3:name",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L3->raw:L3",
+      "from": "amt:L3",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:vat:L1->raw:L1",
+      "from": "vat:L1",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:vat_of:vat:L1->raw:L1",
+      "from": "vat:L1",
+      "to": "raw:L1",
+      "kind": "vat_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:qty:L1->raw:L1",
+      "from": "qty:L1",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:quantity_of:qty:L1->raw:L1",
+      "from": "qty:L1",
+      "to": "raw:L1",
+      "kind": "quantity_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:vat:L2->raw:L2",
+      "from": "vat:L2",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:vat_of:vat:L2->raw:L2",
+      "from": "vat:L2",
+      "to": "raw:L2",
+      "kind": "vat_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:qty:L2->raw:L2",
+      "from": "qty:L2",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:quantity_of:qty:L2->raw:L2",
+      "from": "qty:L2",
+      "to": "raw:L2",
+      "kind": "quantity_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L1->raw:L1",
+      "from": "amt:L1",
+      "to": "raw:L1",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L2->raw:L2",
+      "from": "amt:L2",
+      "to": "raw:L2",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L3->raw:L3",
+      "from": "amt:L3",
+      "to": "raw:L3",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L0->raw:L1",
+      "from": "raw:L0",
+      "to": "raw:L1",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L1->raw:L2",
+      "from": "raw:L1",
+      "to": "raw:L2",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L2->raw:L3",
+      "from": "raw:L2",
+      "to": "raw:L3",
+      "kind": "precedes",
+      "confidence": 0.85
+    }
+  ],
+  "regions": {
+    "header": [
+      "raw:L0"
+    ],
+    "body": [
+      "raw:L1",
+      "raw:L2"
+    ],
+    "footer": [
+      "raw:L3"
+    ]
+  },
+  "profileId": "generic-tr",
+  "confidence": 0.8233333333333331
+}

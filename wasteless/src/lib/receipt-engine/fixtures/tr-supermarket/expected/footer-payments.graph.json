@@ -1,0 +1,486 @@
+{
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "kind": "raw_line",
+      "text": "A101",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "A101",
+        "rawText": "A101",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "raw:L1",
+      "kind": "raw_line",
+      "text": "Su 1.5 L %1 8,90",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "Su 1.5 L %1 8,90",
+        "rawText": "Su 1.5 L %1 8,90",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "raw:L2",
+      "kind": "raw_line",
+      "text": "Nakit 50,00",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Nakit 50,00",
+        "rawText": "Nakit 50,00",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "raw:L3",
+      "kind": "raw_line",
+      "text": "Kredi Kart 8,90",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Kredi Kart 8,90",
+        "rawText": "Kredi Kart 8,90",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "raw:L4",
+      "kind": "raw_line",
+      "text": "TOPLAM 8,90",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM 8,90",
+        "rawText": "TOPLAM 8,90",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "frag:L0:name",
+      "kind": "text_fragment",
+      "text": "A101",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "A101",
+        "rawText": "A101",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "frag:L1:name",
+      "kind": "text_fragment",
+      "text": "Su 1.5 L",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "Su 1.5 L",
+        "rawText": "Su 1.5 L %1 8,90",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "amt:L1",
+      "kind": "amount",
+      "text": "8,90",
+      "amount": 8.9,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "8,90",
+        "rawText": "Su 1.5 L %1 8,90",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "frag:L2:name",
+      "kind": "label",
+      "text": "Nakit",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Nakit",
+        "rawText": "Nakit 50,00",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "amt:L2",
+      "kind": "amount",
+      "text": "50,00",
+      "amount": 50,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "50,00",
+        "rawText": "Nakit 50,00",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "frag:L3:name",
+      "kind": "label",
+      "text": "Kredi Kart",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Kredi Kart",
+        "rawText": "Kredi Kart 8,90",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "amt:L3",
+      "kind": "amount",
+      "text": "8,90",
+      "amount": 8.9,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "8,90",
+        "rawText": "Kredi Kart 8,90",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "frag:L4:name",
+      "kind": "label",
+      "text": "TOPLAM",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 8,90",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "amt:L4",
+      "kind": "amount",
+      "text": "8,90",
+      "amount": 8.9,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "8,90",
+        "rawText": "TOPLAM 8,90",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "vat:L1",
+      "kind": "vat_token",
+      "text": "%1",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "%1",
+        "rawText": "Su 1.5 L %1 8,90",
+        "creationRule": "passTokens:vat",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    },
+    {
+      "id": "qty:L1",
+      "kind": "quantity_token",
+      "text": "1.5 L",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "1.5 L",
+        "rawText": "Su 1.5 L %1 8,90",
+        "creationRule": "passTokens:quantity",
+        "confidence": 0.85
+      },
+      "confidence": 0.85
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:same_row:frag:L0:name->raw:L0",
+      "from": "frag:L0:name",
+      "to": "raw:L0",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:frag:L1:name->raw:L1",
+      "from": "frag:L1:name",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L1->raw:L1",
+      "from": "amt:L1",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L2:name->raw:L2",
+      "from": "frag:L2:name",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L2->raw:L2",
+      "from": "amt:L2",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L3:name->raw:L3",
+      "from": "frag:L3:name",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L3->raw:L3",
+      "from": "amt:L3",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L4:name->raw:L4",
+      "from": "frag:L4:name",
+      "to": "raw:L4",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L4->raw:L4",
+      "from": "amt:L4",
+      "to": "raw:L4",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:vat:L1->raw:L1",
+      "from": "vat:L1",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:vat_of:vat:L1->raw:L1",
+      "from": "vat:L1",
+      "to": "raw:L1",
+      "kind": "vat_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:qty:L1->raw:L1",
+      "from": "qty:L1",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:quantity_of:qty:L1->raw:L1",
+      "from": "qty:L1",
+      "to": "raw:L1",
+      "kind": "quantity_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L1->raw:L1",
+      "from": "amt:L1",
+      "to": "raw:L1",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L2->raw:L2",
+      "from": "amt:L2",
+      "to": "raw:L2",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L3->raw:L3",
+      "from": "amt:L3",
+      "to": "raw:L3",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L4->raw:L4",
+      "from": "amt:L4",
+      "to": "raw:L4",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L0->raw:L1",
+      "from": "raw:L0",
+      "to": "raw:L1",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L1->raw:L2",
+      "from": "raw:L1",
+      "to": "raw:L2",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L2->raw:L3",
+      "from": "raw:L2",
+      "to": "raw:L3",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L3->raw:L4",
+      "from": "raw:L3",
+      "to": "raw:L4",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:footer_of:raw:L3->raw:L2",
+      "from": "raw:L3",
+      "to": "raw:L2",
+      "kind": "footer_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:footer_of:raw:L4->raw:L3",
+      "from": "raw:L4",
+      "to": "raw:L3",
+      "kind": "footer_of",
+      "confidence": 0.85
+    }
+  ],
+  "regions": {
+    "header": [
+      "raw:L0"
+    ],
+    "body": [
+      "raw:L1"
+    ],
+    "footer": [
+      "raw:L2",
+      "raw:L3",
+      "raw:L4"
+    ]
+  },
+  "profileId": "generic-tr",
+  "confidence": 0.8249999999999998
+}

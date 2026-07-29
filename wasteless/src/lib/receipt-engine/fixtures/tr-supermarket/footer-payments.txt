@@ -1,0 +1,5 @@
+A101
+Su 1.5 L %1 8,90
+Nakit 50,00
+Kredi Kart 8,90
+TOPLAM 8,90

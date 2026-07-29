@@ -1,0 +1,134 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "A101",
+      "rawText": "A101",
+      "region": "header",
+      "columns": {
+        "name": "A101"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "Su 1.5 L %1 8,90",
+      "rawText": "Su 1.5 L %1 8,90",
+      "region": "body",
+      "columns": {
+        "vat": "%1",
+        "amount": "8,90",
+        "name": "Su 1.5 L"
+      },
+      "trailingAmount": 8.9,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": true,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "quantity": "1.5 L",
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 2,
+      "text": "Nakit 50,00",
+      "rawText": "Nakit 50,00",
+      "region": "footer",
+      "columns": {
+        "amount": "50,00",
+        "name": "Nakit"
+      },
+      "trailingAmount": 50,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 3,
+      "text": "Kredi Kart 8,90",
+      "rawText": "Kredi Kart 8,90",
+      "region": "footer",
+      "columns": {
+        "amount": "8,90",
+        "name": "Kredi Kart"
+      },
+      "trailingAmount": 8.9,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "TOPLAM 8,90",
+      "rawText": "TOPLAM 8,90",
+      "region": "footer",
+      "columns": {
+        "amount": "8,90",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 8.9,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "regions": {
+    "header": [
+      0
+    ],
+    "body": [
+      1
+    ],
+    "footer": [
+      2,
+      3,
+      4
+    ]
+  },
+  "confidence": 0.8099999999999999
+}

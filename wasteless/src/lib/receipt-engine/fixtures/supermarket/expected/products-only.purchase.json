@@ -1,0 +1,109 @@
+{
+  "merchant": "CARREFOURSA",
+  "purchaseDate": null,
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Peynir 500g",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L1",
+        "graphNodeIds": [
+          "raw:L1",
+          "frag:L1:name",
+          "amt:L1",
+          "vat:L1",
+          "qty:L1"
+        ],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "Peynir 500g %1 89,90"
+        ],
+        "ocrTexts": [
+          "Peynir 500g %1 89,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "quantity": 500,
+      "unit": "g",
+      "lineTotal": 89.9,
+      "vatRate": 1
+    },
+    {
+      "name": "Zeytin 250g",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L2",
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2",
+          "qty:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Zeytin 250g %1 34,50"
+        ],
+        "ocrTexts": [
+          "Zeytin 250g %1 34,50"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "quantity": 250,
+      "unit": "g",
+      "lineTotal": 34.5,
+      "vatRate": 1
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 124.4
+  },
+  "confidence": 0.69,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.69,
+    "rawTexts": [
+      "Peynir 500g %1 89,90",
+      "Zeytin 250g %1 34,50",
+      "TOPLAM 124,40",
+      "CARREFOURSA"
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "CARREFOURSA",
+      "rawText": "CARREFOURSA",
+      "region": "header",
+      "columns": {
+        "name": "CARREFOURSA"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "Peynir 500g %1 89,90",
+      "rawText": "Peynir 500g %1 89,90",
+      "region": "body",
+      "columns": {
+        "vat": "%1",
+        "amount": "89,90",
+        "name": "Peynir 500g"
+      },
+      "trailingAmount": 89.9,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": true,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "quantity": "500g",
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 2,
+      "text": "Zeytin 250g %1 34,50",
+      "rawText": "Zeytin 250g %1 34,50",
+      "region": "body",
+      "columns": {
+        "vat": "%1",
+        "amount": "34,50",
+        "name": "Zeytin 250g"
+      },
+      "trailingAmount": 34.5,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": true,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "quantity": "250g",
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 3,
+      "text": "TOPLAM 124,40",
+      "rawText": "TOPLAM 124,40",
+      "region": "footer",
+      "columns": {
+        "amount": "124,40",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 124.4,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "regions": {
+    "header": [
+      0
+    ],
+    "body": [
+      1,
+      2
+    ],
+    "footer": [
+      3
+    ]
+  },
+  "confidence": 0.8
+}

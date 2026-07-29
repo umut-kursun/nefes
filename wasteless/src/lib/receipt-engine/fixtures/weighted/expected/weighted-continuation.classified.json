@@ -1,0 +1,388 @@
+{
+  "confidence": 0.6928571428571431,
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "graphNodeId": "raw:L0",
+      "semanticKind": "header",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:raw_line"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L0",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "BIM",
+        "rawText": "BIM",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "headerClassifier:raw_line"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L1",
+      "graphNodeId": "raw:L1",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L1",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "0,744 kg x 89,90",
+        "rawText": "0,744 kg x 89,90",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L2",
+      "graphNodeId": "raw:L2",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Domates",
+        "rawText": "Domates",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L3",
+      "graphNodeId": "raw:L3",
+      "semanticKind": "footer",
+      "confidence": 0.65,
+      "matchedRules": [
+        "footerClassifier:footer_region"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "66,89",
+        "rawText": "66,89",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "footerClassifier:footer_region"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L4",
+      "graphNodeId": "raw:L4",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM 66,89",
+        "rawText": "TOPLAM 66,89",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L0:name",
+      "graphNodeId": "frag:L0:name",
+      "semanticKind": "merchant",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:merchant"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L0:name",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "BIM",
+        "rawText": "BIM",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "headerClassifier:merchant"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L1:name",
+      "graphNodeId": "frag:L1:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L1:name",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "0,744 kg x",
+        "rawText": "0,744 kg x 89,90",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L1",
+      "graphNodeId": "amt:L1",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L1",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "89,90",
+        "rawText": "0,744 kg x 89,90",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 89.9
+    },
+    {
+      "id": "frag:L2:name",
+      "graphNodeId": "frag:L2:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L2:name",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Domates",
+        "rawText": "Domates",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L3",
+      "graphNodeId": "amt:L3",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "66,89",
+        "rawText": "66,89",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 66.89
+    },
+    {
+      "id": "frag:L4:name",
+      "graphNodeId": "frag:L4:name",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L4:name",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 66,89",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L4",
+      "graphNodeId": "amt:L4",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:total_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "66,89",
+        "rawText": "TOPLAM 66,89",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 66.89
+    },
+    {
+      "id": "qty:L1",
+      "graphNodeId": "qty:L1",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:product_token"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "other",
+          "confidence": 0.65,
+          "ruleId": "metadataClassifier:structural_token",
+          "reason": "neutral graph token"
+        },
+        {
+          "semanticKind": "other",
+          "confidence": 0.65,
+          "ruleId": "productCandidateClassifier:structural_token",
+          "reason": "neutral structural token"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "qty:L1",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "0,744 kg",
+        "rawText": "0,744 kg x 89,90",
+        "graphCreationRule": "passTokens:quantity",
+        "classificationRules": [
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "uprice:L1",
+      "graphNodeId": "uprice:L1",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:product_token"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "other",
+          "confidence": 0.65,
+          "ruleId": "metadataClassifier:structural_token",
+          "reason": "neutral graph token"
+        },
+        {
+          "semanticKind": "other",
+          "confidence": 0.65,
+          "ruleId": "productCandidateClassifier:structural_token",
+          "reason": "neutral structural token"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "uprice:L1",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "89,90",
+        "rawText": "0,744 kg x 89,90",
+        "graphCreationRule": "passTokens:unit_price",
+        "classificationRules": [
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 89.9
+    }
+  ]
+}

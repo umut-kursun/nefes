@@ -1,0 +1,16 @@
+[
+  { "id": "market", "name": "Market", "parentId": null },
+  { "id": "market-drink", "name": "Drink", "parentId": "market" },
+  { "id": "market-drink-carbonated", "name": "Carbonated Drinks", "parentId": "market-drink" },
+  { "id": "market-drink-water", "name": "Water", "parentId": "market-drink" },
+  { "id": "market-dairy", "name": "Dairy", "parentId": "market" },
+  { "id": "market-dairy-milk", "name": "Milk", "parentId": "market-dairy" },
+  { "id": "market-dairy-yogurt", "name": "Yogurt", "parentId": "market-dairy" },
+  { "id": "market-dairy-cheese", "name": "Cheese", "parentId": "market-dairy" },
+  { "id": "market-bakery", "name": "Bakery", "parentId": "market" },
+  { "id": "market-snacks", "name": "Snacks", "parentId": "market" },
+  { "id": "market-confectionery", "name": "Chocolate & Confectionery", "parentId": "market" },
+  { "id": "market-coffee", "name": "Coffee", "parentId": "market" },
+  { "id": "market-cleaning", "name": "Cleaning", "parentId": "market" },
+  { "id": "sigara", "name": "Cigarettes", "parentId": "market" }
+]

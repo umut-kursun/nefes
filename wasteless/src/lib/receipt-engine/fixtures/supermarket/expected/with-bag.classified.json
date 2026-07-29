@@ -1,0 +1,495 @@
+{
+  "confidence": 0.7131578947368421,
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "graphNodeId": "raw:L0",
+      "semanticKind": "header",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:raw_line"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L0",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "MIGROS A.S.",
+        "rawText": "MIGROS A.S.",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "headerClassifier:raw_line"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L1",
+      "graphNodeId": "raw:L1",
+      "semanticKind": "header",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:raw_line"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L1",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "ISTANBUL",
+        "rawText": "ISTANBUL",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "headerClassifier:raw_line"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L2",
+      "graphNodeId": "raw:L2",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Sut 1 L %1 45,90",
+        "rawText": "Sut 1 L %1 45,90",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L3",
+      "graphNodeId": "raw:L3",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Ekmek %1 15,00",
+        "rawText": "Ekmek %1 15,00",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L4",
+      "graphNodeId": "raw:L4",
+      "semanticKind": "charge",
+      "confidence": 0.85,
+      "matchedRules": [
+        "chargeClassifier:label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "Alisveris Poseti 0,50",
+        "rawText": "Alisveris Poseti 0,50",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "chargeClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L5",
+      "graphNodeId": "raw:L5",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L5",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "TOPLAM 61,40",
+        "rawText": "TOPLAM 61,40",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L0:name",
+      "graphNodeId": "frag:L0:name",
+      "semanticKind": "merchant",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:merchant"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L0:name",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "MIGROS A.S.",
+        "rawText": "MIGROS A.S.",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "headerClassifier:merchant"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L1:name",
+      "graphNodeId": "frag:L1:name",
+      "semanticKind": "header",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:header_fragment"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L1:name",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "ISTANBUL",
+        "rawText": "ISTANBUL",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "headerClassifier:header_fragment"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L2:name",
+      "graphNodeId": "frag:L2:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L2:name",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Sut 1 L",
+        "rawText": "Sut 1 L %1 45,90",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L2",
+      "graphNodeId": "amt:L2",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "45,90",
+        "rawText": "Sut 1 L %1 45,90",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 45.9
+    },
+    {
+      "id": "frag:L3:name",
+      "graphNodeId": "frag:L3:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L3:name",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Ekmek",
+        "rawText": "Ekmek %1 15,00",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L3",
+      "graphNodeId": "amt:L3",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "15,00",
+        "rawText": "Ekmek %1 15,00",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 15
+    },
+    {
+      "id": "frag:L4:name",
+      "graphNodeId": "frag:L4:name",
+      "semanticKind": "charge",
+      "confidence": 0.85,
+      "matchedRules": [
+        "chargeClassifier:label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L4:name",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "Alisveris Poseti",
+        "rawText": "Alisveris Poseti 0,50",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "chargeClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L4",
+      "graphNodeId": "amt:L4",
+      "semanticKind": "charge",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:charge_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "0,50",
+        "rawText": "Alisveris Poseti 0,50",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:charge_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 0.5
+    },
+    {
+      "id": "frag:L5:name",
+      "graphNodeId": "frag:L5:name",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L5:name",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 61,40",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L5",
+      "graphNodeId": "amt:L5",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:total_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L5",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "61,40",
+        "rawText": "TOPLAM 61,40",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 61.4
+    },
+    {
+      "id": "vat:L2",
+      "graphNodeId": "vat:L2",
+      "semanticKind": "vat",
+      "confidence": 0.65,
+      "matchedRules": [
+        "vatClassifier:vat_token"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "vat:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "%1",
+        "rawText": "Sut 1 L %1 45,90",
+        "graphCreationRule": "passTokens:vat",
+        "classificationRules": [
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "qty:L2",
+      "graphNodeId": "qty:L2",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:product_token"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "other",
+          "confidence": 0.65,
+          "ruleId": "metadataClassifier:structural_token",
+          "reason": "neutral graph token"
+        },
+        {
+          "semanticKind": "other",
+          "confidence": 0.65,
+          "ruleId": "productCandidateClassifier:structural_token",
+          "reason": "neutral structural token"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "qty:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "1 L",
+        "rawText": "Sut 1 L %1 45,90",
+        "graphCreationRule": "passTokens:quantity",
+        "classificationRules": [
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "vat:L3",
+      "graphNodeId": "vat:L3",
+      "semanticKind": "vat",
+      "confidence": 0.65,
+      "matchedRules": [
+        "vatClassifier:vat_token"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "vat:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "%1",
+        "rawText": "Ekmek %1 15,00",
+        "graphCreationRule": "passTokens:vat",
+        "classificationRules": [
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    }
+  ]
+}

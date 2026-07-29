@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "wasteless" generated at 2026-07-28T10:03:40.088Z.

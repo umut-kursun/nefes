@@ -1,0 +1,255 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L2",
+      "kind": "product",
+      "label": "Sut 1 L",
+      "quantity": "1 L",
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 45.9,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L2"
+      ],
+      "rawLines": [
+        "Sut 1 L %1 45,90"
+      ],
+      "groupIds": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2",
+        "qty:L2"
+      ],
+      "nodeRefs": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2",
+        "qty:L2"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2",
+          "qty:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Sut 1 L %1 45,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token",
+          "productCandidateClassifier:product_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "product:raw:L3",
+      "kind": "product",
+      "label": "Ekmek",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 15,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L3"
+      ],
+      "rawLines": [
+        "Ekmek %1 15,00"
+      ],
+      "groupIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "nodeRefs": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "Ekmek %1 15,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L4",
+      "frag:L4:name",
+      "amt:L4",
+      "raw:L5",
+      "frag:L5:name",
+      "amt:L5"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4",
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5"
+      ],
+      "layoutLineIndices": [
+        4,
+        5
+      ],
+      "rawTexts": [
+        "Alisveris Poseti 0,50",
+        "TOPLAM 61,40"
+      ],
+      "classificationRules": [
+        "chargeClassifier:label",
+        "amountClassifier:charge_label",
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label"
+      ],
+      "confidence": 0.85
+    },
+    "confidence": 0.85,
+    "charges": [
+      {
+        "label": "Alisveris Poseti",
+        "amount": 0.5,
+        "nodeRefs": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ],
+        "semanticKind": "charge",
+        "confidence": 0.85
+      }
+    ],
+    "discounts": [],
+    "payments": [],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 61.4,
+        "nodeRefs": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": []
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "frag:L0:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "frag:L0:name"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "MIGROS A.S."
+      ],
+      "classificationRules": [
+        "headerClassifier:merchant"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "merchant": "MIGROS A.S.",
+    "date": null,
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0",
+      "raw:L1",
+      "frag:L1:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0",
+        "raw:L1",
+        "frag:L1:name"
+      ],
+      "layoutLineIndices": [
+        0,
+        1
+      ],
+      "rawTexts": [
+        "MIGROS A.S.",
+        "ISTANBUL"
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line",
+        "headerClassifier:header_fragment"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "MIGROS A.S.",
+        "semanticKind": "header",
+        "confidence": 0.65
+      },
+      {
+        "nodeRef": "raw:L1",
+        "text": "ISTANBUL",
+        "semanticKind": "header",
+        "confidence": 0.65
+      },
+      {
+        "nodeRef": "frag:L1:name",
+        "text": "ISTANBUL",
+        "semanticKind": "header",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.69
+}
