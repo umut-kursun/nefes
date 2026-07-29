@@ -214,6 +214,8 @@ export function purchaseDraftToExpenseDraft(
     imageDataUrl?: string | null;
     ocrRawText?: string | null;
     categories?: UserCategory[];
+    /** Structured parser output JSON (PurchaseDraft ± validation). */
+    parserJson?: string | null;
   } = {}
 ): Expense {
   const expenseId = createId("exp");
@@ -305,7 +307,9 @@ export function purchaseDraftToExpenseDraft(
     rawText: ocrRawText,
     confidence: purchase.confidence ?? null,
     imageDataUrl: options.imageDataUrl ?? null,
-    aiResponseJson: null,
+    aiResponseJson:
+      options.parserJson?.trim() ||
+      JSON.stringify(purchase, null, 2),
     fuel: null,
     packCount: items.length || null,
     quickButtonId: null,

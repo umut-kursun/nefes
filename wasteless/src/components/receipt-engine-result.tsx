@@ -97,6 +97,13 @@ export function ReceiptEngineResult({
         </div>
       )}
 
+      <OcrTextPanel
+        title="Parser sonucu"
+        text={JSON.stringify({ purchase, validation }, null, 2)}
+        variant="code"
+        maxHeightClassName="max-h-72"
+      />
+
       <div className="rounded-2xl border border-white/70 bg-white/75 p-4">
         <h3 className="font-semibold">Validation Issues</h3>
         {issues.length === 0 ? (

@@ -68,6 +68,14 @@ const ReceiptEngineResult = dynamic(
 
 type Mode = "chooser" | "manual" | "review" | "engine-result";
 
+function prettyJson(raw: string): string {
+  try {
+    return JSON.stringify(JSON.parse(raw), null, 2);
+  } catch {
+    return raw;
+  }
+}
+
 export default function AddPage() {
   const router = useRouter();
   const { addExpense, categories } = useWasteLessStore();
@@ -158,13 +166,25 @@ export default function AddPage() {
               ?.filter(Boolean)
               .join("\n") ?? "";
 
-      const next = purchaseDraftToExpenseDraft(json.purchase as PurchaseDraft, {
+      const purchase = json.purchase as PurchaseDraft;
+      const validation = json.validation as ValidationReportGolden;
+      const parserJson = JSON.stringify(
+        {
+          purchase,
+          validation,
+        },
+        null,
+        2
+      );
+
+      const next = purchaseDraftToExpenseDraft(purchase, {
         imageDataUrl:
           typeof json.imageDataUrl === "string"
             ? json.imageDataUrl
             : originalDataUrl,
         ocrRawText,
         categories,
+        parserJson,
       });
 
       const rawBaseline = JSON.parse(JSON.stringify(next)) as Expense;
@@ -543,6 +563,16 @@ export default function AddPage() {
           )}
           {mode === "review" && draft.rawText?.trim() && (
             <OcrTextPanel text={draft.rawText} collapsible />
+          )}
+          {mode === "review" && draft.aiResponseJson?.trim() && (
+            <OcrTextPanel
+              title="Parser sonucu"
+              text={prettyJson(draft.aiResponseJson)}
+              collapsible
+              defaultOpen
+              variant="code"
+              maxHeightClassName="max-h-72"
+            />
           )}
           {mode === "review" && (
             <div className="rounded-2xl border border-white/70 bg-white/75 p-3 text-sm text-muted-foreground">

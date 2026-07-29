@@ -7,11 +7,14 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   text: string;
-  /** When true, wrap in a collapsible details element (Add review). */
+  title?: string;
+  /** When true, wrap in a collapsible details element. */
   collapsible?: boolean;
   defaultOpen?: boolean;
   className?: string;
   maxHeightClassName?: string;
+  /** Dark code-block style for JSON / parser output. */
+  variant?: "plain" | "code";
 };
 
 async function copyAllText(text: string): Promise<boolean> {
@@ -41,10 +44,12 @@ async function copyAllText(text: string): Promise<boolean> {
 
 export function OcrTextPanel({
   text,
+  title = "OCR metni",
   collapsible = false,
   defaultOpen = false,
   className,
   maxHeightClassName = "max-h-56",
+  variant = "plain",
 }: Props) {
   const [copied, setCopied] = useState(false);
   const trimmed = text.trim();
@@ -68,7 +73,7 @@ export function OcrTextPanel({
         e.stopPropagation();
         void onCopy();
       }}
-      aria-label="OCR metninin tamamını kopyala"
+      aria-label={`${title} metninin tamamını kopyala`}
     >
       {copied ? (
         <Check className="h-3.5 w-3.5 text-teal-700" />
@@ -82,8 +87,11 @@ export function OcrTextPanel({
   const body = (
     <pre
       className={cn(
-        "mt-3 overflow-auto whitespace-pre-wrap break-words select-text text-xs leading-relaxed text-foreground/85",
-        maxHeightClassName
+        "mt-3 overflow-auto whitespace-pre-wrap break-words select-text text-xs leading-relaxed",
+        maxHeightClassName,
+        variant === "code"
+          ? "rounded-xl bg-stone-950/95 p-3 text-[11px] text-emerald-100"
+          : "text-foreground/85"
       )}
     >
       {trimmed}
@@ -100,7 +108,7 @@ export function OcrTextPanel({
         open={defaultOpen || undefined}
       >
         <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-teal-900 [&::-webkit-details-marker]:hidden">
-          <span>OCR metni</span>
+          <span>{title}</span>
           {copyButton}
         </summary>
         {body}
@@ -116,7 +124,7 @@ export function OcrTextPanel({
       )}
     >
       <div className="flex items-center justify-between gap-3">
-        <h3 className="font-semibold">OCR metni</h3>
+        <h3 className="font-semibold">{title}</h3>
         {copyButton}
       </div>
       {body}
