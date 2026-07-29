@@ -99,6 +99,21 @@ export default function SettingsPage() {
     try {
       const remote = await fetchRemoteVersion();
       if (remote?.version) setRemoteVersion(remote.version);
+
+      if (!remote?.version) {
+        setUpdating(false);
+        setMessage("Sunucu sürümü okunamadı. Bağlantını kontrol et.");
+        return;
+      }
+
+      if (remote.version === APP_VERSION) {
+        // Still force a shell refresh — clears stale SW even when versions match.
+        setMessage(`Zaten ${APP_VERSION}. Önbellek yenileniyor…`);
+        await applyAppUpdate();
+        return;
+      }
+
+      setMessage(`Yeni sürüm ${remote.version} indiriliyor…`);
       await applyAppUpdate();
     } catch {
       setUpdating(false);
