@@ -1,0 +1,118 @@
+{
+  "isValid": true,
+  "consistent": true,
+  "score": 85,
+  "errors": [],
+  "warnings": [
+    {
+      "id": "DateValidator:DATE_MISSING:purchaseDate",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "DATE_MISSING",
+      "message": "Purchase date is not present.",
+      "location": {
+        "path": "purchaseDate"
+      },
+      "provenance": {
+        "validatorId": "DateValidator",
+        "purchaseConfidence": 0.7
+      }
+    },
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.7
+      }
+    },
+    {
+      "id": "MetadataCompletenessValidator:METADATA_SPARSE:metadata",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "METADATA_SPARSE",
+      "message": "Receipt metadata is sparse (missing: purchaseDate, purchaseTime, receiptNumber, currency).",
+      "location": {
+        "path": "metadata"
+      },
+      "provenance": {
+        "validatorId": "MetadataCompletenessValidator",
+        "purchaseConfidence": 0.7
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "ReceiptNumberValidator:RECEIPT_NUMBER_MISSING:receiptNumber",
+      "severity": "INFO",
+      "category": "business",
+      "code": "RECEIPT_NUMBER_MISSING",
+      "message": "Receipt number is not present.",
+      "location": {
+        "path": "receiptNumber"
+      },
+      "provenance": {
+        "validatorId": "ReceiptNumberValidator",
+        "purchaseConfidence": 0.7
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[0]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"0,744 kg x Domates\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.7,
+        "graphNodeIds": [
+          "raw:L1",
+          "frag:L1:name",
+          "amt:L1",
+          "qty:L1",
+          "uprice:L1",
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L3"
+        ]
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.15000000000000002,
+  "overallConfidence": 0.5499999999999999,
+  "provenance": {
+    "purchaseConfidence": 0.7,
+    "structuralValidators": [
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 5
+  },
+  "blocking": false
+}

@@ -1,9 +1,11 @@
 import type { ClassifiedGraph } from "../types/models/classify";
 import type { MetadataBlock } from "../types/models/blocks";
 import { averageConfidence, provenanceFromNodes } from "./blockProvenance";
+import { scoreMerchantLine } from "../merchant/merchantScorer";
 
 const METADATA_KINDS = new Set([
   "merchant",
+  "address",
   "date",
   "time",
   "receipt_number",
@@ -17,6 +19,7 @@ export function buildMetadataBlock(
 ): MetadataBlock {
   const map = new Map(classified.nodes.map((n) => [n.id, n]));
   let merchant: string | null = null;
+  let merchantScore = -1;
   let date: string | null = null;
   let time: string | null = null;
   let receiptNumber: string | null = null;
@@ -32,8 +35,16 @@ export function buildMetadataBlock(
     assigned.add(cn.id);
 
     switch (cn.semanticKind) {
-      case "merchant":
-        merchant = cn.provenance.sourceText;
+      case "merchant": {
+        const scored = scoreMerchantLine(cn.provenance.sourceText, 0);
+        if (scored.score > merchantScore) {
+          merchant = cn.provenance.sourceText;
+          merchantScore = scored.score;
+        }
+        break;
+      }
+      case "address":
+        // Keep address out of merchant field.
         break;
       case "date":
         date = cn.provenance.sourceText;

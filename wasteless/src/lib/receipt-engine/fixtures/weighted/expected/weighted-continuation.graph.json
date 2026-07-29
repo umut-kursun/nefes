@@ -231,7 +231,7 @@
     {
       "id": "qty:L1",
       "kind": "quantity_token",
-      "text": "0,744 kg",
+      "text": "0,744 kg x 89,90",
       "amount": null,
       "layoutRef": {
         "lineIndex": 1
@@ -240,7 +240,7 @@
         "layoutLineIndices": [
           1
         ],
-        "sourceText": "0,744 kg",
+        "sourceText": "0,744 kg x 89,90",
         "rawText": "0,744 kg x 89,90",
         "creationRule": "passTokens:quantity",
         "confidence": 0.85
@@ -400,13 +400,6 @@
       "to": "raw:L4",
       "kind": "precedes",
       "confidence": 0.85
-    },
-    {
-      "id": "edge:footer_of:raw:L4->raw:L3",
-      "from": "raw:L4",
-      "to": "raw:L3",
-      "kind": "footer_of",
-      "confidence": 0.85
     }
   ],
   "regions": {
@@ -415,10 +408,10 @@
     ],
     "body": [
       "raw:L1",
-      "raw:L2"
+      "raw:L2",
+      "raw:L3"
     ],
     "footer": [
-      "raw:L3",
       "raw:L4"
     ]
   },

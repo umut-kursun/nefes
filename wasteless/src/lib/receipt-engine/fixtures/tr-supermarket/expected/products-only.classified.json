@@ -1,5 +1,5 @@
 {
-  "confidence": 0.6900000000000001,
+  "confidence": 0.6961538461538462,
   "nodes": [
     {
       "id": "raw:L0",
@@ -31,7 +31,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -43,7 +43,7 @@
         "rawText": "Peynir 500g %1 89,90",
         "graphCreationRule": "passRawLines",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -55,7 +55,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -67,7 +67,7 @@
         "rawText": "Zeytin 250g %1 34,50",
         "graphCreationRule": "passRawLines",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -110,7 +110,7 @@
       "semanticKind": "merchant",
       "confidence": 0.65,
       "matchedRules": [
-        "headerClassifier:merchant"
+        "headerClassifier:merchant_scored"
       ],
       "alternativeCandidates": [
         {
@@ -129,7 +129,7 @@
         "rawText": "CARREFOURSA",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "headerClassifier:merchant"
+          "headerClassifier:merchant_scored"
         ],
         "confidence": 0.65
       },
@@ -141,7 +141,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -153,7 +153,7 @@
         "rawText": "Peynir 500g %1 89,90",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -189,7 +189,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -201,7 +201,7 @@
         "rawText": "Zeytin 250g %1 34,50",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -311,43 +311,6 @@
       "amount": null
     },
     {
-      "id": "qty:L1",
-      "graphNodeId": "qty:L1",
-      "semanticKind": "product",
-      "confidence": 0.65,
-      "matchedRules": [
-        "productCandidateClassifier:product_token"
-      ],
-      "alternativeCandidates": [
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "metadataClassifier:structural_token",
-          "reason": "neutral graph token"
-        },
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "productCandidateClassifier:structural_token",
-          "reason": "neutral structural token"
-        }
-      ],
-      "provenance": {
-        "graphNodeId": "qty:L1",
-        "layoutLineIndices": [
-          1
-        ],
-        "sourceText": "500g",
-        "rawText": "Peynir 500g %1 89,90",
-        "graphCreationRule": "passTokens:quantity",
-        "classificationRules": [
-          "productCandidateClassifier:product_token"
-        ],
-        "confidence": 0.65
-      },
-      "amount": null
-    },
-    {
       "id": "vat:L2",
       "graphNodeId": "vat:L2",
       "semanticKind": "vat",
@@ -366,43 +329,6 @@
         "graphCreationRule": "passTokens:vat",
         "classificationRules": [
           "vatClassifier:vat_token"
-        ],
-        "confidence": 0.65
-      },
-      "amount": null
-    },
-    {
-      "id": "qty:L2",
-      "graphNodeId": "qty:L2",
-      "semanticKind": "product",
-      "confidence": 0.65,
-      "matchedRules": [
-        "productCandidateClassifier:product_token"
-      ],
-      "alternativeCandidates": [
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "metadataClassifier:structural_token",
-          "reason": "neutral graph token"
-        },
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "productCandidateClassifier:structural_token",
-          "reason": "neutral structural token"
-        }
-      ],
-      "provenance": {
-        "graphNodeId": "qty:L2",
-        "layoutLineIndices": [
-          2
-        ],
-        "sourceText": "250g",
-        "rawText": "Zeytin 250g %1 34,50",
-        "graphCreationRule": "passTokens:quantity",
-        "classificationRules": [
-          "productCandidateClassifier:product_token"
         ],
         "confidence": 0.65
       },

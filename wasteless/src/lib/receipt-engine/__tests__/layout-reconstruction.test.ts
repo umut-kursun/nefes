@@ -97,12 +97,13 @@ describe("Layer 2 — layout reconstruction", () => {
           features: {
             hasVatToken: true,
             hasWeightPattern: false,
-            hasQuantityToken: true,
+            // Package size "1 L" is an attribute, not a purchased-quantity token.
+            hasQuantityToken: false,
             isAmountOnly: false,
             isLikelyContinuation: false,
             isRightAlignedPrice: false,
           },
-          tokens: { quantity: "1 L", vat: "%1" },
+          tokens: { vat: "%1" },
           confidence: 0.85,
         },
         {
@@ -167,7 +168,9 @@ describe("Layer 2 — layout reconstruction", () => {
     const layout = layoutFor("products-only");
     expect(layout.lines).toHaveLength(4);
     expect(layout.regions.footer).toEqual([3]);
-    expect(layout.lines[1]?.features.hasQuantityToken).toBe(true);
+    // "500g" is a package attribute — not a purchased-quantity token.
+    expect(layout.lines[1]?.features.hasQuantityToken).toBe(false);
+    expect(layout.lines[1]?.tokens.quantity).toBeUndefined();
     expect(layout.lines[1]?.columns).toMatchObject({
       name: "Peynir 500g",
       vat: "%1",

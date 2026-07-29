@@ -5,6 +5,7 @@
       "text": "MIGROS A.S.",
       "rawText": "MIGROS A.S.",
       "region": "header",
+      "section": "HEADER",
       "columns": {
         "name": "MIGROS A.S."
       },
@@ -25,6 +26,7 @@
       "text": "ISTANBUL",
       "rawText": "ISTANBUL",
       "region": "header",
+      "section": "HEADER",
       "columns": {
         "name": "ISTANBUL"
       },
@@ -45,6 +47,7 @@
       "text": "Sut 1 L %1 45,90",
       "rawText": "Sut 1 L %1 45,90",
       "region": "body",
+      "section": "PRODUCTS",
       "columns": {
         "vat": "%1",
         "amount": "45,90",
@@ -54,13 +57,12 @@
       "features": {
         "hasVatToken": true,
         "hasWeightPattern": false,
-        "hasQuantityToken": true,
+        "hasQuantityToken": false,
         "isAmountOnly": false,
         "isLikelyContinuation": false,
         "isRightAlignedPrice": false
       },
       "tokens": {
-        "quantity": "1 L",
         "vat": "%1"
       },
       "confidence": 0.85
@@ -70,6 +72,7 @@
       "text": "Ekmek %1 15,00",
       "rawText": "Ekmek %1 15,00",
       "region": "body",
+      "section": "PRODUCTS",
       "columns": {
         "vat": "%1",
         "amount": "15,00",
@@ -94,6 +97,7 @@
       "text": "Alisveris Poseti 0,50",
       "rawText": "Alisveris Poseti 0,50",
       "region": "body",
+      "section": "PRODUCTS",
       "columns": {
         "amount": "0,50",
         "name": "Alisveris Poseti"
@@ -115,6 +119,7 @@
       "text": "TOPLAM 61,40",
       "rawText": "TOPLAM 61,40",
       "region": "footer",
+      "section": "TOTALS",
       "columns": {
         "amount": "61,40",
         "name": "TOPLAM"
@@ -155,5 +160,26 @@
       5
     ]
   },
+  "sections": {
+    "HEADER": [
+      0,
+      1
+    ],
+    "PRODUCTS": [
+      2,
+      3,
+      4
+    ],
+    "TOTALS": [
+      5
+    ],
+    "PAYMENTS": [],
+    "VAT_SUMMARY": [],
+    "CARD_SLIP": [],
+    "LOYALTY": [],
+    "FOOTER": [],
+    "END": []
+  },
+  "productsEndIndex": 5,
   "confidence": 0.7833333333333333
 }

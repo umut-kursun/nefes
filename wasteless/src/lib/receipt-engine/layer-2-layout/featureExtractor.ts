@@ -1,12 +1,11 @@
 import type { LayoutLineFeatures } from "../types/models/layout";
 import {
-  QTY_TOKEN,
-  QTY_X_EMBED,
   VAT_INLINE,
   VAT_STANDALONE,
   WEIGHTED_PATTERN,
 } from "./patterns";
 import { isAmountOnlyLine, leadingWhitespaceRatio } from "./lineUtils";
+import { purchasedQuantityToken } from "../layer-6-purchase/parsers/purchasedQuantity";
 
 export interface ExtractedFeatures extends LayoutLineFeatures {
   quantityToken: string | null;
@@ -35,21 +34,22 @@ export function extractFeatures(
   hasTrailingAmount: boolean
 ): ExtractedFeatures {
   const weighted = normalizedLine.match(WEIGHTED_PATTERN);
-  const qty = normalizedLine.match(QTY_TOKEN);
-  const qtyX = normalizedLine.match(QTY_X_EMBED);
+  const purchased = purchasedQuantityToken(normalizedLine);
   const amountOnly = isAmountOnlyLine(normalizedLine);
   const rightAligned =
     hasTrailingAmount &&
     (leadingWhitespaceRatio(rawLine) > 0.15 || amountOnly);
 
   return {
-    hasVatToken: VAT_INLINE.test(normalizedLine) || VAT_STANDALONE.test(normalizedLine),
+    hasVatToken:
+      VAT_INLINE.test(normalizedLine) || VAT_STANDALONE.test(normalizedLine),
     hasWeightPattern: weighted != null,
-    hasQuantityToken: qty != null || qtyX != null,
+    hasQuantityToken: purchased != null,
     isAmountOnly: amountOnly,
     isLikelyContinuation: false,
     isRightAlignedPrice: rightAligned,
-    quantityToken: qty?.[0]?.trim() ?? qtyX?.[0]?.trim() ?? null,
+    // Only explicit purchased / sold-weight qty — never package attributes.
+    quantityToken: purchased,
     vatToken: null,
   };
 }

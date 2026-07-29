@@ -69,8 +69,8 @@ describe("ConflictResolver", () => {
   it("defines priority for every semantic kind", () => {
     const kinds = [
       "unknown", "product", "charge", "discount", "payment", "total",
-      "subtotal", "vat", "merchant", "date", "time", "receipt_number",
-      "loyalty", "barcode", "separator", "header", "footer", "other",
+      "subtotal", "vat", "merchant", "address", "date", "time", "receipt_number",
+      "loyalty", "barcode", "separator", "header", "footer", "card_slip", "other",
     ] as const;
     for (const kind of kinds) {
       expect(SEMANTIC_PRIORITY[kind]).toBeTypeOf("number");

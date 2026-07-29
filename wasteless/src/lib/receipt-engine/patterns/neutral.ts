@@ -22,7 +22,7 @@ export const FOOTER_HINT =
   /\b(toplam|kdv|ödenecek|odenecek|genel\s*toplam|ara\s*toplam|subtotal|nakit|kart|kredi\s*kart|para\s*üstü|paraustu|teşekkür|tesekkur|fiş\s*no|fis\s*no|z\s*no|mali\s*değer|mali\s*deger|vk[nıi]|vergi\s*no|ödenecek|odenecek)\b/i;
 
 export const HEADER_HINT =
-  /\b(limited|ltd|a\.?\s*ş\.?|aş|ticaret|sanayi|vergi\s*daire|vd\.?|tel|www\.|http|\.com\b|adres|address)\b/i;
+  /\b(limited|ltd|a\.?\s*[sş]\.?|aş|ticaret|sanayi|vergi\s*daire|vd\.?|tel|www\.|http|\.com\b|adres|address)\b/i;
 
 export const BARCODE_NOISE = /^\d{8,}$/;
 export const SEPARATOR_NOISE = /^\*+$/;
@@ -30,7 +30,7 @@ export const SEPARATOR_NOISE = /^\*+$/;
 export const TOTAL_LABEL = /\b(toplam|genel\s*toplam|ödenecek|odenecek)\b/i;
 export const SUBTOTAL_LABEL = /\b(ara\s*toplam|subtotal)\b/i;
 export const PAYMENT_LABEL =
-  /\b(nakit|kart|kredi\s*kart|credit\s*card|para\s*üstü|paraustu|ortak\s*pos|banka\s*kart(?:ı|i)?|sanal\s*pos)\b/i;
+  /\b(nakit|kart|kredi\s*kart(?:ı|i)?|credit\s*card|para\s*üstü|paraustu|ortak\s*pos|banka\s*kart(?:ı|i)?|sanal\s*pos)\b/i;
 export const DISCOUNT_LABEL = /\b(indirim|discount|kampanya|iskonto)\b/i;
 export const CHARGE_LABEL =
   /\b(poset|poşet|poseti|ambalaj|hizmet\s*bedel|kurye|teslimat)\b/i;

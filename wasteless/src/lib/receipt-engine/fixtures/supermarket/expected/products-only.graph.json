@@ -229,25 +229,6 @@
       "confidence": 0.85
     },
     {
-      "id": "qty:L1",
-      "kind": "quantity_token",
-      "text": "500g",
-      "amount": null,
-      "layoutRef": {
-        "lineIndex": 1
-      },
-      "provenance": {
-        "layoutLineIndices": [
-          1
-        ],
-        "sourceText": "500g",
-        "rawText": "Peynir 500g %1 89,90",
-        "creationRule": "passTokens:quantity",
-        "confidence": 0.85
-      },
-      "confidence": 0.85
-    },
-    {
       "id": "vat:L2",
       "kind": "vat_token",
       "text": "%1",
@@ -262,25 +243,6 @@
         "sourceText": "%1",
         "rawText": "Zeytin 250g %1 34,50",
         "creationRule": "passTokens:vat",
-        "confidence": 0.85
-      },
-      "confidence": 0.85
-    },
-    {
-      "id": "qty:L2",
-      "kind": "quantity_token",
-      "text": "250g",
-      "amount": null,
-      "layoutRef": {
-        "lineIndex": 2
-      },
-      "provenance": {
-        "layoutLineIndices": [
-          2
-        ],
-        "sourceText": "250g",
-        "rawText": "Zeytin 250g %1 34,50",
-        "creationRule": "passTokens:quantity",
         "confidence": 0.85
       },
       "confidence": 0.85
@@ -351,20 +313,6 @@
       "confidence": 0.85
     },
     {
-      "id": "edge:same_row:qty:L1->raw:L1",
-      "from": "qty:L1",
-      "to": "raw:L1",
-      "kind": "same_row",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:quantity_of:qty:L1->raw:L1",
-      "from": "qty:L1",
-      "to": "raw:L1",
-      "kind": "quantity_of",
-      "confidence": 0.85
-    },
-    {
       "id": "edge:same_row:vat:L2->raw:L2",
       "from": "vat:L2",
       "to": "raw:L2",
@@ -376,20 +324,6 @@
       "from": "vat:L2",
       "to": "raw:L2",
       "kind": "vat_of",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:same_row:qty:L2->raw:L2",
-      "from": "qty:L2",
-      "to": "raw:L2",
-      "kind": "same_row",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:quantity_of:qty:L2->raw:L2",
-      "from": "qty:L2",
-      "to": "raw:L2",
-      "kind": "quantity_of",
       "confidence": 0.85
     },
     {
@@ -448,5 +382,5 @@
     ]
   },
   "profileId": "generic-tr",
-  "confidence": 0.8233333333333331
+  "confidence": 0.8192307692307691
 }
