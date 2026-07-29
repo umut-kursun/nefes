@@ -71,6 +71,32 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Stamp version.json for this deploy
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          BUILT_AT="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          printf '{"version":"%s","builtAt":"%s"}\n' "$VERSION" "$BUILT_AT" > public/version.json
+          # Keep APP_VERSION in sync with package.json (baked into the JS bundle).
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          version = json.loads(Path("package.json").read_text(encoding="utf-8"))["version"]
+          path = Path("src/lib/app-version.ts")
+          text = path.read_text(encoding="utf-8")
+          import re
+          text2, n = re.subn(
+              r'export const APP_VERSION = "[^"]+";',
+              f'export const APP_VERSION = "{version}";',
+              text,
+              count=1,
+          )
+          if n != 1:
+              raise SystemExit("Failed to sync APP_VERSION")
+          path.write_text(text2, encoding="utf-8")
+          print(f"Stamped version.json + APP_VERSION → {version}")
+          PY
+
       - name: Build static export
         run: |
           set -euo pipefail
@@ -83,6 +109,11 @@ jobs:
           if [ -d src/app/_api_dev_only ]; then
             mv src/app/_api_dev_only src/app/api
           fi
+          # Guarantee version.json ships even if export omits it.
+          cp -f public/version.json out/version.json
+          # Ensure _headers lands in assets root for Cloudflare.
+          cp -f public/_headers out/_headers
+          echo "out/version.json=$(cat out/version.json)"
 
       - name: Deploy with Wrangler
         env:
