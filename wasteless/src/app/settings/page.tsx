@@ -135,10 +135,8 @@ export default function SettingsPage() {
           <div>
             <p className="font-semibold">Sürüm</p>
             <p className="text-sm text-muted-foreground tabular-nums">
-              {APP_VERSION}
-              {remoteVersion && remoteVersion !== APP_VERSION
-                ? ` · sunucu ${remoteVersion}`
-                : ""}
+              Yerel {APP_VERSION}
+              {remoteVersion ? ` · sunucu ${remoteVersion}` : ""}
             </p>
           </div>
           <Button
@@ -151,7 +149,9 @@ export default function SettingsPage() {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Yeni sürüm yayınlandığında Güncelle ile uygulamayı yenile.
+          {remoteVersion && remoteVersion !== APP_VERSION
+            ? `Sunucuda ${remoteVersion} var — Güncelle ile yükle.`
+            : "Yeni sürüm yayınlandığında Güncelle ile uygulamayı yenile."}
         </p>
       </section>
 
