@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import type { Expense } from "@/lib/types";
 import { formatMoney, cn } from "@/lib/utils";
+import { OcrTextPanel } from "@/components/ocr-text-panel";
 
 function Collapsible({
   title,
@@ -70,11 +71,13 @@ export function ReceiptViewer({ expense }: { expense: Expense }) {
         />
       </Collapsible>
 
-      <Collapsible title="OCR metni" empty={!expense.rawText}>
-        <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground/85">
-          {expense.rawText}
-        </pre>
-      </Collapsible>
+      {expense.rawText?.trim() ? (
+        <OcrTextPanel
+          text={expense.rawText}
+          maxHeightClassName="max-h-64"
+          className="border-border/70 bg-white/80"
+        />
+      ) : null}
 
       <Collapsible
         title="Ürünler"

@@ -32,6 +32,7 @@ import {
 import { checkReceiptConsistency, findLineItemIssues } from "@/lib/receipt-quality";
 import { ITEM_CONFIRM_THRESHOLD } from "@/lib/receipt-pipeline";
 import { OcrResultSummary } from "@/components/ocr-result-summary";
+import { OcrTextPanel } from "@/components/ocr-text-panel";
 import type { AnalysisResult, Expense } from "@/lib/types";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
@@ -541,14 +542,7 @@ export default function AddPage() {
             />
           )}
           {mode === "review" && draft.rawText?.trim() && (
-            <details className="rounded-2xl border border-white/70 bg-white/75 p-4 open:pb-3">
-              <summary className="cursor-pointer text-sm font-semibold text-teal-900">
-                OCR metni
-              </summary>
-              <pre className="mt-3 max-h-56 overflow-auto whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground/85">
-                {draft.rawText}
-              </pre>
-            </details>
+            <OcrTextPanel text={draft.rawText} collapsible />
           )}
           {mode === "review" && (
             <div className="rounded-2xl border border-white/70 bg-white/75 p-3 text-sm text-muted-foreground">
