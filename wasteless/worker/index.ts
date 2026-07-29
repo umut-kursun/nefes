@@ -1,4 +1,5 @@
 import { analyzeReceiptFormData } from "../src/lib/analyze-receipt";
+import { analyzeReceiptEngineFormData } from "../src/lib/receipt-engine-analyze";
 import { loadCanonicalCatalog } from "../src/lib/product-knowledge/catalogLoader";
 import { readCatalogFromKv } from "../src/lib/product-knowledge/catalogKv";
 import {
@@ -13,6 +14,7 @@ export interface Env {
   ASSETS: Fetcher;
   OPENAI_API_KEY: string;
   OPENAI_VISION_MODEL?: string;
+  OPENAI_OCR_MODEL?: string;
   KB_ADMIN_PASSWORD?: string;
   KB_CATALOG?: KVNamespace;
 }
@@ -100,6 +102,40 @@ async function handleAnalyze(request: Request, env: Env): Promise<Response> {
   }
 }
 
+async function handleReceiptEngine(request: Request, env: Env): Promise<Response> {
+  if (!env.OPENAI_API_KEY) {
+    return json({ error: "Sunucu yapılandırması eksik." }, 500);
+  }
+
+  try {
+    const form = await request.formData();
+    const model = env.OPENAI_OCR_MODEL ?? env.OPENAI_VISION_MODEL;
+    const result = await analyzeReceiptEngineFormData(form, {
+      apiKey: env.OPENAI_API_KEY,
+      model,
+    });
+
+    if ("error" in result) {
+      return json(
+        { error: result.error, failureCode: result.failureCode },
+        result.status
+      );
+    }
+
+    return json(result);
+  } catch (error) {
+    return json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "İşlem başarısız oldu. Lütfen tekrar deneyin.",
+      },
+      500
+    );
+  }
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -119,6 +155,23 @@ export default {
         return json({ error: "Method not allowed" }, 405);
       }
       return handleAnalyze(request, env);
+    }
+
+    if (url.pathname === "/api/receipt-engine") {
+      if (request.method === "OPTIONS") {
+        return new Response(null, {
+          status: 204,
+          headers: {
+            "access-control-allow-origin": "*",
+            "access-control-allow-methods": "POST, OPTIONS",
+            "access-control-allow-headers": "content-type",
+          },
+        });
+      }
+      if (request.method !== "POST") {
+        return json({ error: "Method not allowed" }, 405);
+      }
+      return handleReceiptEngine(request, env);
     }
 
     if (url.pathname === "/api/kb/catalog") {
