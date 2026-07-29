@@ -4,7 +4,7 @@
       "id": "product:raw:L2",
       "kind": "product",
       "label": "Sut 1 L",
-      "quantity": "1 L",
+      "quantity": null,
       "unit": null,
       "unitPrice": null,
       "totalPrice": 45.9,
@@ -19,23 +19,20 @@
         "raw:L2",
         "frag:L2:name",
         "amt:L2",
-        "vat:L2",
-        "qty:L2"
+        "vat:L2"
       ],
       "nodeRefs": [
         "raw:L2",
         "frag:L2:name",
         "amt:L2",
-        "vat:L2",
-        "qty:L2"
+        "vat:L2"
       ],
       "provenance": {
         "graphNodeIds": [
           "raw:L2",
           "frag:L2:name",
           "amt:L2",
-          "vat:L2",
-          "qty:L2"
+          "vat:L2"
         ],
         "layoutLineIndices": [
           2
@@ -44,10 +41,9 @@
           "Sut 1 L %1 45,90"
         ],
         "classificationRules": [
-          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:products_section",
           "amountClassifier:product_line_amount",
-          "vatClassifier:vat_token",
-          "productCandidateClassifier:product_token"
+          "vatClassifier:vat_token"
         ],
         "confidence": 0.65
       },
@@ -94,7 +90,7 @@
           "Ekmek %1 15,00"
         ],
         "classificationRules": [
-          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:products_section",
           "amountClassifier:product_line_amount",
           "vatClassifier:vat_token"
         ],
@@ -176,24 +172,29 @@
     "id": "metadata:main",
     "kind": "metadata",
     "nodeRefs": [
-      "frag:L0:name"
+      "frag:L0:name",
+      "frag:L1:name"
     ],
     "provenance": {
       "graphNodeIds": [
-        "frag:L0:name"
+        "frag:L0:name",
+        "frag:L1:name"
       ],
       "layoutLineIndices": [
-        0
+        0,
+        1
       ],
       "rawTexts": [
-        "MIGROS A.S."
+        "MIGROS A.S.",
+        "ISTANBUL"
       ],
       "classificationRules": [
-        "headerClassifier:merchant"
+        "headerClassifier:merchant_scored",
+        "headerClassifier:address"
       ],
-      "confidence": 0.65
+      "confidence": 0.8
     },
-    "confidence": 0.65,
+    "confidence": 0.8,
     "merchant": "MIGROS A.S.",
     "date": null,
     "time": null,
@@ -206,14 +207,12 @@
     "kind": "unknown",
     "nodeRefs": [
       "raw:L0",
-      "raw:L1",
-      "frag:L1:name"
+      "raw:L1"
     ],
     "provenance": {
       "graphNodeIds": [
         "raw:L0",
-        "raw:L1",
-        "frag:L1:name"
+        "raw:L1"
       ],
       "layoutLineIndices": [
         0,
@@ -224,8 +223,7 @@
         "ISTANBUL"
       ],
       "classificationRules": [
-        "headerClassifier:raw_line",
-        "headerClassifier:header_fragment"
+        "headerClassifier:raw_line"
       ],
       "confidence": 0.65
     },
@@ -242,14 +240,8 @@
         "text": "ISTANBUL",
         "semanticKind": "header",
         "confidence": 0.65
-      },
-      {
-        "nodeRef": "frag:L1:name",
-        "text": "ISTANBUL",
-        "semanticKind": "header",
-        "confidence": 0.65
       }
     ]
   },
-  "confidence": 0.69
+  "confidence": 0.72
 }

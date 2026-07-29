@@ -4,7 +4,7 @@
       "id": "product:raw:L1",
       "kind": "product",
       "label": "Su 1.5 L",
-      "quantity": "1.5 L",
+      "quantity": null,
       "unit": null,
       "unitPrice": null,
       "totalPrice": 8.9,
@@ -19,23 +19,20 @@
         "raw:L1",
         "frag:L1:name",
         "amt:L1",
-        "vat:L1",
-        "qty:L1"
+        "vat:L1"
       ],
       "nodeRefs": [
         "raw:L1",
         "frag:L1:name",
         "amt:L1",
-        "vat:L1",
-        "qty:L1"
+        "vat:L1"
       ],
       "provenance": {
         "graphNodeIds": [
           "raw:L1",
           "frag:L1:name",
           "amt:L1",
-          "vat:L1",
-          "qty:L1"
+          "vat:L1"
         ],
         "layoutLineIndices": [
           1
@@ -44,10 +41,9 @@
           "Su 1.5 L %1 8,90"
         ],
         "classificationRules": [
-          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:products_section",
           "amountClassifier:product_line_amount",
-          "vatClassifier:vat_token",
-          "productCandidateClassifier:product_token"
+          "vatClassifier:vat_token"
         ],
         "confidence": 0.65
       },

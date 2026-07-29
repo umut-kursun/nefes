@@ -112,6 +112,30 @@ export {
   parseTime,
   parseReceiptNumber,
 } from "./layer-6-purchase/parsers";
+export {
+  extractPurchasedQuantity,
+  extractPackageAttribute,
+  purchasedQuantityToken,
+  extractSoldUnitPrice,
+} from "./layer-6-purchase/parsers/purchasedQuantity";
+export { extractFuelFromProductLines } from "./layer-6-purchase/fuelMapper";
+export {
+  segmentDocument,
+  sectionToCoarseRegion,
+  isProductSection,
+  nextSectionState,
+  looksLikeProductStart,
+} from "./document-segmentation";
+export type {
+  DocumentSection,
+  DocumentSegmentation,
+  SegmentedLine,
+} from "./document-segmentation";
+export {
+  scoreMerchantLine,
+  pickBestMerchant,
+} from "./merchant/merchantScorer";
+export type { MerchantCandidate } from "./merchant/merchantScorer";
 export { layer7Validate } from "./layer-7-validate/validator.layer";
 export { buildValidationReport } from "./layer-7-validate/buildValidationReport";
 export {

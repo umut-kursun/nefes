@@ -5,6 +5,7 @@
       "text": "BIM",
       "rawText": "BIM",
       "region": "header",
+      "section": "HEADER",
       "columns": {
         "name": "BIM"
       },
@@ -25,6 +26,7 @@
       "text": "0,744 kg x 89,90",
       "rawText": "0,744 kg x 89,90",
       "region": "body",
+      "section": "PRODUCTS",
       "columns": {
         "amount": "89,90",
         "name": "0,744 kg x"
@@ -39,7 +41,7 @@
         "isRightAlignedPrice": false
       },
       "tokens": {
-        "quantity": "0,744 kg"
+        "quantity": "0,744 kg x 89,90"
       },
       "confidence": 0.85
     },
@@ -48,6 +50,7 @@
       "text": "Domates",
       "rawText": "Domates",
       "region": "body",
+      "section": "PRODUCTS",
       "columns": {
         "name": "Domates"
       },
@@ -67,7 +70,8 @@
       "index": 3,
       "text": "66,89",
       "rawText": "66,89",
-      "region": "footer",
+      "region": "body",
+      "section": "PRODUCTS",
       "columns": {
         "amount": "66,89",
         "vat": "66,89"
@@ -91,6 +95,7 @@
       "text": "TOPLAM 66,89",
       "rawText": "TOPLAM 66,89",
       "region": "footer",
+      "section": "TOTALS",
       "columns": {
         "amount": "66,89",
         "name": "TOPLAM"
@@ -122,12 +127,32 @@
     ],
     "body": [
       1,
-      2
+      2,
+      3
     ],
     "footer": [
-      3,
       4
     ]
   },
+  "sections": {
+    "HEADER": [
+      0
+    ],
+    "PRODUCTS": [
+      1,
+      2,
+      3
+    ],
+    "TOTALS": [
+      4
+    ],
+    "PAYMENTS": [],
+    "VAT_SUMMARY": [],
+    "CARD_SLIP": [],
+    "LOYALTY": [],
+    "FOOTER": [],
+    "END": []
+  },
+  "productsEndIndex": 4,
   "confidence": 0.77
 }

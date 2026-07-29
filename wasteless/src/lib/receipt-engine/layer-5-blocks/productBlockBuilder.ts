@@ -3,6 +3,7 @@ import type { GraphIndex } from "../graph/graphIndex";
 import type { ChainView } from "../graph/chainView";
 import type { ProductBlock } from "../types/models/blocks";
 import { averageConfidence, provenanceFromNodes } from "./blockProvenance";
+import { extractSoldUnitPrice } from "../layer-6-purchase/parsers/purchasedQuantity";
 
 const PRODUCT_KINDS = new Set<SemanticKind>(["product"]);
 
@@ -73,9 +74,18 @@ export function buildProductBlocks(
   const products: ProductBlock[] = [];
 
   for (const chain of chains) {
+    // PRODUCTS section only (coarse body after segmentation).
     if (chain.rows[0]?.region !== "body") continue;
     if (!isProductChain(chain, map)) continue;
-    if (chain.allNodeIds.some((id) => assigned.has(id))) continue;
+    // Skip only when a primary product label/amount node is already claimed.
+    // A stray metadata claim on a structural token must not kill the chain.
+    const primaryIds = chain.rows.flatMap((row) => [
+      row.rawLineId,
+      ...(row.nameFragmentId ? [row.nameFragmentId] : []),
+      ...row.boundAmountNodeIds,
+      ...row.amountNodeIds,
+    ]);
+    if (primaryIds.some((id) => assigned.has(id))) continue;
 
     const labelParts = chain.rows
       .map((row) => {
@@ -84,6 +94,16 @@ export function buildProductBlocks(
         return row.rawLineNode.text;
       })
       .filter(Boolean);
+
+    const label = labelParts.join(" ").trim() || chain.headRawLineId;
+    // Defense: never emit totals/payment/card-slip text as a product.
+    if (
+      /\b(toplam|topkdv|nakit|kredi|banka|aid|term|onay|ref|paywave|mersis|www)\b/i.test(
+        label
+      )
+    ) {
+      continue;
+    }
 
     let quantity: string | null = null;
     const unit: string | null = null;
@@ -100,6 +120,10 @@ export function buildProductBlocks(
       }
     }
 
+    // Sold-weight / fuel: unit price lives inside the qty expression.
+    const embeddedUnit = quantity ? extractSoldUnitPrice(quantity) : undefined;
+    if (embeddedUnit != null) unitPrice = embeddedUnit.amount;
+
     const total = pickLineTotal(index, chain, map);
     const nodeRefs = Object.freeze([...chain.allNodeIds]);
     nodeRefs.forEach((id) => assigned.add(id));
@@ -112,7 +136,7 @@ export function buildProductBlocks(
       Object.freeze({
         id: `product:${chain.headRawLineId}`,
         kind: "product",
-        label: labelParts.join(" ").trim() || chain.headRawLineId,
+        label,
         quantity,
         unit,
         unitPrice,

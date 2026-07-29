@@ -5,6 +5,7 @@
       "text": "A101",
       "rawText": "A101",
       "region": "header",
+      "section": "HEADER",
       "columns": {
         "name": "A101"
       },
@@ -25,6 +26,7 @@
       "text": "Su 1.5 L %1 8,90",
       "rawText": "Su 1.5 L %1 8,90",
       "region": "body",
+      "section": "PRODUCTS",
       "columns": {
         "vat": "%1",
         "amount": "8,90",
@@ -34,13 +36,12 @@
       "features": {
         "hasVatToken": true,
         "hasWeightPattern": false,
-        "hasQuantityToken": true,
+        "hasQuantityToken": false,
         "isAmountOnly": false,
         "isLikelyContinuation": false,
         "isRightAlignedPrice": false
       },
       "tokens": {
-        "quantity": "1.5 L",
         "vat": "%1"
       },
       "confidence": 0.85
@@ -50,6 +51,7 @@
       "text": "Nakit 50,00",
       "rawText": "Nakit 50,00",
       "region": "footer",
+      "section": "PAYMENTS",
       "columns": {
         "amount": "50,00",
         "name": "Nakit"
@@ -71,6 +73,7 @@
       "text": "Kredi Kart 8,90",
       "rawText": "Kredi Kart 8,90",
       "region": "footer",
+      "section": "PAYMENTS",
       "columns": {
         "amount": "8,90",
         "name": "Kredi Kart"
@@ -92,6 +95,7 @@
       "text": "TOPLAM 8,90",
       "rawText": "TOPLAM 8,90",
       "region": "footer",
+      "section": "PAYMENTS",
       "columns": {
         "amount": "8,90",
         "name": "TOPLAM"
@@ -130,5 +134,25 @@
       4
     ]
   },
+  "sections": {
+    "HEADER": [
+      0
+    ],
+    "PRODUCTS": [
+      1
+    ],
+    "TOTALS": [],
+    "PAYMENTS": [
+      2,
+      3,
+      4
+    ],
+    "VAT_SUMMARY": [],
+    "CARD_SLIP": [],
+    "LOYALTY": [],
+    "FOOTER": [],
+    "END": []
+  },
+  "productsEndIndex": 2,
   "confidence": 0.8099999999999999
 }

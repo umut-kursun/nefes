@@ -4,7 +4,7 @@
       "id": "product:raw:L1",
       "kind": "product",
       "label": "0,744 kg x Domates",
-      "quantity": "0,744 kg",
+      "quantity": "0,744 kg x 89,90",
       "unit": null,
       "unitPrice": 89.9,
       "totalPrice": 66.89,
@@ -60,7 +60,7 @@
           "66,89"
         ],
         "classificationRules": [
-          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:products_section",
           "amountClassifier:product_line_amount",
           "productCandidateClassifier:product_token"
         ],
@@ -167,7 +167,7 @@
       ],
       "classificationRules": [
         "headerClassifier:raw_line",
-        "footerClassifier:footer_region"
+        "productCandidateClassifier:products_section"
       ],
       "confidence": 0.65
     },
@@ -182,7 +182,7 @@
       {
         "nodeRef": "raw:L3",
         "text": "66,89",
-        "semanticKind": "footer",
+        "semanticKind": "product",
         "confidence": 0.65
       }
     ]

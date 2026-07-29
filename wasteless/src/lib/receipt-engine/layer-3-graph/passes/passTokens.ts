@@ -8,6 +8,7 @@ import {
   vatTokenId,
 } from "../graphIds";
 import { createNode, relationEdge, sameRowEdge } from "../graphNodes";
+import { extractSoldUnitPrice } from "../../layer-6-purchase/parsers/purchasedQuantity";
 
 export function passTokens(
   state: GraphBuilderState,
@@ -61,31 +62,44 @@ export function passTokens(
       );
     }
 
-    if (line.features.hasWeightPattern && line.columns?.amount) {
-      const unitText = line.columns.amount.trim();
-      nodes.push(
-        createNode(
-          unitPriceTokenId(line.index),
-          "unit_price_token",
-          unitText,
-          line,
-          "passTokens:unit_price",
-          line.trailingAmount ?? null
-        )
-      );
-      edges.push(
-        sameRowEdge(unitPriceTokenId(line.index), rawId, line.confidence)
-      );
-      edges.push(
-        relationEdge(
-          unitPriceTokenId(line.index),
-          rawId,
-          "unit_price_of",
-          line.confidence
-        )
-      );
-    }
-  }
+    // Prefer unit price embedded in sold-qty (`N LT x 79,17`) over trailing
+    // line total — fuel/single-line weighted rows carry both.
+    if (line.features.hasWeightPattern) {
+      const embedded =
+        (qtyText ? extractSoldUnitPrice(qtyText) : undefined) ??
+        extractSoldUnitPrice(line.text);
+      const unitPriceAmount =
+        embedded?.amount ??
+        (line.columns?.amount ? line.trailingAmount : null) ??
+        null;
+      if (unitPriceAmount != null) {
+        const unitText =
+          embedded?.raw ??
+          line.columns?.amount?.trim() ??
+          String(unitPriceAmount);
+        nodes.push(
+          createNode(
+            unitPriceTokenId(line.index),
+            "unit_price_token",
+            unitText,
+            line,
+            "passTokens:unit_price",
+            unitPriceAmount
+          )
+        );
+        edges.push(
+          sameRowEdge(unitPriceTokenId(line.index), rawId, line.confidence)
+        );
+        edges.push(
+          relationEdge(
+            unitPriceTokenId(line.index),
+            rawId,
+            "unit_price_of",
+            line.confidence
+          )
+        );
+      }
+    }  }
 
   next = withNodes(next, nodes);
   next = withEdges(next, edges);

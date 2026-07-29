@@ -3,17 +3,12 @@ import type { LayoutDocument, LayoutLine } from "../types/models/layout";
 import { clampConfidence, CONFIDENCE } from "../types/provenance";
 import { detectColumns } from "./columnDetector";
 import { markContinuations } from "./continuationDetector";
-import {
-  assignRegions,
-  buildRegionIndices,
-  detectFooterStart,
-  detectHeaderEnd,
-  findBodyStart,
-} from "./footerDetector";
 import { extractFeatures, extractVatToken } from "./featureExtractor";
 import { normalizeOcrLine } from "./lineUtils";
 import { resolveReadingOrder } from "./readingOrderResolver";
 import { BARCODE_NOISE, SEPARATOR_NOISE } from "./patterns";
+import { segmentDocument } from "../document-segmentation/segmentDocument";
+import type { DocumentSection } from "../document-segmentation/types";
 
 function lineConfidence(
   hasColumns: boolean,
@@ -30,6 +25,7 @@ function buildLayoutLine(
   index: number,
   rawLine: string,
   region: LayoutLine["region"],
+  section: DocumentSection,
   isContinuation: boolean
 ): LayoutLine {
   const normalized = normalizeOcrLine(rawLine);
@@ -62,6 +58,7 @@ function buildLayoutLine(
     text: normalized,
     rawText: rawLine,
     region,
+    section,
     columns: hasColumnData ? columns : undefined,
     trailingAmount: split.trailingAmount,
     features: {
@@ -82,6 +79,12 @@ function buildLayoutLine(
   };
 }
 
+/**
+ * Layout reconstruction + document segmentation.
+ *
+ * Pipeline: OCR lines → segment (state machine) → columns/features → LayoutDocument.
+ * Product parsers must only consume `section === "PRODUCTS"` (coarse region `body`).
+ */
 export function reconstructLayout(
   ocr: OcrDocument,
   profileId: string
@@ -91,10 +94,9 @@ export function reconstructLayout(
     : ocr.rawText.split("\n").map((l) => l.trim()).filter(Boolean);
 
   const normalizedLines = rawLines.map(normalizeOcrLine).filter(Boolean);
-  const bodyStart = findBodyStart(normalizedLines);
-  const footerStart = detectFooterStart(normalizedLines);
-  const headerEnd = detectHeaderEnd(normalizedLines, bodyStart);
-  const regions = assignRegions(normalizedLines, footerStart, headerEnd);
+  const segmentation = segmentDocument(normalizedLines);
+  const regions = segmentation.lines.map((l) => l.region);
+  const sections = segmentation.lines.map((l) => l.section);
 
   const trailingAmounts = normalizedLines.map(
     (line) => detectColumns(line).trailingAmount
@@ -106,10 +108,24 @@ export function reconstructLayout(
   );
 
   const lines = normalizedLines.map((line, index) =>
-    buildLayoutLine(index, rawLines[index] ?? line, regions[index]!, continuations[index]!)
+    buildLayoutLine(
+      index,
+      rawLines[index] ?? line,
+      regions[index]!,
+      sections[index]!,
+      continuations[index]!
+    )
   );
 
-  const regionMap = buildRegionIndices(regions);
+  const header: number[] = [];
+  const body: number[] = [];
+  const footer: number[] = [];
+  lines.forEach((l) => {
+    if (l.region === "header") header.push(l.index);
+    else if (l.region === "footer") footer.push(l.index);
+    else body.push(l.index);
+  });
+
   const avgConfidence =
     lines.length > 0
       ? lines.reduce((sum, l) => sum + l.confidence, 0) / lines.length
@@ -119,7 +135,9 @@ export function reconstructLayout(
     lines,
     profileId,
     readingOrder: resolveReadingOrder(lines.length),
-    regions: regionMap,
+    regions: { header, body, footer },
+    sections: segmentation.sections,
+    productsEndIndex: segmentation.productsEndIndex,
     confidence: clampConfidence(avgConfidence),
   };
 }

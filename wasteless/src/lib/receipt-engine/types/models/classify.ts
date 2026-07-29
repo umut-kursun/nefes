@@ -11,6 +11,7 @@ export type SemanticKind =
   | "subtotal"
   | "vat"
   | "merchant"
+  | "address"
   | "date"
   | "time"
   | "receipt_number"
@@ -19,6 +20,7 @@ export type SemanticKind =
   | "separator"
   | "header"
   | "footer"
+  | "card_slip"
   | "other";
 
 export interface ClassificationCandidate {

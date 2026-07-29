@@ -31,7 +31,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -43,7 +43,7 @@
         "rawText": "0,744 kg x 89,90",
         "graphCreationRule": "passRawLines",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -55,7 +55,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -67,7 +67,7 @@
         "rawText": "Domates",
         "graphCreationRule": "passRawLines",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -76,10 +76,10 @@
     {
       "id": "raw:L3",
       "graphNodeId": "raw:L3",
-      "semanticKind": "footer",
+      "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "footerClassifier:footer_region"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -91,7 +91,7 @@
         "rawText": "66,89",
         "graphCreationRule": "passRawLines",
         "classificationRules": [
-          "footerClassifier:footer_region"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -165,7 +165,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -177,7 +177,7 @@
         "rawText": "0,744 kg x 89,90",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -213,7 +213,7 @@
       "semanticKind": "product",
       "confidence": 0.65,
       "matchedRules": [
-        "productCandidateClassifier:body_row"
+        "productCandidateClassifier:products_section"
       ],
       "alternativeCandidates": [],
       "provenance": {
@@ -225,7 +225,7 @@
         "rawText": "Domates",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "productCandidateClassifier:body_row"
+          "productCandidateClassifier:products_section"
         ],
         "confidence": 0.65
       },
@@ -337,7 +337,7 @@
         "layoutLineIndices": [
           1
         ],
-        "sourceText": "0,744 kg",
+        "sourceText": "0,744 kg x 89,90",
         "rawText": "0,744 kg x 89,90",
         "graphCreationRule": "passTokens:quantity",
         "classificationRules": [

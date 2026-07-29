@@ -8,6 +8,7 @@ import type { NodeClassifier } from "./classifierTypes";
 import { resolveConflict } from "./conflictResolver";
 import { GraphContext } from "./graphContext";
 import { amountClassifier } from "./rules/amountClassifier";
+import { cardSlipClassifier } from "./rules/cardSlipClassifier";
 import { chargeClassifier } from "./rules/chargeClassifier";
 import { discountClassifier } from "./rules/discountClassifier";
 import { footerClassifier } from "./rules/footerClassifier";
@@ -22,6 +23,7 @@ import { RULE_CONFIDENCE } from "./constants";
 const CLASSIFIERS: readonly NodeClassifier[] = [
   headerClassifier,
   footerClassifier,
+  cardSlipClassifier,
   vatClassifier,
   paymentClassifier,
   discountClassifier,

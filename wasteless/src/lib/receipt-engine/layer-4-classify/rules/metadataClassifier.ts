@@ -38,7 +38,12 @@ export const metadataClassifier: NodeClassifier = (node) => {
     );
   }
 
-  if (matchesDate(text)) {
+  // Structural product tokens must not be reclassified as clock times/dates
+  // (e.g. unit price "79,17" / "79.17" looks like HH.MM).
+  const isStructuralProductToken =
+    node.kind === "quantity_token" || node.kind === "unit_price_token";
+
+  if (matchesDate(text) && !isStructuralProductToken) {
     results.push(
       candidate(
         "date",
@@ -49,7 +54,7 @@ export const metadataClassifier: NodeClassifier = (node) => {
     );
   }
 
-  if (matchesTime(text)) {
+  if (matchesTime(text) && !isStructuralProductToken) {
     results.push(
       candidate(
         "time",

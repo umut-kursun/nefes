@@ -12,6 +12,8 @@ const FOOTER_KINDS = new Set<SemanticKind>([
   "subtotal",
   "vat",
   "footer",
+  "card_slip",
+  "loyalty",
 ]);
 
 function rowPrimaryKind(

@@ -34,11 +34,11 @@ describe("Layer 6 — product mapping", () => {
     expect(line?.provenance.ocrTexts.length).toBeGreaterThan(1);
   });
 
-  it("maps quantity unit from token when block unit is null", () => {
+  it("does not treat package size as purchased quantity", () => {
     const draft = purchaseFromLegacy("with-bag");
     const milk = draft.products.find((p) => p.name.includes("Sut"));
-    expect(milk?.quantity).toBe(1);
-    expect(milk?.unit).toBe("L");
+    expect(milk?.quantity).toBeUndefined();
+    expect(milk?.unit).toBeUndefined();
     expect(milk?.vatRate).toBe(1);
   });
 
@@ -149,19 +149,19 @@ describe("Layer 6 — unknown unit", () => {
       id: "product:test",
       kind: "product",
       label: "Mystery item",
-      quantity: "2 box",
+      quantity: "2 ADET",
       unit: null,
       unitPrice: null,
       totalPrice: 10,
       vatToken: null,
       chainRawLineIds: ["raw:L1"],
-      rawLines: ["Mystery item 2 box 10,00"],
+      rawLines: ["Mystery item 2 ADET 10,00"],
       groupIds: ["raw:L1"],
       nodeRefs: ["raw:L1"],
       provenance: {
         graphNodeIds: ["raw:L1"],
         layoutLineIndices: [1],
-        rawTexts: ["Mystery item 2 box 10,00"],
+        rawTexts: ["Mystery item 2 ADET 10,00"],
         classificationRules: [],
         confidence: 0.5,
       },
@@ -169,7 +169,7 @@ describe("Layer 6 — unknown unit", () => {
     };
     const draft = buildPurchaseDraft({ ...base, products: [product] });
     expect(draft.products[0]?.quantity).toBe(2);
-    expect(draft.products[0]?.unit).toBeUndefined();
+    expect(draft.products[0]?.unit).toBe("adet");
   });
 });
 

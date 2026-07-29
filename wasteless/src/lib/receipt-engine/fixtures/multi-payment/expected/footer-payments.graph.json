@@ -284,25 +284,6 @@
         "confidence": 0.85
       },
       "confidence": 0.85
-    },
-    {
-      "id": "qty:L1",
-      "kind": "quantity_token",
-      "text": "1.5 L",
-      "amount": null,
-      "layoutRef": {
-        "lineIndex": 1
-      },
-      "provenance": {
-        "layoutLineIndices": [
-          1
-        ],
-        "sourceText": "1.5 L",
-        "rawText": "Su 1.5 L %1 8,90",
-        "creationRule": "passTokens:quantity",
-        "confidence": 0.85
-      },
-      "confidence": 0.85
     }
   ],
   "edges": [
@@ -381,20 +362,6 @@
       "from": "vat:L1",
       "to": "raw:L1",
       "kind": "vat_of",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:same_row:qty:L1->raw:L1",
-      "from": "qty:L1",
-      "to": "raw:L1",
-      "kind": "same_row",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:quantity_of:qty:L1->raw:L1",
-      "from": "qty:L1",
-      "to": "raw:L1",
-      "kind": "quantity_of",
       "confidence": 0.85
     },
     {
@@ -482,5 +449,5 @@
     ]
   },
   "profileId": "generic-tr",
-  "confidence": 0.8249999999999998
+  "confidence": 0.8233333333333331
 }

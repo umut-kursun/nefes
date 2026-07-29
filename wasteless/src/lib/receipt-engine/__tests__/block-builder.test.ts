@@ -71,7 +71,7 @@ describe("Layer 5 — block builder scenarios", () => {
     const product = doc.products.find((p) => p.label.includes("Domates"));
     expect(product?.totalPrice).toBe(66.89);
     expect(product?.unitPrice).toBe(89.9);
-    expect(product?.quantity).toBe("0,744 kg");
+    expect(product?.quantity).toBe("0,744 kg x 89,90");
   });
 
   it("builds multiple payment rows", () => {
