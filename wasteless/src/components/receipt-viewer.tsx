@@ -51,12 +51,12 @@ function Collapsible({
 }
 
 export function ReceiptViewer({ expense }: { expense: Expense }) {
-  let aiPretty: string | null = null;
+  let parserPretty: string | null = null;
   if (expense.aiResponseJson) {
     try {
-      aiPretty = JSON.stringify(JSON.parse(expense.aiResponseJson), null, 2);
+      parserPretty = JSON.stringify(JSON.parse(expense.aiResponseJson), null, 2);
     } catch {
-      aiPretty = expense.aiResponseJson;
+      parserPretty = expense.aiResponseJson;
     }
   }
 
@@ -75,6 +75,16 @@ export function ReceiptViewer({ expense }: { expense: Expense }) {
         <OcrTextPanel
           text={expense.rawText}
           maxHeightClassName="max-h-64"
+          className="border-border/70 bg-white/80"
+        />
+      ) : null}
+
+      {parserPretty ? (
+        <OcrTextPanel
+          title="Parser sonucu"
+          text={parserPretty}
+          variant="code"
+          maxHeightClassName="max-h-72"
           className="border-border/70 bg-white/80"
         />
       ) : null}
@@ -224,12 +234,6 @@ export function ReceiptViewer({ expense }: { expense: Expense }) {
             </li>
           ))}
         </ul>
-      </Collapsible>
-
-      <Collapsible title="AI yanıtı" empty={!aiPretty}>
-        <pre className="max-h-72 overflow-auto whitespace-pre-wrap break-words rounded-xl bg-stone-950/95 p-3 text-[11px] leading-relaxed text-emerald-100">
-          {aiPretty}
-        </pre>
       </Collapsible>
     </div>
   );

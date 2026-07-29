@@ -87,6 +87,14 @@ describe("purchaseDraftToExpenseDraft", () => {
     expect(expense.items).toHaveLength(2);
     expect(expense.items[0]?.rawText).toContain("Sut");
     expect(expense.items[1]?.rawText).toContain("Ekmek");
+    expect(expense.aiResponseJson).toContain("MIGROS");
+  });
+
+  it("stores explicit parserJson when provided", () => {
+    const expense = purchaseDraftToExpenseDraft(samplePurchase(), {
+      parserJson: '{"ok":true}',
+    });
+    expect(expense.aiResponseJson).toBe('{"ok":true}');
   });
 
   it("falls back to purchase provenance rawTexts when ocrRawText omitted", () => {
