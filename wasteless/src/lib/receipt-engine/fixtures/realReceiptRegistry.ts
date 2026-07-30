@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "node:url";
 import type { BlockDocument } from "../types/models/blocks";
 import type { ClassifiedGraph } from "../types/models/classify";
 import type { LayoutDocument } from "../types/models/layout";
@@ -71,10 +72,15 @@ export const REAL_RECEIPT_OCR_CHECKSUMS: Readonly<
     "cc00db4d349e75221ecc9b66e23fc0e669ab79fe8a7d6d3c7ed746885d52f706",
 });
 
-const REAL_ROOT = path.join(__dirname, "real");
+function getRealRoot(): string {
+  if (typeof __dirname !== "undefined") {
+    return path.join(__dirname, "real");
+  }
+  return path.join(path.dirname(fileURLToPath(import.meta.url)), "real");
+}
 
 export function realReceiptDir(ref: RealReceiptRef): string {
-  return path.join(REAL_ROOT, ref.merchant);
+  return path.join(getRealRoot(), ref.merchant);
 }
 
 export function realReceiptExpectedDir(ref: RealReceiptRef): string {
