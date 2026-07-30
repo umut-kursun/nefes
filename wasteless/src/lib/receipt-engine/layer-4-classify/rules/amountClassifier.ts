@@ -64,13 +64,13 @@ function labelSemantic(
       ),
     ];
   }
-  if (ctx.regionOfRaw(rawId) === "body") {
+  if (ctx.regionOfRaw(rawId) === "body" && ctx.isProductEligibleRaw(rawId)) {
     return [
       candidate(
         "product",
         RULE_CONFIDENCE.inferred,
         "amountClassifier:product_line_amount",
-        "amount on product body row"
+        "amount on product section row"
       ),
     ];
   }
@@ -102,13 +102,13 @@ export const amountClassifier: NodeClassifier = (node, ctx) => {
     ];
   }
 
-  if (ctx.regionOfRaw(rawId) === "body") {
+  if (ctx.isProductEligibleRaw(rawId)) {
     return [
       candidate(
         "product",
         RULE_CONFIDENCE.inferred,
-        "amountClassifier:body_amount",
-        "body region amount"
+        "amountClassifier:product_section_amount",
+        "amount in products section"
       ),
     ];
   }

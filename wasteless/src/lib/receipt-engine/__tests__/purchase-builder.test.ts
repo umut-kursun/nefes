@@ -37,9 +37,10 @@ describe("Layer 6 — product mapping", () => {
   it("maps quantity unit from token when block unit is null", () => {
     const draft = purchaseFromLegacy("with-bag");
     const milk = draft.products.find((p) => p.name.includes("Sut"));
-    expect(milk?.quantity).toBe(1);
-    expect(milk?.unit).toBe("L");
+    expect(milk?.quantity).toBeUndefined();
+    expect(milk?.unit).toBeUndefined();
     expect(milk?.vatRate).toBe(1);
+    expect(milk?.lineTotal).toBe(45.9);
   });
 
   it("leaves missing quantity undefined", () => {
@@ -149,7 +150,7 @@ describe("Layer 6 — unknown unit", () => {
       id: "product:test",
       kind: "product",
       label: "Mystery item",
-      quantity: "2 box",
+      quantity: "2 adet",
       unit: null,
       unitPrice: null,
       totalPrice: 10,

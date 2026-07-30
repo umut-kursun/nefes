@@ -1,0 +1,250 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "ECZANE NO 12",
+      "rawText": "ECZANE NO 12",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "ECZANE NO 12"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "29.07.2026 11:05",
+      "rawText": "29.07.2026 11:05",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "columns": {
+        "name": "29.07.2026 11:05"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "Ilac A %1 120,00",
+      "rawText": "Ilac A %1 120,00",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "amount": "1 120,00",
+        "name": "Ilac A %",
+        "vat": "%1"
+      },
+      "trailingAmount": 1120,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 3,
+      "text": "Ilac B %1 85,50",
+      "rawText": "Ilac B %1 85,50",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "vat": "%1",
+        "amount": "85,50",
+        "name": "Ilac B"
+      },
+      "trailingAmount": 85.5,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "TOPLAM 205,50",
+      "rawText": "TOPLAM 205,50",
+      "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "columns": {
+        "amount": "205,50",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 205.5,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "Kredi Kart 205,50",
+      "rawText": "Kredi Kart 205,50",
+      "region": "footer",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
+      "columns": {
+        "amount": "205,50",
+        "name": "Kredi Kart"
+      },
+      "trailingAmount": 205.5,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 6,
+      "text": "Kasiyer: Ayse",
+      "rawText": "Kasiyer: Ayse",
+      "region": "footer",
+      "sectionKind": "footer",
+      "lineSemanticType": "FooterLine",
+      "columns": {
+        "name": "Kasiyer: Ayse"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "regions": {
+    "header": [
+      0,
+      1
+    ],
+    "body": [
+      2,
+      3
+    ],
+    "footer": [
+      4,
+      5,
+      6
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 1
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 2,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 4,
+        "endLineIndex": 4
+      },
+      {
+        "kind": "payments",
+        "startLineIndex": 5,
+        "endLineIndex": 5
+      },
+      {
+        "kind": "footer",
+        "startLineIndex": 6,
+        "endLineIndex": 6
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "products",
+      "products",
+      "totals",
+      "payments",
+      "footer"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "DateLine",
+      "ProductNameLine",
+      "ProductNameLine",
+      "TotalLine",
+      "PaymentLine",
+      "FooterLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "PRODUCTS",
+      "TOTALS",
+      "PAYMENTS",
+      "FOOTER"
+    ]
+  },
+  "confidence": 0.7642857142857143
+}

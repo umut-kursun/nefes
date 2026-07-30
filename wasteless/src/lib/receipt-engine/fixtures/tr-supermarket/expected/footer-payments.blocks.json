@@ -4,7 +4,7 @@
       "id": "product:raw:L1",
       "kind": "product",
       "label": "Su 1.5 L",
-      "quantity": "1.5 L",
+      "quantity": null,
       "unit": null,
       "unitPrice": null,
       "totalPrice": 8.9,
@@ -19,23 +19,20 @@
         "raw:L1",
         "frag:L1:name",
         "amt:L1",
-        "vat:L1",
-        "qty:L1"
+        "vat:L1"
       ],
       "nodeRefs": [
         "raw:L1",
         "frag:L1:name",
         "amt:L1",
-        "vat:L1",
-        "qty:L1"
+        "vat:L1"
       ],
       "provenance": {
         "graphNodeIds": [
           "raw:L1",
           "frag:L1:name",
           "amt:L1",
-          "vat:L1",
-          "qty:L1"
+          "vat:L1"
         ],
         "layoutLineIndices": [
           1
@@ -46,8 +43,7 @@
         "classificationRules": [
           "productCandidateClassifier:body_row",
           "amountClassifier:product_line_amount",
-          "vatClassifier:vat_token",
-          "productCandidateClassifier:product_token"
+          "vatClassifier:vat_token"
         ],
         "confidence": 0.65
       },
@@ -159,11 +155,11 @@
         "A101"
       ],
       "classificationRules": [
-        "headerClassifier:merchant"
+        "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.65
+      "confidence": 0.775
     },
-    "confidence": 0.65,
+    "confidence": 0.775,
     "merchant": "A101",
     "date": null,
     "time": null,
@@ -202,5 +198,5 @@
       }
     ]
   },
-  "confidence": 0.7
+  "confidence": 0.73125
 }

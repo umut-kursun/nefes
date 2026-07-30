@@ -1,5 +1,5 @@
 {
-  "confidence": 0.7131578947368421,
+  "confidence": 0.7375,
   "nodes": [
     {
       "id": "raw:L0",
@@ -156,9 +156,9 @@
       "id": "frag:L0:name",
       "graphNodeId": "frag:L0:name",
       "semanticKind": "merchant",
-      "confidence": 0.65,
+      "confidence": 0.9,
       "matchedRules": [
-        "headerClassifier:merchant"
+        "headerClassifier:merchant_scored"
       ],
       "alternativeCandidates": [
         {
@@ -177,21 +177,28 @@
         "rawText": "MIGROS A.S.",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "headerClassifier:merchant"
+          "headerClassifier:merchant_scored"
         ],
-        "confidence": 0.65
+        "confidence": 0.9
       },
       "amount": null
     },
     {
       "id": "frag:L1:name",
       "graphNodeId": "frag:L1:name",
-      "semanticKind": "header",
-      "confidence": 0.65,
+      "semanticKind": "merchant",
+      "confidence": 0.775,
       "matchedRules": [
-        "headerClassifier:header_fragment"
+        "headerClassifier:merchant_scored"
       ],
-      "alternativeCandidates": [],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
       "provenance": {
         "graphNodeId": "frag:L1:name",
         "layoutLineIndices": [
@@ -201,9 +208,9 @@
         "rawText": "ISTANBUL",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "headerClassifier:header_fragment"
+          "headerClassifier:merchant_scored"
         ],
-        "confidence": 0.65
+        "confidence": 0.775
       },
       "amount": null
     },
@@ -425,43 +432,6 @@
         "graphCreationRule": "passTokens:vat",
         "classificationRules": [
           "vatClassifier:vat_token"
-        ],
-        "confidence": 0.65
-      },
-      "amount": null
-    },
-    {
-      "id": "qty:L2",
-      "graphNodeId": "qty:L2",
-      "semanticKind": "product",
-      "confidence": 0.65,
-      "matchedRules": [
-        "productCandidateClassifier:product_token"
-      ],
-      "alternativeCandidates": [
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "metadataClassifier:structural_token",
-          "reason": "neutral graph token"
-        },
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "productCandidateClassifier:structural_token",
-          "reason": "neutral structural token"
-        }
-      ],
-      "provenance": {
-        "graphNodeId": "qty:L2",
-        "layoutLineIndices": [
-          2
-        ],
-        "sourceText": "1 L",
-        "rawText": "Sut 1 L %1 45,90",
-        "graphCreationRule": "passTokens:quantity",
-        "classificationRules": [
-          "productCandidateClassifier:product_token"
         ],
         "confidence": 0.65
       },

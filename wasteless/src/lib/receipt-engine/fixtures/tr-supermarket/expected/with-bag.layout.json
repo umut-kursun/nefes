@@ -5,6 +5,8 @@
       "text": "MIGROS A.S.",
       "rawText": "MIGROS A.S.",
       "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
       "columns": {
         "name": "MIGROS A.S."
       },
@@ -25,6 +27,8 @@
       "text": "ISTANBUL",
       "rawText": "ISTANBUL",
       "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
       "columns": {
         "name": "ISTANBUL"
       },
@@ -45,6 +49,8 @@
       "text": "Sut 1 L %1 45,90",
       "rawText": "Sut 1 L %1 45,90",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
       "columns": {
         "vat": "%1",
         "amount": "45,90",
@@ -54,13 +60,12 @@
       "features": {
         "hasVatToken": true,
         "hasWeightPattern": false,
-        "hasQuantityToken": true,
+        "hasQuantityToken": false,
         "isAmountOnly": false,
         "isLikelyContinuation": false,
         "isRightAlignedPrice": false
       },
       "tokens": {
-        "quantity": "1 L",
         "vat": "%1"
       },
       "confidence": 0.85
@@ -70,6 +75,8 @@
       "text": "Ekmek %1 15,00",
       "rawText": "Ekmek %1 15,00",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
       "columns": {
         "vat": "%1",
         "amount": "15,00",
@@ -94,6 +101,8 @@
       "text": "Alisveris Poseti 0,50",
       "rawText": "Alisveris Poseti 0,50",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ChargeLine",
       "columns": {
         "amount": "0,50",
         "name": "Alisveris Poseti"
@@ -115,6 +124,8 @@
       "text": "TOPLAM 61,40",
       "rawText": "TOPLAM 61,40",
       "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
       "columns": {
         "amount": "61,40",
         "name": "TOPLAM"
@@ -153,6 +164,49 @@
     ],
     "footer": [
       5
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 1
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 2,
+        "endLineIndex": 4
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 5,
+        "endLineIndex": 5
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "products",
+      "products",
+      "products",
+      "totals"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "MerchantLine",
+      "ProductNameLine",
+      "ProductNameLine",
+      "ChargeLine",
+      "TotalLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "PRODUCTS",
+      "PRODUCTS",
+      "TOTALS"
     ]
   },
   "confidence": 0.7833333333333333

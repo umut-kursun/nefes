@@ -1,0 +1,46 @@
+{
+  "isValid": false,
+  "score": 80,
+  "errors": [
+    {
+      "id": "LineTotalValidator:LINE_TOTAL_MISMATCH:products[0]",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "LINE_TOTAL_MISMATCH",
+      "message": "Line total for \"Motorin 29,766 LT 79,17 TL/L\" does not match quantity × unit price.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "LineTotalValidator",
+        "purchaseConfidence": 0.74375,
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "qty:L3",
+          "amt:L4"
+        ]
+      },
+      "expected": 2356.57422,
+      "actual": 2356.1
+    }
+  ],
+  "warnings": [
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.74375
+      }
+    }
+  ]
+}

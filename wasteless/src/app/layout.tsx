@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope, Outfit } from "next/font/google";
 import { InstallPrompt } from "@/components/install-prompt";
+import { UpdatePrompt } from "@/components/update-prompt";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
@@ -80,6 +81,7 @@ export default function RootLayout({
       <body className={`${display.variable} ${body.variable} ${brand.variable}`}>
         <Providers>
           {children}
+          <UpdatePrompt />
           <InstallPrompt />
         </Providers>
       </body>

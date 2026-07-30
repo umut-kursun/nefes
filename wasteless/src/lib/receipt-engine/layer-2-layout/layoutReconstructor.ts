@@ -13,6 +13,7 @@ import {
 import { extractFeatures, extractVatToken } from "./featureExtractor";
 import { normalizeOcrLine } from "./lineUtils";
 import { resolveReadingOrder } from "./readingOrderResolver";
+import { segmentDocument } from "./sectionDetector";
 import { BARCODE_NOISE, SEPARATOR_NOISE } from "./patterns";
 
 function lineConfidence(
@@ -30,6 +31,8 @@ function buildLayoutLine(
   index: number,
   rawLine: string,
   region: LayoutLine["region"],
+  sectionKind: LayoutLine["sectionKind"],
+  lineSemanticType: LayoutLine["lineSemanticType"],
   isContinuation: boolean
 ): LayoutLine {
   const normalized = normalizeOcrLine(rawLine);
@@ -62,6 +65,8 @@ function buildLayoutLine(
     text: normalized,
     rawText: rawLine,
     region,
+    sectionKind,
+    lineSemanticType,
     columns: hasColumnData ? columns : undefined,
     trailingAmount: split.trailingAmount,
     features: {
@@ -105,8 +110,17 @@ export function reconstructLayout(
     trailingAmounts
   );
 
+  const segmentation = segmentDocument(normalizedLines, regions);
+
   const lines = normalizedLines.map((line, index) =>
-    buildLayoutLine(index, rawLines[index] ?? line, regions[index]!, continuations[index]!)
+    buildLayoutLine(
+      index,
+      rawLines[index] ?? line,
+      regions[index]!,
+      segmentation.sectionByLineIndex[index] ?? "footer",
+      segmentation.lineTypes[index] ?? "UnknownLine",
+      continuations[index]!
+    )
   );
 
   const regionMap = buildRegionIndices(regions);
@@ -120,6 +134,7 @@ export function reconstructLayout(
     profileId,
     readingOrder: resolveReadingOrder(lines.length),
     regions: regionMap,
+    segmentation,
     confidence: clampConfidence(avgConfidence),
   };
 }

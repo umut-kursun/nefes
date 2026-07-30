@@ -1,0 +1,232 @@
+{
+  "receiptId": "toyzz-card-slip",
+  "generatedAt": "2026-07-30T06:48:34.588Z",
+  "sections": [
+    {
+      "kind": "header",
+      "startLineIndex": 0,
+      "endLineIndex": 1
+    },
+    {
+      "kind": "products",
+      "startLineIndex": 2,
+      "endLineIndex": 2
+    },
+    {
+      "kind": "totals",
+      "startLineIndex": 3,
+      "endLineIndex": 3
+    },
+    {
+      "kind": "card_slip",
+      "startLineIndex": 4,
+      "endLineIndex": 5
+    }
+  ],
+  "semanticLineTypes": [
+    {
+      "lineIndex": 0,
+      "type": "MerchantLine",
+      "text": "TOYZZ SHOP A.S."
+    },
+    {
+      "lineIndex": 1,
+      "type": "DateLine",
+      "text": "27.07.2026 14:10"
+    },
+    {
+      "lineIndex": 2,
+      "type": "ProductNameLine",
+      "text": "Oyuncak Araba %20 249,90"
+    },
+    {
+      "lineIndex": 3,
+      "type": "TotalLine",
+      "text": "TOPLAM 249,90"
+    },
+    {
+      "lineIndex": 4,
+      "type": "CardSlipLine",
+      "text": "Visa 249,90"
+    },
+    {
+      "lineIndex": 5,
+      "type": "CardSlipLine",
+      "text": "AID: 1234567890123456"
+    }
+  ],
+  "parserStateTransitions": [
+    {
+      "lineIndex": 0,
+      "state": "HEADER"
+    },
+    {
+      "lineIndex": 1,
+      "state": "HEADER"
+    },
+    {
+      "lineIndex": 2,
+      "state": "PRODUCTS"
+    },
+    {
+      "lineIndex": 3,
+      "state": "TOTALS"
+    },
+    {
+      "lineIndex": 4,
+      "state": "CARD_SLIP"
+    },
+    {
+      "lineIndex": 5,
+      "state": "CARD_SLIP"
+    }
+  ],
+  "confidence": {
+    "merchant": 0.67875,
+    "products": 0.65,
+    "payments": 0,
+    "vat": 0,
+    "totals": 0.85,
+    "fuel": 0,
+    "metadata": 0.7541666666666667,
+    "layout": 0.75,
+    "classification": 0.7093750000000001,
+    "blocks": 0.7541666666666667,
+    "purchase": 0.7541666666666667,
+    "validation": 0.8,
+    "overall": 0.7365833333333333
+  },
+  "fieldExplanations": {
+    "merchant": {
+      "field": "merchant",
+      "value": "TOYZZ SHOP A.S.",
+      "confidence": 0.5,
+      "reason": "Selected by merchantScorer (score=50; reasons: corporate_format, has_letters, merchant_line_type)",
+      "sourceLines": [
+        {
+          "index": 0,
+          "text": "TOYZZ SHOP A.S."
+        }
+      ],
+      "sourceRules": [
+        "corporate_format",
+        "has_letters",
+        "merchant_line_type"
+      ]
+    },
+    "products": [
+      {
+        "field": "products[0]",
+        "value": "Oyuncak Araba %",
+        "confidence": 0.65,
+        "reason": "Detected inside PRODUCTS section",
+        "sourceLines": [
+          {
+            "index": 2,
+            "text": "Oyuncak Araba %20 249,90"
+          }
+        ],
+        "sourceRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ]
+      }
+    ],
+    "payments": [],
+    "vat": [],
+    "totals": [
+      {
+        "field": "total",
+        "value": "TOPLAM",
+        "confidence": 0.85,
+        "reason": "Detected as total line in totals section",
+        "sourceLines": [],
+        "sourceRules": [
+          "total"
+        ]
+      }
+    ],
+    "fuel": [],
+    "metadata": [
+      {
+        "field": "purchaseDate",
+        "value": "2026-07-27",
+        "confidence": 0.7541666666666667,
+        "reason": "Extracted from metadata block header fields",
+        "sourceLines": [
+          {
+            "index": 1,
+            "text": "27.07.2026 14:10"
+          }
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "isValid": false,
+    "score": 80,
+    "errorCount": 1,
+    "warningCount": 1,
+    "errors": [
+      {
+        "code": "TOTAL_MISMATCH",
+        "message": "Declared total does not match product, charge, and discount sums."
+      }
+    ],
+    "warnings": [
+      {
+        "code": "CURRENCY_MISSING",
+        "message": "Currency is not declared on the receipt."
+      }
+    ]
+  },
+  "rejectedCandidates": [
+    {
+      "lineIndex": 0,
+      "text": "TOYZZ SHOP A.S.",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "reason": "Not promoted to purchase draft field"
+    },
+    {
+      "lineIndex": 1,
+      "text": "27.07.2026 14:10",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "reason": "Not promoted to purchase draft field"
+    },
+    {
+      "lineIndex": 3,
+      "text": "TOPLAM 249,90",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "reason": "Totals section line not mapped to subtotal/total/VAT"
+    },
+    {
+      "lineIndex": 4,
+      "text": "Visa 249,90",
+      "sectionKind": "card_slip",
+      "lineSemanticType": "CardSlipLine",
+      "reason": "Card slip section — excluded from products"
+    },
+    {
+      "lineIndex": 5,
+      "text": "AID: 1234567890123456",
+      "sectionKind": "card_slip",
+      "lineSemanticType": "CardSlipLine",
+      "reason": "Card slip section — excluded from products"
+    }
+  ],
+  "timings": {
+    "uploadMs": 0,
+    "ocrMs": 0,
+    "layoutMs": 1,
+    "graphMs": 0,
+    "classificationMs": 1,
+    "blockMs": 0,
+    "purchaseMs": 0,
+    "validationMs": 1,
+    "totalMs": 3
+  }
+}

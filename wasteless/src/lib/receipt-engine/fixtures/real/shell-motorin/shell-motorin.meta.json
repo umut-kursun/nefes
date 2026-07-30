@@ -1,0 +1,9 @@
+{
+  "source": "beta-test-scenario",
+  "immutable": true,
+  "description": "Shell fuel station receipt with motorin quantity and unit price",
+  "merchantCategory": "fuel",
+  "merchantSlug": "shell-motorin",
+  "ingestedAt": "2026-07-30",
+  "origin": "document-parser-regression.test.ts FIXTURES.shell"
+}

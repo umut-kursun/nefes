@@ -1,0 +1,283 @@
+{
+  "receiptId": "shell-motorin",
+  "generatedAt": "2026-07-30T06:48:34.623Z",
+  "sections": [
+    {
+      "kind": "header",
+      "startLineIndex": 0,
+      "endLineIndex": 2
+    },
+    {
+      "kind": "products",
+      "startLineIndex": 3,
+      "endLineIndex": 3
+    },
+    {
+      "kind": "footer",
+      "startLineIndex": 4,
+      "endLineIndex": 4
+    },
+    {
+      "kind": "totals",
+      "startLineIndex": 5,
+      "endLineIndex": 5
+    },
+    {
+      "kind": "payments",
+      "startLineIndex": 6,
+      "endLineIndex": 6
+    }
+  ],
+  "semanticLineTypes": [
+    {
+      "lineIndex": 0,
+      "type": "MerchantLine",
+      "text": "SHELL & TURCAS PETROL A.S."
+    },
+    {
+      "lineIndex": 1,
+      "type": "MerchantLine",
+      "text": "34 ABC 123"
+    },
+    {
+      "lineIndex": 2,
+      "type": "DateLine",
+      "text": "29.07.2026 09:15"
+    },
+    {
+      "lineIndex": 3,
+      "type": "FuelLine",
+      "text": "Motorin 29,766 LT 79,17 TL/L"
+    },
+    {
+      "lineIndex": 4,
+      "type": "FooterLine",
+      "text": "2356,10 TL"
+    },
+    {
+      "lineIndex": 5,
+      "type": "TotalLine",
+      "text": "TOPLAM 2356,10"
+    },
+    {
+      "lineIndex": 6,
+      "type": "PaymentLine",
+      "text": "Kredi Kart 2356,10"
+    }
+  ],
+  "parserStateTransitions": [
+    {
+      "lineIndex": 0,
+      "state": "HEADER"
+    },
+    {
+      "lineIndex": 1,
+      "state": "HEADER"
+    },
+    {
+      "lineIndex": 2,
+      "state": "HEADER"
+    },
+    {
+      "lineIndex": 3,
+      "state": "PRODUCTS"
+    },
+    {
+      "lineIndex": 4,
+      "state": "FOOTER"
+    },
+    {
+      "lineIndex": 5,
+      "state": "TOTALS"
+    },
+    {
+      "lineIndex": 6,
+      "state": "PAYMENTS"
+    }
+  ],
+  "confidence": {
+    "merchant": 0.669375,
+    "products": 0.65,
+    "payments": 0.85,
+    "vat": 0,
+    "totals": 0.85,
+    "fuel": 0.65,
+    "metadata": 0.74375,
+    "layout": 0.7357142857142857,
+    "classification": 0.7617647058823529,
+    "blocks": 0.74375,
+    "purchase": 0.74375,
+    "validation": 0.8,
+    "overall": 0.7498065476190475
+  },
+  "fieldExplanations": {
+    "merchant": {
+      "field": "merchant",
+      "value": "SHELL & TURCAS PETROL A.S.",
+      "confidence": 0.5,
+      "reason": "Selected by merchantScorer (score=50; reasons: corporate_format, has_letters, merchant_line_type)",
+      "sourceLines": [
+        {
+          "index": 0,
+          "text": "SHELL & TURCAS PETROL A.S."
+        }
+      ],
+      "sourceRules": [
+        "corporate_format",
+        "has_letters",
+        "merchant_line_type"
+      ]
+    },
+    "products": [
+      {
+        "field": "products[0]",
+        "value": "Motorin 29,766 LT 79,17 TL/L",
+        "confidence": 0.65,
+        "reason": "Detected as fuel product line (litres + fuel token)",
+        "sourceLines": [
+          {
+            "index": 3,
+            "text": "Motorin 29,766 LT 79,17 TL/L"
+          },
+          {
+            "index": 4,
+            "text": "2356,10 TL"
+          }
+        ],
+        "sourceRules": [
+          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:product_token",
+          "amountClassifier:product_line_amount"
+        ]
+      }
+    ],
+    "payments": [
+      {
+        "field": "payments[0]",
+        "value": "Kredi Kart",
+        "confidence": 0.85,
+        "reason": "Detected as payment line (semanticKind=payment)",
+        "sourceLines": [],
+        "sourceRules": [
+          "payment"
+        ]
+      }
+    ],
+    "vat": [],
+    "totals": [
+      {
+        "field": "total",
+        "value": "TOPLAM",
+        "confidence": 0.85,
+        "reason": "Detected as total line in totals section",
+        "sourceLines": [],
+        "sourceRules": [
+          "total"
+        ]
+      }
+    ],
+    "fuel": [
+      {
+        "field": "products[0]",
+        "value": "Motorin 29,766 LT 79,17 TL/L",
+        "confidence": 0.65,
+        "reason": "Detected as fuel product line (litres + fuel token)",
+        "sourceLines": [
+          {
+            "index": 3,
+            "text": "Motorin 29,766 LT 79,17 TL/L"
+          },
+          {
+            "index": 4,
+            "text": "2356,10 TL"
+          }
+        ],
+        "sourceRules": [
+          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:product_token",
+          "amountClassifier:product_line_amount"
+        ]
+      }
+    ],
+    "metadata": [
+      {
+        "field": "purchaseDate",
+        "value": "2026-07-29",
+        "confidence": 0.74375,
+        "reason": "Extracted from metadata block header fields",
+        "sourceLines": [
+          {
+            "index": 2,
+            "text": "29.07.2026 09:15"
+          }
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "isValid": false,
+    "score": 80,
+    "errorCount": 1,
+    "warningCount": 1,
+    "errors": [
+      {
+        "code": "LINE_TOTAL_MISMATCH",
+        "message": "Line total for \"Motorin 29,766 LT 79,17 TL/L\" does not match quantity × unit price."
+      }
+    ],
+    "warnings": [
+      {
+        "code": "CURRENCY_MISSING",
+        "message": "Currency is not declared on the receipt."
+      }
+    ]
+  },
+  "rejectedCandidates": [
+    {
+      "lineIndex": 0,
+      "text": "SHELL & TURCAS PETROL A.S.",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "reason": "Not promoted to purchase draft field"
+    },
+    {
+      "lineIndex": 1,
+      "text": "34 ABC 123",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "reason": "Not promoted to purchase draft field"
+    },
+    {
+      "lineIndex": 2,
+      "text": "29.07.2026 09:15",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "reason": "Not promoted to purchase draft field"
+    },
+    {
+      "lineIndex": 5,
+      "text": "TOPLAM 2356,10",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "reason": "Totals section line not mapped to subtotal/total/VAT"
+    },
+    {
+      "lineIndex": 6,
+      "text": "Kredi Kart 2356,10",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
+      "reason": "Payment section line not promoted to payment field"
+    }
+  ],
+  "timings": {
+    "uploadMs": 0,
+    "ocrMs": 0,
+    "layoutMs": 1,
+    "graphMs": 0,
+    "classificationMs": 19,
+    "blockMs": 1,
+    "purchaseMs": 0,
+    "validationMs": 1,
+    "totalMs": 22
+  }
+}

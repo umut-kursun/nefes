@@ -1,0 +1,218 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "LC WAIKIKI MAGAZACILIK A.S.",
+      "rawText": "LC WAIKIKI MAGAZACILIK A.S.",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "LC WAIKIKI MAGAZACILIK A.S."
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "28.07.2026 18:22",
+      "rawText": "28.07.2026 18:22",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "columns": {
+        "name": "28.07.2026 18:22"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "Tişört %10 299,99",
+      "rawText": "Tişört %10 299,99",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "amount": "10 299,99",
+        "name": "Tişört %",
+        "vat": "%10"
+      },
+      "trailingAmount": 10299.99,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%10"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 3,
+      "text": "Pantolon %10 499,99",
+      "rawText": "Pantolon %10 499,99",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "amount": "10 499,99",
+        "name": "Pantolon %",
+        "vat": "%10"
+      },
+      "trailingAmount": 10499.99,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%10"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "TOPLAM 799,98",
+      "rawText": "TOPLAM 799,98",
+      "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "columns": {
+        "amount": "799,98",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 799.98,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "Kredi Kart 799,98",
+      "rawText": "Kredi Kart 799,98",
+      "region": "footer",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
+      "columns": {
+        "amount": "799,98",
+        "name": "Kredi Kart"
+      },
+      "trailingAmount": 799.98,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "regions": {
+    "header": [
+      0,
+      1
+    ],
+    "body": [
+      2,
+      3
+    ],
+    "footer": [
+      4,
+      5
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 1
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 2,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 4,
+        "endLineIndex": 4
+      },
+      {
+        "kind": "payments",
+        "startLineIndex": 5,
+        "endLineIndex": 5
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "products",
+      "products",
+      "totals",
+      "payments"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "DateLine",
+      "ProductNameLine",
+      "ProductNameLine",
+      "TotalLine",
+      "PaymentLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "PRODUCTS",
+      "TOTALS",
+      "PAYMENTS"
+    ]
+  },
+  "confidence": 0.7833333333333333
+}

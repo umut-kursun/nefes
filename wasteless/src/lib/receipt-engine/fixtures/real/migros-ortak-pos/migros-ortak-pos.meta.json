@@ -1,0 +1,9 @@
+{
+  "source": "beta-test-scenario",
+  "immutable": true,
+  "description": "Migros supermarket receipt with shared POS payment line (ORTAK POS) and bag charge",
+  "merchantCategory": "supermarket",
+  "merchantSlug": "migros-ortak-pos",
+  "ingestedAt": "2026-07-30",
+  "origin": "document-parser-regression.test.ts FIXTURES.migros"
+}

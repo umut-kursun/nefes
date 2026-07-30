@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AppIcon } from "@/components/icons";
 import type { Insight } from "@/lib/insights";
+import { trackInsightViewed } from "@/lib/beta-telemetry";
 import { cn } from "@/lib/utils";
 
 export function InsightCard({
@@ -15,6 +16,7 @@ export function InsightCard({
   return (
     <Link
       href={insight.href}
+      onClick={() => trackInsightViewed(insight.id)}
       className={cn(
         "block rounded-2xl border border-black/[0.05] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-md active:scale-[0.99]",
         className

@@ -2,8 +2,13 @@
 
 import { useEffect } from "react";
 import { BottomNav } from "@/components/bottom-nav";
+import { useBetaTelemetry } from "@/hooks/use-beta-telemetry";
+import { useProductAnalytics } from "@/hooks/use-product-analytics";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  useProductAnalytics();
+  useBetaTelemetry();
+
   useEffect(() => {
     const blockContextMenu = (event: Event) => {
       event.preventDefault();

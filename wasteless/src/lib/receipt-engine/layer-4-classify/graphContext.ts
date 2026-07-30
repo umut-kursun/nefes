@@ -1,5 +1,6 @@
 import type { GraphEdge, GraphNode } from "../types/models/graph";
 import { buildGraphIndex, type GraphIndex, type GraphRegion } from "../graph/graphIndex";
+import type { LineSemanticType, ReceiptSectionKind } from "../types/models/sections";
 
 export type { GraphRegion };
 
@@ -92,5 +93,37 @@ export class GraphContext {
     const rawId = this.rawLineId(node);
     if (!rawId) return false;
     return rawId === this.firstHeaderRawId();
+  }
+
+  sectionOfRaw(rawId: string): ReceiptSectionKind | null {
+    return this.index.sectionOfRaw(rawId);
+  }
+
+  lineSemanticTypeOfRaw(rawId: string): LineSemanticType | null {
+    return this.index.lineSemanticTypeOfRaw(rawId);
+  }
+
+  isProductEligibleRaw(rawId: string): boolean {
+    const section = this.sectionOfRaw(rawId);
+    if (section !== "products") return false;
+    const lineType = this.lineSemanticTypeOfRaw(rawId);
+    if (lineType === "FuelLine" || lineType === "ProductNameLine") {
+      return true;
+    }
+    if (lineType === "LineTotalLine") return false;
+    if (
+      lineType === "PaymentLine" ||
+      lineType === "TotalLine" ||
+      lineType === "SubtotalLine" ||
+      lineType === "VatSummaryLine" ||
+      lineType === "ChargeLine" ||
+      lineType === "DiscountLine" ||
+      lineType === "CardSlipLine" ||
+      lineType === "FooterLine" ||
+      lineType === "LoyaltyLine"
+    ) {
+      return false;
+    }
+    return true;
   }
 }

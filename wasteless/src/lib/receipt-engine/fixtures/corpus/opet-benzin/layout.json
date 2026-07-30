@@ -1,0 +1,211 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "OPET PETROLCULUK A.S.",
+      "rawText": "OPET PETROLCULUK A.S.",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "OPET PETROLCULUK A.S."
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "06 XYZ 987",
+      "rawText": "06 XYZ 987",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "06 XYZ 987"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "30.07.2026 20:01",
+      "rawText": "30.07.2026 20:01",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "columns": {
+        "name": "30.07.2026 20:01"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 3,
+      "text": "Benzin 42,150 LT 45,50 TL/L",
+      "rawText": "Benzin 42,150 LT 45,50 TL/L",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "FuelLine",
+      "columns": {
+        "name": "Benzin 42,150 LT 45,50 TL/L"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": true,
+        "hasQuantityToken": true,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "quantity": "42,150 LT"
+      },
+      "confidence": 0.65
+    },
+    {
+      "index": 4,
+      "text": "1917,82 TL",
+      "rawText": "1917,82 TL",
+      "region": "footer",
+      "sectionKind": "footer",
+      "lineSemanticType": "FooterLine",
+      "columns": {
+        "amount": "1917,82"
+      },
+      "trailingAmount": 1917.82,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": true,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": true
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "TOPLAM 1917,82",
+      "rawText": "TOPLAM 1917,82",
+      "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "columns": {
+        "amount": "1917,82",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 1917.82,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "regions": {
+    "header": [
+      0,
+      1,
+      2
+    ],
+    "body": [
+      3
+    ],
+    "footer": [
+      4,
+      5
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 2
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 3,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "footer",
+        "startLineIndex": 4,
+        "endLineIndex": 4
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 5,
+        "endLineIndex": 5
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "header",
+      "products",
+      "footer",
+      "totals"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "MerchantLine",
+      "DateLine",
+      "FuelLine",
+      "FooterLine",
+      "TotalLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "FOOTER",
+      "TOTALS"
+    ]
+  },
+  "confidence": 0.7166666666666667
+}

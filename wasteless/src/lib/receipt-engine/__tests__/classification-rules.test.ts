@@ -16,7 +16,8 @@ function graphNode(
   id: string,
   kind: GraphNode["kind"],
   text: string,
-  lineIndex: number
+  lineIndex: number,
+  meta?: GraphNode["meta"]
 ): GraphNode {
   return {
     id,
@@ -32,6 +33,7 @@ function graphNode(
       confidence: 0.85,
     },
     confidence: 0.85,
+    meta,
   };
 }
 
@@ -191,9 +193,13 @@ describe("AmountClassifier", () => {
 
 describe("ProductCandidateClassifier", () => {
   it("classifies body name fragments with amounts", () => {
-    const raw = graphNode("raw:L2", "raw_line", "Sut 1 L %1 45,90", 2);
-    const frag = graphNode("frag:L2:name", "text_fragment", "Sut 1 L", 2);
-    const amount = graphNode("amt:L2", "amount", "45,90", 2);
+    const productMeta = {
+      sectionKind: "products",
+      lineSemanticType: "ProductNameLine",
+    };
+    const raw = graphNode("raw:L2", "raw_line", "Sut 1 L %1 45,90", 2, productMeta);
+    const frag = graphNode("frag:L2:name", "text_fragment", "Sut 1 L", 2, productMeta);
+    const amount = graphNode("amt:L2", "amount", "45,90", 2, productMeta);
     const graph = miniGraph(
       [raw, frag, amount],
       [

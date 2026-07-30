@@ -1,0 +1,81 @@
+{
+  "merchant": "OPET PETROLCULUK A.S.",
+  "purchaseDate": {
+    "raw": "30.07.2026",
+    "normalized": "2026-07-30"
+  },
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Benzin 42,150 LT 45,50 TL/L",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L3",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "qty:L3",
+          "amt:L4"
+        ],
+        "layoutLineIndices": [
+          3,
+          4
+        ],
+        "rawTexts": [
+          "Benzin 42,150 LT 45,50 TL/L",
+          "1917,82 TL"
+        ],
+        "ocrTexts": [
+          "Benzin 42,150 LT 45,50 TL/L",
+          "1917,82 TL"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:product_token",
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "quantity": 42.15,
+      "unit": "LT",
+      "unitPrice": 45.5,
+      "lineTotal": 1917.82
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 1917.82
+  },
+  "confidence": 0.74375,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.74375,
+    "rawTexts": [
+      "Benzin 42,150 LT 45,50 TL/L",
+      "1917,82 TL",
+      "TOPLAM 1917,82",
+      "30.07.2026 20:01",
+      "OPET PETROLCULUK A.S.",
+      "06 XYZ 987"
+    ]
+  }
+}

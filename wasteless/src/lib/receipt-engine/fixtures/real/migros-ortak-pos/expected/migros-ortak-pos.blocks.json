@@ -1,0 +1,280 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L3",
+      "kind": "product",
+      "label": "EKMEK 750 GR",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 15,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L3"
+      ],
+      "rawLines": [
+        "EKMEK 750 GR %1 15,00"
+      ],
+      "groupIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "nodeRefs": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "EKMEK 750 GR %1 15,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "product:raw:L4",
+      "kind": "product",
+      "label": "SUT 1 LT",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 45.9,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L4"
+      ],
+      "rawLines": [
+        "SUT 1 LT %1 45,90"
+      ],
+      "groupIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4",
+        "vat:L4"
+      ],
+      "nodeRefs": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4",
+        "vat:L4"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4",
+          "vat:L4"
+        ],
+        "layoutLineIndices": [
+          4
+        ],
+        "rawTexts": [
+          "SUT 1 LT %1 45,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L6",
+      "frag:L6:name",
+      "amt:L6",
+      "raw:L7",
+      "frag:L7:name",
+      "amt:L7",
+      "raw:L8",
+      "frag:L8:name",
+      "amt:L8"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L6",
+        "frag:L6:name",
+        "amt:L6",
+        "raw:L7",
+        "frag:L7:name",
+        "amt:L7",
+        "raw:L8",
+        "frag:L8:name",
+        "amt:L8"
+      ],
+      "layoutLineIndices": [
+        6,
+        7,
+        8
+      ],
+      "rawTexts": [
+        "ORTAK POS 60,90",
+        "TOPLAM 61,40",
+        "TOPKDV 0,55"
+      ],
+      "classificationRules": [
+        "paymentClassifier:label",
+        "amountClassifier:payment_label",
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label",
+        "footerClassifier:footer_region",
+        "classifierOrchestrator:unknown"
+      ],
+      "confidence": 0.75
+    },
+    "confidence": 0.75,
+    "charges": [
+      {
+        "label": "Alisveris Poseti",
+        "amount": 0.5,
+        "nodeRefs": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "charge",
+        "confidence": 0.85
+      }
+    ],
+    "discounts": [],
+    "payments": [
+      {
+        "label": "ORTAK POS",
+        "amount": 60.9,
+        "nodeRefs": [
+          "raw:L6",
+          "frag:L6:name",
+          "amt:L6"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      }
+    ],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 61.4,
+        "nodeRefs": [
+          "raw:L7",
+          "frag:L7:name",
+          "amt:L7"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": [
+      {
+        "label": "TOPKDV",
+        "amount": 0.55,
+        "nodeRefs": [
+          "raw:L8",
+          "frag:L8:name",
+          "amt:L8"
+        ],
+        "semanticKind": "footer",
+        "confidence": 0.5499999999999999
+      }
+    ]
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "raw:L1",
+      "raw:L2",
+      "frag:L0:name",
+      "frag:L1:name",
+      "frag:L2:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L1",
+        "raw:L2",
+        "frag:L0:name",
+        "frag:L1:name",
+        "frag:L2:name"
+      ],
+      "layoutLineIndices": [
+        0,
+        1,
+        2
+      ],
+      "rawTexts": [
+        "29.07.2026 16:00",
+        "Fiş No: 123456",
+        "MIGROS TICARET A.S."
+      ],
+      "classificationRules": [
+        "metadataClassifier:date",
+        "metadataClassifier:receipt_number",
+        "headerClassifier:merchant_scored"
+      ],
+      "confidence": 0.86
+    },
+    "confidence": 0.86,
+    "merchant": "MIGROS TICARET A.S.",
+    "date": "29.07.2026 16:00",
+    "time": null,
+    "receiptNumber": "Fiş No: 123456",
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "MIGROS TICARET A.S."
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "MIGROS TICARET A.S.",
+        "semanticKind": "header",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.712
+}

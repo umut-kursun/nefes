@@ -1,0 +1,39 @@
+{
+  "isValid": false,
+  "score": 80,
+  "errors": [
+    {
+      "id": "PaymentSumValidator:PAYMENT_SUM_MISMATCH:payments",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "PAYMENT_SUM_MISMATCH",
+      "message": "Payment sum does not match receipt total.",
+      "location": {
+        "path": "payments"
+      },
+      "provenance": {
+        "validatorId": "PaymentSumValidator",
+        "purchaseConfidence": 0.712
+      },
+      "suggestedFix": "Check split payment rows against total.",
+      "expected": 61.4,
+      "actual": 60.9
+    }
+  ],
+  "warnings": [
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.712
+      }
+    }
+  ]
+}

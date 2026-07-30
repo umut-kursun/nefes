@@ -1,0 +1,218 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "LEZZET RESTORAN A.S.",
+      "rawText": "LEZZET RESTORAN A.S.",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "LEZZET RESTORAN A.S."
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "29.07.2026 21:30",
+      "rawText": "29.07.2026 21:30",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "columns": {
+        "name": "29.07.2026 21:30"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "Corba %10 85,00",
+      "rawText": "Corba %10 85,00",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "vat": "%10",
+        "amount": "85,00",
+        "name": "Corba"
+      },
+      "trailingAmount": 85,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%10"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 3,
+      "text": "Izgara %10 320,00",
+      "rawText": "Izgara %10 320,00",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "amount": "10 320,00",
+        "name": "Izgara %",
+        "vat": "%10"
+      },
+      "trailingAmount": 10320,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%10"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "TOPLAM 405,00",
+      "rawText": "TOPLAM 405,00",
+      "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "columns": {
+        "amount": "405,00",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 405,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "Nakit 405,00",
+      "rawText": "Nakit 405,00",
+      "region": "footer",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
+      "columns": {
+        "amount": "405,00",
+        "name": "Nakit"
+      },
+      "trailingAmount": 405,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "regions": {
+    "header": [
+      0,
+      1
+    ],
+    "body": [
+      2,
+      3
+    ],
+    "footer": [
+      4,
+      5
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 1
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 2,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 4,
+        "endLineIndex": 4
+      },
+      {
+        "kind": "payments",
+        "startLineIndex": 5,
+        "endLineIndex": 5
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "products",
+      "products",
+      "totals",
+      "payments"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "DateLine",
+      "ProductNameLine",
+      "ProductNameLine",
+      "TotalLine",
+      "PaymentLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "PRODUCTS",
+      "TOTALS",
+      "PAYMENTS"
+    ]
+  },
+  "confidence": 0.7833333333333333
+}

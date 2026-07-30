@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BackButton } from "@/components/back-button";
+import { EmptyState } from "@/components/empty-state";
 import { GroupedExpenseList } from "@/components/grouped-expense-list";
 import {
   ExpenseFilterBar,
@@ -88,6 +89,14 @@ export default function HistoryPage() {
 
       {!ready ? (
         <p className="text-sm text-muted-foreground">Yükleniyor…</p>
+      ) : expenses.length === 0 && !filtersActive ? (
+        <EmptyState
+          emoji="🧾"
+          title="Henüz harcama yok"
+          description="Fiş tara veya manuel giriş yap; harcama geçmişin burada birikir. İlk kayıttan sonra filtreleme ve arama da açılır."
+          actionLabel="İlk harcamayı ekle"
+          actionHref="/add"
+        />
       ) : (
         <div className="animate-fade-up delay-2">
           <GroupedExpenseList

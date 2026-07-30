@@ -1,0 +1,9 @@
+{
+  "source": "beta-test-scenario",
+  "immutable": true,
+  "description": "LC Waikiki clothing retail receipt with VAT lines",
+  "merchantCategory": "clothing",
+  "merchantSlug": "lcw-clothing",
+  "ingestedAt": "2026-07-30",
+  "origin": "document-parser-regression.test.ts FIXTURES.lcw"
+}

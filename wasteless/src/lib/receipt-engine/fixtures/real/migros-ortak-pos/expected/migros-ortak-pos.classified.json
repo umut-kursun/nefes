@@ -1,0 +1,690 @@
+{
+  "confidence": 0.7480769230769231,
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "graphNodeId": "raw:L0",
+      "semanticKind": "header",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:raw_line"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L0",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "MIGROS TICARET A.S.",
+        "rawText": "MIGROS TICARET A.S.",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "headerClassifier:raw_line"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L1",
+      "graphNodeId": "raw:L1",
+      "semanticKind": "date",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:date"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "time",
+          "confidence": 0.85,
+          "ruleId": "metadataClassifier:time",
+          "reason": "time pattern: 29.07.2026 16:00"
+        },
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:raw_line",
+          "reason": "raw line in header region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L1",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "29.07.2026 16:00",
+        "rawText": "29.07.2026 16:00",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "metadataClassifier:date"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L2",
+      "graphNodeId": "raw:L2",
+      "semanticKind": "receipt_number",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:receipt_number"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:raw_line",
+          "reason": "raw line in header region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Fiş No: 123456",
+        "rawText": "Fiş No: 123456",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "metadataClassifier:receipt_number"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L3",
+      "graphNodeId": "raw:L3",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "EKMEK 750 GR %1 15,00",
+        "rawText": "EKMEK 750 GR %1 15,00",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L4",
+      "graphNodeId": "raw:L4",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "SUT 1 LT %1 45,90",
+        "rawText": "SUT 1 LT %1 45,90",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L5",
+      "graphNodeId": "raw:L5",
+      "semanticKind": "charge",
+      "confidence": 0.85,
+      "matchedRules": [
+        "chargeClassifier:label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L5",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "Alisveris Poseti 0,50",
+        "rawText": "Alisveris Poseti 0,50",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "chargeClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L6",
+      "graphNodeId": "raw:L6",
+      "semanticKind": "payment",
+      "confidence": 0.85,
+      "matchedRules": [
+        "paymentClassifier:label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L6",
+        "layoutLineIndices": [
+          6
+        ],
+        "sourceText": "ORTAK POS 60,90",
+        "rawText": "ORTAK POS 60,90",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "paymentClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L7",
+      "graphNodeId": "raw:L7",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L7",
+        "layoutLineIndices": [
+          7
+        ],
+        "sourceText": "TOPLAM 61,40",
+        "rawText": "TOPLAM 61,40",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L8",
+      "graphNodeId": "raw:L8",
+      "semanticKind": "footer",
+      "confidence": 0.65,
+      "matchedRules": [
+        "footerClassifier:footer_region"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L8",
+        "layoutLineIndices": [
+          8
+        ],
+        "sourceText": "TOPKDV 0,55",
+        "rawText": "TOPKDV 0,55",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "footerClassifier:footer_region"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L0:name",
+      "graphNodeId": "frag:L0:name",
+      "semanticKind": "merchant",
+      "confidence": 0.9,
+      "matchedRules": [
+        "headerClassifier:merchant_scored"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L0:name",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "MIGROS TICARET A.S.",
+        "rawText": "MIGROS TICARET A.S.",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "headerClassifier:merchant_scored"
+        ],
+        "confidence": 0.9
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L1:name",
+      "graphNodeId": "frag:L1:name",
+      "semanticKind": "date",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:date"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "time",
+          "confidence": 0.85,
+          "ruleId": "metadataClassifier:time",
+          "reason": "time pattern: 29.07.2026 16:00"
+        },
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L1:name",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "29.07.2026 16:00",
+        "rawText": "29.07.2026 16:00",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "metadataClassifier:date"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L2:name",
+      "graphNodeId": "frag:L2:name",
+      "semanticKind": "receipt_number",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:receipt_number"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L2:name",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Fiş No: 123456",
+        "rawText": "Fiş No: 123456",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "metadataClassifier:receipt_number"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L3:name",
+      "graphNodeId": "frag:L3:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L3:name",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "EKMEK 750 GR",
+        "rawText": "EKMEK 750 GR %1 15,00",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L3",
+      "graphNodeId": "amt:L3",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "15,00",
+        "rawText": "EKMEK 750 GR %1 15,00",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 15
+    },
+    {
+      "id": "frag:L4:name",
+      "graphNodeId": "frag:L4:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L4:name",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "SUT 1 LT",
+        "rawText": "SUT 1 LT %1 45,90",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L4",
+      "graphNodeId": "amt:L4",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "45,90",
+        "rawText": "SUT 1 LT %1 45,90",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 45.9
+    },
+    {
+      "id": "frag:L5:name",
+      "graphNodeId": "frag:L5:name",
+      "semanticKind": "charge",
+      "confidence": 0.85,
+      "matchedRules": [
+        "chargeClassifier:label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L5:name",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "Alisveris Poseti",
+        "rawText": "Alisveris Poseti 0,50",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "chargeClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L5",
+      "graphNodeId": "amt:L5",
+      "semanticKind": "charge",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:charge_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L5",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "0,50",
+        "rawText": "Alisveris Poseti 0,50",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:charge_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 0.5
+    },
+    {
+      "id": "frag:L6:name",
+      "graphNodeId": "frag:L6:name",
+      "semanticKind": "payment",
+      "confidence": 0.85,
+      "matchedRules": [
+        "paymentClassifier:label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L6:name",
+        "layoutLineIndices": [
+          6
+        ],
+        "sourceText": "ORTAK POS",
+        "rawText": "ORTAK POS 60,90",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "paymentClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L6",
+      "graphNodeId": "amt:L6",
+      "semanticKind": "payment",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:payment_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L6",
+        "layoutLineIndices": [
+          6
+        ],
+        "sourceText": "60,90",
+        "rawText": "ORTAK POS 60,90",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:payment_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 60.9
+    },
+    {
+      "id": "frag:L7:name",
+      "graphNodeId": "frag:L7:name",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L7:name",
+        "layoutLineIndices": [
+          7
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 61,40",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L7",
+      "graphNodeId": "amt:L7",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:total_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L7",
+        "layoutLineIndices": [
+          7
+        ],
+        "sourceText": "61,40",
+        "rawText": "TOPLAM 61,40",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 61.4
+    },
+    {
+      "id": "frag:L8:name",
+      "graphNodeId": "frag:L8:name",
+      "semanticKind": "footer",
+      "confidence": 0.65,
+      "matchedRules": [
+        "footerClassifier:footer_region"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L8:name",
+        "layoutLineIndices": [
+          8
+        ],
+        "sourceText": "TOPKDV",
+        "rawText": "TOPKDV 0,55",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "footerClassifier:footer_region"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L8",
+      "graphNodeId": "amt:L8",
+      "semanticKind": "unknown",
+      "confidence": 0.35,
+      "matchedRules": [
+        "classifierOrchestrator:unknown"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L8",
+        "layoutLineIndices": [
+          8
+        ],
+        "sourceText": "0,55",
+        "rawText": "TOPKDV 0,55",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "classifierOrchestrator:unknown"
+        ],
+        "confidence": 0.35
+      },
+      "amount": 0.55
+    },
+    {
+      "id": "vat:L3",
+      "graphNodeId": "vat:L3",
+      "semanticKind": "vat",
+      "confidence": 0.65,
+      "matchedRules": [
+        "vatClassifier:vat_token"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "vat:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "%1",
+        "rawText": "EKMEK 750 GR %1 15,00",
+        "graphCreationRule": "passTokens:vat",
+        "classificationRules": [
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "vat:L4",
+      "graphNodeId": "vat:L4",
+      "semanticKind": "vat",
+      "confidence": 0.65,
+      "matchedRules": [
+        "vatClassifier:vat_token"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "vat:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "%1",
+        "rawText": "SUT 1 LT %1 45,90",
+        "graphCreationRule": "passTokens:vat",
+        "classificationRules": [
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    }
+  ]
+}

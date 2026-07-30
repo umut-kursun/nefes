@@ -1,4 +1,5 @@
 import type { LayoutDocument } from "../../types/models/layout";
+import { isFuelLine } from "../../patterns/document";
 import type { GraphBuilderState } from "../graphImmutable";
 import { addEdge } from "../graphImmutable";
 import { rawLineId } from "../graphIds";
@@ -14,6 +15,8 @@ export function passContinuations(
 
     const prev = layout.lines[line.index - 1];
     if (!prev) continue;
+    if (prev.region !== line.region) continue;
+    if (isFuelLine(line.text) || isFuelLine(prev.text)) continue;
 
     next = addEdge(
       next,

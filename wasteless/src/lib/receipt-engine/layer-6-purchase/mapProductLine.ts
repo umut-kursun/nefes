@@ -8,14 +8,35 @@ import {
   parseUnit,
   parseVatRate,
 } from "./parsers";
+import {
+  isFuelProductLabel,
+  parseFuelProductFields,
+} from "./section-parsers/fuelProductParser";
 
 export function mapProductBlock(block: ProductBlock): PurchaseLine {
   const qtyParsed = block.quantity ? parseQuantity(block.quantity) : null;
   const unitFromBlock = block.unit ? parseUnit(block.unit) : null;
-  const unit =
+
+  let quantity = qtyParsed?.normalized;
+  let unit =
     unitFromBlock?.normalized ??
     qtyParsed?.unitNormalized ??
     undefined;
+  let unitPrice = block.unitPrice ?? undefined;
+  let lineTotal = block.totalPrice ?? undefined;
+
+  if (isFuelProductLabel(block.label)) {
+    const fuel = parseFuelProductFields(
+      block.label,
+      block.totalPrice,
+      block.unitPrice
+    );
+    if (fuel.quantity !== undefined) quantity = fuel.quantity;
+    if (fuel.unit) unit = fuel.unit;
+    if (fuel.unitPrice !== undefined) unitPrice = fuel.unitPrice;
+    if (fuel.lineTotal !== undefined) lineTotal = fuel.lineTotal;
+  }
+
   const vatParsed = block.vatToken ? parseVatRate(block.vatToken) : null;
 
   const line: PurchaseLine = {
@@ -33,15 +54,15 @@ export function mapProductBlock(block: ProductBlock): PurchaseLine {
   };
 
   const withQty =
-    qtyParsed?.normalized !== undefined
-      ? { ...line, quantity: qtyParsed.normalized }
+    quantity !== undefined
+      ? { ...line, quantity }
       : line;
   const withUnit = unit ? { ...withQty, unit } : withQty;
   const withUnitPrice =
-    block.unitPrice !== null ? { ...withUnit, unitPrice: block.unitPrice } : withUnit;
+    unitPrice != null ? { ...withUnit, unitPrice } : withUnit;
   const withLineTotal =
-    block.totalPrice !== null
-      ? { ...withUnitPrice, lineTotal: block.totalPrice }
+    lineTotal != null
+      ? { ...withUnitPrice, lineTotal }
       : withUnitPrice;
   const withVat =
     vatParsed?.normalized !== undefined

@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { BackButton } from "@/components/back-button";
+import { EmptyState } from "@/components/empty-state";
 import { InsightCard } from "@/components/insight-card";
+import { PremiumTeaser } from "@/components/premium-teaser";
 import { useWasteLessStore } from "@/hooks/use-store";
 import { generateInsights } from "@/lib/insights";
 
@@ -29,35 +30,31 @@ export default function SmartInsightsPage() {
       {!ready ? (
         <p className="text-sm text-muted-foreground">Yükleniyor…</p>
       ) : insights.length === 0 ? (
-        <div className="rounded-3xl border border-black/[0.05] bg-white px-6 py-14 text-center shadow-sm animate-fade-up">
-          <p className="text-4xl" aria-hidden>
-            🧠
-          </p>
-          <p className="mt-4 font-semibold text-[color:var(--ink)]">
-            Henüz içgörü yok
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Birkaç satın alma ekle; WasteLess desenleri keşfetmeye başlasın.
-          </p>
-          <Link
-            href="/add"
-            className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition active:scale-95"
-          >
-            Harcama ekle
-          </Link>
-        </div>
+        <EmptyState
+          emoji="🧠"
+          title="Henüz içgörü yok"
+          description="Birkaç satın alma ekle; WasteLess desenleri keşfetmeye başlasın."
+          actionLabel="Harcama ekle"
+          actionHref="/add"
+        />
       ) : (
-        <ul className="space-y-3 animate-fade-up delay-1">
-          {insights.map((insight, i) => (
-            <li
-              key={insight.id}
-              className="animate-fade-up"
-              style={{ animationDelay: `${Math.min(i, 6) * 0.04}s` }}
-            >
-              <InsightCard insight={insight} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="space-y-3 animate-fade-up delay-1">
+            {insights.map((insight, i) => (
+              <li
+                key={insight.id}
+                className="animate-fade-up"
+                style={{ animationDelay: `${Math.min(i, 6) * 0.04}s` }}
+              >
+                <InsightCard insight={insight} />
+              </li>
+            ))}
+          </ul>
+          <PremiumTeaser
+            className="mt-6"
+            storageKey="wl_premium_teaser_insights"
+          />
+        </>
       )}
     </AppShell>
   );

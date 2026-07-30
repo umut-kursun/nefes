@@ -184,6 +184,9 @@ export interface AppSettings {
   theme: "light" | "dark" | "system";
   /** Optional first name for personalized greetings. */
   displayName?: string | null;
+  /** First-run onboarding completed on this device. */
+  onboardingCompleted?: boolean;
+  onboardingCompletedAt?: string;
 }
 
 /** User-taught OCR correction — never overwrites original OCR on expenses. */

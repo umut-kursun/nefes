@@ -4,8 +4,7 @@ import { candidate, type NodeClassifier } from "../classifierTypes";
 import type { GraphContext } from "../graphContext";
 
 function isProductRow(ctx: GraphContext, rawId: string): boolean {
-  const region = ctx.regionOfRaw(rawId);
-  if (region !== "body") return false;
+  if (!ctx.isProductEligibleRaw(rawId)) return false;
 
   const labelText = ctx.combinedRowText(rawId);
   if (matchesSpecialFooterLabel(labelText)) return false;

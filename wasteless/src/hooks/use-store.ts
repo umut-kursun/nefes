@@ -75,6 +75,7 @@ export function WasteLessProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<AppSettings>({
     theme: "light",
     displayName: null,
+    onboardingCompleted: false,
   });
   const [ready, setReady] = useState(false);
 

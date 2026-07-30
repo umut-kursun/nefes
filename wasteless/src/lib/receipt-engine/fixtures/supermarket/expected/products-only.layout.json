@@ -5,6 +5,8 @@
       "text": "CARREFOURSA",
       "rawText": "CARREFOURSA",
       "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
       "columns": {
         "name": "CARREFOURSA"
       },
@@ -25,6 +27,8 @@
       "text": "Peynir 500g %1 89,90",
       "rawText": "Peynir 500g %1 89,90",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
       "columns": {
         "vat": "%1",
         "amount": "89,90",
@@ -34,13 +38,12 @@
       "features": {
         "hasVatToken": true,
         "hasWeightPattern": false,
-        "hasQuantityToken": true,
+        "hasQuantityToken": false,
         "isAmountOnly": false,
         "isLikelyContinuation": false,
         "isRightAlignedPrice": false
       },
       "tokens": {
-        "quantity": "500g",
         "vat": "%1"
       },
       "confidence": 0.85
@@ -50,6 +53,8 @@
       "text": "Zeytin 250g %1 34,50",
       "rawText": "Zeytin 250g %1 34,50",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
       "columns": {
         "vat": "%1",
         "amount": "34,50",
@@ -59,13 +64,12 @@
       "features": {
         "hasVatToken": true,
         "hasWeightPattern": false,
-        "hasQuantityToken": true,
+        "hasQuantityToken": false,
         "isAmountOnly": false,
         "isLikelyContinuation": false,
         "isRightAlignedPrice": false
       },
       "tokens": {
-        "quantity": "250g",
         "vat": "%1"
       },
       "confidence": 0.85
@@ -75,6 +79,8 @@
       "text": "TOPLAM 124,40",
       "rawText": "TOPLAM 124,40",
       "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
       "columns": {
         "amount": "124,40",
         "name": "TOPLAM"
@@ -109,6 +115,43 @@
     ],
     "footer": [
       3
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 0
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 1,
+        "endLineIndex": 2
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 3,
+        "endLineIndex": 3
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "products",
+      "products",
+      "totals"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "ProductNameLine",
+      "ProductNameLine",
+      "TotalLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "PRODUCTS",
+      "PRODUCTS",
+      "TOTALS"
     ]
   },
   "confidence": 0.8

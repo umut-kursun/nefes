@@ -1,0 +1,143 @@
+{
+  "merchant": "MIGROS TICARET A.S.",
+  "purchaseDate": {
+    "raw": "29.07.2026",
+    "normalized": "2026-07-29"
+  },
+  "purchaseTime": null,
+  "receiptNumber": {
+    "raw": "123456",
+    "normalized": "123456"
+  },
+  "currency": null,
+  "products": [
+    {
+      "name": "EKMEK 750 GR",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L3",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "EKMEK 750 GR %1 15,00"
+        ],
+        "ocrTexts": [
+          "EKMEK 750 GR %1 15,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 15,
+      "vatRate": 1
+    },
+    {
+      "name": "SUT 1 LT",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L4",
+        "graphNodeIds": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4",
+          "vat:L4"
+        ],
+        "layoutLineIndices": [
+          4
+        ],
+        "rawTexts": [
+          "SUT 1 LT %1 45,90"
+        ],
+        "ocrTexts": [
+          "SUT 1 LT %1 45,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 45.9,
+      "vatRate": 1
+    }
+  ],
+  "charges": [
+    {
+      "label": "Alisveris Poseti",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "charge",
+        "confidence": 0.85
+      },
+      "amount": 0.5
+    }
+  ],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "ORTAK POS",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L6",
+          "frag:L6:name",
+          "amt:L6"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      "amount": 60.9
+    }
+  ],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L7",
+        "frag:L7:name",
+        "amt:L7"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 61.4
+  },
+  "confidence": 0.712,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.712,
+    "rawTexts": [
+      "EKMEK 750 GR %1 15,00",
+      "SUT 1 LT %1 45,90",
+      "ORTAK POS 60,90",
+      "TOPLAM 61,40",
+      "TOPKDV 0,55",
+      "29.07.2026 16:00",
+      "Fiş No: 123456",
+      "MIGROS TICARET A.S."
+    ]
+  }
+}

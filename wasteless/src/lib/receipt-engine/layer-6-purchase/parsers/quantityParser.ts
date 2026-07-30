@@ -1,4 +1,4 @@
-import { QTY_TOKEN } from "../../patterns/neutral";
+import { PURCHASED_QTY_EXPLICIT } from "../../patterns/document";
 import { parseTrNumber } from "./parseNumber";
 import type { ParsedField } from "../../types/models/purchase";
 import { parseUnit } from "./unitParser";
@@ -8,30 +8,36 @@ export interface QuantityParseResult extends ParsedField<number> {
   unitNormalized?: string;
 }
 
+/**
+ * Purchased quantity only from explicit expressions (2 x, 3 Adet).
+ * Weight/volume attributes (750 GR, 1 LT) are NOT purchased quantity.
+ */
 export function parseQuantity(text: string): QuantityParseResult {
   const raw = text.trim();
   if (!raw) return { raw: text };
 
-  const match = raw.match(QTY_TOKEN);
-  if (!match) {
-    const leading = raw.match(/^(\d+(?:[.,]\d+)?)\b/);
-    if (leading?.[1]) {
-      const qty = parseTrNumber(leading[1]);
-      if (qty !== undefined) return { raw, normalized: qty };
+  const explicit = raw.match(PURCHASED_QTY_EXPLICIT);
+  if (explicit) {
+    const qtyRaw = explicit[1] ?? explicit[2];
+    if (qtyRaw) {
+      const qty = parseTrNumber(qtyRaw);
+      if (qty !== undefined) {
+        return { raw, normalized: qty };
+      }
     }
-    const bare = parseTrNumber(raw);
-    if (bare !== undefined) return { raw, normalized: bare };
-    return { raw };
   }
 
-  const qty = parseTrNumber(match[1] ?? "");
-  const unitRaw = match[2];
-  const unitParsed = unitRaw ? parseUnit(unitRaw) : undefined;
+  const scaleWeight = raw.match(/^(\d+(?:[.,]\d+)?)\s*(kg|gr|gram)\b/);
+  if (scaleWeight?.[1] && scaleWeight?.[2]) {
+    const qty = parseTrNumber(scaleWeight[1]);
+    const unitParsed = parseUnit(scaleWeight[2]);
+    return {
+      raw,
+      ...(qty !== undefined ? { normalized: qty } : {}),
+      unitRaw: scaleWeight[2],
+      ...(unitParsed?.normalized ? { unitNormalized: unitParsed.normalized } : {}),
+    };
+  }
 
-  return {
-    raw,
-    ...(qty !== undefined ? { normalized: qty } : {}),
-    ...(unitRaw ? { unitRaw } : {}),
-    ...(unitParsed?.normalized ? { unitNormalized: unitParsed.normalized } : {}),
-  };
+  return { raw };
 }

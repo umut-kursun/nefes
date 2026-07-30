@@ -1,9 +1,4 @@
-import {
-  createEngineDependencies,
-  resolveEngineConfig,
-  runReceiptEngine,
-} from "@/lib/receipt-engine";
-import { createStubLayoutProfileRegistry } from "@/lib/receipt-engine/config/profiles";
+import { analyzeReceipt } from "@/lib/receipt-engine-sdk";
 import { stripValidatedPurchase } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
@@ -63,51 +58,42 @@ export async function analyzeReceiptEngineFormData(
     altImageDataUrl = await fileToDataUrl(altFile);
   }
 
-  const config = resolveEngineConfig({
-    debug: process.env.NODE_ENV === "development",
-  });
-
-  const deps = createEngineDependencies({
-    config,
-    layoutProfiles: createStubLayoutProfileRegistry(
-      config.defaultLayoutProfileId
-    ),
-    ocrProviderOptions: {
-      kind: "openai",
-      openAi: {
-        apiKey: options.apiKey,
-        model: options.model ?? process.env.OPENAI_OCR_MODEL ?? "gpt-4o-mini",
-      },
-    },
-  });
-
-  const result = await runReceiptEngine(
+  const result = await analyzeReceipt(
     {
-      imagePrimary: {
-        dataUrl: primaryDataUrl,
-        variant: "enhanced",
-        preprocessMs: Number.isFinite(preprocessMs) ? preprocessMs : undefined,
-      },
-      imageAlt: altImageDataUrl
-        ? { dataUrl: altImageDataUrl, variant: "threshold" }
-        : undefined,
+      imageDataUrl: primaryDataUrl,
+      altImageDataUrl,
       sourceHint: hint,
-      imageDataUrl: displayDataUrl,
+      preprocessMs: Number.isFinite(preprocessMs) ? preprocessMs : undefined,
     },
-    deps
+    {
+      debug: process.env.NODE_ENV === "development",
+      ocrProviderId: "openai",
+    },
+    {
+      ocrFactoryOptions: {
+        kind: "openai",
+        openAi: {
+          apiKey: options.apiKey,
+          model: options.model ?? process.env.OPENAI_OCR_MODEL ?? "gpt-4o-mini",
+        },
+      },
+    }
   );
 
   if (!result.success) {
     return {
-      error: result.failure.message,
-      failureCode: result.failure.code,
+      error: result.error?.message ?? "Receipt analysis failed.",
+      failureCode: result.error?.code,
       status: 500,
     };
   }
 
   return {
-    purchase: result.validation.validatedPurchase,
-    validation: stripValidatedPurchase(result.validation),
+    purchase: result.purchase,
+    validation: stripValidatedPurchase({
+      ...result.validation,
+      validatedPurchase: result.purchase,
+    }),
     imageDataUrl: displayDataUrl,
     ocrRawText: result.ocrRawText,
   };

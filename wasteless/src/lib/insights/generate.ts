@@ -2,7 +2,10 @@ import type { Expense, UserCategory, UserTag } from "@/lib/types";
 import { getAverageFuelPrice } from "./average-fuel-price";
 import { getAverageReceipt } from "./average-receipt";
 import { getCheapestMerchantInsight } from "./cheapest-merchant";
+import { getCoffeeFrequency } from "./coffee-frequency";
+import { getCigaretteSpending } from "./cigarette-spending";
 import { getDaysSinceLastPurchase } from "./days-since-last-purchase";
+import { getFuelMonthTrend } from "./fuel-month-trend";
 import { getHighestSpendingCategory } from "./highest-spending-category";
 import { getHighestSpendingProduct } from "./highest-spending-product";
 import { getLargestPurchase } from "./largest-purchase";
@@ -14,17 +17,24 @@ import { getPriceDecrease } from "./price-decreased";
 import { getPriceIncrease } from "./price-increased";
 import { getPurchaseFrequency } from "./purchase-frequency";
 import { getPurchaseMilestone } from "./purchase-milestone";
+import { getRecurringProduct } from "./recurring-product";
+import { getSavingsOpportunity } from "./savings-opportunity";
 import { getShoppingWeekday } from "./shopping-weekday";
 import { pickHomeInsights } from "./pick-home";
 import type { Insight, InsightContext } from "./types";
 
 const GENERATORS: Array<(ctx: InsightContext) => Insight | null> = [
+  getFuelMonthTrend,
+  getCigaretteSpending,
+  getSavingsOpportunity,
   getPriceIncrease,
   getPriceDecrease,
   getCheapestMerchantInsight,
   getMonthlyComparison,
   getPurchaseMilestone,
   getPurchaseFrequency,
+  getRecurringProduct,
+  getCoffeeFrequency,
   getHighestSpendingProduct,
   getHighestSpendingCategory,
   getAverageFuelPrice,

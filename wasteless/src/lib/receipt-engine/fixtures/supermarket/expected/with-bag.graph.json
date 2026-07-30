@@ -17,7 +17,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
     },
     {
       "id": "raw:L1",
@@ -36,7 +40,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
     },
     {
       "id": "raw:L2",
@@ -55,7 +63,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "raw:L3",
@@ -74,7 +86,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "raw:L4",
@@ -93,7 +109,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ChargeLine"
+      }
     },
     {
       "id": "raw:L5",
@@ -112,7 +132,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "frag:L0:name",
@@ -131,7 +155,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
     },
     {
       "id": "frag:L1:name",
@@ -150,7 +178,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
     },
     {
       "id": "frag:L2:name",
@@ -169,7 +201,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "amt:L2",
@@ -188,7 +224,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "frag:L3:name",
@@ -207,7 +247,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "amt:L3",
@@ -226,7 +270,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "frag:L4:name",
@@ -245,7 +293,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ChargeLine"
+      }
     },
     {
       "id": "amt:L4",
@@ -264,7 +316,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ChargeLine"
+      }
     },
     {
       "id": "frag:L5:name",
@@ -283,7 +339,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "amt:L5",
@@ -302,7 +362,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "vat:L2",
@@ -321,26 +385,11 @@
         "creationRule": "passTokens:vat",
         "confidence": 0.85
       },
-      "confidence": 0.85
-    },
-    {
-      "id": "qty:L2",
-      "kind": "quantity_token",
-      "text": "1 L",
-      "amount": null,
-      "layoutRef": {
-        "lineIndex": 2
-      },
-      "provenance": {
-        "layoutLineIndices": [
-          2
-        ],
-        "sourceText": "1 L",
-        "rawText": "Sut 1 L %1 45,90",
-        "creationRule": "passTokens:quantity",
-        "confidence": 0.85
-      },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "vat:L3",
@@ -359,7 +408,11 @@
         "creationRule": "passTokens:vat",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     }
   ],
   "edges": [
@@ -445,20 +498,6 @@
       "from": "vat:L2",
       "to": "raw:L2",
       "kind": "vat_of",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:same_row:qty:L2->raw:L2",
-      "from": "qty:L2",
-      "to": "raw:L2",
-      "kind": "same_row",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:quantity_of:qty:L2->raw:L2",
-      "from": "qty:L2",
-      "to": "raw:L2",
-      "kind": "quantity_of",
       "confidence": 0.85
     },
     {
@@ -554,5 +593,5 @@
     ]
   },
   "profileId": "generic-tr",
-  "confidence": 0.8078947368421051
+  "confidence": 0.8055555555555555
 }

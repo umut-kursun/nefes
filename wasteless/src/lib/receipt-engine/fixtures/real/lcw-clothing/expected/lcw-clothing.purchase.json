@@ -1,0 +1,122 @@
+{
+  "merchant": "LC WAIKIKI MAGAZACILIK A.S.",
+  "purchaseDate": {
+    "raw": "28.07.2026",
+    "normalized": "2026-07-28"
+  },
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Tişört %",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L2",
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Tişört %10 299,99"
+        ],
+        "ocrTexts": [
+          "Tişört %10 299,99"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 10299.99,
+      "vatRate": 10
+    },
+    {
+      "name": "Pantolon %",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L3",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "Pantolon %10 499,99"
+        ],
+        "ocrTexts": [
+          "Pantolon %10 499,99"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 10499.99,
+      "vatRate": 10
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "Kredi Kart",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      "amount": 799.98
+    }
+  ],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 799.98
+  },
+  "confidence": 0.7333333333333333,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.7333333333333333,
+    "rawTexts": [
+      "Tişört %10 299,99",
+      "Pantolon %10 499,99",
+      "TOPLAM 799,98",
+      "Kredi Kart 799,98",
+      "28.07.2026 18:22",
+      "LC WAIKIKI MAGAZACILIK A.S."
+    ]
+  }
+}

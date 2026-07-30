@@ -1,0 +1,9 @@
+{
+  "source": "beta-test-scenario",
+  "immutable": true,
+  "description": "Pharmacy receipt with product lines and cashier footer",
+  "merchantCategory": "pharmacy",
+  "merchantSlug": "eczane-pharmacy",
+  "ingestedAt": "2026-07-30",
+  "origin": "document-parser-regression.test.ts FIXTURES.pharmacy"
+}

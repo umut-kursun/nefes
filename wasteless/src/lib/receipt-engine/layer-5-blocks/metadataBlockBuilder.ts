@@ -1,5 +1,7 @@
 import type { ClassifiedGraph } from "../types/models/classify";
 import type { MetadataBlock } from "../types/models/blocks";
+import { buildGraphIndex } from "../graph/graphIndex";
+import { selectBestMerchant } from "./merchantScorer";
 import { averageConfidence, provenanceFromNodes } from "./blockProvenance";
 
 const METADATA_KINDS = new Set([
@@ -53,6 +55,12 @@ export function buildMetadataBlock(
       default:
         break;
     }
+  }
+
+  const index = buildGraphIndex(classified.graph);
+  const scoredMerchant = selectBestMerchant(index.headerLinesForMerchant());
+  if (scoredMerchant) {
+    merchant = scoredMerchant;
   }
 
   const refs = Object.freeze([...nodeRefs]);

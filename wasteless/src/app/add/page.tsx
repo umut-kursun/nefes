@@ -1,10 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Camera, ImagePlus, Keyboard, Loader2 } from "lucide-react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Camera, ImagePlus, Keyboard, Loader2, Sparkles, X } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { ErrorRecoveryCard } from "@/components/error-recovery-card";
 import { Button } from "@/components/ui/button";
 import { useWasteLessStore } from "@/hooks/use-store";
 import { useToast } from "@/components/toast";
@@ -31,12 +32,19 @@ import {
 } from "@/lib/receipt-image-preprocess";
 import { checkReceiptConsistency, findLineItemIssues } from "@/lib/receipt-quality";
 import { ITEM_CONFIRM_THRESHOLD } from "@/lib/receipt-pipeline";
+import { trackProductEvent } from "@/lib/product-analytics";
+import { trackFirstReceiptSaved, trackTiming } from "@/lib/beta-telemetry";
+import { setLastScanConfidence } from "@/lib/beta-feedback";
 import { OcrResultSummary } from "@/components/ocr-result-summary";
 import { OcrTextPanel } from "@/components/ocr-text-panel";
 import type { AnalysisResult, Expense } from "@/lib/types";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import type { ReceiptDebugExport } from "@/lib/receipt-engine-debug/exportSchema";
+import {
+  onLaunchFile,
+  takePendingLaunchFile,
+} from "@/lib/pwa-launch-handler";
 
 const ReviewForm = dynamic(
   () =>
@@ -76,12 +84,17 @@ function prettyJson(raw: string): string {
   }
 }
 
-export default function AddPage() {
+function AddPageInner() {
   const router = useRouter();
-  const { addExpense, categories } = useWasteLessStore();
+  const searchParams = useSearchParams();
+  const showWelcome = searchParams.get("welcome") === "1";
+  const { addExpense, categories, expenses } = useWasteLessStore();
   const { toast } = useToast();
   const cameraRef = useRef<HTMLInputElement>(null);
   const galleryRef = useRef<HTMLInputElement>(null);
+  const pageLoadRef = useRef(typeof performance !== "undefined" ? performance.now() : 0);
+  const scanStartRef = useRef<number | null>(null);
+  const [welcomeDismissed, setWelcomeDismissed] = useState(false);
   const [mode, setMode] = useState<Mode>("chooser");
   const [draft, setDraft] = useState<Expense | null>(null);
   /** Unedited OCR draft — used to detect user corrections on save. */
@@ -107,6 +120,7 @@ export default function AddPage() {
   const [engineImageUrl, setEngineImageUrl] = useState<string | null>(null);
   const [engineDebugExport, setEngineDebugExport] =
     useState<ReceiptDebugExport | null>(null);
+  const analyzeFileRef = useRef<(file: File) => Promise<void>>(async () => {});
 
   const analyzeWithReceiptEngine = async (file: File) => {
     setLoading(true);
@@ -158,64 +172,24 @@ export default function AddPage() {
           ? (json.debugExport as ReceiptDebugExport)
           : null
       );
-
-      const ocrRawText =
-        typeof json.ocrRawText === "string"
-          ? json.ocrRawText
-          : (json.purchase as PurchaseDraft)?.provenance?.rawTexts
-              ?.filter(Boolean)
-              .join("\n") ?? "";
-
-      const purchase = json.purchase as PurchaseDraft;
-      const validation = json.validation as ValidationReportGolden;
-      const parserJson = JSON.stringify(
-        {
-          purchase,
-          validation,
-        },
-        null,
-        2
+      setMode("engine-result");
+      setLastScanConfidence(
+        (json.purchase as PurchaseDraft)?.confidence ?? undefined
       );
-
-      const next = purchaseDraftToExpenseDraft(purchase, {
-        imageDataUrl:
-          typeof json.imageDataUrl === "string"
-            ? json.imageDataUrl
-            : originalDataUrl,
-        ocrRawText,
-        categories,
-        parserJson,
+      trackProductEvent("receipt_scan_success", {
+        feature: "receipt-engine",
       });
-
-      const rawBaseline = JSON.parse(JSON.stringify(next)) as Expense;
-      setOcrBaseline(rawBaseline);
-      setCorrectionsApplied(0);
-
-      const consistency = checkReceiptConsistency(
-        next.items,
-        next.totalAmount,
-        next.charges,
-        next.discounts
-      );
-      const issues = findLineItemIssues(
-        next.items,
-        next.totalAmount,
-        next.charges,
-        next.discounts
-      );
-      setOcrSummary({
-        productCount: next.items.filter((i) => i.name.trim()).length,
-        reviewCount: next.items.filter(
-          (i) => (i.confidence ?? 1) < ITEM_CONFIRM_THRESHOLD
-        ).length,
-        totalVerified: !consistency.inconsistent,
-        issues,
-      });
-
-      setDraft(next);
-      // Review form shows OCR summary + editable fields (PWA production path).
-      setMode("review");
+      if (scanStartRef.current != null) {
+        trackTiming(
+          "time_to_parse_complete",
+          Math.round(performance.now() - scanStartRef.current)
+        );
+      }
     } catch (err) {
+      trackProductEvent("receipt_scan_fail", {
+        feature: "receipt-engine",
+        meta: { message: err instanceof Error ? err.message.slice(0, 120) : "unknown" },
+      });
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
@@ -351,7 +325,21 @@ export default function AddPage() {
 
       setDraft(next);
       setMode("review");
+      setLastScanConfidence(next.confidence ?? undefined);
+      trackProductEvent("receipt_scan_success", {
+        feature: "legacy-analyze",
+      });
+      if (scanStartRef.current != null) {
+        trackTiming(
+          "time_to_parse_complete",
+          Math.round(performance.now() - scanStartRef.current)
+        );
+      }
     } catch (err) {
+      trackProductEvent("receipt_scan_fail", {
+        feature: "legacy-analyze",
+        meta: { message: err instanceof Error ? err.message.slice(0, 120) : "unknown" },
+      });
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
     } finally {
       setLoading(false);
@@ -363,8 +351,36 @@ export default function AddPage() {
   ) => {
     const file = event.target.files?.[0];
     event.target.value = "";
-    if (file) await analyzeFile(file);
+    if (file) {
+      if (scanStartRef.current == null) {
+        scanStartRef.current = performance.now();
+        trackTiming(
+          "time_to_scan_start",
+          Math.round(scanStartRef.current - pageLoadRef.current)
+        );
+      }
+      await analyzeFile(file);
+    }
   };
+
+  analyzeFileRef.current = analyzeFile;
+
+  useEffect(() => {
+    const runLaunchFile = (file: File) => {
+      if (scanStartRef.current == null) {
+        scanStartRef.current = performance.now();
+        trackTiming(
+          "time_to_scan_start",
+          Math.round(scanStartRef.current - pageLoadRef.current)
+        );
+      }
+      void analyzeFileRef.current(file);
+    };
+
+    const pending = takePendingLaunchFile();
+    if (pending) runLaunchFile(pending);
+    return onLaunchFile(runLaunchFile);
+  }, []);
 
   const startManual = () => {
     const defaultCategory =
@@ -384,7 +400,13 @@ export default function AddPage() {
       // Record user OCR corrections without overwriting original OCR fields
       if (ocrBaseline && mode === "review") {
         const rows = buildCorrectionRecords(ocrBaseline, expense);
-        if (rows.length) await saveOcrCorrections(rows);
+        if (rows.length) {
+          await saveOcrCorrections(rows);
+          trackProductEvent("manual_edit", {
+            feature: "ocr-correction",
+            meta: { count: rows.length },
+          });
+        }
 
         const existingLearned = toAliasEntries(await getAllProductAliases());
         const aliasRows = collectAliasLearnings(
@@ -406,6 +428,9 @@ export default function AddPage() {
         }
       }
       await addExpense(expense);
+      if (expenses.length === 0) {
+        trackFirstReceiptSaved();
+      }
       toast("Harcama kaydedildi", "success");
       router.push("/");
     } finally {
@@ -421,6 +446,31 @@ export default function AddPage() {
           Fiş, banka ekran görüntüsü veya hızlı manuel giriş
         </p>
       </header>
+
+      {showWelcome && !welcomeDismissed && mode === "chooser" && !loading && (
+        <div className="relative mb-4 rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50/90 to-white p-4 animate-fade-up">
+          <button
+            type="button"
+            aria-label="Kapat"
+            onClick={() => setWelcomeDismissed(true)}
+            className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/80 text-muted-foreground"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+          <div className="flex items-start gap-3 pr-6">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="font-semibold text-teal-950">İlk fişini tara!</p>
+              <p className="mt-1 text-sm text-teal-900/80">
+                Market fişi veya banka ekran görüntüsü yükle; ürünler ve tutarlar
+                otomatik çıkar. Kaydetmeden önce kontrol edebilirsin.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {(mode === "chooser" || loading) && (
         <div className="space-y-4">
@@ -510,9 +560,15 @@ export default function AddPage() {
           )}
 
           {error && (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
-              {error}
-            </div>
+            <ErrorRecoveryCard
+              message={error}
+              onRetry={() => {
+                setError(null);
+                scanStartRef.current = null;
+              }}
+              onManual={startManual}
+              onGallery={() => galleryRef.current?.click()}
+            />
           )}
 
           <input
@@ -607,5 +663,21 @@ export default function AddPage() {
         </div>
       )}
     </AppShell>
+  );
+}
+
+export default function AddPage() {
+  return (
+    <Suspense
+      fallback={
+        <AppShell>
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        </AppShell>
+      }
+    >
+      <AddPageInner />
+    </Suspense>
   );
 }

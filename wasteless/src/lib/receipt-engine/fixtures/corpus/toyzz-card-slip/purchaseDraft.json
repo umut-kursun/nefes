@@ -1,0 +1,74 @@
+{
+  "merchant": "TOYZZ SHOP A.S.",
+  "purchaseDate": {
+    "raw": "27.07.2026",
+    "normalized": "2026-07-27"
+  },
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Oyuncak Araba %",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L2",
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Oyuncak Araba %20 249,90"
+        ],
+        "ocrTexts": [
+          "Oyuncak Araba %20 249,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 20249.9,
+      "vatRate": 20
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 249.9
+  },
+  "confidence": 0.7541666666666667,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.7541666666666667,
+    "rawTexts": [
+      "Oyuncak Araba %20 249,90",
+      "TOPLAM 249,90",
+      "27.07.2026 14:10",
+      "TOYZZ SHOP A.S."
+    ]
+  }
+}

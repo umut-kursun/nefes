@@ -1,0 +1,48 @@
+{
+  "sections": [
+    {
+      "kind": "header",
+      "startLineIndex": 0,
+      "endLineIndex": 1
+    },
+    {
+      "kind": "products",
+      "startLineIndex": 2,
+      "endLineIndex": 2
+    },
+    {
+      "kind": "totals",
+      "startLineIndex": 3,
+      "endLineIndex": 3
+    },
+    {
+      "kind": "card_slip",
+      "startLineIndex": 4,
+      "endLineIndex": 5
+    }
+  ],
+  "sectionByLineIndex": [
+    "header",
+    "header",
+    "products",
+    "totals",
+    "card_slip",
+    "card_slip"
+  ],
+  "lineTypes": [
+    "MerchantLine",
+    "DateLine",
+    "ProductNameLine",
+    "TotalLine",
+    "CardSlipLine",
+    "CardSlipLine"
+  ],
+  "parserStates": [
+    "HEADER",
+    "HEADER",
+    "PRODUCTS",
+    "TOTALS",
+    "CARD_SLIP",
+    "CARD_SLIP"
+  ]
+}

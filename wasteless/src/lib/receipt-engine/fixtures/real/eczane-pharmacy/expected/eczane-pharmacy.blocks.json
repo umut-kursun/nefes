@@ -1,0 +1,257 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L2",
+      "kind": "product",
+      "label": "Ilac A %",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 1120,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L2"
+      ],
+      "rawLines": [
+        "Ilac A %1 120,00"
+      ],
+      "groupIds": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2"
+      ],
+      "nodeRefs": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Ilac A %1 120,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "product:raw:L3",
+      "kind": "product",
+      "label": "Ilac B",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 85.5,
+      "vatToken": "%1",
+      "chainRawLineIds": [
+        "raw:L3"
+      ],
+      "rawLines": [
+        "Ilac B %1 85,50"
+      ],
+      "groupIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "nodeRefs": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "Ilac B %1 85,50"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L4",
+      "frag:L4:name",
+      "amt:L4",
+      "raw:L5",
+      "frag:L5:name",
+      "amt:L5",
+      "raw:L6",
+      "frag:L6:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4",
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5",
+        "raw:L6",
+        "frag:L6:name"
+      ],
+      "layoutLineIndices": [
+        4,
+        5,
+        6
+      ],
+      "rawTexts": [
+        "TOPLAM 205,50",
+        "Kredi Kart 205,50",
+        "Kasiyer: Ayse"
+      ],
+      "classificationRules": [
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label",
+        "paymentClassifier:label",
+        "amountClassifier:payment_label",
+        "footerClassifier:footer_region"
+      ],
+      "confidence": 0.8
+    },
+    "confidence": 0.8,
+    "charges": [],
+    "discounts": [],
+    "payments": [
+      {
+        "label": "Kredi Kart",
+        "amount": 205.5,
+        "nodeRefs": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      }
+    ],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 205.5,
+        "nodeRefs": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": [
+      {
+        "label": "Kasiyer: Ayse",
+        "amount": null,
+        "nodeRefs": [
+          "raw:L6",
+          "frag:L6:name"
+        ],
+        "semanticKind": "footer",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "raw:L1",
+      "frag:L0:name",
+      "frag:L1:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L1",
+        "frag:L0:name",
+        "frag:L1:name"
+      ],
+      "layoutLineIndices": [
+        0,
+        1
+      ],
+      "rawTexts": [
+        "29.07.2026 11:05",
+        "ECZANE NO 12"
+      ],
+      "classificationRules": [
+        "metadataClassifier:date",
+        "headerClassifier:merchant_scored"
+      ],
+      "confidence": 0.8666666666666667
+    },
+    "confidence": 0.8666666666666667,
+    "merchant": "ECZANE NO 12",
+    "date": "29.07.2026 11:05",
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "ECZANE NO 12"
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "ECZANE NO 12",
+        "semanticKind": "header",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.7233333333333334
+}

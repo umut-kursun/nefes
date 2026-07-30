@@ -15,7 +15,7 @@
       },
       "provenance": {
         "validatorId": "PaymentSumValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.73125
       },
       "suggestedFix": "Verify cash payment includes change amount.",
       "expected": 8.9,
@@ -32,7 +32,7 @@
       },
       "provenance": {
         "validatorId": "DateValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.73125
       }
     },
     {
@@ -46,7 +46,7 @@
       },
       "provenance": {
         "validatorId": "CurrencyValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.73125
       }
     },
     {
@@ -60,7 +60,7 @@
       },
       "provenance": {
         "validatorId": "MetadataCompletenessValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.73125
       }
     }
   ],
@@ -76,14 +76,14 @@
       },
       "provenance": {
         "validatorId": "ReceiptNumberValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.73125
       }
     }
   ],
   "confidenceAdjustment": -0.2,
-  "overallConfidence": 0.49999999999999994,
+  "overallConfidence": 0.53125,
   "provenance": {
-    "purchaseConfidence": 0.7,
+    "purchaseConfidence": 0.73125,
     "structuralValidators": [
       "ReceiptTotalValidator",
       "SubtotalValidator",

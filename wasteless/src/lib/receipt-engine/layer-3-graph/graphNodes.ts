@@ -5,6 +5,7 @@ import type {
   GraphNodeKind,
 } from "../types/models/graph";
 import type { LayoutLine } from "../types/models/layout";
+import type { LineSemanticType, ReceiptSectionKind } from "../types/models/sections";
 import { clampConfidence } from "../types/provenance";
 import { edgeId } from "./graphIds";
 
@@ -34,6 +35,10 @@ export function createNode(
       confidence,
     }),
     confidence,
+    meta: Object.freeze({
+      sectionKind: line.sectionKind as ReceiptSectionKind,
+      lineSemanticType: line.lineSemanticType as LineSemanticType,
+    }),
   });
 }
 

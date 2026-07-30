@@ -1,0 +1,122 @@
+{
+  "merchant": "LEZZET RESTORAN A.S.",
+  "purchaseDate": {
+    "raw": "29.07.2026",
+    "normalized": "2026-07-29"
+  },
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Corba",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L2",
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Corba %10 85,00"
+        ],
+        "ocrTexts": [
+          "Corba %10 85,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 85,
+      "vatRate": 10
+    },
+    {
+      "name": "Izgara %",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L3",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "Izgara %10 320,00"
+        ],
+        "ocrTexts": [
+          "Izgara %10 320,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 10320,
+      "vatRate": 10
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "Nakit",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      "amount": 405
+    }
+  ],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 405
+  },
+  "confidence": 0.7333333333333333,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.7333333333333333,
+    "rawTexts": [
+      "Corba %10 85,00",
+      "Izgara %10 320,00",
+      "TOPLAM 405,00",
+      "Nakit 405,00",
+      "29.07.2026 21:30",
+      "LEZZET RESTORAN A.S."
+    ]
+  }
+}

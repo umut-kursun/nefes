@@ -16,12 +16,16 @@ export function LineItemsEditor({
   category,
   items,
   onChange,
+  highlightLowConfidence = false,
 }: {
   expenseId: string;
   category: string;
   items: ReceiptItem[];
   onChange: (items: ReceiptItem[]) => void;
+  /** Highlight line items with confidence below 0.7 */
+  highlightLowConfidence?: boolean;
 }) {
+  const lowConfidenceThreshold = highlightLowConfidence ? 0.7 : ITEM_CONFIRM_THRESHOLD;
   const updateItem = (id: string, patch: Partial<ReceiptItem>) => {
     onChange(
       items.map((item) => {
@@ -82,7 +86,7 @@ export function LineItemsEditor({
           {items.map((item, index) => {
             const lowConfidence =
               item.confidence != null &&
-              item.confidence < ITEM_CONFIRM_THRESHOLD;
+              item.confidence < lowConfidenceThreshold;
             return (
             <li
               key={item.id}

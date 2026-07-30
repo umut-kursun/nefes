@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
-import { Plus, Settings2 } from "lucide-react";
+import { BarChart3, Plus, Settings2, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { DashboardSkeleton } from "@/components/skeleton";
 import { SectionHeader } from "@/components/section-header";
@@ -15,6 +16,7 @@ import { PurchaseSearch } from "@/components/home/purchase-search";
 import { QuickActionCard } from "@/components/home/quick-action-card";
 import { RecentExpenseCard } from "@/components/home/recent-expense-card";
 import { CategoryCard } from "@/components/home/category-card";
+import { InsightCard } from "@/components/insight-card";
 import { useWasteLessStore } from "@/hooks/use-store";
 import { getCategoryMeta } from "@/lib/categories";
 import {
@@ -24,7 +26,7 @@ import {
   getPeriodTotals,
   type PeriodScope,
 } from "@/lib/analytics";
-import { getHomeAssistantInsights } from "@/lib/insights";
+import { getHomeAssistantInsights, getTopInsight } from "@/lib/insights";
 import { formatRelativeDate, formatTime } from "@/lib/datetime";
 import { normalizeMerchantName } from "@/lib/merchants";
 import { isWithinInterval, parseISO } from "date-fns";
@@ -70,6 +72,7 @@ function periodCaption(period: PeriodScope): string {
 }
 
 export default function HomePage() {
+  const router = useRouter();
   const {
     ready,
     expenses,
@@ -84,10 +87,10 @@ export default function HomePage() {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
-    setNow(new Date());
-    const id = window.setInterval(() => setNow(new Date()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
+    if (ready && !settings.onboardingCompleted) {
+      router.replace("/onboarding");
+    }
+  }, [ready, settings.onboardingCompleted, router]);
 
   const totals = useMemo(
     () => (now ? getPeriodTotals(expenses, now) : null),
@@ -200,6 +203,20 @@ export default function HomePage() {
 
   const recentExpenses = useMemo(() => expenses.slice(0, 3), [expenses]);
 
+  useEffect(() => {
+    setNow(new Date());
+    const id = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const topInsight = useMemo(
+    () =>
+      now
+        ? getTopInsight({ expenses, categories, tags, now })
+        : null,
+    [expenses, categories, tags, now]
+  );
+
   const assistantInsights = useMemo(
     () =>
       now
@@ -258,6 +275,34 @@ export default function HomePage() {
             <PurchaseSearch />
           </div>
 
+          <div className="flex gap-2 animate-fade-up delay-2">
+            <Link
+              href="/reports"
+              className="flex flex-1 items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-white px-3 py-3 shadow-sm transition duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                <BarChart3 className="h-4 w-4" />
+              </span>
+              <span className="text-sm font-semibold">Raporlar</span>
+            </Link>
+            <Link
+              href="/insights"
+              className="flex flex-1 items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-white px-3 py-3 shadow-sm transition duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+                <Sparkles className="h-4 w-4" />
+              </span>
+              <span className="text-sm font-semibold">İçgörüler</span>
+            </Link>
+          </div>
+
+          {topInsight && (
+            <div className="animate-fade-up delay-2">
+              <SectionHeader title="Öne çıkan" actionLabel="Tümü" href="/insights" />
+              <InsightCard insight={topInsight} className="shadow-[0_8px_30px_rgba(15,23,42,0.06)]" />
+            </div>
+          )}
+
           {assistantInsights.length > 0 && (
             <div className="animate-fade-up delay-2">
               <AssistantCard insights={assistantInsights} />
@@ -303,8 +348,8 @@ export default function HomePage() {
           <section className="animate-fade-up delay-3">
             <SectionHeader
               title="Kategoriler"
-              actionLabel="Tümü"
-              href="/categories"
+              actionLabel="Raporlar"
+              href="/reports"
             />
             <div className="space-y-2">
               {topCategories.map((row) => {

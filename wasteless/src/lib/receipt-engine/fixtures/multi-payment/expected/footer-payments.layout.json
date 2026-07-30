@@ -5,6 +5,8 @@
       "text": "A101",
       "rawText": "A101",
       "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "AddressLine",
       "columns": {
         "name": "A101"
       },
@@ -25,6 +27,8 @@
       "text": "Su 1.5 L %1 8,90",
       "rawText": "Su 1.5 L %1 8,90",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
       "columns": {
         "vat": "%1",
         "amount": "8,90",
@@ -34,13 +38,12 @@
       "features": {
         "hasVatToken": true,
         "hasWeightPattern": false,
-        "hasQuantityToken": true,
+        "hasQuantityToken": false,
         "isAmountOnly": false,
         "isLikelyContinuation": false,
         "isRightAlignedPrice": false
       },
       "tokens": {
-        "quantity": "1.5 L",
         "vat": "%1"
       },
       "confidence": 0.85
@@ -50,6 +53,8 @@
       "text": "Nakit 50,00",
       "rawText": "Nakit 50,00",
       "region": "footer",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
       "columns": {
         "amount": "50,00",
         "name": "Nakit"
@@ -71,6 +76,8 @@
       "text": "Kredi Kart 8,90",
       "rawText": "Kredi Kart 8,90",
       "region": "footer",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
       "columns": {
         "amount": "8,90",
         "name": "Kredi Kart"
@@ -92,6 +99,8 @@
       "text": "TOPLAM 8,90",
       "rawText": "TOPLAM 8,90",
       "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
       "columns": {
         "amount": "8,90",
         "name": "TOPLAM"
@@ -128,6 +137,51 @@
       2,
       3,
       4
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 0
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 1,
+        "endLineIndex": 1
+      },
+      {
+        "kind": "payments",
+        "startLineIndex": 2,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 4,
+        "endLineIndex": 4
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "products",
+      "payments",
+      "payments",
+      "totals"
+    ],
+    "lineTypes": [
+      "AddressLine",
+      "ProductNameLine",
+      "PaymentLine",
+      "PaymentLine",
+      "TotalLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "PRODUCTS",
+      "PAYMENTS",
+      "PAYMENTS",
+      "TOTALS"
     ]
   },
   "confidence": 0.8099999999999999

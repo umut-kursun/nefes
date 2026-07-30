@@ -1,0 +1,9 @@
+{
+  "source": "beta-test-scenario",
+  "immutable": true,
+  "description": "Toyzz Shop receipt with card slip footer (AID line)",
+  "merchantCategory": "retail",
+  "merchantSlug": "toyzz-card-slip",
+  "ingestedAt": "2026-07-30",
+  "origin": "document-parser-regression.test.ts FIXTURES.toyzz"
+}

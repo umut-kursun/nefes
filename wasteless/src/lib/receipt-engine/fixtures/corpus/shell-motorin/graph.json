@@ -1,0 +1,568 @@
+{
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "kind": "raw_line",
+      "text": "SHELL & TURCAS PETROL A.S.",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "SHELL & TURCAS PETROL A.S.",
+        "rawText": "SHELL & TURCAS PETROL A.S.",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
+    },
+    {
+      "id": "raw:L1",
+      "kind": "raw_line",
+      "text": "34 ABC 123",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "34 ABC 123",
+        "rawText": "34 ABC 123",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
+    },
+    {
+      "id": "raw:L2",
+      "kind": "raw_line",
+      "text": "29.07.2026 09:15",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "29.07.2026 09:15",
+        "rawText": "29.07.2026 09:15",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "DateLine"
+      }
+    },
+    {
+      "id": "raw:L3",
+      "kind": "raw_line",
+      "text": "Motorin 29,766 LT 79,17 TL/L",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Motorin 29,766 LT 79,17 TL/L",
+        "rawText": "Motorin 29,766 LT 79,17 TL/L",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "FuelLine"
+      }
+    },
+    {
+      "id": "raw:L4",
+      "kind": "raw_line",
+      "text": "2356,10 TL",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "2356,10 TL",
+        "rawText": "2356,10 TL",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "footer",
+        "lineSemanticType": "FooterLine"
+      }
+    },
+    {
+      "id": "raw:L5",
+      "kind": "raw_line",
+      "text": "TOPLAM 2356,10",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 5
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "TOPLAM 2356,10",
+        "rawText": "TOPLAM 2356,10",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
+    },
+    {
+      "id": "raw:L6",
+      "kind": "raw_line",
+      "text": "Kredi Kart 2356,10",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 6
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          6
+        ],
+        "sourceText": "Kredi Kart 2356,10",
+        "rawText": "Kredi Kart 2356,10",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
+    },
+    {
+      "id": "frag:L0:name",
+      "kind": "text_fragment",
+      "text": "SHELL & TURCAS PETROL A.S.",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "SHELL & TURCAS PETROL A.S.",
+        "rawText": "SHELL & TURCAS PETROL A.S.",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
+    },
+    {
+      "id": "frag:L1:name",
+      "kind": "text_fragment",
+      "text": "34 ABC 123",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "34 ABC 123",
+        "rawText": "34 ABC 123",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
+    },
+    {
+      "id": "frag:L2:name",
+      "kind": "text_fragment",
+      "text": "29.07.2026 09:15",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "29.07.2026 09:15",
+        "rawText": "29.07.2026 09:15",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "DateLine"
+      }
+    },
+    {
+      "id": "frag:L3:name",
+      "kind": "text_fragment",
+      "text": "Motorin 29,766 LT 79,17 TL/L",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Motorin 29,766 LT 79,17 TL/L",
+        "rawText": "Motorin 29,766 LT 79,17 TL/L",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "FuelLine"
+      }
+    },
+    {
+      "id": "amt:L4",
+      "kind": "amount",
+      "text": "2356,10",
+      "amount": 2356.1,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "2356,10",
+        "rawText": "2356,10 TL",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "footer",
+        "lineSemanticType": "FooterLine"
+      }
+    },
+    {
+      "id": "frag:L5:name",
+      "kind": "label",
+      "text": "TOPLAM",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 5
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 2356,10",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
+    },
+    {
+      "id": "amt:L5",
+      "kind": "amount",
+      "text": "2356,10",
+      "amount": 2356.1,
+      "layoutRef": {
+        "lineIndex": 5
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "2356,10",
+        "rawText": "TOPLAM 2356,10",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
+    },
+    {
+      "id": "frag:L6:name",
+      "kind": "label",
+      "text": "Kredi Kart",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 6
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          6
+        ],
+        "sourceText": "Kredi Kart",
+        "rawText": "Kredi Kart 2356,10",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
+    },
+    {
+      "id": "amt:L6",
+      "kind": "amount",
+      "text": "2356,10",
+      "amount": 2356.1,
+      "layoutRef": {
+        "lineIndex": 6
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          6
+        ],
+        "sourceText": "2356,10",
+        "rawText": "Kredi Kart 2356,10",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
+    },
+    {
+      "id": "qty:L3",
+      "kind": "quantity_token",
+      "text": "29,766 LT",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "29,766 LT",
+        "rawText": "Motorin 29,766 LT 79,17 TL/L",
+        "creationRule": "passTokens:quantity",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "FuelLine"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:same_row:frag:L0:name->raw:L0",
+      "from": "frag:L0:name",
+      "to": "raw:L0",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:frag:L1:name->raw:L1",
+      "from": "frag:L1:name",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:frag:L2:name->raw:L2",
+      "from": "frag:L2:name",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:frag:L3:name->raw:L3",
+      "from": "frag:L3:name",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:amt:L4->raw:L4",
+      "from": "amt:L4",
+      "to": "raw:L4",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L5:name->raw:L5",
+      "from": "frag:L5:name",
+      "to": "raw:L5",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L5->raw:L5",
+      "from": "amt:L5",
+      "to": "raw:L5",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L6:name->raw:L6",
+      "from": "frag:L6:name",
+      "to": "raw:L6",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L6->raw:L6",
+      "from": "amt:L6",
+      "to": "raw:L6",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:qty:L3->raw:L3",
+      "from": "qty:L3",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:quantity_of:qty:L3->raw:L3",
+      "from": "qty:L3",
+      "to": "raw:L3",
+      "kind": "quantity_of",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:amount_of:amt:L4->raw:L3",
+      "from": "amt:L4",
+      "to": "raw:L3",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L5->raw:L5",
+      "from": "amt:L5",
+      "to": "raw:L5",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L6->raw:L6",
+      "from": "amt:L6",
+      "to": "raw:L6",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L0->raw:L1",
+      "from": "raw:L0",
+      "to": "raw:L1",
+      "kind": "precedes",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:precedes:raw:L1->raw:L2",
+      "from": "raw:L1",
+      "to": "raw:L2",
+      "kind": "precedes",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:precedes:raw:L2->raw:L3",
+      "from": "raw:L2",
+      "to": "raw:L3",
+      "kind": "precedes",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:precedes:raw:L3->raw:L4",
+      "from": "raw:L3",
+      "to": "raw:L4",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L4->raw:L5",
+      "from": "raw:L4",
+      "to": "raw:L5",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L5->raw:L6",
+      "from": "raw:L5",
+      "to": "raw:L6",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:footer_of:raw:L5->raw:L4",
+      "from": "raw:L5",
+      "to": "raw:L4",
+      "kind": "footer_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:footer_of:raw:L6->raw:L5",
+      "from": "raw:L6",
+      "to": "raw:L5",
+      "kind": "footer_of",
+      "confidence": 0.85
+    }
+  ],
+  "regions": {
+    "header": [
+      "raw:L0",
+      "raw:L1",
+      "raw:L2"
+    ],
+    "body": [
+      "raw:L3"
+    ],
+    "footer": [
+      "raw:L4",
+      "raw:L5",
+      "raw:L6"
+    ]
+  },
+  "profileId": "generic-tr",
+  "confidence": 0.7441176470588236
+}

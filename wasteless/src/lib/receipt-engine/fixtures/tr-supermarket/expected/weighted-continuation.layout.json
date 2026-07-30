@@ -5,6 +5,8 @@
       "text": "BIM",
       "rawText": "BIM",
       "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
       "columns": {
         "name": "BIM"
       },
@@ -25,6 +27,8 @@
       "text": "0,744 kg x 89,90",
       "rawText": "0,744 kg x 89,90",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
       "columns": {
         "amount": "89,90",
         "name": "0,744 kg x"
@@ -48,6 +52,8 @@
       "text": "Domates",
       "rawText": "Domates",
       "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
       "columns": {
         "name": "Domates"
       },
@@ -68,6 +74,8 @@
       "text": "66,89",
       "rawText": "66,89",
       "region": "footer",
+      "sectionKind": "footer",
+      "lineSemanticType": "FooterLine",
       "columns": {
         "amount": "66,89",
         "vat": "66,89"
@@ -91,6 +99,8 @@
       "text": "TOPLAM 66,89",
       "rawText": "TOPLAM 66,89",
       "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
       "columns": {
         "amount": "66,89",
         "name": "TOPLAM"
@@ -127,6 +137,51 @@
     "footer": [
       3,
       4
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 0
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 1,
+        "endLineIndex": 2
+      },
+      {
+        "kind": "footer",
+        "startLineIndex": 3,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 4,
+        "endLineIndex": 4
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "products",
+      "products",
+      "footer",
+      "totals"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "ProductNameLine",
+      "ProductNameLine",
+      "FooterLine",
+      "TotalLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "PRODUCTS",
+      "PRODUCTS",
+      "FOOTER",
+      "TOTALS"
     ]
   },
   "confidence": 0.77

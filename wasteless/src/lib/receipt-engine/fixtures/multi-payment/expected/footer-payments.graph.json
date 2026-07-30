@@ -17,7 +17,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "AddressLine"
+      }
     },
     {
       "id": "raw:L1",
@@ -36,7 +40,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "raw:L2",
@@ -55,7 +63,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
     },
     {
       "id": "raw:L3",
@@ -74,7 +86,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
     },
     {
       "id": "raw:L4",
@@ -93,7 +109,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "frag:L0:name",
@@ -112,7 +132,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "AddressLine"
+      }
     },
     {
       "id": "frag:L1:name",
@@ -131,7 +155,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "amt:L1",
@@ -150,7 +178,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "frag:L2:name",
@@ -169,7 +201,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
     },
     {
       "id": "amt:L2",
@@ -188,7 +224,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
     },
     {
       "id": "frag:L3:name",
@@ -207,7 +247,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
     },
     {
       "id": "amt:L3",
@@ -226,7 +270,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
     },
     {
       "id": "frag:L4:name",
@@ -245,7 +293,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "amt:L4",
@@ -264,7 +316,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "vat:L1",
@@ -283,26 +339,11 @@
         "creationRule": "passTokens:vat",
         "confidence": 0.85
       },
-      "confidence": 0.85
-    },
-    {
-      "id": "qty:L1",
-      "kind": "quantity_token",
-      "text": "1.5 L",
-      "amount": null,
-      "layoutRef": {
-        "lineIndex": 1
-      },
-      "provenance": {
-        "layoutLineIndices": [
-          1
-        ],
-        "sourceText": "1.5 L",
-        "rawText": "Su 1.5 L %1 8,90",
-        "creationRule": "passTokens:quantity",
-        "confidence": 0.85
-      },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     }
   ],
   "edges": [
@@ -381,20 +422,6 @@
       "from": "vat:L1",
       "to": "raw:L1",
       "kind": "vat_of",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:same_row:qty:L1->raw:L1",
-      "from": "qty:L1",
-      "to": "raw:L1",
-      "kind": "same_row",
-      "confidence": 0.85
-    },
-    {
-      "id": "edge:quantity_of:qty:L1->raw:L1",
-      "from": "qty:L1",
-      "to": "raw:L1",
-      "kind": "quantity_of",
       "confidence": 0.85
     },
     {
@@ -482,5 +509,5 @@
     ]
   },
   "profileId": "generic-tr",
-  "confidence": 0.8249999999999998
+  "confidence": 0.8233333333333331
 }

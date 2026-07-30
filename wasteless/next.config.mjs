@@ -21,6 +21,7 @@ const withPWA = withPWAInit({
     skipWaiting: false,
     clientsClaim: true,
     cleanupOutdatedCaches: true,
+    navigationPreload: true,
   },
 });
 

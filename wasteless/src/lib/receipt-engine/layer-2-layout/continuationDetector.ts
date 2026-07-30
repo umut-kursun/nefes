@@ -1,4 +1,5 @@
 import type { LayoutRegion } from "../types/models/layout";
+import { isFuelLine } from "../patterns/document";
 import { BARCODE_NOISE, HAS_LETTERS, SEPARATOR_NOISE, VAT_STANDALONE } from "./patterns";
 import { isAmountOnlyLine } from "./lineUtils";
 
@@ -9,6 +10,7 @@ export function markContinuations(
 ): boolean[] {
   return lines.map((line, index) => {
     if (regions[index] !== "body") return false;
+    if (isFuelLine(line)) return false;
     if (trailingAmounts[index] != null) return false;
     if (isAmountOnlyLine(line)) return false;
     if (VAT_STANDALONE.test(line)) return false;

@@ -1,0 +1,190 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L2",
+      "kind": "product",
+      "label": "Oyuncak Araba %",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 20249.9,
+      "vatToken": "%20",
+      "chainRawLineIds": [
+        "raw:L2"
+      ],
+      "rawLines": [
+        "Oyuncak Araba %20 249,90"
+      ],
+      "groupIds": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2"
+      ],
+      "nodeRefs": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Oyuncak Araba %20 249,90"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L3",
+      "frag:L3:name",
+      "amt:L3"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3"
+      ],
+      "layoutLineIndices": [
+        3
+      ],
+      "rawTexts": [
+        "TOPLAM 249,90"
+      ],
+      "classificationRules": [
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label"
+      ],
+      "confidence": 0.85
+    },
+    "confidence": 0.85,
+    "charges": [],
+    "discounts": [],
+    "payments": [],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 249.9,
+        "nodeRefs": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": [
+      {
+        "label": "Visa",
+        "amount": 249.9,
+        "nodeRefs": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ],
+        "semanticKind": "footer",
+        "confidence": 0.5499999999999999
+      },
+      {
+        "label": "AID: 1234567890123456",
+        "amount": null,
+        "nodeRefs": [
+          "raw:L5",
+          "frag:L5:name"
+        ],
+        "semanticKind": "footer",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "raw:L1",
+      "frag:L0:name",
+      "frag:L1:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L1",
+        "frag:L0:name",
+        "frag:L1:name"
+      ],
+      "layoutLineIndices": [
+        0,
+        1
+      ],
+      "rawTexts": [
+        "27.07.2026 14:10",
+        "TOYZZ SHOP A.S."
+      ],
+      "classificationRules": [
+        "metadataClassifier:date",
+        "headerClassifier:merchant_scored"
+      ],
+      "confidence": 0.8666666666666667
+    },
+    "confidence": 0.8666666666666667,
+    "merchant": "TOYZZ SHOP A.S.",
+    "date": "27.07.2026 14:10",
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "TOYZZ SHOP A.S."
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "TOYZZ SHOP A.S.",
+        "semanticKind": "header",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.7541666666666667
+}

@@ -12,6 +12,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowDownRight, ArrowUpRight, ImageIcon, Search } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { EmptyState } from "@/components/empty-state";
 import { Input } from "@/components/ui/input";
 import { useWasteLessStore } from "@/hooks/use-store";
 import {
@@ -252,25 +253,35 @@ function PurchaseMemoryInner() {
 
       {!ready && <p className="text-sm text-muted-foreground">Yükleniyor...</p>}
 
-      {ready && deferredQuery.trim().length < 2 && (
-        <div className="rounded-2xl border border-white/70 bg-white/75 px-4 py-10 text-center animate-fade-up delay-2">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-teal-50 text-2xl">
-            🧠
-          </div>
-          <p className="font-medium">Ürün veya mağaza ara</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Son fiyat, mağaza ve alım sıklığını anında gör.
-          </p>
-        </div>
+      {ready && expenses.length === 0 && (
+        <EmptyState
+          emoji="🧠"
+          title="Satın alma hafızan boş"
+          description="Fiş tara veya harcama ekle; ürün ve mağaza araması burada çalışmaya başlar. Süt ne zaman aldın, fiyat nasıl değişti — hepsini bul."
+          actionLabel="İlk fişi tara"
+          actionHref="/add?welcome=1"
+        />
+      )}
+
+      {ready && expenses.length > 0 && deferredQuery.trim().length < 2 && (
+        <EmptyState
+          emoji="🔍"
+          title="Ürün veya mağaza ara"
+          description="Son fiyat, mağaza ve alım sıklığını anında gör. En az 2 karakter yaz."
+          actionLabel="Harcama ekle"
+          actionHref="/add"
+          className="py-10"
+        />
       )}
 
       {result && result.hits.length === 0 && (
-        <div className="rounded-2xl border border-white/70 bg-white/75 px-4 py-10 text-center">
-          <p className="font-medium">Sonuç yok</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            “{result.query}” için kayıtlı alım bulunamadı.
-          </p>
-        </div>
+        <EmptyState
+          title="Sonuç yok"
+          description={`"${result.query}" için kayıtlı alım bulunamadı. Farklı bir arama dene veya yeni fiş ekle.`}
+          actionLabel="Fiş ekle"
+          actionHref="/add"
+          className="py-10"
+        />
       )}
 
       {result && result.last && (

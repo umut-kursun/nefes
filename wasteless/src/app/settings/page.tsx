@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { RefreshCw } from "lucide-react";
+import {
+  Download,
+  FileText,
+  MessageSquare,
+  RefreshCw,
+  Shield,
+} from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { KbPasswordDialog } from "@/components/kb-manager/kb-password-dialog";
 import { Button } from "@/components/ui/button";
@@ -19,6 +25,10 @@ import {
   fetchRemoteVersion,
 } from "@/lib/app-version";
 import { verifyKbAdminPassword } from "@/lib/product-knowledge/adminAuth";
+import {
+  exportBetaFeedbackJson,
+  getBetaFeedbackQueue,
+} from "@/lib/beta-feedback";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -32,6 +42,7 @@ export default function SettingsPage() {
   const [updating, setUpdating] = useState(false);
   const [remoteVersion, setRemoteVersion] = useState<string | null>(null);
   const [kbDialogOpen, setKbDialogOpen] = useState(false);
+  const [feedbackCount, setFeedbackCount] = useState(0);
 
   useEffect(() => {
     setDark(settings.theme === "dark");
@@ -47,6 +58,22 @@ export default function SettingsPage() {
       if (remote?.version) setRemoteVersion(remote.version);
     });
   }, []);
+
+  useEffect(() => {
+    setFeedbackCount(getBetaFeedbackQueue().length);
+  }, []);
+
+  const onExportFeedback = () => {
+    const json = exportBetaFeedbackJson();
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `wasteless-feedback-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast("Geri bildirim dışa aktarıldı", "success");
+  };
 
   const onTheme = async (checked: boolean) => {
     setDark(checked);
@@ -155,6 +182,43 @@ export default function SettingsPage() {
         </p>
       </section>
 
+      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+        <h2 className="font-semibold">Beta</h2>
+        <Button asChild className="w-full justify-start gap-2" variant="secondary">
+          <Link href="/feedback">
+            <MessageSquare className="h-4 w-4" />
+            Geri bildirim
+            {feedbackCount > 0 && (
+              <span className="ml-auto rounded-full bg-primary/15 px-2 py-0.5 text-xs tabular-nums text-primary">
+                {feedbackCount}
+              </span>
+            )}
+          </Link>
+        </Button>
+        {feedbackCount > 0 && (
+          <Button
+            className="w-full justify-start gap-2"
+            variant="outline"
+            onClick={onExportFeedback}
+          >
+            <Download className="h-4 w-4" />
+            Geri bildirimi dışa aktar (JSON)
+          </Button>
+        )}
+        <Button asChild className="w-full justify-start gap-2" variant="secondary">
+          <Link href="/privacy">
+            <Shield className="h-4 w-4" />
+            Gizlilik
+          </Link>
+        </Button>
+        <Button asChild className="w-full justify-start gap-2" variant="secondary">
+          <Link href="/terms">
+            <FileText className="h-4 w-4" />
+            Kullanım koşulları
+          </Link>
+        </Button>
+      </section>
+
       <section className="mb-4 space-y-4 rounded-2xl border border-white/70 bg-white/75 p-4">
         <div className="grid gap-2">
           <Label htmlFor="displayName">Adın</Label>
@@ -186,6 +250,16 @@ export default function SettingsPage() {
         <div className="rounded-xl bg-muted/60 px-3 py-2 text-sm">
           Kayıtlı harcama: <strong>{expenses.length}</strong>
         </div>
+      </section>
+
+      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+        <h2 className="font-semibold">Raporlar</h2>
+        <p className="text-sm text-muted-foreground">
+          Aylık ve yıllık harcama özetleri, kategori trendleri.
+        </p>
+        <Button asChild className="w-full" variant="secondary">
+          <Link href="/reports">Raporları aç</Link>
+        </Button>
       </section>
 
       <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">

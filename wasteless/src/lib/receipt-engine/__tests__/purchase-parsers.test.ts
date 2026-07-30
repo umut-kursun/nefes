@@ -10,22 +10,32 @@ import {
 } from "@/lib/receipt-engine/layer-6-purchase/parsers";
 
 describe("QuantityParser", () => {
-  it("parses quantity with unit token", () => {
-    expect(parseQuantity("1 L")).toEqual({
-      raw: "1 L",
-      normalized: 1,
-      unitRaw: "L",
-      unitNormalized: "L",
+  it("parses explicit x quantity", () => {
+    expect(parseQuantity("2 x")).toEqual({
+      raw: "2 x",
+      normalized: 2,
     });
   });
 
-  it("parses weighted kg quantity", () => {
+  it("parses explicit adet quantity", () => {
+    expect(parseQuantity("3 Adet")).toEqual({
+      raw: "3 Adet",
+      normalized: 3,
+    });
+  });
+
+  it("parses scale-weight quantity for weighted products", () => {
     expect(parseQuantity("0,744 kg")).toEqual({
       raw: "0,744 kg",
       normalized: 0.744,
       unitRaw: "kg",
       unitNormalized: "kg",
     });
+  });
+
+  it("does not treat package volume as purchased quantity", () => {
+    expect(parseQuantity("1 L")).toEqual({ raw: "1 L" });
+    expect(parseQuantity("750 GR")).toEqual({ raw: "750 GR" });
   });
 
   it("returns raw only for unparseable text", () => {

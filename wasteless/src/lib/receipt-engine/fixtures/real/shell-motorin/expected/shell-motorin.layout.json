@@ -1,0 +1,244 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "SHELL & TURCAS PETROL A.S.",
+      "rawText": "SHELL & TURCAS PETROL A.S.",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "SHELL & TURCAS PETROL A.S."
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "34 ABC 123",
+      "rawText": "34 ABC 123",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "34 ABC 123"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "29.07.2026 09:15",
+      "rawText": "29.07.2026 09:15",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "columns": {
+        "name": "29.07.2026 09:15"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 3,
+      "text": "Motorin 29,766 LT 79,17 TL/L",
+      "rawText": "Motorin 29,766 LT 79,17 TL/L",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "FuelLine",
+      "columns": {
+        "name": "Motorin 29,766 LT 79,17 TL/L"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": true,
+        "hasQuantityToken": true,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "quantity": "29,766 LT"
+      },
+      "confidence": 0.65
+    },
+    {
+      "index": 4,
+      "text": "2356,10 TL",
+      "rawText": "2356,10 TL",
+      "region": "footer",
+      "sectionKind": "footer",
+      "lineSemanticType": "FooterLine",
+      "columns": {
+        "amount": "2356,10"
+      },
+      "trailingAmount": 2356.1,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": true,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": true
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "TOPLAM 2356,10",
+      "rawText": "TOPLAM 2356,10",
+      "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "columns": {
+        "amount": "2356,10",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 2356.1,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 6,
+      "text": "Kredi Kart 2356,10",
+      "rawText": "Kredi Kart 2356,10",
+      "region": "footer",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
+      "columns": {
+        "amount": "2356,10",
+        "name": "Kredi Kart"
+      },
+      "trailingAmount": 2356.1,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "regions": {
+    "header": [
+      0,
+      1,
+      2
+    ],
+    "body": [
+      3
+    ],
+    "footer": [
+      4,
+      5,
+      6
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 2
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 3,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "footer",
+        "startLineIndex": 4,
+        "endLineIndex": 4
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 5,
+        "endLineIndex": 5
+      },
+      {
+        "kind": "payments",
+        "startLineIndex": 6,
+        "endLineIndex": 6
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "header",
+      "products",
+      "footer",
+      "totals",
+      "payments"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "MerchantLine",
+      "DateLine",
+      "FuelLine",
+      "FooterLine",
+      "TotalLine",
+      "PaymentLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "FOOTER",
+      "TOTALS",
+      "PAYMENTS"
+    ]
+  },
+  "confidence": 0.7357142857142857
+}

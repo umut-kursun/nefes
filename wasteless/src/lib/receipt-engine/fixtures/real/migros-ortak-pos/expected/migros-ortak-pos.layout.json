@@ -1,0 +1,306 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "MIGROS TICARET A.S.",
+      "rawText": "MIGROS TICARET A.S.",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "MIGROS TICARET A.S."
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "29.07.2026 16:00",
+      "rawText": "29.07.2026 16:00",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "columns": {
+        "name": "29.07.2026 16:00"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "Fiş No: 123456",
+      "rawText": "Fiş No: 123456",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "ReceiptNumberLine",
+      "columns": {
+        "name": "Fiş No: 123456"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 3,
+      "text": "EKMEK 750 GR %1 15,00",
+      "rawText": "EKMEK 750 GR %1 15,00",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "vat": "%1",
+        "amount": "15,00",
+        "name": "EKMEK 750 GR"
+      },
+      "trailingAmount": 15,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "SUT 1 LT %1 45,90",
+      "rawText": "SUT 1 LT %1 45,90",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "FuelLine",
+      "columns": {
+        "vat": "%1",
+        "amount": "45,90",
+        "name": "SUT 1 LT"
+      },
+      "trailingAmount": 45.9,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%1"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "Alisveris Poseti 0,50",
+      "rawText": "Alisveris Poseti 0,50",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ChargeLine",
+      "columns": {
+        "amount": "0,50",
+        "name": "Alisveris Poseti"
+      },
+      "trailingAmount": 0.5,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 6,
+      "text": "ORTAK POS 60,90",
+      "rawText": "ORTAK POS 60,90",
+      "region": "body",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
+      "columns": {
+        "amount": "60,90",
+        "name": "ORTAK POS"
+      },
+      "trailingAmount": 60.9,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 7,
+      "text": "TOPLAM 61,40",
+      "rawText": "TOPLAM 61,40",
+      "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "columns": {
+        "amount": "61,40",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 61.4,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 8,
+      "text": "TOPKDV 0,55",
+      "rawText": "TOPKDV 0,55",
+      "region": "footer",
+      "sectionKind": "vat_summary",
+      "lineSemanticType": "VatSummaryLine",
+      "columns": {
+        "amount": "0,55",
+        "name": "TOPKDV"
+      },
+      "trailingAmount": 0.55,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "regions": {
+    "header": [
+      0,
+      1,
+      2
+    ],
+    "body": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "footer": [
+      7,
+      8
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 2
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 3,
+        "endLineIndex": 5
+      },
+      {
+        "kind": "payments",
+        "startLineIndex": 6,
+        "endLineIndex": 6
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 7,
+        "endLineIndex": 7
+      },
+      {
+        "kind": "vat_summary",
+        "startLineIndex": 8,
+        "endLineIndex": 8
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "header",
+      "products",
+      "products",
+      "products",
+      "payments",
+      "totals",
+      "vat_summary"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "DateLine",
+      "ReceiptNumberLine",
+      "ProductNameLine",
+      "FuelLine",
+      "ChargeLine",
+      "PaymentLine",
+      "TotalLine",
+      "VatSummaryLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "PRODUCTS",
+      "PRODUCTS",
+      "PAYMENTS",
+      "TOTALS",
+      "VAT_SUMMARY"
+    ]
+  },
+  "confidence": 0.7833333333333332
+}

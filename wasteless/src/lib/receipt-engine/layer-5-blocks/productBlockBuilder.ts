@@ -8,8 +8,12 @@ const PRODUCT_KINDS = new Set<SemanticKind>(["product"]);
 
 function isProductChain(
   chain: ChainView,
-  classified: Map<string, ClassifiedNode>
+  classified: Map<string, ClassifiedNode>,
+  index: GraphIndex
 ): boolean {
+  const headType = index.lineSemanticTypeOfRaw(chain.headRawLineId);
+  if (headType === "FuelLine") return true;
+
   const hasChargeOrDiscount = chain.allNodeIds.some((id) => {
     const kind = classified.get(id)?.semanticKind;
     return kind === "charge" || kind === "discount";
@@ -73,8 +77,25 @@ export function buildProductBlocks(
   const products: ProductBlock[] = [];
 
   for (const chain of chains) {
-    if (chain.rows[0]?.region !== "body") continue;
-    if (!isProductChain(chain, map)) continue;
+    const headRawId = chain.headRawLineId;
+    const section = index.sectionOfRaw(headRawId);
+    const lineType = index.lineSemanticTypeOfRaw(headRawId);
+    if (section !== "products") continue;
+    if (
+      lineType === "PaymentLine" ||
+      lineType === "TotalLine" ||
+      lineType === "SubtotalLine" ||
+      lineType === "VatSummaryLine" ||
+      lineType === "ChargeLine" ||
+      lineType === "DiscountLine" ||
+      lineType === "CardSlipLine" ||
+      lineType === "FooterLine" ||
+      lineType === "LoyaltyLine" ||
+      lineType === "LineTotalLine"
+    ) {
+      continue;
+    }
+    if (!isProductChain(chain, map, index)) continue;
     if (chain.allNodeIds.some((id) => assigned.has(id))) continue;
 
     const labelParts = chain.rows

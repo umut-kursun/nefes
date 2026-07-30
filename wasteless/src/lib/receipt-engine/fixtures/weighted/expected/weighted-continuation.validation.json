@@ -15,7 +15,7 @@
       },
       "provenance": {
         "validatorId": "DateValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.75
       }
     },
     {
@@ -29,7 +29,7 @@
       },
       "provenance": {
         "validatorId": "CurrencyValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.75
       }
     },
     {
@@ -43,7 +43,7 @@
       },
       "provenance": {
         "validatorId": "MetadataCompletenessValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.75
       }
     }
   ],
@@ -59,7 +59,7 @@
       },
       "provenance": {
         "validatorId": "ReceiptNumberValidator",
-        "purchaseConfidence": 0.7
+        "purchaseConfidence": 0.75
       }
     },
     {
@@ -75,7 +75,7 @@
       },
       "provenance": {
         "validatorId": "UnknownFieldValidator",
-        "purchaseConfidence": 0.7,
+        "purchaseConfidence": 0.75,
         "graphNodeIds": [
           "raw:L1",
           "frag:L1:name",
@@ -90,9 +90,9 @@
     }
   ],
   "confidenceAdjustment": -0.15000000000000002,
-  "overallConfidence": 0.5499999999999999,
+  "overallConfidence": 0.6,
   "provenance": {
-    "purchaseConfidence": 0.7,
+    "purchaseConfidence": 0.75,
     "structuralValidators": [
       "ReceiptTotalValidator",
       "SubtotalValidator",

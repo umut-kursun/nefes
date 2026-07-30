@@ -1,5 +1,6 @@
 import type { LayoutRegion } from "../types/models/layout";
 import { FOOTER_HINT, HAS_LETTERS } from "./patterns";
+import { isFuelLine } from "../patterns/document";
 import { isAmountOnlyLine } from "./lineUtils";
 
 export function detectFooterStart(lines: string[]): number {
@@ -61,6 +62,8 @@ export function findBodyStart(lines: string[]): number {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]!;
     if (FOOTER_HINT.test(line)) break;
+    if (isAmountOnlyLine(line)) continue;
+    if (isFuelLine(line)) return i;
     if (/(\d+[,.]\d{2})\s*(?:tl|₺)?$/i.test(line) && HAS_LETTERS.test(line)) {
       return i;
     }

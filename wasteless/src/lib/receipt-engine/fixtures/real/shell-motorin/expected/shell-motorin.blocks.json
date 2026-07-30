@@ -1,0 +1,218 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L3",
+      "kind": "product",
+      "label": "Motorin 29,766 LT 79,17 TL/L",
+      "quantity": "29,766 LT",
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 2356.1,
+      "vatToken": null,
+      "chainRawLineIds": [
+        "raw:L3"
+      ],
+      "rawLines": [
+        "Motorin 29,766 LT 79,17 TL/L",
+        "2356,10 TL"
+      ],
+      "groupIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "qty:L3",
+        "amt:L4"
+      ],
+      "nodeRefs": [
+        "raw:L3",
+        "frag:L3:name",
+        "qty:L3",
+        "amt:L4"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "qty:L3",
+          "amt:L4"
+        ],
+        "layoutLineIndices": [
+          3,
+          4
+        ],
+        "rawTexts": [
+          "Motorin 29,766 LT 79,17 TL/L",
+          "2356,10 TL"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:product_token",
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L5",
+      "frag:L5:name",
+      "amt:L5",
+      "raw:L6",
+      "frag:L6:name",
+      "amt:L6"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5",
+        "raw:L6",
+        "frag:L6:name",
+        "amt:L6"
+      ],
+      "layoutLineIndices": [
+        5,
+        6
+      ],
+      "rawTexts": [
+        "TOPLAM 2356,10",
+        "Kredi Kart 2356,10"
+      ],
+      "classificationRules": [
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label",
+        "paymentClassifier:label",
+        "amountClassifier:payment_label"
+      ],
+      "confidence": 0.85
+    },
+    "confidence": 0.85,
+    "charges": [],
+    "discounts": [],
+    "payments": [
+      {
+        "label": "Kredi Kart",
+        "amount": 2356.1,
+        "nodeRefs": [
+          "raw:L6",
+          "frag:L6:name",
+          "amt:L6"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      }
+    ],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 2356.1,
+        "nodeRefs": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": []
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "raw:L2",
+      "frag:L0:name",
+      "frag:L1:name",
+      "frag:L2:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L2",
+        "frag:L0:name",
+        "frag:L1:name",
+        "frag:L2:name"
+      ],
+      "layoutLineIndices": [
+        0,
+        1,
+        2
+      ],
+      "rawTexts": [
+        "29.07.2026 09:15",
+        "SHELL & TURCAS PETROL A.S.",
+        "34 ABC 123"
+      ],
+      "classificationRules": [
+        "metadataClassifier:date",
+        "headerClassifier:merchant_scored"
+      ],
+      "confidence": 0.8250000000000001
+    },
+    "confidence": 0.8250000000000001,
+    "merchant": "SHELL & TURCAS PETROL A.S.",
+    "date": "29.07.2026 09:15",
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0",
+      "raw:L1",
+      "raw:L4"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0",
+        "raw:L1",
+        "raw:L4"
+      ],
+      "layoutLineIndices": [
+        0,
+        1,
+        4
+      ],
+      "rawTexts": [
+        "SHELL & TURCAS PETROL A.S.",
+        "34 ABC 123",
+        "2356,10 TL"
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line",
+        "footerClassifier:footer_region"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "SHELL & TURCAS PETROL A.S.",
+        "semanticKind": "header",
+        "confidence": 0.65
+      },
+      {
+        "nodeRef": "raw:L1",
+        "text": "34 ABC 123",
+        "semanticKind": "header",
+        "confidence": 0.65
+      },
+      {
+        "nodeRef": "raw:L4",
+        "text": "2356,10 TL",
+        "semanticKind": "footer",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.74375
+}

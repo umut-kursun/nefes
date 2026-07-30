@@ -1,0 +1,274 @@
+{
+  "receiptId": "eczane-pharmacy",
+  "generatedAt": "2026-07-30T06:48:34.683Z",
+  "sections": [
+    {
+      "kind": "header",
+      "startLineIndex": 0,
+      "endLineIndex": 1
+    },
+    {
+      "kind": "products",
+      "startLineIndex": 2,
+      "endLineIndex": 3
+    },
+    {
+      "kind": "totals",
+      "startLineIndex": 4,
+      "endLineIndex": 4
+    },
+    {
+      "kind": "payments",
+      "startLineIndex": 5,
+      "endLineIndex": 5
+    },
+    {
+      "kind": "footer",
+      "startLineIndex": 6,
+      "endLineIndex": 6
+    }
+  ],
+  "semanticLineTypes": [
+    {
+      "lineIndex": 0,
+      "type": "MerchantLine",
+      "text": "ECZANE NO 12"
+    },
+    {
+      "lineIndex": 1,
+      "type": "DateLine",
+      "text": "29.07.2026 11:05"
+    },
+    {
+      "lineIndex": 2,
+      "type": "ProductNameLine",
+      "text": "Ilac A %1 120,00"
+    },
+    {
+      "lineIndex": 3,
+      "type": "ProductNameLine",
+      "text": "Ilac B %1 85,50"
+    },
+    {
+      "lineIndex": 4,
+      "type": "TotalLine",
+      "text": "TOPLAM 205,50"
+    },
+    {
+      "lineIndex": 5,
+      "type": "PaymentLine",
+      "text": "Kredi Kart 205,50"
+    },
+    {
+      "lineIndex": 6,
+      "type": "FooterLine",
+      "text": "Kasiyer: Ayse"
+    }
+  ],
+  "parserStateTransitions": [
+    {
+      "lineIndex": 0,
+      "state": "HEADER"
+    },
+    {
+      "lineIndex": 1,
+      "state": "HEADER"
+    },
+    {
+      "lineIndex": 2,
+      "state": "PRODUCTS"
+    },
+    {
+      "lineIndex": 3,
+      "state": "PRODUCTS"
+    },
+    {
+      "lineIndex": 4,
+      "state": "TOTALS"
+    },
+    {
+      "lineIndex": 5,
+      "state": "PAYMENTS"
+    },
+    {
+      "lineIndex": 6,
+      "state": "FOOTER"
+    }
+  ],
+  "confidence": {
+    "merchant": 0.651,
+    "products": 0.65,
+    "payments": 0.85,
+    "vat": 0,
+    "totals": 0.85,
+    "fuel": 0,
+    "metadata": 0.7233333333333334,
+    "layout": 0.7642857142857143,
+    "classification": 0.7425,
+    "blocks": 0.7233333333333334,
+    "purchase": 0.7233333333333334,
+    "validation": 0.8,
+    "overall": 0.7481031746031747
+  },
+  "fieldExplanations": {
+    "merchant": {
+      "field": "merchant",
+      "value": "ECZANE NO 12",
+      "confidence": 0.5,
+      "reason": "Selected by merchantScorer (score=50; reasons: corporate_format, has_letters, merchant_line_type)",
+      "sourceLines": [
+        {
+          "index": 0,
+          "text": "ECZANE NO 12"
+        }
+      ],
+      "sourceRules": [
+        "corporate_format",
+        "has_letters",
+        "merchant_line_type"
+      ]
+    },
+    "products": [
+      {
+        "field": "products[0]",
+        "value": "Ilac A %",
+        "confidence": 0.65,
+        "reason": "Detected inside PRODUCTS section",
+        "sourceLines": [
+          {
+            "index": 2,
+            "text": "Ilac A %1 120,00"
+          }
+        ],
+        "sourceRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ]
+      },
+      {
+        "field": "products[1]",
+        "value": "Ilac B",
+        "confidence": 0.65,
+        "reason": "Detected inside PRODUCTS section",
+        "sourceLines": [
+          {
+            "index": 3,
+            "text": "Ilac B %1 85,50"
+          }
+        ],
+        "sourceRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ]
+      }
+    ],
+    "payments": [
+      {
+        "field": "payments[0]",
+        "value": "Kredi Kart",
+        "confidence": 0.85,
+        "reason": "Detected as payment line (semanticKind=payment)",
+        "sourceLines": [],
+        "sourceRules": [
+          "payment"
+        ]
+      }
+    ],
+    "vat": [],
+    "totals": [
+      {
+        "field": "total",
+        "value": "TOPLAM",
+        "confidence": 0.85,
+        "reason": "Detected as total line in totals section",
+        "sourceLines": [],
+        "sourceRules": [
+          "total"
+        ]
+      }
+    ],
+    "fuel": [],
+    "metadata": [
+      {
+        "field": "purchaseDate",
+        "value": "2026-07-29",
+        "confidence": 0.7233333333333334,
+        "reason": "Extracted from metadata block header fields",
+        "sourceLines": [
+          {
+            "index": 1,
+            "text": "29.07.2026 11:05"
+          }
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "isValid": false,
+    "score": 80,
+    "errorCount": 1,
+    "warningCount": 1,
+    "errors": [
+      {
+        "code": "TOTAL_MISMATCH",
+        "message": "Declared total does not match product, charge, and discount sums."
+      }
+    ],
+    "warnings": [
+      {
+        "code": "CURRENCY_MISSING",
+        "message": "Currency is not declared on the receipt."
+      }
+    ]
+  },
+  "rejectedCandidates": [
+    {
+      "lineIndex": 0,
+      "text": "ECZANE NO 12",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "reason": "Not promoted to purchase draft field"
+    },
+    {
+      "lineIndex": 1,
+      "text": "29.07.2026 11:05",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "reason": "Not promoted to purchase draft field"
+    },
+    {
+      "lineIndex": 4,
+      "text": "TOPLAM 205,50",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "reason": "Totals section line not mapped to subtotal/total/VAT"
+    },
+    {
+      "lineIndex": 5,
+      "text": "Kredi Kart 205,50",
+      "sectionKind": "payments",
+      "lineSemanticType": "PaymentLine",
+      "reason": "Payment section line not promoted to payment field"
+    },
+    {
+      "lineIndex": 6,
+      "text": "Kasiyer: Ayse",
+      "sectionKind": "footer",
+      "lineSemanticType": "FooterLine",
+      "reason": "Footer line excluded from products"
+    }
+  ],
+  "timings": {
+    "uploadMs": 0,
+    "ocrMs": 0,
+    "layoutMs": 1,
+    "graphMs": 0,
+    "classificationMs": 0,
+    "blockMs": 2,
+    "purchaseMs": 0,
+    "validationMs": 0,
+    "totalMs": 3
+  }
+}

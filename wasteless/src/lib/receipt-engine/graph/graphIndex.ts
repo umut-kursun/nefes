@@ -1,9 +1,5 @@
-import type {
-  GraphEdge,
-  GraphEdgeKind,
-  GraphNode,
-  ReceiptGraph,
-} from "../types/models/graph";
+import type { GraphEdge, GraphEdgeKind, GraphNode, ReceiptGraph } from "../types/models/graph";
+import type { LineSemanticType, ReceiptSectionKind } from "../types/models/sections";
 
 export type GraphRegion = "header" | "body" | "footer";
 
@@ -189,6 +185,36 @@ export class GraphIndex {
       const minIndex = this.node(min)?.layoutRef.lineIndex ?? Infinity;
       const idIndex = this.node(id)?.layoutRef.lineIndex ?? Infinity;
       return idIndex < minIndex ? id : min;
+    });
+  }
+
+  sectionOfRaw(rawId: string): ReceiptSectionKind | null {
+    const meta = this.node(rawId)?.meta as
+      | { sectionKind?: ReceiptSectionKind }
+      | undefined;
+    return meta?.sectionKind ?? null;
+  }
+
+  lineSemanticTypeOfRaw(rawId: string): LineSemanticType | null {
+    const meta = this.node(rawId)?.meta as
+      | { lineSemanticType?: LineSemanticType }
+      | undefined;
+    return meta?.lineSemanticType ?? null;
+  }
+
+  headerLinesForMerchant(): Array<{
+    index: number;
+    text: string;
+    lineSemanticType: LineSemanticType;
+  }> {
+    return (this.graph.regions.header ?? []).map((rawId) => {
+      const node = this.node(rawId);
+      const meta = node?.meta as { lineSemanticType?: LineSemanticType } | undefined;
+      return {
+        index: node?.layoutRef.lineIndex ?? 0,
+        text: node?.text ?? "",
+        lineSemanticType: meta?.lineSemanticType ?? "UnknownLine",
+      };
     });
   }
 }

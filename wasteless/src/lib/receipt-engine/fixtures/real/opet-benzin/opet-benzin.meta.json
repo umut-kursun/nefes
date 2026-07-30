@@ -1,0 +1,9 @@
+{
+  "source": "beta-test-scenario",
+  "immutable": true,
+  "description": "Opet fuel station receipt with benzin quantity and line total",
+  "merchantCategory": "fuel",
+  "merchantSlug": "opet-benzin",
+  "ingestedAt": "2026-07-30",
+  "origin": "document-parser-regression.test.ts FIXTURES.opet"
+}

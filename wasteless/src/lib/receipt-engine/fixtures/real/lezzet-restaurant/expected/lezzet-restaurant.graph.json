@@ -1,0 +1,604 @@
+{
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "kind": "raw_line",
+      "text": "LEZZET RESTORAN A.S.",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "LEZZET RESTORAN A.S.",
+        "rawText": "LEZZET RESTORAN A.S.",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
+    },
+    {
+      "id": "raw:L1",
+      "kind": "raw_line",
+      "text": "29.07.2026 21:30",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "29.07.2026 21:30",
+        "rawText": "29.07.2026 21:30",
+        "creationRule": "passRawLines",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "DateLine"
+      }
+    },
+    {
+      "id": "raw:L2",
+      "kind": "raw_line",
+      "text": "Corba %10 85,00",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Corba %10 85,00",
+        "rawText": "Corba %10 85,00",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    },
+    {
+      "id": "raw:L3",
+      "kind": "raw_line",
+      "text": "Izgara %10 320,00",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Izgara %10 320,00",
+        "rawText": "Izgara %10 320,00",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    },
+    {
+      "id": "raw:L4",
+      "kind": "raw_line",
+      "text": "TOPLAM 405,00",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM 405,00",
+        "rawText": "TOPLAM 405,00",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
+    },
+    {
+      "id": "raw:L5",
+      "kind": "raw_line",
+      "text": "Nakit 405,00",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 5
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "Nakit 405,00",
+        "rawText": "Nakit 405,00",
+        "creationRule": "passRawLines",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
+    },
+    {
+      "id": "frag:L0:name",
+      "kind": "text_fragment",
+      "text": "LEZZET RESTORAN A.S.",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 0
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "LEZZET RESTORAN A.S.",
+        "rawText": "LEZZET RESTORAN A.S.",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
+    },
+    {
+      "id": "frag:L1:name",
+      "kind": "text_fragment",
+      "text": "29.07.2026 21:30",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 1
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "29.07.2026 21:30",
+        "rawText": "29.07.2026 21:30",
+        "creationRule": "passColumns:name",
+        "confidence": 0.65
+      },
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "DateLine"
+      }
+    },
+    {
+      "id": "frag:L2:name",
+      "kind": "text_fragment",
+      "text": "Corba",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Corba",
+        "rawText": "Corba %10 85,00",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    },
+    {
+      "id": "amt:L2",
+      "kind": "amount",
+      "text": "85,00",
+      "amount": 85,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "85,00",
+        "rawText": "Corba %10 85,00",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    },
+    {
+      "id": "frag:L3:name",
+      "kind": "text_fragment",
+      "text": "Izgara %",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Izgara %",
+        "rawText": "Izgara %10 320,00",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    },
+    {
+      "id": "amt:L3",
+      "kind": "amount",
+      "text": "10 320,00",
+      "amount": 10320,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "10 320,00",
+        "rawText": "Izgara %10 320,00",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    },
+    {
+      "id": "frag:L4:name",
+      "kind": "label",
+      "text": "TOPLAM",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 405,00",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
+    },
+    {
+      "id": "amt:L4",
+      "kind": "amount",
+      "text": "405,00",
+      "amount": 405,
+      "layoutRef": {
+        "lineIndex": 4
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "405,00",
+        "rawText": "TOPLAM 405,00",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
+    },
+    {
+      "id": "frag:L5:name",
+      "kind": "label",
+      "text": "Nakit",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 5
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "Nakit",
+        "rawText": "Nakit 405,00",
+        "creationRule": "passColumns:name",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
+    },
+    {
+      "id": "amt:L5",
+      "kind": "amount",
+      "text": "405,00",
+      "amount": 405,
+      "layoutRef": {
+        "lineIndex": 5
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "405,00",
+        "rawText": "Nakit 405,00",
+        "creationRule": "passColumns:amount",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "payments",
+        "lineSemanticType": "PaymentLine"
+      }
+    },
+    {
+      "id": "vat:L2",
+      "kind": "vat_token",
+      "text": "%10",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 2
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "%10",
+        "rawText": "Corba %10 85,00",
+        "creationRule": "passTokens:vat",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    },
+    {
+      "id": "vat:L3",
+      "kind": "vat_token",
+      "text": "%10",
+      "amount": null,
+      "layoutRef": {
+        "lineIndex": 3
+      },
+      "provenance": {
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "%10",
+        "rawText": "Izgara %10 320,00",
+        "creationRule": "passTokens:vat",
+        "confidence": 0.85
+      },
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:same_row:frag:L0:name->raw:L0",
+      "from": "frag:L0:name",
+      "to": "raw:L0",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:frag:L1:name->raw:L1",
+      "from": "frag:L1:name",
+      "to": "raw:L1",
+      "kind": "same_row",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:same_row:frag:L2:name->raw:L2",
+      "from": "frag:L2:name",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L2->raw:L2",
+      "from": "amt:L2",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L3:name->raw:L3",
+      "from": "frag:L3:name",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L3->raw:L3",
+      "from": "amt:L3",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L4:name->raw:L4",
+      "from": "frag:L4:name",
+      "to": "raw:L4",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L4->raw:L4",
+      "from": "amt:L4",
+      "to": "raw:L4",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:frag:L5:name->raw:L5",
+      "from": "frag:L5:name",
+      "to": "raw:L5",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:amt:L5->raw:L5",
+      "from": "amt:L5",
+      "to": "raw:L5",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:vat:L2->raw:L2",
+      "from": "vat:L2",
+      "to": "raw:L2",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:vat_of:vat:L2->raw:L2",
+      "from": "vat:L2",
+      "to": "raw:L2",
+      "kind": "vat_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:same_row:vat:L3->raw:L3",
+      "from": "vat:L3",
+      "to": "raw:L3",
+      "kind": "same_row",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:vat_of:vat:L3->raw:L3",
+      "from": "vat:L3",
+      "to": "raw:L3",
+      "kind": "vat_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L2->raw:L2",
+      "from": "amt:L2",
+      "to": "raw:L2",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L3->raw:L3",
+      "from": "amt:L3",
+      "to": "raw:L3",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L4->raw:L4",
+      "from": "amt:L4",
+      "to": "raw:L4",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:amount_of:amt:L5->raw:L5",
+      "from": "amt:L5",
+      "to": "raw:L5",
+      "kind": "amount_of",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L0->raw:L1",
+      "from": "raw:L0",
+      "to": "raw:L1",
+      "kind": "precedes",
+      "confidence": 0.65
+    },
+    {
+      "id": "edge:precedes:raw:L1->raw:L2",
+      "from": "raw:L1",
+      "to": "raw:L2",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L2->raw:L3",
+      "from": "raw:L2",
+      "to": "raw:L3",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L3->raw:L4",
+      "from": "raw:L3",
+      "to": "raw:L4",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:precedes:raw:L4->raw:L5",
+      "from": "raw:L4",
+      "to": "raw:L5",
+      "kind": "precedes",
+      "confidence": 0.85
+    },
+    {
+      "id": "edge:footer_of:raw:L5->raw:L4",
+      "from": "raw:L5",
+      "to": "raw:L4",
+      "kind": "footer_of",
+      "confidence": 0.85
+    }
+  ],
+  "regions": {
+    "header": [
+      "raw:L0",
+      "raw:L1"
+    ],
+    "body": [
+      "raw:L2",
+      "raw:L3"
+    ],
+    "footer": [
+      "raw:L4",
+      "raw:L5"
+    ]
+  },
+  "profileId": "generic-tr",
+  "confidence": 0.8055555555555555
+}

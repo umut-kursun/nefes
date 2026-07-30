@@ -1,0 +1,125 @@
+{
+  "isValid": false,
+  "consistent": false,
+  "score": 80,
+  "errors": [
+    {
+      "id": "LineTotalValidator:LINE_TOTAL_MISMATCH:products[0]",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "LINE_TOTAL_MISMATCH",
+      "message": "Line total for \"Motorin 29,766 LT 79,17 TL/L\" does not match quantity × unit price.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "LineTotalValidator",
+        "purchaseConfidence": 0.74375,
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "qty:L3",
+          "amt:L4"
+        ]
+      },
+      "expected": 2356.57422,
+      "actual": 2356.1
+    }
+  ],
+  "warnings": [
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.74375
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "ReceiptNumberValidator:RECEIPT_NUMBER_MISSING:receiptNumber",
+      "severity": "INFO",
+      "category": "business",
+      "code": "RECEIPT_NUMBER_MISSING",
+      "message": "Receipt number is not present.",
+      "location": {
+        "path": "receiptNumber"
+      },
+      "provenance": {
+        "validatorId": "ReceiptNumberValidator",
+        "purchaseConfidence": 0.74375
+      }
+    },
+    {
+      "id": "MetadataCompletenessValidator:METADATA_PARTIAL:metadata",
+      "severity": "INFO",
+      "category": "business",
+      "code": "METADATA_PARTIAL",
+      "message": "Some metadata fields are missing: purchaseTime, receiptNumber, currency.",
+      "location": {
+        "path": "metadata"
+      },
+      "provenance": {
+        "validatorId": "MetadataCompletenessValidator",
+        "purchaseConfidence": 0.74375
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[0]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"Motorin 29,766 LT 79,17 TL/L\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.74375,
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "qty:L3",
+          "amt:L4"
+        ]
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.2,
+  "overallConfidence": 0.54375,
+  "provenance": {
+    "purchaseConfidence": 0.74375,
+    "structuralValidators": [
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 5
+  },
+  "blocking": false
+}

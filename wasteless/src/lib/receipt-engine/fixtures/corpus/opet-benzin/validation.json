@@ -1,0 +1,21 @@
+{
+  "isValid": true,
+  "score": 95,
+  "errors": [],
+  "warnings": [
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.74375
+      }
+    }
+  ]
+}

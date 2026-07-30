@@ -1,0 +1,62 @@
+{
+  "sections": [
+    {
+      "kind": "header",
+      "startLineIndex": 0,
+      "endLineIndex": 2
+    },
+    {
+      "kind": "products",
+      "startLineIndex": 3,
+      "endLineIndex": 5
+    },
+    {
+      "kind": "payments",
+      "startLineIndex": 6,
+      "endLineIndex": 6
+    },
+    {
+      "kind": "totals",
+      "startLineIndex": 7,
+      "endLineIndex": 7
+    },
+    {
+      "kind": "vat_summary",
+      "startLineIndex": 8,
+      "endLineIndex": 8
+    }
+  ],
+  "sectionByLineIndex": [
+    "header",
+    "header",
+    "header",
+    "products",
+    "products",
+    "products",
+    "payments",
+    "totals",
+    "vat_summary"
+  ],
+  "lineTypes": [
+    "MerchantLine",
+    "DateLine",
+    "ReceiptNumberLine",
+    "ProductNameLine",
+    "FuelLine",
+    "ChargeLine",
+    "PaymentLine",
+    "TotalLine",
+    "VatSummaryLine"
+  ],
+  "parserStates": [
+    "HEADER",
+    "HEADER",
+    "HEADER",
+    "PRODUCTS",
+    "PRODUCTS",
+    "PRODUCTS",
+    "PAYMENTS",
+    "TOTALS",
+    "VAT_SUMMARY"
+  ]
+}

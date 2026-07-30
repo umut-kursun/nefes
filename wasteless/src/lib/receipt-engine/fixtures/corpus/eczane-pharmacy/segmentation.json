@@ -1,0 +1,56 @@
+{
+  "sections": [
+    {
+      "kind": "header",
+      "startLineIndex": 0,
+      "endLineIndex": 1
+    },
+    {
+      "kind": "products",
+      "startLineIndex": 2,
+      "endLineIndex": 3
+    },
+    {
+      "kind": "totals",
+      "startLineIndex": 4,
+      "endLineIndex": 4
+    },
+    {
+      "kind": "payments",
+      "startLineIndex": 5,
+      "endLineIndex": 5
+    },
+    {
+      "kind": "footer",
+      "startLineIndex": 6,
+      "endLineIndex": 6
+    }
+  ],
+  "sectionByLineIndex": [
+    "header",
+    "header",
+    "products",
+    "products",
+    "totals",
+    "payments",
+    "footer"
+  ],
+  "lineTypes": [
+    "MerchantLine",
+    "DateLine",
+    "ProductNameLine",
+    "ProductNameLine",
+    "TotalLine",
+    "PaymentLine",
+    "FooterLine"
+  ],
+  "parserStates": [
+    "HEADER",
+    "HEADER",
+    "PRODUCTS",
+    "PRODUCTS",
+    "TOTALS",
+    "PAYMENTS",
+    "FOOTER"
+  ]
+}

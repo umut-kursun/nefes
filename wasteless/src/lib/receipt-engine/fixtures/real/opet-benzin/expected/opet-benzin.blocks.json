@@ -1,0 +1,196 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L3",
+      "kind": "product",
+      "label": "Benzin 42,150 LT 45,50 TL/L",
+      "quantity": "42,150 LT",
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 1917.82,
+      "vatToken": null,
+      "chainRawLineIds": [
+        "raw:L3"
+      ],
+      "rawLines": [
+        "Benzin 42,150 LT 45,50 TL/L",
+        "1917,82 TL"
+      ],
+      "groupIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "qty:L3",
+        "amt:L4"
+      ],
+      "nodeRefs": [
+        "raw:L3",
+        "frag:L3:name",
+        "qty:L3",
+        "amt:L4"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "qty:L3",
+          "amt:L4"
+        ],
+        "layoutLineIndices": [
+          3,
+          4
+        ],
+        "rawTexts": [
+          "Benzin 42,150 LT 45,50 TL/L",
+          "1917,82 TL"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:product_token",
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L5",
+      "frag:L5:name",
+      "amt:L5"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5"
+      ],
+      "layoutLineIndices": [
+        5
+      ],
+      "rawTexts": [
+        "TOPLAM 1917,82"
+      ],
+      "classificationRules": [
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label"
+      ],
+      "confidence": 0.85
+    },
+    "confidence": 0.85,
+    "charges": [],
+    "discounts": [],
+    "payments": [],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 1917.82,
+        "nodeRefs": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": []
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "raw:L2",
+      "frag:L0:name",
+      "frag:L1:name",
+      "frag:L2:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L2",
+        "frag:L0:name",
+        "frag:L1:name",
+        "frag:L2:name"
+      ],
+      "layoutLineIndices": [
+        0,
+        1,
+        2
+      ],
+      "rawTexts": [
+        "30.07.2026 20:01",
+        "OPET PETROLCULUK A.S.",
+        "06 XYZ 987"
+      ],
+      "classificationRules": [
+        "metadataClassifier:date",
+        "headerClassifier:merchant_scored"
+      ],
+      "confidence": 0.8250000000000001
+    },
+    "confidence": 0.8250000000000001,
+    "merchant": "OPET PETROLCULUK A.S.",
+    "date": "30.07.2026 20:01",
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0",
+      "raw:L1",
+      "raw:L4"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0",
+        "raw:L1",
+        "raw:L4"
+      ],
+      "layoutLineIndices": [
+        0,
+        1,
+        4
+      ],
+      "rawTexts": [
+        "OPET PETROLCULUK A.S.",
+        "06 XYZ 987",
+        "1917,82 TL"
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line",
+        "footerClassifier:footer_region"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "OPET PETROLCULUK A.S.",
+        "semanticKind": "header",
+        "confidence": 0.65
+      },
+      {
+        "nodeRef": "raw:L1",
+        "text": "06 XYZ 987",
+        "semanticKind": "header",
+        "confidence": 0.65
+      },
+      {
+        "nodeRef": "raw:L4",
+        "text": "1917,82 TL",
+        "semanticKind": "footer",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.74375
+}

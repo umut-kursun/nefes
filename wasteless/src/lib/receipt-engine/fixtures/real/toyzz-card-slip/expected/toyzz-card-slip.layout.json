@@ -1,0 +1,214 @@
+{
+  "lines": [
+    {
+      "index": 0,
+      "text": "TOYZZ SHOP A.S.",
+      "rawText": "TOYZZ SHOP A.S.",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "MerchantLine",
+      "columns": {
+        "name": "TOYZZ SHOP A.S."
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 1,
+      "text": "27.07.2026 14:10",
+      "rawText": "27.07.2026 14:10",
+      "region": "header",
+      "sectionKind": "header",
+      "lineSemanticType": "DateLine",
+      "columns": {
+        "name": "27.07.2026 14:10"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    },
+    {
+      "index": 2,
+      "text": "Oyuncak Araba %20 249,90",
+      "rawText": "Oyuncak Araba %20 249,90",
+      "region": "body",
+      "sectionKind": "products",
+      "lineSemanticType": "ProductNameLine",
+      "columns": {
+        "amount": "20 249,90",
+        "name": "Oyuncak Araba %",
+        "vat": "%20"
+      },
+      "trailingAmount": 20249.9,
+      "features": {
+        "hasVatToken": true,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {
+        "vat": "%20"
+      },
+      "confidence": 0.85
+    },
+    {
+      "index": 3,
+      "text": "TOPLAM 249,90",
+      "rawText": "TOPLAM 249,90",
+      "region": "footer",
+      "sectionKind": "totals",
+      "lineSemanticType": "TotalLine",
+      "columns": {
+        "amount": "249,90",
+        "name": "TOPLAM"
+      },
+      "trailingAmount": 249.9,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 4,
+      "text": "Visa 249,90",
+      "rawText": "Visa 249,90",
+      "region": "footer",
+      "sectionKind": "card_slip",
+      "lineSemanticType": "CardSlipLine",
+      "columns": {
+        "amount": "249,90",
+        "name": "Visa"
+      },
+      "trailingAmount": 249.9,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.85
+    },
+    {
+      "index": 5,
+      "text": "AID: 1234567890123456",
+      "rawText": "AID: 1234567890123456",
+      "region": "footer",
+      "sectionKind": "card_slip",
+      "lineSemanticType": "CardSlipLine",
+      "columns": {
+        "name": "AID: 1234567890123456"
+      },
+      "trailingAmount": null,
+      "features": {
+        "hasVatToken": false,
+        "hasWeightPattern": false,
+        "hasQuantityToken": false,
+        "isAmountOnly": false,
+        "isLikelyContinuation": false,
+        "isRightAlignedPrice": false
+      },
+      "tokens": {},
+      "confidence": 0.65
+    }
+  ],
+  "profileId": "generic-tr",
+  "readingOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "regions": {
+    "header": [
+      0,
+      1
+    ],
+    "body": [
+      2
+    ],
+    "footer": [
+      3,
+      4,
+      5
+    ]
+  },
+  "segmentation": {
+    "sections": [
+      {
+        "kind": "header",
+        "startLineIndex": 0,
+        "endLineIndex": 1
+      },
+      {
+        "kind": "products",
+        "startLineIndex": 2,
+        "endLineIndex": 2
+      },
+      {
+        "kind": "totals",
+        "startLineIndex": 3,
+        "endLineIndex": 3
+      },
+      {
+        "kind": "card_slip",
+        "startLineIndex": 4,
+        "endLineIndex": 5
+      }
+    ],
+    "sectionByLineIndex": [
+      "header",
+      "header",
+      "products",
+      "totals",
+      "card_slip",
+      "card_slip"
+    ],
+    "lineTypes": [
+      "MerchantLine",
+      "DateLine",
+      "ProductNameLine",
+      "TotalLine",
+      "CardSlipLine",
+      "CardSlipLine"
+    ],
+    "parserStates": [
+      "HEADER",
+      "HEADER",
+      "PRODUCTS",
+      "TOTALS",
+      "CARD_SLIP",
+      "CARD_SLIP"
+    ]
+  },
+  "confidence": 0.75
+}

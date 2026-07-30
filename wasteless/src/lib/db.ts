@@ -390,7 +390,11 @@ export async function ensureSeedData(): Promise<void> {
 
   const settings = await db.settings.get("app");
   if (!settings) {
-    await db.settings.put({ id: "app", theme: "light" });
+    await db.settings.put({
+      id: "app",
+      theme: "light",
+      onboardingCompleted: false,
+    });
   }
 }
 
@@ -711,11 +715,19 @@ export async function saveProductAliases(
 }
 
 export async function getSettings(): Promise<AppSettings> {
-  if (!db) return { theme: "light", displayName: null };
+  if (!db) {
+    return { theme: "light", displayName: null, onboardingCompleted: false };
+  }
   const row = await db.settings.get("app");
+  if (!row) {
+    return { theme: "light", displayName: null, onboardingCompleted: false };
+  }
   return {
-    theme: row?.theme ?? "light",
-    displayName: row?.displayName ?? null,
+    theme: row.theme ?? "light",
+    displayName: row.displayName ?? null,
+    // Existing installs without the field skip onboarding; new seeds set false explicitly.
+    onboardingCompleted: row.onboardingCompleted ?? true,
+    onboardingCompletedAt: row.onboardingCompletedAt,
   };
 }
 

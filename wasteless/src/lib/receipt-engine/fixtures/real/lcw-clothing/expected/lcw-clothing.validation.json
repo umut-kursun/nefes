@@ -1,0 +1,101 @@
+{
+  "isValid": false,
+  "consistent": false,
+  "score": 80,
+  "errors": [
+    {
+      "id": "ReceiptTotalValidator:TOTAL_MISMATCH:total.amount",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "TOTAL_MISMATCH",
+      "message": "Declared total does not match product, charge, and discount sums.",
+      "location": {
+        "path": "total.amount"
+      },
+      "provenance": {
+        "validatorId": "ReceiptTotalValidator",
+        "purchaseConfidence": 0.7333333333333333,
+        "graphNodeIds": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ]
+      },
+      "suggestedFix": "Review line totals, charges, and discounts against footer total.",
+      "expected": 20799.98,
+      "actual": 799.98
+    }
+  ],
+  "warnings": [
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.7333333333333333
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "ReceiptNumberValidator:RECEIPT_NUMBER_MISSING:receiptNumber",
+      "severity": "INFO",
+      "category": "business",
+      "code": "RECEIPT_NUMBER_MISSING",
+      "message": "Receipt number is not present.",
+      "location": {
+        "path": "receiptNumber"
+      },
+      "provenance": {
+        "validatorId": "ReceiptNumberValidator",
+        "purchaseConfidence": 0.7333333333333333
+      }
+    },
+    {
+      "id": "MetadataCompletenessValidator:METADATA_PARTIAL:metadata",
+      "severity": "INFO",
+      "category": "business",
+      "code": "METADATA_PARTIAL",
+      "message": "Some metadata fields are missing: purchaseTime, receiptNumber, currency.",
+      "location": {
+        "path": "metadata"
+      },
+      "provenance": {
+        "validatorId": "MetadataCompletenessValidator",
+        "purchaseConfidence": 0.7333333333333333
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.2,
+  "overallConfidence": 0.5333333333333332,
+  "provenance": {
+    "purchaseConfidence": 0.7333333333333333,
+    "structuralValidators": [
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 4
+  },
+  "blocking": false
+}

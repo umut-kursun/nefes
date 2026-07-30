@@ -1,0 +1,44 @@
+{
+  "isValid": false,
+  "score": 80,
+  "errors": [
+    {
+      "id": "ReceiptTotalValidator:TOTAL_MISMATCH:total.amount",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "TOTAL_MISMATCH",
+      "message": "Declared total does not match product, charge, and discount sums.",
+      "location": {
+        "path": "total.amount"
+      },
+      "provenance": {
+        "validatorId": "ReceiptTotalValidator",
+        "purchaseConfidence": 0.7233333333333334,
+        "graphNodeIds": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ]
+      },
+      "suggestedFix": "Review line totals, charges, and discounts against footer total.",
+      "expected": 1205.5,
+      "actual": 205.5
+    }
+  ],
+  "warnings": [
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.7233333333333334
+      }
+    }
+  ]
+}

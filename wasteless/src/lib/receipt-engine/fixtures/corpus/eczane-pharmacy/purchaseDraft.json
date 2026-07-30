@@ -1,0 +1,123 @@
+{
+  "merchant": "ECZANE NO 12",
+  "purchaseDate": {
+    "raw": "29.07.2026",
+    "normalized": "2026-07-29"
+  },
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Ilac A %",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L2",
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Ilac A %1 120,00"
+        ],
+        "ocrTexts": [
+          "Ilac A %1 120,00"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 1120,
+      "vatRate": 1
+    },
+    {
+      "name": "Ilac B",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L3",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "Ilac B %1 85,50"
+        ],
+        "ocrTexts": [
+          "Ilac B %1 85,50"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "lineTotal": 85.5,
+      "vatRate": 1
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "Kredi Kart",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      "amount": 205.5
+    }
+  ],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 205.5
+  },
+  "confidence": 0.7233333333333334,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.7233333333333334,
+    "rawTexts": [
+      "Ilac A %1 120,00",
+      "Ilac B %1 85,50",
+      "TOPLAM 205,50",
+      "Kredi Kart 205,50",
+      "Kasiyer: Ayse",
+      "29.07.2026 11:05",
+      "ECZANE NO 12"
+    ]
+  }
+}

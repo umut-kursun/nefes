@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Plus, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { EmptyState } from "@/components/empty-state";
 import { useConfirm } from "@/components/confirm-modal";
 import { useToast } from "@/components/toast";
 import { Button } from "@/components/ui/button";
@@ -136,12 +137,12 @@ export default function TagsPage() {
           );
         })}
         {tags.length === 0 && (
-          <div className="rounded-2xl border border-white/70 bg-white/60 px-4 py-10 text-center">
-            <p className="font-medium">Henüz etiket yok</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Weekend Trip, Vacation 2026 gibi etiketler ekle.
-            </p>
-          </div>
+          <EmptyState
+            title="Henüz etiket yok"
+            description="Tatil, iş seyahati veya proje etiketleri ekle; harcamalarını bağlamla grupla."
+            actionLabel="İlk fişi ekle"
+            actionHref="/add"
+          />
         )}
       </div>
     </AppShell>

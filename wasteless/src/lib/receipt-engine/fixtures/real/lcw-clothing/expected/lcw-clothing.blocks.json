@@ -1,0 +1,239 @@
+{
+  "products": [
+    {
+      "id": "product:raw:L2",
+      "kind": "product",
+      "label": "Tişört %",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 10299.99,
+      "vatToken": "%10",
+      "chainRawLineIds": [
+        "raw:L2"
+      ],
+      "rawLines": [
+        "Tişört %10 299,99"
+      ],
+      "groupIds": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2"
+      ],
+      "nodeRefs": [
+        "raw:L2",
+        "frag:L2:name",
+        "amt:L2",
+        "vat:L2"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L2",
+          "frag:L2:name",
+          "amt:L2",
+          "vat:L2"
+        ],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Tişört %10 299,99"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    },
+    {
+      "id": "product:raw:L3",
+      "kind": "product",
+      "label": "Pantolon %",
+      "quantity": null,
+      "unit": null,
+      "unitPrice": null,
+      "totalPrice": 10499.99,
+      "vatToken": "%10",
+      "chainRawLineIds": [
+        "raw:L3"
+      ],
+      "rawLines": [
+        "Pantolon %10 499,99"
+      ],
+      "groupIds": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "nodeRefs": [
+        "raw:L3",
+        "frag:L3:name",
+        "amt:L3",
+        "vat:L3"
+      ],
+      "provenance": {
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "amt:L3",
+          "vat:L3"
+        ],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "Pantolon %10 499,99"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "amountClassifier:product_line_amount",
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "confidence": 0.65
+    }
+  ],
+  "footer": {
+    "id": "footer:main",
+    "kind": "footer",
+    "nodeRefs": [
+      "raw:L4",
+      "frag:L4:name",
+      "amt:L4",
+      "raw:L5",
+      "frag:L5:name",
+      "amt:L5"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L4",
+        "frag:L4:name",
+        "amt:L4",
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5"
+      ],
+      "layoutLineIndices": [
+        4,
+        5
+      ],
+      "rawTexts": [
+        "TOPLAM 799,98",
+        "Kredi Kart 799,98"
+      ],
+      "classificationRules": [
+        "metadataClassifier:total_label",
+        "amountClassifier:total_label",
+        "paymentClassifier:label",
+        "amountClassifier:payment_label"
+      ],
+      "confidence": 0.85
+    },
+    "confidence": 0.85,
+    "charges": [],
+    "discounts": [],
+    "payments": [
+      {
+        "label": "Kredi Kart",
+        "amount": 799.98,
+        "nodeRefs": [
+          "raw:L5",
+          "frag:L5:name",
+          "amt:L5"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      }
+    ],
+    "subtotals": [],
+    "totals": [
+      {
+        "label": "TOPLAM",
+        "amount": 799.98,
+        "nodeRefs": [
+          "raw:L4",
+          "frag:L4:name",
+          "amt:L4"
+        ],
+        "semanticKind": "total",
+        "confidence": 0.85
+      }
+    ],
+    "vatSummaries": [],
+    "unassigned": []
+  },
+  "metadata": {
+    "id": "metadata:main",
+    "kind": "metadata",
+    "nodeRefs": [
+      "raw:L1",
+      "frag:L0:name",
+      "frag:L1:name"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L1",
+        "frag:L0:name",
+        "frag:L1:name"
+      ],
+      "layoutLineIndices": [
+        0,
+        1
+      ],
+      "rawTexts": [
+        "28.07.2026 18:22",
+        "LC WAIKIKI MAGAZACILIK A.S."
+      ],
+      "classificationRules": [
+        "metadataClassifier:date",
+        "headerClassifier:merchant_scored"
+      ],
+      "confidence": 0.8666666666666667
+    },
+    "confidence": 0.8666666666666667,
+    "merchant": "LC WAIKIKI MAGAZACILIK A.S.",
+    "date": "28.07.2026 18:22",
+    "time": null,
+    "receiptNumber": null,
+    "loyalty": null,
+    "barcodes": []
+  },
+  "unknown": {
+    "id": "unknown:remainder",
+    "kind": "unknown",
+    "nodeRefs": [
+      "raw:L0"
+    ],
+    "provenance": {
+      "graphNodeIds": [
+        "raw:L0"
+      ],
+      "layoutLineIndices": [
+        0
+      ],
+      "rawTexts": [
+        "LC WAIKIKI MAGAZACILIK A.S."
+      ],
+      "classificationRules": [
+        "headerClassifier:raw_line"
+      ],
+      "confidence": 0.65
+    },
+    "confidence": 0.65,
+    "entries": [
+      {
+        "nodeRef": "raw:L0",
+        "text": "LC WAIKIKI MAGAZACILIK A.S.",
+        "semanticKind": "header",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "confidence": 0.7333333333333333
+}

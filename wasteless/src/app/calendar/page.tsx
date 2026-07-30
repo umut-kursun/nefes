@@ -18,6 +18,7 @@ import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BackButton } from "@/components/back-button";
 import { BottomSheet } from "@/components/bottom-sheet";
+import { EmptyState } from "@/components/empty-state";
 import { PurchaseCardCompact } from "@/components/purchase-card";
 import { useWasteLessStore } from "@/hooks/use-store";
 import type { Expense } from "@/lib/types";
@@ -199,6 +200,14 @@ export default function CalendarPage() {
 
       {!ready ? (
         <p className="text-sm text-muted-foreground">Yükleniyor…</p>
+      ) : expenses.length === 0 ? (
+        <EmptyState
+          emoji="📅"
+          title="Takvimde henüz gün yok"
+          description="Fiş tara veya harcama ekle; satın aldığın günler takvimde rozet olarak görünür."
+          actionLabel="Harcama ekle"
+          actionHref="/add"
+        />
       ) : (
         <div className="animate-fade-up delay-1 rounded-3xl border border-black/[0.04] bg-white p-3 shadow-[0_8px_30px_rgba(15,23,42,0.05)] sm:p-4">
           <div className="mb-2 flex items-center justify-between gap-2 px-1">

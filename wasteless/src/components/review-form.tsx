@@ -8,11 +8,12 @@ import {
 import { normalizeMerchantName } from "@/lib/merchants";
 import { formatPlate } from "@/lib/plate";
 import { checkReceiptConsistency, findLineItemIssues, sumItemPrices } from "@/lib/receipt-quality";
-import { LOW_CONFIDENCE_THRESHOLD } from "@/lib/validation";
+import { getRecentMerchants } from "@/lib/recent-values";
 import { AmountInput } from "@/components/amount-input";
 import { CategoryDropdownPicker } from "@/components/category-dropdown-picker";
 import { LineItemsEditor } from "@/components/line-items-editor";
 import { ReceiptChargesEditor } from "@/components/receipt-charges-editor";
+import { TrustBanner } from "@/components/trust-banner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +23,7 @@ import { TagPicker } from "@/components/tag-picker";
 import { useWasteLessStore } from "@/hooks/use-store";
 import { formatMoney } from "@/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Expense } from "@/lib/types";
 import { ChargeType, DiscountType, parseChargeType, parseDiscountType } from "@/lib/receipt-model";
 
@@ -42,7 +43,8 @@ export function ReviewForm({
   saving,
   compactProducts = false,
 }: ReviewFormProps) {
-  const { categories } = useWasteLessStore();
+  const { categories, expenses } = useWasteLessStore();
+  const merchantRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<Expense>({
     ...initial,
     time: initial.time ?? null,
@@ -61,10 +63,16 @@ export function ReviewForm({
   const showFuel = isFuelCategory(selected);
   const showCigarette = isCigaretteCategory(selected);
 
-  const lowConfidence = useMemo(
-    () => (form.confidence ?? 1) < LOW_CONFIDENCE_THRESHOLD,
-    [form.confidence]
+  const recentMerchants = useMemo(
+    () => getRecentMerchants(expenses),
+    [expenses]
   );
+
+  useEffect(() => {
+    if (compactProducts) {
+      merchantRef.current?.focus();
+    }
+  }, [compactProducts]);
 
   const consistency = useMemo(
     () =>
@@ -174,11 +182,8 @@ export function ReviewForm({
         });
       }}
     >
-      {lowConfidence && (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          Düşük güven skoru ({Math.round((form.confidence ?? 0) * 100)}%).
-          Kaydetmeden önce alanları kontrol et.
-        </div>
+      {form.confidence != null && (
+        <TrustBanner confidence={form.confidence} />
       )}
 
       {consistency.inconsistent && (
@@ -251,7 +256,9 @@ export function ReviewForm({
         <div className="grid gap-2">
           <Label htmlFor="merchant">İşyeri</Label>
           <Input
+            ref={merchantRef}
             id="merchant"
+            list="recent-merchants"
             value={form.merchantName ?? ""}
             onChange={(e) => {
               const value = e.target.value || null;
@@ -264,6 +271,32 @@ export function ReviewForm({
             }}
             placeholder="Migros, Shell, Starbucks..."
           />
+          <datalist id="recent-merchants">
+            {recentMerchants.map((m) => (
+              <option key={m} value={m} />
+            ))}
+          </datalist>
+          {recentMerchants.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-0.5">
+              {recentMerchants.slice(0, 5).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  className="rounded-full border border-black/[0.08] bg-white px-2.5 py-1 text-xs font-medium text-foreground/80 transition hover:bg-muted/60 active:scale-95"
+                  onClick={() => {
+                    setForm((prev) => ({
+                      ...prev,
+                      merchantRaw: prev.merchantRaw ?? m,
+                      merchantName: m,
+                      updatedAt: new Date().toISOString(),
+                    }));
+                  }}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -416,6 +449,7 @@ export function ReviewForm({
               expenseId={form.id}
               category={form.category}
               items={form.items}
+              highlightLowConfidence={compactProducts}
               onChange={(items) => {
                 setAckInconsistency(false);
                 update("items", items);

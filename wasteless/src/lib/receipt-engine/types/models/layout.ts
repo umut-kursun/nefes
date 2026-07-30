@@ -1,4 +1,11 @@
 import type { Confidence } from "../provenance";
+import type {
+  LineSemanticType,
+  ReceiptSectionKind,
+} from "./sections";
+import type { DocumentSegmentation } from "./sections";
+
+export type { ReceiptSectionKind, LineSemanticType, DocumentSegmentation };
 
 export type LayoutRegion = "header" | "body" | "footer";
 
@@ -27,6 +34,8 @@ export interface LayoutLine {
   text: string;
   rawText: string;
   region: LayoutRegion;
+  sectionKind: ReceiptSectionKind;
+  lineSemanticType: LineSemanticType;
   columns?: LayoutLineColumns;
   trailingAmount?: number | null;
   features: LayoutLineFeatures;
@@ -45,6 +54,7 @@ export interface LayoutDocument {
   profileId: string;
   readingOrder: number[];
   regions: LayoutRegions;
+  segmentation: DocumentSegmentation;
   confidence: Confidence;
 }
 
@@ -54,6 +64,12 @@ export function emptyLayoutDocument(profileId = "generic-tr"): LayoutDocument {
     profileId,
     readingOrder: [],
     regions: { header: [], body: [], footer: [] },
+    segmentation: {
+      sections: [],
+      sectionByLineIndex: [],
+      lineTypes: [],
+      parserStates: [],
+    },
     confidence: 0,
   };
 }

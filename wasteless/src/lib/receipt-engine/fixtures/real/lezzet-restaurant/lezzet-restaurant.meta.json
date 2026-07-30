@@ -1,0 +1,9 @@
+{
+  "source": "beta-test-scenario",
+  "immutable": true,
+  "description": "Lezzet restaurant receipt with food items and cash payment",
+  "merchantCategory": "restaurant",
+  "merchantSlug": "lezzet-restaurant",
+  "ingestedAt": "2026-07-30",
+  "origin": "document-parser-regression.test.ts FIXTURES.restaurant"
+}

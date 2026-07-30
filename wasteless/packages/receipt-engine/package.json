@@ -1,0 +1,37 @@
+{
+  "name": "@wasteless/receipt-engine",
+  "version": "0.1.0",
+  "description": "Receipt Engine SDK — standalone receipt parsing platform",
+  "private": true,
+  "main": "../../src/lib/receipt-engine-sdk/index.ts",
+  "types": "../../src/lib/receipt-engine-sdk/index.ts",
+  "exports": {
+    ".": {
+      "types": "../../src/lib/receipt-engine-sdk/index.ts",
+      "default": "../../src/lib/receipt-engine-sdk/index.ts"
+    }
+  },
+  "files": [
+    "../../src/lib/receipt-engine-sdk",
+    "../../src/lib/receipt-engine",
+    "../../src/lib/receipt-engine-quality",
+    "../../src/lib/receipt-engine-debug"
+  ],
+  "scripts": {
+    "benchmark": "tsx ../../src/lib/receipt-engine-sdk/scripts/runBenchmark.ts"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "openai": "^6.49.0",
+    "papaparse": "^5.5.4",
+    "xlsx": "^0.18.5",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

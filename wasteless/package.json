@@ -1,6 +1,6 @@
 {
   "name": "wasteless",
-  "version": "0.0.30",
+  "version": "1.0.0-beta.1",
   "private": true,
   "engines": {
     "node": ">=20"
@@ -12,6 +12,10 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "corpus:build": "tsx src/lib/receipt-engine-quality/scripts/buildCorpus.ts",
+    "quality:dashboard": "tsx src/lib/receipt-engine-quality/scripts/generateRegressionDashboard.ts",
+    "test:quality": "vitest run src/lib/receipt-engine-quality && vitest run src/lib/receipt-engine/__tests__/real-receipt-golden.test.ts && npm run quality:dashboard",
+    "benchmark:sdk": "tsx src/lib/receipt-engine-sdk/scripts/runBenchmark.ts",
     "deploy": "powershell -ExecutionPolicy Bypass -File ./scripts/deploy-cloudflare.ps1",
     "deploy:unix": "bash ./scripts/deploy-cloudflare.sh",
     "cf:whoami": "wrangler whoami",
@@ -51,6 +55,7 @@
     "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.19.4",
     "typescript": "^5",
     "vitest": "^3.2.4",
     "wrangler": "^4.114.0"

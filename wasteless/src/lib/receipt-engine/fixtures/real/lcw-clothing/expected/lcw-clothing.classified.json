@@ -1,0 +1,498 @@
+{
+  "confidence": 0.7527777777777778,
+  "nodes": [
+    {
+      "id": "raw:L0",
+      "graphNodeId": "raw:L0",
+      "semanticKind": "header",
+      "confidence": 0.65,
+      "matchedRules": [
+        "headerClassifier:raw_line"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L0",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "LC WAIKIKI MAGAZACILIK A.S.",
+        "rawText": "LC WAIKIKI MAGAZACILIK A.S.",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "headerClassifier:raw_line"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L1",
+      "graphNodeId": "raw:L1",
+      "semanticKind": "date",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:date"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "time",
+          "confidence": 0.85,
+          "ruleId": "metadataClassifier:time",
+          "reason": "time pattern: 28.07.2026 18:22"
+        },
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:raw_line",
+          "reason": "raw line in header region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L1",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "28.07.2026 18:22",
+        "rawText": "28.07.2026 18:22",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "metadataClassifier:date"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L2",
+      "graphNodeId": "raw:L2",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Tişört %10 299,99",
+        "rawText": "Tişört %10 299,99",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L3",
+      "graphNodeId": "raw:L3",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "raw:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Pantolon %10 499,99",
+        "rawText": "Pantolon %10 499,99",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L4",
+      "graphNodeId": "raw:L4",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM 799,98",
+        "rawText": "TOPLAM 799,98",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "raw:L5",
+      "graphNodeId": "raw:L5",
+      "semanticKind": "payment",
+      "confidence": 0.85,
+      "matchedRules": [
+        "paymentClassifier:label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "raw:L5",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "Kredi Kart 799,98",
+        "rawText": "Kredi Kart 799,98",
+        "graphCreationRule": "passRawLines",
+        "classificationRules": [
+          "paymentClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L0:name",
+      "graphNodeId": "frag:L0:name",
+      "semanticKind": "merchant",
+      "confidence": 0.9,
+      "matchedRules": [
+        "headerClassifier:merchant_scored"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L0:name",
+        "layoutLineIndices": [
+          0
+        ],
+        "sourceText": "LC WAIKIKI MAGAZACILIK A.S.",
+        "rawText": "LC WAIKIKI MAGAZACILIK A.S.",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "headerClassifier:merchant_scored"
+        ],
+        "confidence": 0.9
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L1:name",
+      "graphNodeId": "frag:L1:name",
+      "semanticKind": "date",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:date"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "time",
+          "confidence": 0.85,
+          "ruleId": "metadataClassifier:time",
+          "reason": "time pattern: 28.07.2026 18:22"
+        },
+        {
+          "semanticKind": "header",
+          "confidence": 0.65,
+          "ruleId": "headerClassifier:header_fragment",
+          "reason": "header region name fragment"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L1:name",
+        "layoutLineIndices": [
+          1
+        ],
+        "sourceText": "28.07.2026 18:22",
+        "rawText": "28.07.2026 18:22",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "metadataClassifier:date"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "frag:L2:name",
+      "graphNodeId": "frag:L2:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L2:name",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "Tişört %",
+        "rawText": "Tişört %10 299,99",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L2",
+      "graphNodeId": "amt:L2",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "10 299,99",
+        "rawText": "Tişört %10 299,99",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 10299.99
+    },
+    {
+      "id": "frag:L3:name",
+      "graphNodeId": "frag:L3:name",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "productCandidateClassifier:body_row"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "frag:L3:name",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "Pantolon %",
+        "rawText": "Pantolon %10 499,99",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "productCandidateClassifier:body_row"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L3",
+      "graphNodeId": "amt:L3",
+      "semanticKind": "product",
+      "confidence": 0.65,
+      "matchedRules": [
+        "amountClassifier:product_line_amount"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "10 499,99",
+        "rawText": "Pantolon %10 499,99",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "amount": 10499.99
+    },
+    {
+      "id": "frag:L4:name",
+      "graphNodeId": "frag:L4:name",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "metadataClassifier:total_label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L4:name",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "TOPLAM",
+        "rawText": "TOPLAM 799,98",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "metadataClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L4",
+      "graphNodeId": "amt:L4",
+      "semanticKind": "total",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:total_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L4",
+        "layoutLineIndices": [
+          4
+        ],
+        "sourceText": "799,98",
+        "rawText": "TOPLAM 799,98",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:total_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 799.98
+    },
+    {
+      "id": "frag:L5:name",
+      "graphNodeId": "frag:L5:name",
+      "semanticKind": "payment",
+      "confidence": 0.85,
+      "matchedRules": [
+        "paymentClassifier:label"
+      ],
+      "alternativeCandidates": [
+        {
+          "semanticKind": "footer",
+          "confidence": 0.65,
+          "ruleId": "footerClassifier:footer_region",
+          "reason": "node in footer region"
+        }
+      ],
+      "provenance": {
+        "graphNodeId": "frag:L5:name",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "Kredi Kart",
+        "rawText": "Kredi Kart 799,98",
+        "graphCreationRule": "passColumns:name",
+        "classificationRules": [
+          "paymentClassifier:label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": null
+    },
+    {
+      "id": "amt:L5",
+      "graphNodeId": "amt:L5",
+      "semanticKind": "payment",
+      "confidence": 0.85,
+      "matchedRules": [
+        "amountClassifier:payment_label"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "amt:L5",
+        "layoutLineIndices": [
+          5
+        ],
+        "sourceText": "799,98",
+        "rawText": "Kredi Kart 799,98",
+        "graphCreationRule": "passColumns:amount",
+        "classificationRules": [
+          "amountClassifier:payment_label"
+        ],
+        "confidence": 0.85
+      },
+      "amount": 799.98
+    },
+    {
+      "id": "vat:L2",
+      "graphNodeId": "vat:L2",
+      "semanticKind": "vat",
+      "confidence": 0.65,
+      "matchedRules": [
+        "vatClassifier:vat_token"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "vat:L2",
+        "layoutLineIndices": [
+          2
+        ],
+        "sourceText": "%10",
+        "rawText": "Tişört %10 299,99",
+        "graphCreationRule": "passTokens:vat",
+        "classificationRules": [
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    },
+    {
+      "id": "vat:L3",
+      "graphNodeId": "vat:L3",
+      "semanticKind": "vat",
+      "confidence": 0.65,
+      "matchedRules": [
+        "vatClassifier:vat_token"
+      ],
+      "alternativeCandidates": [],
+      "provenance": {
+        "graphNodeId": "vat:L3",
+        "layoutLineIndices": [
+          3
+        ],
+        "sourceText": "%10",
+        "rawText": "Pantolon %10 499,99",
+        "graphCreationRule": "passTokens:vat",
+        "classificationRules": [
+          "vatClassifier:vat_token"
+        ],
+        "confidence": 0.65
+      },
+      "amount": null
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "merchant": "SHELL & TURCAS PETROL A.S.",
+  "purchaseDate": {
+    "raw": "29.07.2026",
+    "normalized": "2026-07-29"
+  },
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "products": [
+    {
+      "name": "Motorin 29,766 LT 79,17 TL/L",
+      "confidence": 0.65,
+      "provenance": {
+        "productBlockId": "product:raw:L3",
+        "graphNodeIds": [
+          "raw:L3",
+          "frag:L3:name",
+          "qty:L3",
+          "amt:L4"
+        ],
+        "layoutLineIndices": [
+          3,
+          4
+        ],
+        "rawTexts": [
+          "Motorin 29,766 LT 79,17 TL/L",
+          "2356,10 TL"
+        ],
+        "ocrTexts": [
+          "Motorin 29,766 LT 79,17 TL/L",
+          "2356,10 TL"
+        ],
+        "classificationRules": [
+          "productCandidateClassifier:body_row",
+          "productCandidateClassifier:product_token",
+          "amountClassifier:product_line_amount"
+        ],
+        "confidence": 0.65
+      },
+      "quantity": 29.766,
+      "unit": "LT",
+      "unitPrice": 79.17,
+      "lineTotal": 2356.1
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "Kredi Kart",
+      "confidence": 0.85,
+      "provenance": {
+        "footerBlockId": "footer:main",
+        "graphNodeIds": [
+          "raw:L6",
+          "frag:L6:name",
+          "amt:L6"
+        ],
+        "semanticKind": "payment",
+        "confidence": 0.85
+      },
+      "amount": 2356.1
+    }
+  ],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "confidence": 0.85,
+    "provenance": {
+      "footerBlockId": "footer:main",
+      "graphNodeIds": [
+        "raw:L5",
+        "frag:L5:name",
+        "amt:L5"
+      ],
+      "semanticKind": "total",
+      "confidence": 0.85
+    },
+    "amount": 2356.1
+  },
+  "confidence": 0.74375,
+  "provenance": {
+    "metadataBlockId": "metadata:main",
+    "footerBlockId": "footer:main",
+    "blockDocumentConfidence": 0.74375,
+    "rawTexts": [
+      "Motorin 29,766 LT 79,17 TL/L",
+      "2356,10 TL",
+      "TOPLAM 2356,10",
+      "Kredi Kart 2356,10",
+      "29.07.2026 09:15",
+      "SHELL & TURCAS PETROL A.S.",
+      "34 ABC 123"
+    ]
+  }
+}

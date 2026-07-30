@@ -1,5 +1,5 @@
 {
-  "confidence": 0.7625,
+  "confidence": 0.7783333333333332,
   "nodes": [
     {
       "id": "raw:L0",
@@ -146,9 +146,9 @@
       "id": "frag:L0:name",
       "graphNodeId": "frag:L0:name",
       "semanticKind": "merchant",
-      "confidence": 0.65,
+      "confidence": 0.775,
       "matchedRules": [
-        "headerClassifier:merchant"
+        "headerClassifier:merchant_scored"
       ],
       "alternativeCandidates": [
         {
@@ -167,9 +167,9 @@
         "rawText": "A101",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "headerClassifier:merchant"
+          "headerClassifier:merchant_scored"
         ],
-        "confidence": 0.65
+        "confidence": 0.775
       },
       "amount": null
     },
@@ -405,43 +405,6 @@
         "graphCreationRule": "passTokens:vat",
         "classificationRules": [
           "vatClassifier:vat_token"
-        ],
-        "confidence": 0.65
-      },
-      "amount": null
-    },
-    {
-      "id": "qty:L1",
-      "graphNodeId": "qty:L1",
-      "semanticKind": "product",
-      "confidence": 0.65,
-      "matchedRules": [
-        "productCandidateClassifier:product_token"
-      ],
-      "alternativeCandidates": [
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "metadataClassifier:structural_token",
-          "reason": "neutral graph token"
-        },
-        {
-          "semanticKind": "other",
-          "confidence": 0.65,
-          "ruleId": "productCandidateClassifier:structural_token",
-          "reason": "neutral structural token"
-        }
-      ],
-      "provenance": {
-        "graphNodeId": "qty:L1",
-        "layoutLineIndices": [
-          1
-        ],
-        "sourceText": "1.5 L",
-        "rawText": "Su 1.5 L %1 8,90",
-        "graphCreationRule": "passTokens:quantity",
-        "classificationRules": [
-          "productCandidateClassifier:product_token"
         ],
         "confidence": 0.65
       },

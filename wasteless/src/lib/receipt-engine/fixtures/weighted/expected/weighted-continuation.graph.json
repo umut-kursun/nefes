@@ -17,7 +17,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
     },
     {
       "id": "raw:L1",
@@ -36,7 +40,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "raw:L2",
@@ -55,7 +63,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "raw:L3",
@@ -74,7 +86,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "footer",
+        "lineSemanticType": "FooterLine"
+      }
     },
     {
       "id": "raw:L4",
@@ -93,7 +109,11 @@
         "creationRule": "passRawLines",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "frag:L0:name",
@@ -112,7 +132,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "header",
+        "lineSemanticType": "MerchantLine"
+      }
     },
     {
       "id": "frag:L1:name",
@@ -131,7 +155,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "amt:L1",
@@ -150,7 +178,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "frag:L2:name",
@@ -169,7 +201,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.65
       },
-      "confidence": 0.65
+      "confidence": 0.65,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "amt:L3",
@@ -188,7 +224,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "footer",
+        "lineSemanticType": "FooterLine"
+      }
     },
     {
       "id": "frag:L4:name",
@@ -207,7 +247,11 @@
         "creationRule": "passColumns:name",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "amt:L4",
@@ -226,7 +270,11 @@
         "creationRule": "passColumns:amount",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "totals",
+        "lineSemanticType": "TotalLine"
+      }
     },
     {
       "id": "qty:L1",
@@ -245,7 +293,11 @@
         "creationRule": "passTokens:quantity",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     },
     {
       "id": "uprice:L1",
@@ -264,7 +316,11 @@
         "creationRule": "passTokens:unit_price",
         "confidence": 0.85
       },
-      "confidence": 0.85
+      "confidence": 0.85,
+      "meta": {
+        "sectionKind": "products",
+        "lineSemanticType": "ProductNameLine"
+      }
     }
   ],
   "edges": [

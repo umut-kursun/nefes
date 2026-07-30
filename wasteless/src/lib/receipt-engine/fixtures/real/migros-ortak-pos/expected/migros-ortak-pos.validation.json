@@ -1,0 +1,82 @@
+{
+  "isValid": false,
+  "consistent": false,
+  "score": 80,
+  "errors": [
+    {
+      "id": "PaymentSumValidator:PAYMENT_SUM_MISMATCH:payments",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "PAYMENT_SUM_MISMATCH",
+      "message": "Payment sum does not match receipt total.",
+      "location": {
+        "path": "payments"
+      },
+      "provenance": {
+        "validatorId": "PaymentSumValidator",
+        "purchaseConfidence": 0.712
+      },
+      "suggestedFix": "Check split payment rows against total.",
+      "expected": 61.4,
+      "actual": 60.9
+    }
+  ],
+  "warnings": [
+    {
+      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "CURRENCY_MISSING",
+      "message": "Currency is not declared on the receipt.",
+      "location": {
+        "path": "currency"
+      },
+      "provenance": {
+        "validatorId": "CurrencyValidator",
+        "purchaseConfidence": 0.712
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "MetadataCompletenessValidator:METADATA_PARTIAL:metadata",
+      "severity": "INFO",
+      "category": "business",
+      "code": "METADATA_PARTIAL",
+      "message": "Some metadata fields are missing: purchaseTime, currency.",
+      "location": {
+        "path": "metadata"
+      },
+      "provenance": {
+        "validatorId": "MetadataCompletenessValidator",
+        "purchaseConfidence": 0.712
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.2,
+  "overallConfidence": 0.512,
+  "provenance": {
+    "purchaseConfidence": 0.712,
+    "structuralValidators": [
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 3
+  },
+  "blocking": false
+}

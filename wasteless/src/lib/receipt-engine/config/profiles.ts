@@ -1,4 +1,10 @@
 /** Layout profile registry — populated in Phase 2+. */
+/** Optional confidence boost metadata — profiles never required for parsing. */
+export interface ProfileConfidenceBoost {
+  readonly profileId: string;
+  readonly multiplier: number;
+}
+
 export interface LayoutProfile {
   id: string;
   label: string;

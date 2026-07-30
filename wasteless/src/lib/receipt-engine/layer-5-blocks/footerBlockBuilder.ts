@@ -83,11 +83,34 @@ export function buildFooterBlock(
   for (const row of rows) {
     if (row.allNodeIds.some((id) => assigned.has(id))) continue;
 
+    const section = index.sectionOfRaw(row.rawLineId);
+    const lineType = index.lineSemanticTypeOfRaw(row.rawLineId);
     const kind = rowPrimaryKind(row, map);
     const inFooter = row.region === "footer";
     const isFooterKind = FOOTER_KINDS.has(kind);
 
-    if (!inFooter && !isFooterKind) continue;
+    if (section === "products") {
+      if (lineType === "ChargeLine" || kind === "charge") {
+        const entry = buildFooterEntry(row, index, map);
+        pushEntry(charges, entry, assigned);
+        continue;
+      }
+      if (lineType === "DiscountLine" || kind === "discount") {
+        const entry = buildFooterEntry(row, index, map);
+        pushEntry(discounts, entry, assigned);
+        continue;
+      }
+      continue;
+    }
+    if (section === "card_slip") {
+      const entry = buildFooterEntry(row, index, map);
+      pushEntry(unassigned, entry, assigned);
+      continue;
+    }
+
+    if (!inFooter && !isFooterKind && section !== "totals" && section !== "payments" && section !== "vat_summary") {
+      continue;
+    }
     if (kind === "product") continue;
 
     const entry = buildFooterEntry(row, index, map);

@@ -4,7 +4,7 @@
       "id": "product:raw:L1",
       "kind": "product",
       "label": "Peynir 500g",
-      "quantity": "500g",
+      "quantity": null,
       "unit": null,
       "unitPrice": null,
       "totalPrice": 89.9,
@@ -19,23 +19,20 @@
         "raw:L1",
         "frag:L1:name",
         "amt:L1",
-        "vat:L1",
-        "qty:L1"
+        "vat:L1"
       ],
       "nodeRefs": [
         "raw:L1",
         "frag:L1:name",
         "amt:L1",
-        "vat:L1",
-        "qty:L1"
+        "vat:L1"
       ],
       "provenance": {
         "graphNodeIds": [
           "raw:L1",
           "frag:L1:name",
           "amt:L1",
-          "vat:L1",
-          "qty:L1"
+          "vat:L1"
         ],
         "layoutLineIndices": [
           1
@@ -46,8 +43,7 @@
         "classificationRules": [
           "productCandidateClassifier:body_row",
           "amountClassifier:product_line_amount",
-          "vatClassifier:vat_token",
-          "productCandidateClassifier:product_token"
+          "vatClassifier:vat_token"
         ],
         "confidence": 0.65
       },
@@ -57,7 +53,7 @@
       "id": "product:raw:L2",
       "kind": "product",
       "label": "Zeytin 250g",
-      "quantity": "250g",
+      "quantity": null,
       "unit": null,
       "unitPrice": null,
       "totalPrice": 34.5,
@@ -72,23 +68,20 @@
         "raw:L2",
         "frag:L2:name",
         "amt:L2",
-        "vat:L2",
-        "qty:L2"
+        "vat:L2"
       ],
       "nodeRefs": [
         "raw:L2",
         "frag:L2:name",
         "amt:L2",
-        "vat:L2",
-        "qty:L2"
+        "vat:L2"
       ],
       "provenance": {
         "graphNodeIds": [
           "raw:L2",
           "frag:L2:name",
           "amt:L2",
-          "vat:L2",
-          "qty:L2"
+          "vat:L2"
         ],
         "layoutLineIndices": [
           2
@@ -99,8 +92,7 @@
         "classificationRules": [
           "productCandidateClassifier:body_row",
           "amountClassifier:product_line_amount",
-          "vatClassifier:vat_token",
-          "productCandidateClassifier:product_token"
+          "vatClassifier:vat_token"
         ],
         "confidence": 0.65
       },
@@ -171,11 +163,11 @@
         "CARREFOURSA"
       ],
       "classificationRules": [
-        "headerClassifier:merchant"
+        "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.65
+      "confidence": 0.9
     },
-    "confidence": 0.65,
+    "confidence": 0.9,
     "merchant": "CARREFOURSA",
     "date": null,
     "time": null,
@@ -214,5 +206,5 @@
       }
     ]
   },
-  "confidence": 0.69
+  "confidence": 0.74
 }
