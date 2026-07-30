@@ -95,6 +95,6 @@ export async function analyzeReceiptEngineFormData(
       validatedPurchase: result.purchase,
     }),
     imageDataUrl: displayDataUrl,
-    ocrRawText: result.ocrRawText,
+    ocrRawText: result.rawOcr.rawText,
   };
 }
