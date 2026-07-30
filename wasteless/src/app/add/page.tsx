@@ -21,7 +21,7 @@ import {
   toAliasEntries,
 } from "@/lib/product-knowledge";
 import { createId } from "@/lib/utils";
-import { analysisToExpenseDraft, createManualExpense, purchaseDraftToExpenseDraft } from "@/lib/expense-factory";
+import { analysisToExpenseDraft, createManualExpense } from "@/lib/expense-factory";
 import {
   applyCorrectionsToExpense,
   buildCorrectionRecords,
