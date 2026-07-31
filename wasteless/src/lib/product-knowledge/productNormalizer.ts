@@ -75,6 +75,63 @@ export function normalizeOcrText(raw: string): string {
   return text.replace(/\s+/g, " ").trim();
 }
 
+/**
+ * OCR mistake dictionary for well-known brands that thermal printers and the
+ * vision model frequently mangle. Keys are Turkish-folded, uppercased and
+ * punctuation-stripped so "COLA TÜRKIYE" and "COLA TÜRK" both resolve.
+ */
+const BRAND_OCR_FIXES: ReadonlyArray<{ keys: string[]; canonical: string }> = [
+  {
+    keys: ["COLA TURKIYE", "COLA TURK", "COLATURK", "COLATURKIYE", "COLA TURKA"],
+    canonical: "Cola Turka",
+  },
+  {
+    keys: [
+      "ULUDAG LIMONADA SEKSIZ",
+      "ULUDAG LIMONATA SEKSIZ",
+      "ULUDAG LIMONADA SEKERSIZ",
+      "ULUDAG LIMONATA SEKERSIZ",
+    ],
+    canonical: "Uludağ Limonata Şekersiz",
+  },
+];
+
+function titleCaseAsciiRemainder(value: string): string {
+  return value
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+/**
+ * Fix known brand OCR mistakes before generic normalization. Returns the
+ * cleaned display name, or the original string when nothing matches.
+ */
+export function sanitizeBrandOcr(raw: string | null | undefined): string {
+  if (!raw) return raw ?? "";
+  const key = foldTurkish(raw)
+    .toUpperCase()
+    .replace(/[^A-Z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!key) return raw;
+
+  for (const fix of BRAND_OCR_FIXES) {
+    for (const k of fix.keys) {
+      if (key === k) return fix.canonical;
+      if (key.startsWith(`${k} `)) {
+        const remainder = key.slice(k.length).trim();
+        return remainder
+          ? `${fix.canonical} ${titleCaseAsciiRemainder(remainder)}`
+          : fix.canonical;
+      }
+    }
+  }
+  return raw;
+}
+
 /** Extract size tokens for identity-safe matching. */
 export function extractSizeTokens(normalized: string): string[] {
   const tokens: string[] = [];

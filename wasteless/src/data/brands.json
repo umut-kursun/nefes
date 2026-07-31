@@ -12,7 +12,18 @@
   {
     "id": "cola-turka",
     "name": "Cola Turka",
-    "aliases": ["COLA TURKA", "COLATURKA"]
+    "aliases": [
+      "COLA TURKA",
+      "COLATURKA",
+      "COLA TURK",
+      "COLA TURKIYE",
+      "COLATURK"
+    ]
+  },
+  {
+    "id": "uludag",
+    "name": "Uludağ",
+    "aliases": ["ULUDAG", "ULUDAĞ", "ULUDAG LIMONATA", "ULUDAG LIMONADA"]
   },
   {
     "id": "abant",

@@ -1,4 +1,5 @@
 import { normalizeKey } from "@/lib/merchants";
+import { sanitizeBrandOcr } from "@/lib/product-knowledge/productNormalizer";
 
 /** Canonical product *bases* — size variants stay separate after normalize. */
 const PRODUCT_ALIASES: Record<string, string[]> = {
@@ -178,7 +179,7 @@ export function normalizeProductName(
   raw: string | null | undefined
 ): string | null {
   if (!raw) return null;
-  const trimmed = raw.trim();
+  const trimmed = sanitizeBrandOcr(raw.trim());
   if (!trimmed) return null;
 
   const size = parsePackSize(trimmed);

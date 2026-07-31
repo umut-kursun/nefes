@@ -10,6 +10,7 @@ const UNIT_MAP: Readonly<Record<string, string>> = {
   l: "L",
   litre: "L",
   adet: "adet",
+  ad: "adet",
 };
 
 export function parseUnit(text: string): ParsedField<string> {

@@ -462,6 +462,102 @@ export function getSigaraStats(expenses: Expense[]) {
   };
 }
 
+/** Fold Turkish diacritics so query matching is accent/case-insensitive. */
+function foldQuery(value: string): string {
+  return value
+    .toLocaleLowerCase("tr-TR")
+    .replace(/ç/g, "c")
+    .replace(/ğ/g, "g")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ş/g, "s")
+    .replace(/ü/g, "u");
+}
+
+const TOBACCO_QUERY_TERMS = [
+  "sigara",
+  "tutun",
+  "puro",
+  "tobacco",
+  "cigarette",
+  "marlboro",
+  "parliament",
+  "camel",
+  "winston",
+  "kent",
+  "muratti",
+  "chesterfield",
+  "tekel",
+  "davidoff",
+  "rothmans",
+  "lark",
+  "monte carlo",
+];
+
+/** True when a Purchase Memory query is about tobacco/cigarettes. */
+export function isTobaccoQuery(query: string): boolean {
+  const q = foldQuery(query.trim());
+  if (q.length < 2) return false;
+  return TOBACCO_QUERY_TERMS.some((term) => q.includes(term));
+}
+
+export type TobaccoMerchantBreakdown = {
+  name: string;
+  packs: number;
+  spend: number;
+  purchaseCount: number;
+};
+
+export type TobaccoAnalysis = {
+  totalPacks: number;
+  totalSpend: number;
+  purchaseCount: number;
+  /** Average price per pack (₺/paket), null when no packs are recorded. */
+  averagePricePerPack: number | null;
+  merchants: TobaccoMerchantBreakdown[];
+};
+
+/**
+ * Analytical breakdown for the Purchase Memory "Tütün Analizi" card.
+ * Aggregates every cigarette-category expense: total packs, average price per
+ * pack, and a per-merchant split (e.g. Migros vs. Tekel Bayi).
+ */
+export function getTobaccoAnalysis(expenses: Expense[]): TobaccoAnalysis {
+  const rows = expenses.filter((e) => e.category === "sigara");
+  const packsFor = (e: Expense): number =>
+    e.packCount ?? (e.totalAmount > 0 ? 1 : 0);
+
+  const totalPacks = rows.reduce((acc, e) => acc + packsFor(e), 0);
+  const totalSpend = sum(rows);
+
+  const merchantMap = new Map<string, TobaccoMerchantBreakdown>();
+  for (const e of rows) {
+    const name =
+      normalizeMerchantName(e.merchantName) ||
+      e.merchantName?.trim() ||
+      "Bilinmeyen";
+    const current =
+      merchantMap.get(name) ??
+      ({ name, packs: 0, spend: 0, purchaseCount: 0 } as TobaccoMerchantBreakdown);
+    current.packs += packsFor(e);
+    current.spend += e.totalAmount;
+    current.purchaseCount += 1;
+    merchantMap.set(name, current);
+  }
+
+  const merchants = Array.from(merchantMap.values()).sort(
+    (a, b) => b.spend - a.spend
+  );
+
+  return {
+    totalPacks,
+    totalSpend,
+    purchaseCount: rows.length,
+    averagePricePerPack: totalPacks > 0 ? totalSpend / totalPacks : null,
+    merchants,
+  };
+}
+
 export function getMerchantCategoryStats(expenses: Expense[]) {
   const entries = [...expenses].sort((a, b) => b.date.localeCompare(a.date));
 

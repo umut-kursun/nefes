@@ -6,12 +6,14 @@ import { AppIcon } from "@/components/icons";
 import type { Insight } from "@/lib/insights";
 import { cn } from "@/lib/utils";
 
-const AUTO_MS = 5000;
+const AUTO_MS = 10000;
 const PAUSE_MS = 12000;
 
 /**
  * One assistant observation at a time.
- * Auto-rotates every 5s; pauses ~12s after manual swipe/tap on dots.
+ * Auto-rotates every 10s; pauses ~12s after manual swipe/tap on dots.
+ * A fixed min-height keeps the card from resizing (and the page from jumping)
+ * as observations of different lengths cycle in.
  */
 export function AssistantCard({
   insights,
@@ -81,7 +83,7 @@ export function AssistantCard({
       </div>
 
       <div
-        className="relative overflow-hidden rounded-3xl border border-black/[0.04] bg-white p-4 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"
+        className="relative flex min-h-[140px] flex-col justify-center overflow-hidden rounded-3xl border border-black/[0.04] bg-white p-4 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"
         onTouchStart={(e) => {
           touchStartX.current = e.touches[0]?.clientX ?? null;
         }}

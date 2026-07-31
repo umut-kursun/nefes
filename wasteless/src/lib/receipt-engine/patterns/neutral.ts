@@ -9,11 +9,13 @@ export const MONEY_ONLY =
 export const X_TOTAL =
   /^x\s*(\d{1,3}(?:[.\s]\d{3})*(?:[,.]\d{2})|\d+[,.]\d{2}|\d+)$/i;
 
+// `adet` MUST precede the `ad` abbreviation so the full word wins the match.
+// `ad` covers Migros-style multiplier lines like "9 AD x 40,00 TL/AD".
 export const WEIGHTED_PATTERN =
-  /(\d+(?:[.,]\d+)?)\s*(kg|g|gr|gram|ml|lt|l|litre|adet)\s*(?:x|×|\*|@|:)?\s*(\d+(?:[.,]\d+)?)/i;
+  /(\d+(?:[.,]\d+)?)\s*(kg|g|gr|gram|ml|lt|l|litre|adet|ad)\b\s*(?:x|×|\*|@|:)?\s*(\d+(?:[.,]\d+)?)/i;
 
 export const QTY_TOKEN =
-  /\b(\d+(?:[.,]\d+)?)\s*(kg|g|gr|gram|ml|lt|l|litre|adet)\b/i;
+  /\b(\d+(?:[.,]\d+)?)\s*(kg|g|gr|gram|ml|lt|l|litre|adet|ad)\b/i;
 export const QTY_X_EMBED = /\bx\s*(\d{1,3}(?:[.,]\d+)?)\b/i;
 
 export const HAS_LETTERS = /[a-zA-ZçğıöşüÇĞİÖŞÜ]{2,}/;
