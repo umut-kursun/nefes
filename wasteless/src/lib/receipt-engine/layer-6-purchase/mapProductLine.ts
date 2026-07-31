@@ -8,6 +8,7 @@ import {
   parseUnit,
   parseVatRate,
 } from "./parsers";
+import { enforceLineTotal } from "../analysis/receiptFixups";
 
 export function mapProductBlock(block: ProductBlock): PurchaseLine {
   const qtyParsed = block.quantity ? parseQuantity(block.quantity) : null;
@@ -47,6 +48,19 @@ export function mapProductBlock(block: ProductBlock): PurchaseLine {
     vatParsed?.normalized !== undefined
       ? { ...withLineTotal, vatRate: vatParsed.normalized }
       : withLineTotal;
+
+  // Multi-line multipliers ("9 AD x 40,00"): when no explicit line total was
+  // printed but quantity and unit price are known, enforce total = qty × price.
+  if (withVat.lineTotal === undefined) {
+    const derived = enforceLineTotal({
+      quantity: withVat.quantity ?? null,
+      unitPrice: withVat.unitPrice ?? null,
+      lineTotal: null,
+    });
+    if (derived !== undefined) {
+      return Object.freeze({ ...withVat, lineTotal: derived });
+    }
+  }
 
   return Object.freeze(withVat);
 }

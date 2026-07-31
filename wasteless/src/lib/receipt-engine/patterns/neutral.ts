@@ -35,7 +35,7 @@ export const PAYMENT_LABEL =
   /\b(nakit|kart|kredi\s*kart|credit\s*card|para\s*üstü|paraustu|ortak\s*pos|banka\s*kart(?:ı|i)?|sanal\s*pos)\b/i;
 export const DISCOUNT_LABEL = /\b(indirim|discount|kampanya|iskonto)\b/i;
 export const CHARGE_LABEL =
-  /\b(poset|poşet|poseti|ambalaj|hizmet\s*bedel|kurye|teslimat)\b/i;
+  /\b(poset|poşet|poseti|ambalaj|hizmet\s*bedel|kurye|teslimat|nakliye|kargo)\b/i;
 export const VAT_LABEL = /\b(kdv|vat)\b/i;
 export const DATE_PATTERN = /\b(\d{1,2}[./-]\d{1,2}[./-]\d{2,4})\b/;
 export const TIME_PATTERN = /\b(\d{1,2}[:.]\d{2}(?::\d{2})?)\b/;
