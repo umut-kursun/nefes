@@ -345,7 +345,7 @@ function PurchaseMemoryInner() {
         </div>
       )}
 
-      {result && result.hits.length === 0 && (
+      {result && result.hits.length === 0 && !tobacco && (
         <div className="rounded-2xl border border-white/70 bg-white/75 px-4 py-10 text-center">
           <p className="font-medium">Sonuç yok</p>
           <p className="mt-1 text-sm text-muted-foreground">
