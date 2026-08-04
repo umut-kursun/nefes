@@ -2,7 +2,7 @@ import { normalizeKey, normalizeMerchantName } from "@/lib/merchants";
 import type { Expense } from "@/lib/types";
 
 const TOBACCO_QUERY =
-  /\b(sigara|marlboro|tütün|tutun|camel|winston|parliament|tekel|ld\s|l[\s&]?m)\b/i;
+  /\b(sigara|marlboro|tütün|tutun|camel|winston|parliament|tekel|kent|chesterfield|pall\s*mall|muratti|ld\s|l[\s&]?m)\b/i;
 
 const TOBACCO_ITEM =
   /\b(sigara|marlboro|camel|winston|parliament|tekel|tütün|tutun|ld|l[\s&]?m|chesterfield|pall\s*mall|kent|muratti)\b/i;
@@ -16,6 +16,38 @@ function isTobaccoItem(name: string): boolean {
 }
 
 export { isTobaccoItem };
+
+export function isTobaccoExpense(expense: Expense): boolean {
+  if (expense.category === "sigara") return true;
+  if (expense.items.some((i) => isTobaccoItem(i.name))) return true;
+  return TOBACCO_ITEM.test(expense.notes ?? "");
+}
+
+/** Match tobacco query against a deduped purchase record's searchable fields. */
+export function tobaccoItemMatchesQuery(
+  record: {
+    isTobacco: boolean;
+    productName: string;
+    searchProductFields: string[];
+    searchCategoryFields: string[];
+  },
+  queryNormalized: string,
+  queryTokens: string[]
+): boolean {
+  if (!record.isTobacco) return false;
+
+  const fields = [
+    ...record.searchProductFields,
+    ...record.searchCategoryFields,
+    normalizeKey(record.productName),
+  ].filter(Boolean);
+
+  if (fields.some((f) => f.includes(queryNormalized))) return true;
+
+  return queryTokens.every((qt) =>
+    fields.some((f) => f.includes(normalizeKey(qt)))
+  );
+}
 
 function inferPackCount(expense: Expense): number {
   if (expense.packCount != null && expense.packCount > 0) {
@@ -65,12 +97,12 @@ export function buildTobaccoMemoryBreakdowns(
 
   for (const expense of expenses) {
     const tobaccoItems = expense.items.filter((i) => isTobaccoItem(i.name));
-    const isTobaccoExpense =
+    const isTobacco =
       tobaccoItems.length > 0 ||
       expense.category === "sigara" ||
       TOBACCO_ITEM.test(expense.notes ?? "");
 
-    if (!isTobaccoExpense) continue;
+    if (!isTobacco) continue;
 
     const packs =
       tobaccoItems.length > 0
@@ -118,19 +150,20 @@ export function buildTobaccoMemoryBreakdowns(
   };
 }
 
+/** @deprecated Use isTobaccoExpense + tobaccoItemMatchesQuery on purchase index records. */
 export function expenseMatchesTobaccoQuery(
   expense: Expense,
   queryNormalized: string,
   queryTokens: string[]
 ): boolean {
+  if (!isTobaccoExpense(expense)) return false;
+
   const fields = [
-    expense.merchantName,
-    expense.merchantRaw,
-    expense.notes,
-    ...expense.items.map((i) => i.name),
-    ...expense.items.map((i) => i.normalizedName ?? ""),
-    "sigara",
-    "tütün",
+    ...expense.items.filter((i) => isTobaccoItem(i.name)).map((i) => i.name),
+    ...expense.items
+      .filter((i) => isTobaccoItem(i.name))
+      .map((i) => i.normalizedName ?? ""),
+    expense.category === "sigara" ? "sigara" : "",
   ]
     .filter(Boolean)
     .map((f) => normalizeKey(String(f)));

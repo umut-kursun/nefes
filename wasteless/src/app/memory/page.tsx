@@ -565,7 +565,7 @@ function PurchaseMemoryInner() {
   const router = useRouter();
   const pathname = usePathname();
   const urlQuery = params.get("q") ?? "";
-  const { expenses, ready } = useWasteLessStore();
+  const { expenses, categories, ready } = useWasteLessStore();
   const [query, setQuery] = useState(urlQuery);
   const deferredQuery = useDeferredValue(query);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -594,8 +594,8 @@ function PurchaseMemoryInner() {
   }, [deferredQuery, pathname, router]);
 
   const result = useMemo(
-    () => searchPurchaseMemory(expenses, deferredQuery),
-    [expenses, deferredQuery]
+    () => searchPurchaseMemory(expenses, deferredQuery, categories),
+    [expenses, deferredQuery, categories]
   );
 
   const lastRelative = result?.last
@@ -606,7 +606,7 @@ function PurchaseMemoryInner() {
     <AppShell>
       <header className="sticky top-0 z-30 -mx-4 mb-5 flex items-start justify-between gap-3 bg-[color:var(--surface)]/75 px-4 py-3 backdrop-blur-md animate-fade-up">
         <div className="min-w-0">
-          <h1 className="font-display text-2xl tracking-tight">Purchase Memory</h1>
+          <h1 className="font-display text-2xl tracking-tight">Satın alma hafızası</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Ne aldığını, nereden ve kaça hatırla
           </p>
