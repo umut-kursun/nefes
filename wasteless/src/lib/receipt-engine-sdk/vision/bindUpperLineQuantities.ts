@@ -2,6 +2,12 @@ import { parseTrNumber } from "@/lib/receipt-engine/layer-6-purchase/parsers/par
 import type { ParsedReceipt, ReceiptItem } from "../types/ParsedReceipt";
 import { roundLineTotal } from "./parsedReceiptPostProcess";
 import { parseMultiplierText } from "./mergeStandaloneMultiplierProducts";
+import {
+  isCollapsedQuantityLine,
+  lineTotalsMatch,
+  multiplierMathMatchesLine,
+} from "./multiplierBindingUtils";
+
 /** Product row ending with printed line total, e.g. `LAKTOSUZ SÜT 200ML  *99.50`. */
 const PRODUCT_LINE_WITH_TOTAL =
   /^(.+?)\s*\*+\s*(\d+(?:[.,]\d+)?)\s*$/;
@@ -45,7 +51,9 @@ function namesMatch(a: string, b: string): boolean {
   return false;
 }
 
-function parseMultiplierLine(line: string): Omit<UpperLineBinding, "nameHint" | "lineTotal"> | null {
+function parseMultiplierLine(
+  line: string
+): Omit<UpperLineBinding, "nameHint" | "lineTotal"> | null {
   const parsed = parseMultiplierText(line);
   if (!parsed || Number.isNaN(parsed.unitPrice)) return null;
   return {
@@ -54,6 +62,7 @@ function parseMultiplierLine(line: string): Omit<UpperLineBinding, "nameHint" | 
     unitPrice: parsed.unitPrice,
   };
 }
+
 function parseProductLine(line: string): { nameHint: string; lineTotal: number } | null {
   const match = line.trim().match(PRODUCT_LINE_WITH_TOTAL);
   if (!match) return null;
@@ -70,9 +79,15 @@ function pushBinding(
   product: { nameHint: string; lineTotal: number },
   multiplier: Omit<UpperLineBinding, "nameHint" | "lineTotal">
 ): void {
-  const expected = roundLineTotal(multiplier.quantity, multiplier.unitPrice);
-  const delta = Math.abs(expected - product.lineTotal);
-  if (delta > 0.05) return;
+  if (
+    !multiplierMathMatchesLine(
+      multiplier.quantity,
+      multiplier.unitPrice,
+      product.lineTotal
+    )
+  ) {
+    return;
+  }
 
   bindings.push({
     nameHint: product.nameHint,
@@ -110,21 +125,35 @@ export function extractUpperLineBindings(rawText: string): UpperLineBinding[] {
 }
 
 function bindingImprovesItem(item: ReceiptItem, binding: UpperLineBinding): boolean {
-  if (!namesMatch(item.name, binding.nameHint)) return false;
+  const nameOk = namesMatch(item.name, binding.nameHint);
+  const collapsed = isCollapsedQuantityLine(item);
+  const lineOk = lineTotalsMatch(item.lineTotal, binding.lineTotal);
+
+  if (!nameOk && !(collapsed && lineOk)) return false;
+
+  const bindingDelta = Math.abs(
+    roundLineTotal(binding.quantity, binding.unitPrice) - binding.lineTotal
+  );
+  if (bindingDelta > 0.05) return false;
 
   const currentQty = item.quantity ?? 1;
   const currentUnit = item.unitPrice ?? item.lineTotal;
   const currentDelta = Math.abs(roundLineTotal(currentQty, currentUnit) - item.lineTotal);
-  const bindingDelta = Math.abs(
-    roundLineTotal(binding.quantity, binding.unitPrice) - item.lineTotal
-  );
-  const bindingMatchesPrintedTotal =
-    Math.abs(binding.lineTotal - item.lineTotal) <= 0.5;
 
-  if (!bindingMatchesPrintedTotal && bindingDelta > 0.05) return false;
+  if (collapsed && lineOk && binding.quantity > 1) return true;
+
+  if (nameOk) {
+    if (
+      currentQty === binding.quantity &&
+      Math.abs(currentUnit - binding.unitPrice) <= 0.011 &&
+      currentDelta <= 0.011
+    ) {
+      return false;
+    }
+    return binding.quantity > 1 || bindingDelta <= currentDelta;
+  }
 
   if (currentDelta <= 0.011) {
-    // Already math-consistent — still apply when qty/unit split differs from OCR binding.
     return (
       currentQty !== binding.quantity ||
       Math.abs(currentUnit - binding.unitPrice) > 0.011 ||
@@ -145,8 +174,47 @@ function applyBinding(item: ReceiptItem, binding: UpperLineBinding): ReceiptItem
   };
 }
 
+function bindProductsToBindings(
+  products: readonly ReceiptItem[],
+  bindings: readonly UpperLineBinding[]
+): ReceiptItem[] {
+  const usedBindings = new Set<number>();
+  const updated = products.map((item) => ({ ...item }));
+
+  // Pass 1: name + lineTotal (document order).
+  for (let p = 0; p < updated.length; p++) {
+    for (let b = 0; b < bindings.length; b++) {
+      if (usedBindings.has(b)) continue;
+      if (!namesMatch(updated[p]!.name, bindings[b]!.nameHint)) continue;
+      if (!bindingImprovesItem(updated[p]!, bindings[b]!)) continue;
+      updated[p] = applyBinding(updated[p]!, bindings[b]!);
+      usedBindings.add(b);
+      break;
+    }
+  }
+
+  // Pass 2: unique lineTotal match for collapsed rows (name drift / OCR mismatch).
+  for (let b = 0; b < bindings.length; b++) {
+    if (usedBindings.has(b)) continue;
+    const binding = bindings[b]!;
+    const candidates: number[] = [];
+    for (let p = 0; p < updated.length; p++) {
+      if (!lineTotalsMatch(updated[p]!.lineTotal, binding.lineTotal)) continue;
+      if (!isCollapsedQuantityLine(updated[p]!)) continue;
+      if (!bindingImprovesItem(updated[p]!, binding)) continue;
+      candidates.push(p);
+    }
+    if (candidates.length !== 1) continue;
+    const idx = candidates[0]!;
+    updated[idx] = applyBinding(updated[idx]!, binding);
+    usedBindings.add(b);
+  }
+
+  return updated;
+}
+
 /**
- * When rawText is present, bind `{N} ad|kg X {PRICE}` lines directly above product rows.
+ * When rawText is present, bind `{N} ad|kg X {PRICE}` lines to product rows.
  */
 export function bindUpperLineQuantities(parsed: ParsedReceipt): ParsedReceipt {
   if (!parsed.rawText?.trim()) return parsed;
@@ -154,17 +222,8 @@ export function bindUpperLineQuantities(parsed: ParsedReceipt): ParsedReceipt {
   const bindings = extractUpperLineBindings(parsed.rawText);
   if (bindings.length === 0) return parsed;
 
-  const used = new Set<number>();
-  const products = parsed.products.map((item) => {
-    for (let i = 0; i < bindings.length; i++) {
-      if (used.has(i)) continue;
-      if (bindingImprovesItem(item, bindings[i]!)) {
-        used.add(i);
-        return applyBinding(item, bindings[i]!);
-      }
-    }
-    return item;
-  });
-
-  return { ...parsed, products };
+  return {
+    ...parsed,
+    products: bindProductsToBindings(parsed.products, bindings),
+  };
 }

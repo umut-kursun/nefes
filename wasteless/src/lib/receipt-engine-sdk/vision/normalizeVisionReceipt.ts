@@ -108,18 +108,28 @@ export function normalizeVisionReceipt(parsed: ParsedReceipt): ParsedReceipt {
 
   };
 
+  const rebound = bindUpperLineQuantities(sanitized);
+
+  const finalParsed = {
+
+    ...rebound,
+
+    discounts: sanitized.discounts,
+
+  };
 
 
-  const lineChecks = validateParsedReceiptLineItems(sanitized);
 
-  const math = validateParsedReceiptMath(sanitized);
+  const lineChecks = validateParsedReceiptLineItems(finalParsed);
+
+  const math = validateParsedReceiptMath(finalParsed);
 
   const ocrConfidence = parsed.confidence ?? 0.9;
   const lineErrors = hasLineItemMathErrors(lineChecks);
   const mathOk = math.ok && !lineErrors;
 
   return {
-    ...sanitized,
+    ...finalParsed,
     confidence: ocrConfidence,
     mathConsistent: mathOk,
   };

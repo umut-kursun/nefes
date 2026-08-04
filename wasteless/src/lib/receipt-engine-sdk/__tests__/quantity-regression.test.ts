@@ -103,6 +103,93 @@ describe("quantity regression — Migros multipliers", () => {
     expect(finalized.products.every((p) => !/İNDİRİM/i.test(p.name))).toBe(true);
   });
 
+  it("binds İÇİM multiplier-above from rawText on collapsed vision row", () => {
+    const finalized = finalizeVisionParsedReceipt({
+      merchant: { title: "MIGROS", category: "MARKET" },
+      metadata: { purchaseDate: "2026-07-15", currency: "TRY" },
+      products: [
+        {
+          name: "İÇİM RAHAT LAKTOZSUZ",
+          quantity: 1,
+          unit: null,
+          unitPrice: 77.7,
+          lineTotal: 77.7,
+        },
+      ],
+      discounts: [],
+      payments: [],
+      financials: { totalAmount: 77.7 },
+      rawText: "3 AD x 25,90 TL/AD\nİÇİM RAHAT LAKTOZSUZ *77,70",
+    });
+
+    const icim = finalized.products[0]!;
+    expect(icim.quantity).toBe(3);
+    expect(icim.unitPrice).toBeCloseTo(25.9, 2);
+    expect(icim.lineTotal).toBeCloseTo(77.7, 2);
+  });
+
+  it("binds misplaced multiplier row by lineTotal math, not adjacency only", () => {
+    const finalized = finalizeVisionParsedReceipt({
+      merchant: { title: "MIGROS", category: "MARKET" },
+      metadata: { purchaseDate: "2026-07-15", currency: "TRY" },
+      products: [
+        {
+          name: "ALGIDA FRIGOLA",
+          quantity: 1,
+          unitPrice: 360,
+          lineTotal: 360,
+        },
+        {
+          name: "3 AD x 25,90 TL/AD",
+          quantity: 1,
+          unitPrice: 25.9,
+          lineTotal: 25.9,
+        },
+        {
+          name: "MARLBORO EDGE SLIMS",
+          quantity: 1,
+          unitPrice: 460,
+          lineTotal: 460,
+        },
+        {
+          name: "İÇİM RAHAT LAKTOZSUZ",
+          quantity: 1,
+          unitPrice: 77.7,
+          lineTotal: 77.7,
+        },
+      ],
+      discounts: [],
+      payments: [],
+      financials: { totalAmount: 897.7 },
+      rawText: "",
+    });
+
+    const icim = finalized.products.find((p) => /İÇİM/i.test(p.name))!;
+    expect(icim.quantity).toBe(3);
+    expect(icim.unitPrice).toBeCloseTo(25.9, 2);
+    expect(finalized.products.some((p) => /3 AD/i.test(p.name))).toBe(false);
+  });
+
+  it("does not synthesize phantom -0.01 discounts", () => {
+    const finalized = finalizeVisionParsedReceipt({
+      merchant: { title: "MIGROS", category: "MARKET" },
+      metadata: { purchaseDate: "2026-07-15", currency: "TRY" },
+      products: [
+        {
+          name: "ÜRÜN",
+          quantity: 1,
+          unitPrice: 50,
+          lineTotal: 50,
+        },
+      ],
+      discounts: [{ name: "İndirim", amount: 0, linkedProductName: null }],
+      payments: [],
+      financials: { totalAmount: 50 },
+      rawText: "",
+    });
+    expect(finalized.discounts).toHaveLength(0);
+  });
+
   it("binds multiplier only to preceding product (SOFRA EKMEK layout)", () => {
     const parsed: ParsedReceipt = {
       merchant: { title: "MIGROS", category: "MARKET" },

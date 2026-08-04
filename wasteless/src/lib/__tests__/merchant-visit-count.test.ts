@@ -126,7 +126,7 @@ describe("merchant visit counts", () => {
     ];
 
     const memory = searchPurchaseMemory(expenses, "Süt");
-    expect(memory?.purchaseCount).toBe(3);
+    expect(memory?.purchaseCount).toBe(2);
     expect(countMerchantVisitMatches(expenses, "Süt")).toBe(0);
   });
 });

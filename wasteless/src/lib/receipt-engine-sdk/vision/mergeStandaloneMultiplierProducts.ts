@@ -1,14 +1,17 @@
 import { parseTrNumber } from "@/lib/receipt-engine/layer-6-purchase/parsers/parseNumber";
 import type { ParsedReceipt, ReceiptItem } from "../types/ParsedReceipt";
 import { roundLineTotal } from "./parsedReceiptPostProcess";
+import {
+  multiplierMathMatchesLine,
+} from "./multiplierBindingUtils";
 
 /** Full multiplier: `3 AD x 25,90 TL/AD` or `5.59 kg X 19.50`. */
 export const FULL_MULTIPLIER_LINE =
-  /^(\d+(?:[.,]\d+)?)\s+(ad|adet|kg|g)\s+[xX×]\s+(\d+(?:[.,]\d+)?)(?:\s*(?:TL(?:\/(?:AD|KG))?)?)?\s*$/i;
+  /^(\d+(?:[.,]\d+)?)\s*(ad|adet|kg|g)\s+[xX×]\s+(\d+(?:[.,]\d+)?)(?:\s*(?:TL(?:\/(?:AD|KG))?)?)?\s*$/i;
 
 /** Loose multiplier name only: `3 AD`, `9 adet`. */
 const LOOSE_AD_MULTIPLIER =
-  /^(\d+(?:[.,]\d+)?)\s+(?:ad|adet)\s*$/i;
+  /^(\d+(?:[.,]\d+)?)\s*(?:ad|adet)\s*$/i;
 
 export type ParsedMultiplier = {
   quantity: number;
@@ -97,8 +100,11 @@ function bindingMatchesProduct(
   product: ReceiptItem,
   multiplier: ParsedMultiplier
 ): boolean {
-  const expected = roundLineTotal(multiplier.quantity, multiplier.unitPrice);
-  return Math.abs(expected - product.lineTotal) <= 0.05;
+  return multiplierMathMatchesLine(
+    multiplier.quantity,
+    multiplier.unitPrice,
+    product.lineTotal
+  );
 }
 
 function applyMultiplierToProduct(
@@ -114,9 +120,39 @@ function applyMultiplierToProduct(
   };
 }
 
+function multiplierBelowProductInRawText(
+  rawText: string,
+  multiplierLine: string,
+  productName: string
+): boolean | null {
+  const raw = rawText.toLocaleLowerCase("tr-TR");
+  const productKey = productName.replace(/[^a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF]/g, "");
+  if (!productKey) return null;
+  const productIdx = raw.indexOf(productKey.toLocaleLowerCase("tr-TR"));
+  const multIdx = raw.indexOf(multiplierLine.trim().toLocaleLowerCase("tr-TR").slice(0, 12));
+  if (productIdx < 0 || multIdx < 0) return null;
+  return multIdx > productIdx;
+}
+
+function findMathMatchedProductIndex(
+  products: readonly ReceiptItem[],
+  skip: ReadonlySet<number>,
+  multiplier: ParsedMultiplier,
+  excludeMultiplierIdx: number
+): number | null {
+  const matches: number[] = [];
+  for (let j = 0; j < products.length; j++) {
+    if (j === excludeMultiplierIdx || skip.has(j)) continue;
+    const candidate = products[j]!;
+    if (isStandaloneMultiplierProduct(candidate)) continue;
+    if (bindingMatchesProduct(candidate, multiplier)) matches.push(j);
+  }
+  return matches.length === 1 ? matches[0]! : null;
+}
+
 /**
  * When the vision LLM outputs multiplier lines as separate products[] rows,
- * merge qty/unitPrice into the adjacent real product and drop the phantom row.
+ * merge qty/unitPrice into the matching product and drop the phantom row.
  */
 export function mergeStandaloneMultiplierProducts(
   parsed: ParsedReceipt
@@ -152,8 +188,12 @@ export function mergeStandaloneMultiplierProducts(
     if (prevMatch && !nextMatch) targetIdx = i - 1;
     else if (nextMatch && !prevMatch) targetIdx = i + 1;
     else if (prevMatch && nextMatch) {
-      // Multiplier-below (Migros): bind to preceding product only.
-      targetIdx = i - 1;
+      const below = parsed.rawText?.trim()
+        ? multiplierBelowProductInRawText(parsed.rawText, item.name, prev!.name)
+        : null;
+      targetIdx = below === true ? i - 1 : below === false ? i + 1 : i + 1;
+    } else {
+      targetIdx = findMathMatchedProductIndex(products, remove, multiplier, i);
     }
 
     if (targetIdx == null) continue;

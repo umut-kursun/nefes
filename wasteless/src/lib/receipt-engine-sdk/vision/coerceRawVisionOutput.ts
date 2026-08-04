@@ -161,12 +161,8 @@ export function coerceRawVisionOutput(raw: unknown): unknown {
           ? disc.name.trim()
           : "İndirim";
       const amountRaw = toNumber(disc.amount);
-      const amount =
-        amountRaw != null && amountRaw !== 0
-          ? amountRaw < 0
-            ? amountRaw
-            : -Math.abs(amountRaw)
-          : -0.01;
+      if (amountRaw == null || amountRaw === 0) return null;
+      const amount = amountRaw < 0 ? amountRaw : -Math.abs(amountRaw);
       const vat = coerceVatRate(disc.vatRatePercentage);
       return {
         ...disc,

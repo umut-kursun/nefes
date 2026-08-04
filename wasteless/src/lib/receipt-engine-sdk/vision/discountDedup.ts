@@ -3,7 +3,7 @@ import type { DiscountInfo } from "../types/ParsedReceipt";
 const DISCOUNT_AMOUNT_TOLERANCE = 0.02;
 
 export function normalizeDiscountAmount(amount: number): number {
-  if (amount === 0) return -0.01;
+  if (amount === 0) return 0;
   return amount < 0 ? amount : -Math.abs(amount);
 }
 
