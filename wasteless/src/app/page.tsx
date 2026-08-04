@@ -11,7 +11,7 @@ import { AmountInput } from "@/components/amount-input";
 import { DashboardSkeleton } from "@/components/skeleton";
 import { SectionHeader } from "@/components/section-header";
 import { useToast } from "@/components/toast";
-import { AssistantCard } from "@/components/home/assistant-card";
+import { AssistantCard, AssistantEmptyCard } from "@/components/home/assistant-card";
 import { HeroCard } from "@/components/home/hero-card";
 import { PurchaseSearch } from "@/components/home/purchase-search";
 import { QuickActionCard } from "@/components/home/quick-action-card";
@@ -250,7 +250,7 @@ export default function HomePage() {
         <Link
           href="/settings"
           aria-label="Ayarlar"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-black/[0.05] bg-white/80 text-foreground/70 shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
+          className="wl-icon-btn shrink-0 border border-border/60 bg-card/80 text-foreground/70 shadow-sm backdrop-blur-md transition-colors duration-200 hover:bg-card active:scale-95"
         >
           <Settings2 className="h-[18px] w-[18px]" />
         </Link>
@@ -259,7 +259,7 @@ export default function HomePage() {
       {!ready || !now ? (
         <DashboardSkeleton />
       ) : (
-        <div className="space-y-5">
+        <div className="wl-page-stack">
           <div className="animate-fade-up delay-1">
             <HeroCard
               period={period}
@@ -284,7 +284,7 @@ export default function HomePage() {
           <div className="flex gap-2 animate-fade-up delay-2">
             <Link
               href="/reports"
-              className="flex flex-1 items-center gap-4 rounded-2xl border border-black/[0.05] bg-white px-4 py-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+              className="wl-surface flex flex-1 items-center gap-4 px-4 py-3 transition-colors duration-200 hover:bg-accent/20 active:scale-[0.98]"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
                 <BarChart3 className="h-4 w-4" />
@@ -293,7 +293,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/insights"
-              className="flex flex-1 items-center gap-4 rounded-2xl border border-black/[0.05] bg-white px-4 py-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+              className="wl-surface flex flex-1 items-center gap-4 px-4 py-3 transition-colors duration-200 hover:bg-accent/20 active:scale-[0.98]"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
                 <Sparkles className="h-4 w-4" />
@@ -302,9 +302,13 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {assistantInsights.length > 0 && (
+          {assistantInsights.length > 0 ? (
             <div className="animate-fade-up delay-2">
               <AssistantCard insights={assistantInsights} />
+            </div>
+          ) : (
+            <div className="animate-fade-up delay-2">
+              <AssistantEmptyCard />
             </div>
           )}
 

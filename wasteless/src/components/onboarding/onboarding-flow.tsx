@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Camera, Brain, LineChart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,6 +44,8 @@ const STEPS = [
   },
 ] as const;
 
+type BusyAction = "skip" | "next" | "back" | "scan" | "start" | null;
+
 export function OnboardingFlow({
   settings,
   onComplete,
@@ -54,26 +56,33 @@ export function OnboardingFlow({
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [name, setName] = useState(settings.displayName ?? "");
-  const [saving, setSaving] = useState(false);
+  const [busy, setBusy] = useState<BusyAction>(null);
+  const finishingRef = useRef(false);
 
   const current = STEPS[step]!;
   const Icon = current.icon;
   const isLast = step === STEPS.length - 1;
 
-  const finish = useCallback(async (redirectTo = "/") => {
-    setSaving(true);
-    try {
-      await onComplete({
-        ...settings,
-        displayName: name.trim() || settings.displayName || null,
-        onboardingCompleted: true,
-        onboardingCompletedAt: new Date().toISOString(),
-      });
-      router.replace(redirectTo);
-    } finally {
-      setSaving(false);
-    }
-  }, [name, onComplete, router, settings]);
+  const finish = useCallback(
+    async (redirectTo: string, action: BusyAction) => {
+      if (finishingRef.current) return;
+      finishingRef.current = true;
+      setBusy(action);
+      try {
+        await onComplete({
+          ...settings,
+          displayName: name.trim() || settings.displayName || null,
+          onboardingCompleted: true,
+          onboardingCompletedAt: new Date().toISOString(),
+        });
+        router.replace(redirectTo);
+      } catch {
+        finishingRef.current = false;
+        setBusy(null);
+      }
+    },
+    [name, onComplete, router, settings]
+  );
 
   return (
     <div className="flex min-h-[70dvh] flex-col">
@@ -92,12 +101,12 @@ export function OnboardingFlow({
 
       <div
         className={cn(
-          "relative flex flex-1 flex-col overflow-hidden rounded-3xl border border-black/[0.05] bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.06)] animate-fade-up",
+          "wl-surface-hero relative flex flex-1 flex-col overflow-hidden p-6 animate-fade-up",
           `bg-gradient-to-br ${current.accent}`
         )}
       >
         <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <span className="mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-white text-teal-700 shadow-sm">
+          <span className="mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-card text-teal-700 shadow-sm">
             <Icon className="h-8 w-8" strokeWidth={1.8} />
           </span>
           <h2 className="font-display text-2xl font-semibold tracking-tight text-[color:var(--ink)]">
@@ -118,7 +127,7 @@ export function OnboardingFlow({
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Örn. Umut"
                 maxLength={40}
-                className="mt-2 h-11"
+                className="mt-2"
               />
               <p className="mt-1.5 text-xs text-muted-foreground">
                 Ana sayfada seni selamlamak için kullanılır.
@@ -134,7 +143,7 @@ export function OnboardingFlow({
               variant="secondary"
               className="h-12 flex-1 rounded-2xl"
               onClick={() => setStep((s) => s - 1)}
-              disabled={saving}
+              disabled={busy === "back"}
             >
               Geri
             </Button>
@@ -147,7 +156,7 @@ export function OnboardingFlow({
                   variant="secondary"
                   className="h-12 w-full rounded-2xl"
                   onClick={() => setStep((s) => s - 1)}
-                  disabled={saving}
+                  disabled={busy != null}
                 >
                   Geri
                 </Button>
@@ -155,19 +164,19 @@ export function OnboardingFlow({
               <Button
                 type="button"
                 className="h-12 w-full rounded-2xl"
-                onClick={() => void finish("/add?welcome=1")}
-                disabled={saving}
+                onClick={() => void finish("/add?welcome=1", "scan")}
+                disabled={busy === "scan"}
               >
-                {saving ? "Kaydediliyor…" : "İlk fişi tara"}
+                {busy === "scan" ? "Kaydediliyor…" : "İlk fişi tara"}
               </Button>
               <Button
                 type="button"
                 variant="secondary"
                 className="h-12 w-full rounded-2xl"
-                onClick={() => void finish("/")}
-                disabled={saving}
+                onClick={() => void finish("/", "start")}
+                disabled={busy === "start"}
               >
-                Başla
+                {busy === "start" ? "Kaydediliyor…" : "Başla"}
               </Button>
             </div>
           ) : (
@@ -175,7 +184,7 @@ export function OnboardingFlow({
               type="button"
               className="h-12 flex-1 rounded-2xl"
               onClick={() => setStep((s) => s + 1)}
-              disabled={saving}
+              disabled={busy === "next"}
             >
               Devam
             </Button>
@@ -186,11 +195,11 @@ export function OnboardingFlow({
       {step < STEPS.length - 1 && (
         <button
           type="button"
-          className="mt-4 text-center text-sm text-muted-foreground transition hover:text-foreground"
-          onClick={() => void finish("/")}
-          disabled={saving}
+          className="mt-4 min-h-11 text-center text-sm text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
+          onClick={() => void finish("/", "skip")}
+          disabled={busy === "skip"}
         >
-          Atla
+          {busy === "skip" ? "Kaydediliyor…" : "Atla"}
         </button>
       )}
     </div>

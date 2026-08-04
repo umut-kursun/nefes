@@ -32,8 +32,8 @@ export function RecentExpenseCard({ expense }: { expense: Expense }) {
   return (
     <div
       className={cn(
-        "flex items-center gap-3 rounded-2xl border border-black/[0.05] bg-white p-3 shadow-sm transition duration-200",
-        !processing && "hover:-translate-y-0.5",
+        "flex items-center gap-3 rounded-2xl wl-surface p-3 transition-colors duration-200 active:scale-[0.99]",
+        !processing && "hover:bg-accent/20",
         processing && "opacity-90",
         pendingApproval && "ring-1 ring-amber-200/80"
       )}
@@ -75,8 +75,8 @@ export function RecentExpenseCard({ expense }: { expense: Expense }) {
                   : meta.label}
             </span>
             {processing && (
-              <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-medium text-teal-800">
-                Processing…
+              <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-medium text-teal-800 dark:bg-teal-950/50 dark:text-teal-200">
+                İşleniyor…
               </span>
             )}
             {pendingApproval && (
@@ -120,7 +120,7 @@ export function RecentExpenseCard({ expense }: { expense: Expense }) {
         <button
           type="button"
           aria-label="Fişi sil"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-rose-600 transition hover:bg-rose-50 active:scale-95"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-rose-600 transition hover:bg-rose-50 active:scale-95 min-h-11 min-w-11"
           onClick={(e) => {
             e.preventDefault();
             void removeExpense(expense.id);

@@ -18,13 +18,13 @@ export function InsightCard({
       href={insight.href}
       onClick={() => trackInsightViewed(insight.id)}
       className={cn(
-        "block rounded-2xl border border-black/[0.05] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-md active:scale-[0.99]",
+        "wl-surface block p-4 transition-colors duration-200 hover:bg-accent/30 active:scale-[0.99]",
         className
       )}
     >
       <div className="flex items-start gap-3">
         <span
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-teal-800"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-teal-800 dark:bg-teal-950/50 dark:text-teal-200"
           aria-hidden
         >
           <AppIcon name={insight.icon} className="h-5 w-5" />
@@ -33,10 +33,10 @@ export function InsightCard({
           <h3 className="text-[15px] font-semibold leading-tight text-[color:var(--ink)]">
             {insight.title}
           </h3>
-          <p className="mt-1 text-sm leading-snug text-muted-foreground">
+          <p className="mt-1.5 text-sm leading-snug text-muted-foreground">
             {insight.description}
           </p>
-          <p className="mt-2 text-xs font-medium text-primary">Detaya git →</p>
+          <p className="mt-2.5 text-xs font-semibold text-primary">Detayları gör →</p>
         </div>
       </div>
     </Link>

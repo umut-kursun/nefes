@@ -60,7 +60,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           onAction: options?.onAction,
         },
       ]);
-      const duration = options?.onAction ? 8000 : 2800;
+      const duration = options?.onAction ? 7000 : 2600;
       window.setTimeout(() => {
         setItems((prev) => prev.filter((item) => item.id !== id));
       }, duration);
@@ -75,12 +75,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       {mounted &&
         createPortal(
-          <div className="pointer-events-none fixed inset-x-0 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-[90] flex flex-col items-center gap-2 px-4">
+          <div
+            role="status"
+            aria-live="polite"
+            className="pointer-events-none fixed inset-x-0 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-[90] flex flex-col items-center gap-2 px-4"
+          >
             {items.map((item) => (
               <div
                 key={item.id}
+                role={item.actionLabel ? "group" : undefined}
                 className={cn(
-                  "animate-fade-up pointer-events-auto max-w-sm rounded-2xl px-4 py-3 text-sm font-medium shadow-lg",
+                  "animate-fade-up pointer-events-auto max-w-sm rounded-2xl px-4 py-3 text-sm font-medium shadow-lg motion-reduce:animate-none",
                   item.tone === "success" && "bg-teal-800 text-white",
                   item.tone === "danger" && "bg-rose-700 text-white",
                   item.tone === "default" && "bg-stone-900 text-white"

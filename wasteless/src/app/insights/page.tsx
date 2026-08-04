@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { BackButton } from "@/components/back-button";
 import { EmptyState } from "@/components/empty-state";
 import { InsightCard } from "@/components/insight-card";
+import { Skeleton } from "@/components/skeleton";
 import { PremiumTeaser } from "@/components/premium-teaser";
 import { useWasteLessStore } from "@/hooks/use-store";
 import { generateInsights } from "@/lib/insights";
@@ -28,7 +29,11 @@ export default function SmartInsightsPage() {
       </header>
 
       {!ready ? (
-        <p className="text-sm text-muted-foreground">Yükleniyor…</p>
+        <div className="space-y-3">
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+        </div>
       ) : insights.length === 0 ? (
         <EmptyState
           emoji="🧠"

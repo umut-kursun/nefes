@@ -25,6 +25,15 @@
     --radius: 0.9rem;
     --surface: #f4f7f5;
     --ink: #10231f;
+    /* WasteLess design tokens */
+    --wl-radius-card: 1rem;
+    --wl-radius-sheet: 1.5rem;
+    --wl-shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.04);
+    --wl-border-subtle: hsl(150 12% 86% / 0.85);
+    --wl-overlay: rgba(0, 0, 0, 0.4);
+    --wl-duration-fast: 150ms;
+    --wl-duration-normal: 200ms;
+    --wl-duration-slow: 320ms;
   }
 
   .dark {
@@ -48,6 +57,9 @@
     --ring: 172 45% 45%;
     --surface: #101816;
     --ink: #edf6f3;
+    --wl-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.25);
+    --wl-border-subtle: hsl(160 10% 22% / 0.9);
+    --wl-overlay: rgba(0, 0, 0, 0.55);
   }
 
   * {
@@ -101,9 +113,59 @@
   }
 }
 
+@layer components {
+  .wl-surface {
+    @apply rounded-2xl border bg-card text-card-foreground;
+    border-color: var(--wl-border-subtle);
+    box-shadow: var(--wl-shadow-card);
+  }
+
+  .wl-surface-muted {
+    @apply rounded-2xl border bg-card/80 backdrop-blur-md;
+    border-color: var(--wl-border-subtle);
+    box-shadow: var(--wl-shadow-card);
+  }
+
+  .wl-surface-hero {
+    @apply rounded-3xl border bg-card;
+    border-color: var(--wl-border-subtle);
+    box-shadow: var(--wl-shadow-card);
+  }
+
+  .wl-section-title {
+    @apply text-sm font-semibold tracking-wide text-foreground/80;
+  }
+
+  .wl-section-gap {
+    @apply mb-3;
+  }
+
+  .wl-page-stack {
+    @apply space-y-5;
+  }
+
+  .wl-press {
+    @apply transition-transform duration-150 active:scale-[0.98];
+  }
+
+  .wl-icon-btn {
+    @apply inline-flex h-11 w-11 min-h-11 min-w-11 items-center justify-center rounded-xl;
+  }
+
+  .wl-focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+}
+
 @layer utilities {
   .animate-fade-up {
-    animation: fade-up 0.45s ease both;
+    animation: fade-up var(--wl-duration-slow) ease both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-up {
+      animation: none;
+    }
   }
   .delay-1 {
     animation-delay: 0.05s;

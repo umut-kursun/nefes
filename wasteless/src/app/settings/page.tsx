@@ -25,6 +25,7 @@ import {
   fetchRemoteVersion,
 } from "@/lib/app-version";
 import { verifyKbAdminPassword } from "@/lib/product-knowledge/adminAuth";
+import { isDebugClipboardUiEnabled } from "@/lib/receipt-engine-debug/devGuard";
 import {
   exportBetaFeedbackJson,
   getBetaFeedbackQueue,
@@ -43,6 +44,7 @@ export default function SettingsPage() {
   const [remoteVersion, setRemoteVersion] = useState<string | null>(null);
   const [kbDialogOpen, setKbDialogOpen] = useState(false);
   const [feedbackCount, setFeedbackCount] = useState(0);
+  const showDevTools = isDebugClipboardUiEnabled();
 
   useEffect(() => {
     setDark(settings.theme === "dark");
@@ -157,7 +159,7 @@ export default function SettingsPage() {
         </p>
       </header>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="font-semibold">Sürüm</p>
@@ -182,7 +184,7 @@ export default function SettingsPage() {
         </p>
       </section>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">Beta</h2>
         <Button asChild className="w-full justify-start gap-2" variant="secondary">
           <Link href="/feedback">
@@ -219,7 +221,7 @@ export default function SettingsPage() {
         </Button>
       </section>
 
-      <section className="mb-4 space-y-4 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-4 p-4">
         <div className="grid gap-2">
           <Label htmlFor="displayName">Adın</Label>
           <p className="text-xs text-muted-foreground">
@@ -252,7 +254,7 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">Raporlar</h2>
         <p className="text-sm text-muted-foreground">
           Aylık ve yıllık harcama özetleri, kategori trendleri.
@@ -262,7 +264,7 @@ export default function SettingsPage() {
         </Button>
       </section>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">Akıllı içgörüler</h2>
         <p className="text-sm text-muted-foreground">
           Yerel harcama verinden çıkan alışkanlık ve fiyat desenleri.
@@ -272,7 +274,7 @@ export default function SettingsPage() {
         </Button>
       </section>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">Kategoriler</h2>
         <p className="text-sm text-muted-foreground">
           Market, sağlık, giyim… kategorilerini yönet.
@@ -282,7 +284,7 @@ export default function SettingsPage() {
         </Button>
       </section>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">Etiketler</h2>
         <p className="text-sm text-muted-foreground">
           Hafta sonu gezisi, Eskişehir, Tatil 2026…
@@ -292,7 +294,7 @@ export default function SettingsPage() {
         </Button>
       </section>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">Hızlı butonlar</h2>
         <p className="text-sm text-muted-foreground">
           Tek dokunuşluk harcama kısayollarını yönet.
@@ -302,7 +304,8 @@ export default function SettingsPage() {
         </Button>
       </section>
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      {showDevTools && (
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">📦 Ürün bilgi tabanı</h2>
         <p className="text-sm text-muted-foreground">
           Ürün kataloğu, markalar ve global OCR eşleşmeleri.
@@ -315,8 +318,9 @@ export default function SettingsPage() {
           Ürün kataloğunu güncelle
         </Button>
       </section>
+      )}
 
-      <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
+      <section className="wl-surface-muted mb-4 space-y-3 p-4">
         <h2 className="font-semibold">Veri</h2>
         <Button
           className="w-full"
@@ -334,7 +338,7 @@ export default function SettingsPage() {
         </Button>
       </section>
 
-      <section className="rounded-2xl border border-white/70 bg-white/75 p-4 text-sm leading-relaxed text-muted-foreground">
+      <section className="wl-surface-muted p-4 text-sm leading-relaxed text-muted-foreground">
         <h2 className="mb-2 font-semibold text-foreground">Gizlilik notu</h2>
         Harcama kayıtlarınız bu cihazda IndexedDB içinde tutulur. Fiş analizi
         sırasında görsel, yalnızca analiz için sunucu üzerinden OpenAI

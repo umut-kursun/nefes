@@ -224,7 +224,7 @@ export default function ReportsPage() {
             ))}
           </div>
 
-          <section className="rounded-3xl border border-black/[0.05] bg-white p-5 shadow-sm">
+          <section className="wl-surface-hero p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
               {periodLabel(scope, now)}
             </p>
@@ -239,7 +239,7 @@ export default function ReportsPage() {
           </section>
 
           {topCategories.length > 0 && (
-            <section className="rounded-3xl border border-black/[0.05] bg-white p-4 shadow-sm">
+            <section className="wl-surface p-4">
               <h2 className="mb-3 text-sm font-semibold">En çok harcanan</h2>
               <ul className="space-y-2">
                 {topCategories.map((row) => {
@@ -305,7 +305,7 @@ export default function ReportsPage() {
           )}
 
           {topMerchants.length > 0 && (
-            <section className="rounded-3xl border border-black/[0.05] bg-white p-4 shadow-sm">
+            <section className="wl-surface p-4">
               <h2 className="mb-3 text-sm font-semibold">İşyerleri</h2>
               <ul className="space-y-2">
                 {topMerchants.map((row) => (
@@ -334,7 +334,7 @@ export default function ReportsPage() {
             {fuelStats.totalSpend > 0 && (
               <Link
                 href={historyHref(scope, now, { categoryId: fuelId })}
-                className="rounded-2xl border border-black/[0.05] bg-white p-4 shadow-sm transition hover:bg-black/[0.01] active:scale-[0.99]"
+                className="wl-surface p-4 transition-colors hover:bg-accent/20 active:scale-[0.99]"
               >
                 <div className="flex items-center gap-2">
                   <AppIcon name="fuel" className="h-4 w-4 text-blue-700" />
@@ -354,7 +354,7 @@ export default function ReportsPage() {
             {sigaraStats.totalSpend > 0 && (
               <Link
                 href={historyHref(scope, now, { categoryId: "sigara" })}
-                className="rounded-2xl border border-black/[0.05] bg-white p-4 shadow-sm transition hover:bg-black/[0.01] active:scale-[0.99]"
+                className="wl-surface p-4 transition-colors hover:bg-accent/20 active:scale-[0.99]"
               >
                 <div className="flex items-center gap-2">
                   <AppIcon name="cigarette" className="h-4 w-4 text-amber-700" />
@@ -372,7 +372,7 @@ export default function ReportsPage() {
             {groceryStats.totalSpend > 0 && (
               <Link
                 href={historyHref(scope, now)}
-                className="rounded-2xl border border-black/[0.05] bg-white p-4 shadow-sm transition hover:bg-black/[0.01] active:scale-[0.99] sm:col-span-2"
+                className="wl-surface p-4 transition-colors hover:bg-accent/20 active:scale-[0.99] sm:col-span-2"
               >
                 <div className="flex items-center gap-2">
                   <AppIcon name="shopping" className="h-4 w-4 text-teal-700" />

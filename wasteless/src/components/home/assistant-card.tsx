@@ -9,6 +9,33 @@ import { cn } from "@/lib/utils";
 const AUTOPLAY_MS = 3333;
 const PAUSE_AFTER_TOUCH_MS = 30000;
 
+/** Compact empty assistant — visible when no insights yet. */
+export function AssistantEmptyCard({ className }: { className?: string }) {
+  return (
+    <section className={cn("space-y-2", className)}>
+      <div className="flex items-center justify-between px-0.5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          Asistan
+        </p>
+        <Link
+          href="/insights"
+          className="text-xs font-semibold text-primary transition-colors hover:text-primary/90"
+        >
+          Tümü
+        </Link>
+      </div>
+      <div className="wl-surface-muted px-4 py-5">
+        <p className="text-sm font-medium text-[color:var(--ink)]">
+          Veri ekledikçe özetler burada
+        </p>
+        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+          Birkaç fiş veya harcama sonrası alışkanlık ve fiyat desenleri görünür.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 /**
  * One assistant observation at a time.
  * Auto-rotates every ~3.3s; pauses while touched/hovered and for 30s after interaction.
@@ -107,7 +134,7 @@ export function AssistantCard({
       </div>
 
       <div
-        className="relative touch-manipulation overflow-hidden rounded-3xl border border-teal-100/80 bg-gradient-to-br from-teal-50/40 via-white to-blue-50/30 p-4 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"
+        className="wl-surface-hero relative touch-manipulation overflow-hidden border-teal-100/60 bg-gradient-to-br from-teal-50/40 via-card to-blue-50/20 p-4 dark:border-teal-900/40 dark:from-teal-950/20 dark:via-card dark:to-blue-950/10"
         onPointerEnter={() => {
           hoverActive.current = true;
           setAutoplayEnabled(false);
@@ -173,7 +200,7 @@ export function AssistantCard({
               <p className="mt-1 min-h-[2.75rem] text-[15px] font-medium leading-snug text-[color:var(--ink)]">
                 {insight.description}
               </p>
-              <p className="mt-2 text-xs font-medium text-primary">Detaya git →</p>
+              <p className="mt-2 text-xs font-semibold text-primary">Detayları gör →</p>
             </div>
           </div>
         </Link>

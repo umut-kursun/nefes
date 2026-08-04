@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { AppIcon } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function EmptyState({
@@ -12,6 +13,7 @@ export function EmptyState({
   actionLabel,
   actionHref,
   onAction,
+  compact = false,
   className,
 }: {
   icon?: string;
@@ -21,40 +23,44 @@ export function EmptyState({
   actionLabel?: string;
   actionHref?: string;
   onAction?: () => void;
+  compact?: boolean;
   className?: string;
 }) {
-  const actionClass =
-    "mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition active:scale-95";
-
   return (
     <div
       className={cn(
-        "rounded-3xl border border-black/[0.05] bg-white px-6 py-14 text-center shadow-sm animate-fade-up",
+        "wl-surface text-center animate-fade-up",
+        compact ? "px-5 py-8" : "px-6 py-12",
         className
       )}
     >
       {emoji ? (
-        <p className="text-4xl" aria-hidden>
+        <p className={cn("text-4xl", compact ? "text-3xl" : "")} aria-hidden>
           {emoji}
         </p>
       ) : (
-        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-800">
-          <AppIcon name={icon} className="h-7 w-7" />
+        <span
+          className={cn(
+            "mx-auto flex items-center justify-center rounded-2xl bg-teal-50 text-teal-800 dark:bg-teal-950/40 dark:text-teal-200",
+            compact ? "h-12 w-12" : "h-14 w-14"
+          )}
+        >
+          <AppIcon name={icon} className={compact ? "h-6 w-6" : "h-7 w-7"} />
         </span>
       )}
-      <p className="mt-4 font-semibold text-[color:var(--ink)]">{title}</p>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        {description}
+      <p className={cn("font-semibold text-[color:var(--ink)]", compact ? "mt-3" : "mt-4")}>
+        {title}
       </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
       {actionLabel && actionHref && (
-        <Link href={actionHref} className={actionClass}>
-          {actionLabel}
-        </Link>
+        <Button asChild className="mt-5">
+          <Link href={actionHref}>{actionLabel}</Link>
+        </Button>
       )}
       {actionLabel && onAction && !actionHref && (
-        <button type="button" onClick={onAction} className={actionClass}>
+        <Button type="button" onClick={onAction} className="mt-5">
           {actionLabel}
-        </button>
+        </Button>
       )}
     </div>
   );
