@@ -52,7 +52,7 @@ function productLine(
   return Object.freeze({
     name: displayName,
     quantity: qty ?? null,
-    unit,
+    unit: unit ?? undefined,
     unitPrice,
     lineTotal,
     baseUnit: item.baseUnit ?? metrics.baseUnit,

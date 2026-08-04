@@ -125,7 +125,7 @@ function applyBinding(item: ReceiptItem, binding: PosLineBinding): ReceiptItem {
   return {
     ...item,
     quantity: binding.quantity,
-    unit: item.unit ?? binding.unit,
+    unit: item.unit ?? undefined,
     unitPrice: binding.unitPrice,
     lineTotal: binding.lineTotal,
   };
