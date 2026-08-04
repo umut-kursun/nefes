@@ -1,0 +1,8 @@
+{
+  "slug": "migros",
+  "label": "Migros",
+  "category": "market",
+  "legacyRef": "migros-ortak-pos",
+  "image": null,
+  "imageNote": "Add scan to cases/migros/image.jpg"
+}

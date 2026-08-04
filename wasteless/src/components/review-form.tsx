@@ -27,21 +27,41 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Expense } from "@/lib/types";
 import { ChargeType, DiscountType, parseChargeType, parseDiscountType } from "@/lib/receipt-model";
 
+const FUEL_ITEM = /\b(motorin|benzin|dizel|lpg|akaryak[iı]t)\b/i;
+
+function findFuelItemIndex(items: Expense["items"]): number {
+  const idx = items.findIndex((i) => FUEL_ITEM.test(i.name));
+  if (idx >= 0) return idx;
+  return items.length === 1 ? 0 : -1;
+}
+
+function roundMoney(n: number): number {
+  return Math.round(n * 100) / 100;
+}
+
 interface ReviewFormProps {
   initial: Expense;
   onSave: (expense: Expense) => Promise<void> | void;
   onCancel?: () => void;
+  onDelete?: () => void | Promise<void>;
+  deleting?: boolean;
   saving?: boolean;
   /** When true (OCR flow), keep products collapsed for a compact first screen. */
   compactProducts?: boolean;
+  saveLabel?: string;
+  deleteLabel?: string;
 }
 
 export function ReviewForm({
   initial,
   onSave,
   onCancel,
+  onDelete,
   saving,
+  deleting,
   compactProducts = false,
+  saveLabel = "Kaydet",
+  deleteLabel = "Fişi Sil",
 }: ReviewFormProps) {
   const { categories, expenses } = useWasteLessStore();
   const merchantRef = useRef<HTMLInputElement>(null);
@@ -74,6 +94,16 @@ export function ReviewForm({
     }
   }, [compactProducts]);
 
+  useEffect(() => {
+    if (!initial.fuel) return;
+    const cat = resolveCategory(categories, form.category);
+    if (isFuelCategory(cat)) return;
+    const fuelCat = categories.find((c) => isFuelCategory(c));
+    if (fuelCat) {
+      setForm((prev) => ({ ...prev, category: fuelCat.id, fuel: prev.fuel ?? initial.fuel }));
+    }
+  }, [initial.fuel, categories, form.category]);
+
   const consistency = useMemo(
     () =>
       checkReceiptConsistency(
@@ -105,9 +135,8 @@ export function ReviewForm({
   };
 
   const updateFuel = (key: string, value: string | number | null) => {
-    setForm((prev) => ({
-      ...prev,
-      fuel: {
+    setForm((prev) => {
+      const nextFuel = {
         fuelType: prev.fuel?.fuelType ?? null,
         liters: prev.fuel?.liters ?? null,
         pricePerLiter: prev.fuel?.pricePerLiter ?? null,
@@ -115,8 +144,37 @@ export function ReviewForm({
         odometer: prev.fuel?.odometer ?? null,
         plate: prev.fuel?.plate ?? null,
         [key]: value === "" || value === null ? null : value,
-      },
-    }));
+      };
+      let items = prev.items;
+      const idx = showFuel ? findFuelItemIndex(prev.items) : -1;
+      if (idx >= 0 && (key === "liters" || key === "pricePerLiter")) {
+        items = [...prev.items];
+        const item = { ...items[idx]! };
+        if (key === "liters" && typeof value === "number") {
+          item.quantity = value;
+          item.unit = "LT";
+          const ppl = nextFuel.pricePerLiter;
+          if (ppl != null && ppl > 0) {
+            item.unitPrice = ppl;
+            item.totalPrice = roundMoney(value * ppl);
+          }
+        }
+        if (key === "pricePerLiter" && typeof value === "number") {
+          item.unitPrice = value;
+          const liters = nextFuel.liters;
+          if (liters != null && liters > 0) {
+            item.totalPrice = roundMoney(liters * value);
+          }
+        }
+        items[idx] = item;
+      }
+      return {
+        ...prev,
+        fuel: nextFuel,
+        items,
+        updatedAt: new Date().toISOString(),
+      };
+    });
   };
 
   const updatePlate = (value: string) => {
@@ -452,6 +510,45 @@ export function ReviewForm({
               highlightLowConfidence={compactProducts}
               onChange={(items) => {
                 setAckInconsistency(false);
+                if (showFuel) {
+                  const idx = findFuelItemIndex(items);
+                  if (idx >= 0) {
+                    const fuelLine = items[idx]!;
+                    const liters =
+                      fuelLine.quantity != null && fuelLine.quantity > 0
+                        ? fuelLine.quantity
+                        : null;
+                    let pricePerLiter = form.fuel?.pricePerLiter ?? null;
+                    if (
+                      liters != null &&
+                      fuelLine.totalPrice != null &&
+                      fuelLine.totalPrice > 0
+                    ) {
+                      pricePerLiter = roundMoney(
+                        fuelLine.totalPrice / liters
+                      );
+                    } else if (
+                      fuelLine.unitPrice != null &&
+                      fuelLine.unitPrice > 0
+                    ) {
+                      pricePerLiter = fuelLine.unitPrice;
+                    }
+                    setForm((prev) => ({
+                      ...prev,
+                      items,
+                      fuel: {
+                        fuelType: prev.fuel?.fuelType ?? null,
+                        liters,
+                        pricePerLiter,
+                        stationName: prev.fuel?.stationName ?? null,
+                        odometer: prev.fuel?.odometer ?? null,
+                        plate: prev.fuel?.plate ?? null,
+                      },
+                      updatedAt: new Date().toISOString(),
+                    }));
+                    return;
+                  }
+                }
                 update("items", items);
               }}
             />
@@ -501,24 +598,37 @@ export function ReviewForm({
         </div>
       )}
 
-      <div className="sticky bottom-24 flex gap-3 pt-2">
-        {onCancel && (
+      <div className="sticky bottom-24 space-y-2 pt-2">
+        {onDelete && (
           <Button
             type="button"
-            variant="outline"
-            className="flex-1"
-            onClick={onCancel}
+            variant="ghost"
+            className="w-full text-rose-700 hover:bg-rose-50 hover:text-rose-800"
+            disabled={deleting || saving}
+            onClick={() => void onDelete()}
           >
-            İptal
+            {deleting ? "Siliniyor…" : deleteLabel}
           </Button>
         )}
-        <Button
-          type="submit"
-          className="flex-1"
-          disabled={saving || (consistency.inconsistent && !ackInconsistency)}
-        >
-          {saving ? "Kaydediliyor..." : "Kaydet"}
-        </Button>
+        <div className="flex gap-3">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1"
+              onClick={onCancel}
+            >
+              İptal
+            </Button>
+          )}
+          <Button
+            type="submit"
+            className="flex-1"
+            disabled={saving || deleting || (consistency.inconsistent && !ackInconsistency)}
+          >
+            {saving ? "Kaydediliyor..." : saveLabel}
+          </Button>
+        </div>
       </div>
     </form>
   );

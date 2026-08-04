@@ -135,9 +135,9 @@
       "classificationRules": [
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.8500000000000001
+      "confidence": 0.95
     },
-    "confidence": 0.8500000000000001,
+    "confidence": 0.95,
     "merchant": "BIM",
     "date": null,
     "time": null,
@@ -187,5 +187,5 @@
       }
     ]
   },
-  "confidence": 0.75
+  "confidence": 0.775
 }

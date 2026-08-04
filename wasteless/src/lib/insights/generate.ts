@@ -5,6 +5,7 @@ import { getCheapestMerchantInsight } from "./cheapest-merchant";
 import { getCoffeeFrequency } from "./coffee-frequency";
 import { getCigaretteSpending } from "./cigarette-spending";
 import { getDaysSinceLastPurchase } from "./days-since-last-purchase";
+import { getSamePeriodMonthInsight } from "./same-period-month";
 import { getFuelMonthTrend } from "./fuel-month-trend";
 import { getHighestSpendingCategory } from "./highest-spending-category";
 import { getHighestSpendingProduct } from "./highest-spending-product";
@@ -24,6 +25,7 @@ import { pickHomeInsights } from "./pick-home";
 import type { Insight, InsightContext } from "./types";
 
 const GENERATORS: Array<(ctx: InsightContext) => Insight | null> = [
+  getSamePeriodMonthInsight,
   getFuelMonthTrend,
   getCigaretteSpending,
   getSavingsOpportunity,

@@ -1,47 +1,32 @@
 {
   "isValid": false,
   "consistent": false,
-  "score": 80,
+  "score": 85,
   "errors": [
     {
-      "id": "ReceiptTotalValidator:TOTAL_MISMATCH:total.amount",
+      "id": "ReceiptTotalValidator:MISSING_CHARGE:total.amount",
       "severity": "ERROR",
       "category": "structural",
-      "code": "TOTAL_MISMATCH",
-      "message": "Declared total does not match product, charge, and discount sums.",
+      "code": "MISSING_CHARGE",
+      "message": "Ürün toplamı fiş tutarından yüksek — poşet, kargo veya servis bedeli eksik olabilir.",
       "location": {
         "path": "total.amount"
       },
       "provenance": {
         "validatorId": "ReceiptTotalValidator",
-        "purchaseConfidence": 0.7233333333333334,
+        "purchaseConfidence": 0.7266666666666667,
         "graphNodeIds": [
           "raw:L4",
           "frag:L4:name",
           "amt:L4"
         ]
       },
-      "suggestedFix": "Review line totals, charges, and discounts against footer total.",
+      "suggestedFix": "charges[] içine eksik ek ücret satırını ekleyin.",
       "expected": 1205.5,
       "actual": 205.5
     }
   ],
-  "warnings": [
-    {
-      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
-      "severity": "WARNING",
-      "category": "business",
-      "code": "CURRENCY_MISSING",
-      "message": "Currency is not declared on the receipt.",
-      "location": {
-        "path": "currency"
-      },
-      "provenance": {
-        "validatorId": "CurrencyValidator",
-        "purchaseConfidence": 0.7233333333333334
-      }
-    }
-  ],
+  "warnings": [],
   "info": [
     {
       "id": "ReceiptNumberValidator:RECEIPT_NUMBER_MISSING:receiptNumber",
@@ -54,7 +39,7 @@
       },
       "provenance": {
         "validatorId": "ReceiptNumberValidator",
-        "purchaseConfidence": 0.7233333333333334
+        "purchaseConfidence": 0.7266666666666667
       }
     },
     {
@@ -68,14 +53,14 @@
       },
       "provenance": {
         "validatorId": "MetadataCompletenessValidator",
-        "purchaseConfidence": 0.7233333333333334
+        "purchaseConfidence": 0.7266666666666667
       }
     }
   ],
-  "confidenceAdjustment": -0.2,
-  "overallConfidence": 0.5233333333333334,
+  "confidenceAdjustment": -0.15,
+  "overallConfidence": 0.5766666666666667,
   "provenance": {
-    "purchaseConfidence": 0.7233333333333334,
+    "purchaseConfidence": 0.7266666666666667,
     "structuralValidators": [
       "ReceiptTotalValidator",
       "SubtotalValidator",
@@ -95,7 +80,7 @@
       "UnknownFieldValidator",
       "AnomalyValidator"
     ],
-    "issueCount": 4
+    "issueCount": 3
   },
   "blocking": false
 }

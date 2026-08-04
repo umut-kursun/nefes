@@ -60,15 +60,54 @@ function expense(partial: Partial<Expense> & Pick<Expense, "id" | "date">): Expe
 }
 
 describe("proactive insights", () => {
-  it("fuel month trend detects increase", () => {
+  it("fuel month trend detects increase from day 6 with same-period compare", () => {
     const now = new Date("2026-07-15");
+    const fuel = {
+      liters: 40,
+      pricePerLiter: 50,
+      fuelType: "Motorin" as const,
+      plate: null,
+      stationName: null,
+    };
     const expenses = [
-      expense({ id: "1", date: "2026-07-10", category: "akaryakit", totalAmount: 2000 }),
-      expense({ id: "2", date: "2026-06-10", category: "akaryakit", totalAmount: 1000 }),
+      expense({
+        id: "1",
+        date: "2026-07-10",
+        category: "akaryakit",
+        totalAmount: 2000,
+        fuel: { ...fuel, liters: 40, pricePerLiter: 50 },
+      }),
+      expense({
+        id: "2",
+        date: "2026-06-10",
+        category: "akaryakit",
+        totalAmount: 1000,
+        fuel: { ...fuel, liters: 20, pricePerLiter: 50 },
+      }),
     ];
     const insight = getFuelMonthTrend({ expenses, categories, tags: [], now });
     expect(insight).not.toBeNull();
-    expect(insight!.description).toMatch(/akaryakıt|yakıt/i);
+    expect(insight!.description).toMatch(/akaryakıt|yakıt|aynı dönem|ilk 15 gün/i);
+  });
+
+  it("fuel month trend suppressed in first 5 days", () => {
+    const now = new Date("2026-07-03");
+    const expenses = [
+      expense({
+        id: "1",
+        date: "2026-07-01",
+        category: "akaryakit",
+        totalAmount: 5000,
+      }),
+      expense({
+        id: "2",
+        date: "2026-06-01",
+        category: "akaryakit",
+        totalAmount: 100,
+      }),
+    ];
+    const insight = getFuelMonthTrend({ expenses, categories, tags: [], now });
+    expect(insight).toBeNull();
   });
 
   it("coffee frequency counts kahve items", () => {

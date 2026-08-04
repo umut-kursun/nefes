@@ -1,0 +1,9 @@
+{
+  "profile": "fuel",
+  "merchant": "BP",
+  "purchaseDate": "2026-07-29",
+  "products": [
+    { "name": "Motorin", "quantity": 35.5, "unit": "LT", "lineTotal": 2786.75 }
+  ],
+  "total": 2786.75
+}

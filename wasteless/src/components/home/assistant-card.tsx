@@ -6,12 +6,12 @@ import { AppIcon } from "@/components/icons";
 import type { Insight } from "@/lib/insights";
 import { cn } from "@/lib/utils";
 
-const AUTO_MS = 5000;
-const PAUSE_MS = 12000;
+const AUTOPLAY_MS = 3333;
+const PAUSE_AFTER_TOUCH_MS = 30000;
 
 /**
  * One assistant observation at a time.
- * Auto-rotates every 5s; pauses ~12s after manual swipe/tap on dots.
+ * Auto-rotates every ~3.3s; pauses while touched/hovered and for 30s after interaction.
  */
 export function AssistantCard({
   insights,
@@ -22,13 +22,34 @@ export function AssistantCard({
 }) {
   const [index, setIndex] = useState(0);
   const [fade, setFade] = useState(true);
-  const pauseUntil = useRef(0);
+  const [autoplayEnabled, setAutoplayEnabled] = useState(true);
+  const touchActive = useRef(false);
+  const hoverActive = useRef(false);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartX = useRef<number | null>(null);
   const insightKey = useMemo(
     () => insights.map((i) => i.id).join("|"),
     [insights]
   );
   const count = insights.length;
+
+  const scheduleResume = useCallback((delayMs: number) => {
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => {
+      if (!touchActive.current && !hoverActive.current) {
+        setAutoplayEnabled(true);
+      }
+      resumeTimer.current = null;
+    }, delayMs);
+  }, []);
+
+  const pauseAutoplay = useCallback(
+    (delayMs = PAUSE_AFTER_TOUCH_MS) => {
+      setAutoplayEnabled(false);
+      scheduleResume(delayMs);
+    },
+    [scheduleResume]
+  );
 
   const goTo = useCallback(
     (next: number, manual = false) => {
@@ -39,9 +60,9 @@ export function AssistantCard({
         setIndex(i);
         setFade(true);
       }, 120);
-      if (manual) pauseUntil.current = Date.now() + PAUSE_MS;
+      if (manual) pauseAutoplay(PAUSE_AFTER_TOUCH_MS);
     },
-    [count]
+    [count, pauseAutoplay]
   );
 
   useEffect(() => {
@@ -50,17 +71,22 @@ export function AssistantCard({
   }, [insightKey]);
 
   useEffect(() => {
-    if (count <= 1) return;
+    return () => {
+      if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (count <= 1 || !autoplayEnabled) return;
     const id = window.setInterval(() => {
-      if (Date.now() < pauseUntil.current) return;
       setFade(false);
       window.setTimeout(() => {
         setIndex((prev) => (prev + 1) % count);
         setFade(true);
       }, 120);
-    }, AUTO_MS);
+    }, AUTOPLAY_MS);
     return () => window.clearInterval(id);
-  }, [count, insightKey]);
+  }, [count, insightKey, autoplayEnabled]);
 
   if (count === 0) return null;
 
@@ -74,20 +100,53 @@ export function AssistantCard({
         </p>
         <Link
           href="/insights"
-          className="text-xs font-semibold text-primary transition hover:underline"
+          className="text-xs font-semibold text-primary transition-all duration-200 hover:underline"
         >
           Tümü
         </Link>
       </div>
 
       <div
-        className="relative overflow-hidden rounded-3xl border border-black/[0.04] bg-white p-4 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"
+        className="relative touch-manipulation overflow-hidden rounded-3xl border border-teal-100/80 bg-gradient-to-br from-teal-50/40 via-white to-blue-50/30 p-4 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"
+        onPointerEnter={() => {
+          hoverActive.current = true;
+          setAutoplayEnabled(false);
+        }}
+        onPointerLeave={() => {
+          hoverActive.current = false;
+          if (!touchActive.current) {
+            scheduleResume(400);
+          }
+        }}
+        onPointerDown={(e) => {
+          if (e.pointerType === "touch" || e.pointerType === "pen") {
+            touchActive.current = true;
+          }
+          pauseAutoplay(PAUSE_AFTER_TOUCH_MS);
+        }}
+        onPointerUp={() => {
+          touchActive.current = false;
+          if (!hoverActive.current) {
+            scheduleResume(PAUSE_AFTER_TOUCH_MS);
+          }
+        }}
+        onPointerCancel={() => {
+          touchActive.current = false;
+          if (!hoverActive.current) {
+            scheduleResume(PAUSE_AFTER_TOUCH_MS);
+          }
+        }}
         onTouchStart={(e) => {
+          touchActive.current = true;
+          pauseAutoplay(PAUSE_AFTER_TOUCH_MS);
           touchStartX.current = e.touches[0]?.clientX ?? null;
         }}
         onTouchEnd={(e) => {
           const start = touchStartX.current;
           touchStartX.current = null;
+          touchActive.current = false;
+          pauseAutoplay(PAUSE_AFTER_TOUCH_MS);
+
           if (start == null || count <= 1) return;
           const end = e.changedTouches[0]?.clientX ?? start;
           const dx = end - start;
@@ -98,19 +157,20 @@ export function AssistantCard({
         <Link
           href={insight.href}
           className={cn(
-            "block transition-opacity duration-300 active:scale-[0.99]",
+            "block min-h-[7.75rem] transition-all duration-200 active:scale-[0.99]",
             fade ? "opacity-100" : "opacity-0"
           )}
+          onClick={() => pauseAutoplay(PAUSE_AFTER_TOUCH_MS)}
         >
-          <div className="flex items-start gap-3">
+          <div className="flex min-h-[7.75rem] items-start gap-4">
             <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-50 text-teal-800">
               <AppIcon name={insight.icon} className="h-5 w-5" />
             </span>
-            <div className="min-w-0 flex-1">
+            <div className="min-h-[5.5rem] min-w-0 flex-1 py-0.5">
               <p className="text-[13px] font-semibold text-foreground/70">
                 {insight.title}
               </p>
-              <p className="mt-1 text-[15px] font-medium leading-snug text-[color:var(--ink)]">
+              <p className="mt-1 min-h-[2.75rem] text-[15px] font-medium leading-snug text-[color:var(--ink)]">
                 {insight.description}
               </p>
               <p className="mt-2 text-xs font-medium text-primary">Detaya git →</p>
@@ -126,9 +186,13 @@ export function AssistantCard({
                 type="button"
                 aria-label={`Gözlem ${i + 1}`}
                 aria-current={i === index}
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                  pauseAutoplay(PAUSE_AFTER_TOUCH_MS);
+                }}
                 onClick={() => goTo(i, true)}
                 className={cn(
-                  "h-1.5 rounded-full transition-all duration-300",
+                  "h-1.5 rounded-full transition-all duration-200",
                   i === index ? "w-4 bg-teal-700" : "w-1.5 bg-black/15"
                 )}
               />

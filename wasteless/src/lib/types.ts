@@ -36,6 +36,11 @@ export interface ReceiptItem {
   quantity: number | null;
   unit: string | null;
   unitPrice: number | null;
+  /** TL/L, TL/kg, or TL/ad — comparable across purchases. */
+  normalizedUnitPrice?: number | null;
+  baseUnit?: "L" | "kg" | "ad" | null;
+  variantSize?: string | null;
+  productKey?: string | null;
   totalPrice: number | null;
   categoryGuess: ExpenseCategory | null;
   /** Verbatim OCR line — never overwritten by corrections. */
@@ -63,9 +68,17 @@ export interface UserTag {
   updatedAt: string;
 }
 
+export type ParseStatus =
+  | "processing"
+  | "pending_approval"
+  | "ready"
+  | "failed";
+
 export interface Expense {
   id: string;
   sourceType: SourceType;
+  /** Background receipt parse state (optional for legacy rows). */
+  parseStatus?: ParseStatus | null;
   date: string;
   /** Purchase time HH:mm when known (from OCR or user). */
   time: string | null;

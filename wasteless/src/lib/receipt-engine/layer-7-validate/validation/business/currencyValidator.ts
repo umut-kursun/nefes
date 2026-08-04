@@ -11,7 +11,16 @@ export function validateCurrency(purchase: PurchaseDraft): ValidatorResult {
   const issues: ValidationIssue[] = [];
   const currency = purchase.currency;
 
+  const inferredTry =
+    !currency &&
+    (purchase.receiptNumber ||
+      purchase.merchant ||
+      purchase.products.length > 0);
+
   if (!currency) {
+    if (inferredTry) {
+      return buildValidatorResult(ID, "business", issues);
+    }
     issues.push(
       createIssue({
         validatorId: ID,

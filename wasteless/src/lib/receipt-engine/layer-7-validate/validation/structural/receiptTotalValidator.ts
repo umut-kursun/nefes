@@ -3,6 +3,10 @@ import type { ValidationIssue, ValidatorResult } from "../../../types/models/val
 import { createIssue } from "../issueFactory";
 import { buildValidatorResult } from "../scoring";
 import { nearlyEqual, sumAmounts } from "../issueFactory";
+import {
+  diagnoseReceiptTotalMismatch,
+  findProductAlignmentDiagnosis,
+} from "./receiptTotalDiagnostics";
 
 const ID = "ReceiptTotalValidator";
 
@@ -31,20 +35,41 @@ export function validateReceiptTotal(purchase: PurchaseDraft): ValidatorResult {
     return buildValidatorResult(ID, "structural", issues);
   }
 
-  if (!nearlyEqual(expected, declared)) {
+  const alignment = findProductAlignmentDiagnosis(purchase);
+  if (alignment) {
     issues.push(
       createIssue({
         validatorId: ID,
         category: "structural",
-        code: "TOTAL_MISMATCH",
+        code: alignment.code,
         severity: "ERROR",
-        message: "Declared total does not match product, charge, and discount sums.",
+        message: alignment.message,
+        path: "products",
+        purchase,
+        suggestedFix: alignment.suggestedFix,
+      })
+    );
+  }
+
+  if (!nearlyEqual(expected, declared)) {
+    const diagnosis = diagnoseReceiptTotalMismatch(purchase);
+    issues.push(
+      createIssue({
+        validatorId: ID,
+        category: "structural",
+        code: diagnosis?.code ?? "TOTAL_MISMATCH",
+        severity: "ERROR",
+        message:
+          diagnosis?.message ??
+          "Declared total does not match product, charge, and discount sums.",
         path: "total.amount",
         expected,
         actual: declared,
         purchase,
         graphNodeIds: purchase.total?.provenance.graphNodeIds,
-        suggestedFix: "Review line totals, charges, and discounts against footer total.",
+        suggestedFix:
+          diagnosis?.suggestedFix ??
+          "Review line totals, charges, and discounts against footer total.",
       })
     );
   }

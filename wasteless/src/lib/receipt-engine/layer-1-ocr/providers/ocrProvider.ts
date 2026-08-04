@@ -18,6 +18,8 @@ export interface OcrExtractOutput {
   readonly lines?: readonly OcrExtractLine[];
   readonly source: OcrSource;
   readonly documentConfidence?: number;
+  /** Exact OpenAI message.content before any parsing — debug export only. */
+  readonly rawVisionResponse?: string;
 }
 
 export interface OcrProvider {

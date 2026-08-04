@@ -1,0 +1,8 @@
+{
+  "profile": "e-arsiv",
+  "merchant": "ABC TEKNOLOJI",
+  "purchaseDate": "2026-07-29",
+  "productCount": 1,
+  "total": 350,
+  "forbiddenProductPatterns": ["KDV", "Fatura"]
+}

@@ -1,0 +1,13 @@
+{
+  "profile": "market",
+  "merchant": "MIGROS",
+  "purchaseDate": "2026-07-29",
+  "receiptNumber": "123456",
+  "products": [
+    { "name": "EKMEK", "lineTotal": 15 },
+    { "name": "SUT", "lineTotal": 45.9 }
+  ],
+  "payments": [{ "label": "ORTAK POS", "amount": 60.9 }],
+  "total": 61.4,
+  "forbiddenProductPatterns": ["TOPLAM", "TOPKDV", "ORTAK"]
+}

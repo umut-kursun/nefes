@@ -112,7 +112,7 @@
       "confidence": 0.85,
       "meta": {
         "sectionKind": "products",
-        "lineSemanticType": "FuelLine"
+        "lineSemanticType": "ProductNameLine"
       }
     },
     {
@@ -342,7 +342,7 @@
       "confidence": 0.85,
       "meta": {
         "sectionKind": "products",
-        "lineSemanticType": "FuelLine"
+        "lineSemanticType": "ProductNameLine"
       }
     },
     {
@@ -365,7 +365,7 @@
       "confidence": 0.85,
       "meta": {
         "sectionKind": "products",
-        "lineSemanticType": "FuelLine"
+        "lineSemanticType": "ProductNameLine"
       }
     },
     {
@@ -595,7 +595,7 @@
       "confidence": 0.85,
       "meta": {
         "sectionKind": "products",
-        "lineSemanticType": "FuelLine"
+        "lineSemanticType": "ProductNameLine"
       }
     }
   ],

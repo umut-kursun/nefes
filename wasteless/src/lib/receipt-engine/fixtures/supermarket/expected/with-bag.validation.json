@@ -1,7 +1,7 @@
 {
   "isValid": true,
   "consistent": true,
-  "score": 85,
+  "score": 90,
   "errors": [],
   "warnings": [
     {
@@ -15,21 +15,7 @@
       },
       "provenance": {
         "validatorId": "DateValidator",
-        "purchaseConfidence": 0.7274999999999999
-      }
-    },
-    {
-      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
-      "severity": "WARNING",
-      "category": "business",
-      "code": "CURRENCY_MISSING",
-      "message": "Currency is not declared on the receipt.",
-      "location": {
-        "path": "currency"
-      },
-      "provenance": {
-        "validatorId": "CurrencyValidator",
-        "purchaseConfidence": 0.7274999999999999
+        "purchaseConfidence": 0.7499999999999999
       }
     },
     {
@@ -43,7 +29,7 @@
       },
       "provenance": {
         "validatorId": "MetadataCompletenessValidator",
-        "purchaseConfidence": 0.7274999999999999
+        "purchaseConfidence": 0.7499999999999999
       }
     }
   ],
@@ -59,14 +45,14 @@
       },
       "provenance": {
         "validatorId": "ReceiptNumberValidator",
-        "purchaseConfidence": 0.7274999999999999
+        "purchaseConfidence": 0.7499999999999999
       }
     }
   ],
-  "confidenceAdjustment": -0.15000000000000002,
-  "overallConfidence": 0.5774999999999999,
+  "confidenceAdjustment": -0.1,
+  "overallConfidence": 0.6499999999999999,
   "provenance": {
-    "purchaseConfidence": 0.7274999999999999,
+    "purchaseConfidence": 0.7499999999999999,
     "structuralValidators": [
       "ReceiptTotalValidator",
       "SubtotalValidator",
@@ -86,7 +72,7 @@
       "UnknownFieldValidator",
       "AnomalyValidator"
     ],
-    "issueCount": 4
+    "issueCount": 3
   },
   "blocking": false
 }

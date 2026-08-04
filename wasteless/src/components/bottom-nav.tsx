@@ -17,8 +17,15 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-[color:var(--surface)]/92 backdrop-blur-xl pb-[env(safe-area-inset-bottom)]">
-      <div className="mx-auto grid max-w-lg grid-cols-5 px-1 pt-1">
+    <nav
+      className={cn(
+        "fixed inset-x-0 bottom-0 z-40 border-t border-white/50",
+        "bg-[color:var(--surface)]/68 backdrop-blur-md supports-[backdrop-filter]:bg-[color:var(--surface)]/58",
+        "pb-[env(safe-area-inset-bottom)]",
+        "shadow-[0_-6px_28px_rgba(15,23,42,0.07)]"
+      )}
+    >
+      <div className="mx-auto grid max-w-lg grid-cols-5 px-0.5 pt-0.5">
         {items.map((item) => {
           const active =
             item.href === "/"
@@ -33,18 +40,20 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex min-h-[64px] flex-col items-center justify-center gap-1 rounded-xl text-[11px] font-medium transition-all duration-200 active:scale-95",
+                "flex min-h-[58px] flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-1.5",
+                "text-[10.5px] font-medium leading-none tracking-tight",
+                "transition-all duration-200 active:scale-95",
                 active ? "text-primary" : "text-muted-foreground"
               )}
             >
               <Icon
                 className={cn(
-                  "h-5 w-5 transition-transform duration-200",
-                  active && "scale-110"
+                  "h-[22px] w-[22px] shrink-0 transition-transform duration-200",
+                  active && "scale-105"
                 )}
-                strokeWidth={active ? 2.4 : 2}
+                strokeWidth={active ? 2.35 : 2}
               />
-              {item.label}
+              <span className="max-w-full truncate">{item.label}</span>
             </Link>
           );
         })}

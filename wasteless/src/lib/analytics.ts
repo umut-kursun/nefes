@@ -28,11 +28,114 @@ import type {
 import { normalizeMerchantName, normalizeKey } from "@/lib/merchants";
 import { computeUnitPrice, normalizeProductName } from "@/lib/products";
 import { getRootCategoryId } from "@/lib/category-hierarchy";
+import {
+  formatEarlyMonthInsight,
+  formatSamePeriodMonthInsight,
+  getSamePeriodMonthBounds,
+  isMonthTrendReady,
+} from "@/lib/analytics/month-comparison";
+import {
+  buildFuelMemoryBreakdowns,
+  expenseMatchesFuelQuery,
+  fuelMemoryMetrics,
+  fuelUnitPriceForExpense,
+  inferFuelDisplayName,
+  isFuelMemoryExpense,
+  isFuelMemoryQuery,
+  isValidFuelExpense,
+  type FuelMemoryBreakdowns,
+} from "@/lib/fuel-memory";
+import {
+  buildTobaccoMemoryBreakdowns,
+  expenseMatchesTobaccoQuery,
+  isTobaccoItem,
+  isTobaccoMemoryQuery,
+  type TobaccoMemoryBreakdowns,
+} from "@/lib/tobacco-memory";
 import { toPercent } from "@/lib/utils";
+
+export {
+  formatEarlyMonthInsight,
+  formatSamePeriodMonthCaption,
+  formatSamePeriodMonthInsight,
+  getSamePeriodMonthBounds,
+  isMonthTrendReady,
+  MONTH_TREND_MIN_DAY,
+} from "@/lib/analytics/month-comparison";
 
 export type PeriodScope = "day" | "week" | "month" | "year";
 
 const weekOpts = { weekStartsOn: 1 as const };
+
+/** Expenses that count toward spending totals (excludes in-flight / pending drafts). */
+export function isSpendingExpense(expense: Expense): boolean {
+  const status = expense.parseStatus;
+  return (
+    status !== "processing" &&
+    status !== "pending_approval" &&
+    status !== "failed"
+  );
+}
+
+export function spendingExpenses(expenses: Expense[]): Expense[] {
+  return expenses.filter(isSpendingExpense);
+}
+
+/** Canonical merchant visit counts — one per spending expense, normalized merchant name. */
+export function aggregateMerchantVisitCounts(
+  expenses: Expense[]
+): Map<string, number> {
+  const map = new Map<string, number>();
+  for (const expense of spendingExpenses(expenses)) {
+    const name =
+      normalizeMerchantName(expense.merchantName) ||
+      expense.merchantName?.trim();
+    if (!name) continue;
+    map.set(name, (map.get(name) ?? 0) + 1);
+  }
+  return map;
+}
+
+/** Merchant with the highest visit count among spending expenses. */
+export function getTopMerchantByVisits(
+  expenses: Expense[]
+): { name: string; count: number } | null {
+  const top = Array.from(aggregateMerchantVisitCounts(expenses).entries()).sort(
+    (a, b) => b[1] - a[1]
+  )[0];
+  if (!top || top[1] < 1) return null;
+  return { name: top[0], count: top[1] };
+}
+
+function expenseMerchantNameMatchesQuery(
+  expense: Expense,
+  queryTokens: string[],
+  queryNormalized: string
+): boolean {
+  const merchantFields = [expense.merchantName, expense.merchantRaw];
+  for (const field of merchantFields) {
+    if (exactNormalizedEquals(field, queryNormalized)) return true;
+  }
+  for (const field of merchantFields) {
+    if (tokensCoverQuery(tokenizeSearchText(field), queryTokens)) return true;
+  }
+  return false;
+}
+
+/** Spending expense visits whose merchant name matches the memory search query. */
+export function countMerchantVisitMatches(
+  expenses: Expense[],
+  query: string
+): number {
+  const q = query.trim();
+  if (q.length < 2) return 0;
+  const queryNormalized = normalizeKey(q);
+  const queryTokens = tokenizeSearchText(q);
+  if (!queryNormalized || queryTokens.length === 0) return 0;
+  return spendingExpenses(expenses).filter((expense) =>
+    expenseMerchantNameMatchesQuery(expense, queryTokens, queryNormalized)
+  ).length;
+}
 
 function inRange(expense: Expense, start: Date, end: Date): boolean {
   const date = parseISO(expense.date);
@@ -44,6 +147,7 @@ function sum(expenses: Expense[]): number {
 }
 
 export function getPeriodTotals(expenses: Expense[], now = new Date()) {
+  const rows = spendingExpenses(expenses);
   const todayStart = startOfDay(now);
   const todayEnd = endOfDay(now);
   const weekStart = startOfWeek(now, weekOpts);
@@ -57,28 +161,33 @@ export function getPeriodTotals(expenses: Expense[], now = new Date()) {
   const prevDayEnd = endOfDay(subDays(now, 1));
   const prevWeekStart = startOfWeek(subWeeks(now, 1), weekOpts);
   const prevWeekEnd = endOfWeek(subWeeks(now, 1), weekOpts);
-  const prevMonthStart = startOfMonth(subMonths(now, 1));
-  const prevMonthEnd = endOfMonth(subMonths(now, 1));
   const prevYearStart = startOfYear(subYears(now, 1));
   const prevYearEnd = endOfYear(subYears(now, 1));
 
-  const daily = sum(expenses.filter((e) => inRange(e, todayStart, todayEnd)));
-  const weekly = sum(expenses.filter((e) => inRange(e, weekStart, weekEnd)));
-  const monthly = sum(expenses.filter((e) => inRange(e, monthStart, monthEnd)));
-  const yearly = sum(expenses.filter((e) => inRange(e, yearStart, yearEnd)));
+  const daily = sum(rows.filter((e) => inRange(e, todayStart, todayEnd)));
+  const weekly = sum(rows.filter((e) => inRange(e, weekStart, weekEnd)));
+  const monthly = sum(rows.filter((e) => inRange(e, monthStart, monthEnd)));
+  const yearly = sum(rows.filter((e) => inRange(e, yearStart, yearEnd)));
 
   const prevDaily = sum(
-    expenses.filter((e) => inRange(e, prevDayStart, prevDayEnd))
+    rows.filter((e) => inRange(e, prevDayStart, prevDayEnd))
   );
   const prevWeekly = sum(
-    expenses.filter((e) => inRange(e, prevWeekStart, prevWeekEnd))
+    rows.filter((e) => inRange(e, prevWeekStart, prevWeekEnd))
   );
+  const prevMonthBounds = getSamePeriodMonthBounds(now);
   const prevMonthly = sum(
-    expenses.filter((e) => inRange(e, prevMonthStart, prevMonthEnd))
+    rows.filter((e) =>
+      inRange(e, prevMonthBounds.previousStart, prevMonthBounds.previousEnd)
+    )
   );
   const prevYearly = sum(
-    expenses.filter((e) => inRange(e, prevYearStart, prevYearEnd))
+    rows.filter((e) => inRange(e, prevYearStart, prevYearEnd))
   );
+
+  const monthlyTrend = prevMonthBounds.trendReady
+    ? toPercent(monthly, prevMonthly)
+    : null;
 
   return {
     daily,
@@ -88,8 +197,15 @@ export function getPeriodTotals(expenses: Expense[], now = new Date()) {
     trends: {
       daily: toPercent(daily, prevDaily),
       weekly: toPercent(weekly, prevWeekly),
-      monthly: toPercent(monthly, prevMonthly),
+      monthly: monthlyTrend,
       yearly: toPercent(yearly, prevYearly),
+    },
+    samePeriodMonth: {
+      dayCount: prevMonthBounds.dayCount,
+      trendReady: prevMonthBounds.trendReady,
+      current: monthly,
+      previous: prevMonthly,
+      trend: monthlyTrend,
     },
   };
 }
@@ -115,7 +231,7 @@ export function getPeriodOverview(
   categories: UserCategory[] = []
 ) {
   const { start, end } = getPeriodRange(scope, now);
-  const scoped = expenses.filter((e) => inRange(e, start, end));
+  const scoped = spendingExpenses(expenses).filter((e) => inRange(e, start, end));
 
   const catMap = new Map<string, number>();
   const merchMap = new Map<string, number>();
@@ -146,15 +262,14 @@ export function getInsightLine(
   if (totals.daily === 0) {
     return "Bugün henüz bir harcama yok 🎉";
   }
-  if (totals.trends.monthly != null) {
-    const abs = Math.round(Math.abs(totals.trends.monthly));
-    if (totals.trends.monthly < 0) {
-      return `Bu ay geçen aya göre %${abs} daha az harcadın.`;
-    }
-    if (totals.trends.monthly > 0) {
-      return `Bu ay geçen aya göre %${abs} daha fazla harcadın.`;
-    }
-    return "Bu ay geçen ay ile aynı seviyedesin.";
+  if (totals.samePeriodMonth && !totals.samePeriodMonth.trendReady) {
+    return formatEarlyMonthInsight();
+  }
+  if (totals.trends.monthly != null && totals.samePeriodMonth) {
+    return formatSamePeriodMonthInsight(
+      totals.trends.monthly,
+      totals.samePeriodMonth.dayCount
+    );
   }
   if (totals.trends.weekly != null && totals.trends.weekly < 0) {
     return `Bu hafta geçen haftaya göre %${Math.round(
@@ -185,7 +300,7 @@ export function getCategoryBreakdown(
     end = endOfMonth(now);
   }
 
-  const filtered = expenses.filter((e) => inRange(e, start, end));
+  const filtered = spendingExpenses(expenses).filter((e) => inRange(e, start, end));
   const map = new Map<ExpenseCategory, { total: number; count: number }>();
 
   for (const expense of filtered) {
@@ -256,6 +371,63 @@ export function getParentCategoryBreakdown(
     .sort((a, b) => b.total - a.total);
 }
 
+function getParentCategoryBreakdownInRange(
+  expenses: Expense[],
+  categories: UserCategory[],
+  start: Date,
+  end: Date
+): ParentBreakdownRow[] {
+  const filtered = spendingExpenses(expenses).filter((e) => inRange(e, start, end));
+  const map = new Map<ExpenseCategory, { total: number; count: number }>();
+
+  for (const expense of filtered) {
+    const current = map.get(expense.category) ?? { total: 0, count: 0 };
+    current.total += expense.totalAmount || 0;
+    current.count += 1;
+    map.set(expense.category, current);
+  }
+
+  const leafRows = Array.from(map.entries())
+    .map(([category, data]) => ({ category, ...data }))
+    .sort((a, b) => b.total - a.total);
+
+  const parentMap = new Map<
+    string,
+    {
+      total: number;
+      count: number;
+      children: Map<string, { total: number; count: number }>;
+    }
+  >();
+
+  for (const row of leafRows) {
+    const parentId = getRootCategoryId(row.category, categories);
+    const bucket = parentMap.get(parentId) ?? {
+      total: 0,
+      count: 0,
+      children: new Map(),
+    };
+    bucket.total += row.total;
+    bucket.count += row.count;
+    const child = bucket.children.get(row.category) ?? { total: 0, count: 0 };
+    child.total += row.total;
+    child.count += row.count;
+    bucket.children.set(row.category, child);
+    parentMap.set(parentId, bucket);
+  }
+
+  return Array.from(parentMap.entries())
+    .map(([category, data]) => ({
+      category,
+      total: data.total,
+      count: data.count,
+      children: Array.from(data.children.entries())
+        .map(([childId, c]) => ({ category: childId, ...c }))
+        .sort((a, b) => b.total - a.total),
+    }))
+    .sort((a, b) => b.total - a.total);
+}
+
 export function getParentCategoryBreakdownWithTrend(
   expenses: Expense[],
   categories: UserCategory[],
@@ -263,6 +435,24 @@ export function getParentCategoryBreakdownWithTrend(
   now = new Date()
 ) {
   const current = getParentCategoryBreakdown(expenses, categories, scope, now);
+
+  if (scope === "month") {
+    const bounds = getSamePeriodMonthBounds(now);
+    if (!bounds.trendReady) {
+      return current.map((row) => ({ ...row, trend: null as number | null }));
+    }
+    const previous = getParentCategoryBreakdownInRange(
+      expenses,
+      categories,
+      bounds.previousStart,
+      bounds.previousEnd
+    );
+    const prevMap = new Map(previous.map((p) => [p.category, p.total]));
+    return current.map((row) => ({
+      ...row,
+      trend: toPercent(row.total, prevMap.get(row.category) ?? 0),
+    }));
+  }
 
   let prevNow: Date;
   if (scope === "day") prevNow = subDays(now, 1);
@@ -318,7 +508,7 @@ export function getDailySeries(
   for (let i = 0; i < days; i++) {
     map.set(format(addDays(start, i), "yyyy-MM-dd"), 0);
   }
-  for (const expense of expenses) {
+  for (const expense of spendingExpenses(expenses)) {
     if (!map.has(expense.date)) continue;
     map.set(expense.date, (map.get(expense.date) ?? 0) + (expense.totalAmount || 0));
   }
@@ -376,28 +566,32 @@ export function groupExpensesByDate(
 }
 
 export function getCategoryInsights(expenses: Expense[], now = new Date()) {
-  const totalSpend = sum(expenses);
-  const count = expenses.length;
+  const rows = spendingExpenses(expenses);
+  const totalSpend = sum(rows);
+  const count = rows.length;
   const averageSpend = count > 0 ? totalSpend / count : 0;
   const biggest =
     count > 0
-      ? [...expenses].sort((a, b) => b.totalAmount - a.totalAmount)[0]
+      ? [...rows].sort((a, b) => b.totalAmount - a.totalAmount)[0]
       : null;
 
   const monthStart = startOfMonth(now);
   const monthEnd = endOfMonth(now);
-  const prevMonthStart = startOfMonth(subMonths(now, 1));
-  const prevMonthEnd = endOfMonth(subMonths(now, 1));
+  const monthBounds = getSamePeriodMonthBounds(now);
 
   const thisMonth = sum(
-    expenses.filter((e) => inRange(e, monthStart, monthEnd))
+    rows.filter((e) => inRange(e, monthStart, monthEnd))
   );
   const lastMonth = sum(
-    expenses.filter((e) => inRange(e, prevMonthStart, prevMonthEnd))
+    rows.filter((e) =>
+      inRange(e, monthBounds.previousStart, monthBounds.previousEnd)
+    )
   );
-  const monthlyTrend = toPercent(thisMonth, lastMonth);
+  const monthlyTrend = monthBounds.trendReady
+    ? toPercent(thisMonth, lastMonth)
+    : null;
 
-  const days = new Set(expenses.map((e) => e.date)).size;
+  const days = new Set(rows.map((e) => e.date)).size;
   const visitFrequency =
     days > 0 ? count / Math.max(days, 1) : 0;
 
@@ -409,14 +603,15 @@ export function getCategoryInsights(expenses: Expense[], now = new Date()) {
     thisMonth,
     lastMonth,
     monthlyTrend,
+    samePeriodDayCount: monthBounds.dayCount,
+    samePeriodTrendReady: monthBounds.trendReady,
     uniqueDays: days,
     visitFrequency,
   };
 }
 
 export function getFuelStats(expenses: Expense[]) {
-  // Caller already scopes the list (e.g. category filter).
-  const rows = expenses;
+  const rows = spendingExpenses(expenses).filter(isValidFuelExpense);
   const withLiters = rows.filter((e) => e.fuel?.liters && e.fuel.liters > 0);
   const withPrice = rows.filter(
     (e) => e.fuel?.pricePerLiter && e.fuel.pricePerLiter > 0
@@ -428,12 +623,9 @@ export function getFuelStats(expenses: Expense[]) {
     0
   );
   const prices = withPrice.map((e) => e.fuel!.pricePerLiter!);
-  const avgPrice =
-    totalLiters > 0
-      ? totalSpend / totalLiters
-      : prices.length
-        ? prices.reduce((a, b) => a + b, 0) / prices.length
-        : null;
+  const avgPrice = prices.length
+    ? prices.reduce((a, b) => a + b, 0) / prices.length
+    : null;
 
   return {
     totalSpend,
@@ -448,7 +640,9 @@ export function getFuelStats(expenses: Expense[]) {
 }
 
 export function getSigaraStats(expenses: Expense[]) {
-  const entries = [...expenses].sort((a, b) => b.date.localeCompare(a.date));
+  const entries = [...spendingExpenses(expenses)].sort((a, b) =>
+    b.date.localeCompare(a.date)
+  );
   const packCount = entries.reduce(
     (acc, e) => acc + (e.packCount ?? (e.totalAmount > 0 ? 1 : 0)),
     0
@@ -562,6 +756,10 @@ export type PurchaseMemoryResult = {
   mostExpensive: PurchaseMemoryHit | null;
   cheapest: PurchaseMemoryHit | null;
   stores: string[];
+  /** Fuel-only breakdowns when query is akaryakıt / fuel type search. */
+  fuelBreakdowns: FuelMemoryBreakdowns | null;
+  /** Tobacco-only breakdowns for sigara / tütün queries. */
+  tobaccoBreakdowns: TobaccoMemoryBreakdowns | null;
 };
 
 /**
@@ -793,12 +991,22 @@ function bestMerchantMatchRank(
   queryNormalized: string
 ): MatchVerdict | null {
   const merchantFields = [expense.merchantName, expense.merchantRaw];
+  const fuelFields = [
+    expense.fuel?.stationName,
+    expense.fuel?.fuelType,
+    expense.subcategory,
+  ];
   for (const field of merchantFields) {
     if (exactNormalizedEquals(field, queryNormalized)) {
       return { rank: MATCH_EXACT_MERCHANT, specificity: 0 };
     }
   }
   for (const field of merchantFields) {
+    if (tokensCoverQuery(tokenizeSearchText(field), queryTokens)) {
+      return { rank: MATCH_WORD_MERCHANT, specificity: 0 };
+    }
+  }
+  for (const field of fuelFields) {
     if (tokensCoverQuery(tokenizeSearchText(field), queryTokens)) {
       return { rank: MATCH_WORD_MERCHANT, specificity: 0 };
     }
@@ -812,7 +1020,12 @@ function bestMerchantMatchRank(
   return null;
 }
 
+function fuelUnitPrice(expense: Expense): number | null {
+  return fuelUnitPriceForExpense(expense);
+}
+
 function effectivePrice(hit: PurchaseMemoryHit): number | null {
+  if (hit.unitLabel === "₺/L") return hit.unitPrice ?? null;
   return hit.unitPrice ?? hit.price;
 }
 
@@ -842,8 +1055,97 @@ export function searchPurchaseMemory(
   if (!queryNormalized || queryTokens.length === 0) return null;
 
   const rankedHits: RankedMemoryHit[] = [];
+  const rows = spendingExpenses(expenses);
+  const fuelQuery = isFuelMemoryQuery(q);
+  const tobaccoQuery = isTobaccoMemoryQuery(q);
 
-  for (const expense of expenses) {
+  if (fuelQuery) {
+    for (const expense of rows.filter(isFuelMemoryExpense)) {
+      if (!expenseMatchesFuelQuery(expense, queryNormalized, queryTokens)) {
+        continue;
+      }
+      const store =
+        normalizeMerchantName(expense.merchantName) || expense.merchantName;
+      const metrics = fuelMemoryMetrics(expense);
+      rankedHits.push({
+        itemName: inferFuelDisplayName(expense),
+        normalizedName: null,
+        rawText: expense.rawText,
+        expenseId: expense.id,
+        date: expense.date,
+        store,
+        price: expense.totalAmount,
+        unitPrice: metrics.unitPrice,
+        unitLabel: metrics.unitLabel ?? "₺/L",
+        quantity: metrics.quantity,
+        unit: metrics.unit ?? "LT",
+        currency: expense.currency,
+        hasReceipt: !!expense.imageDataUrl,
+        matchRank: MATCH_EXACT_MERCHANT,
+        matchSpecificity: 100,
+      });
+    }
+  } else if (tobaccoQuery) {
+    for (const expense of rows) {
+      if (!expenseMatchesTobaccoQuery(expense, queryNormalized, queryTokens)) {
+        continue;
+      }
+      for (const item of expense.items.filter((i) => isTobaccoItem(i.name))) {
+        const unitInfo = computeUnitPrice({
+          totalPrice: item.totalPrice ?? expense.totalAmount,
+          quantity: item.quantity,
+          unit: item.unit,
+          name: item.name,
+          existingUnitPrice: item.normalizedUnitPrice ?? item.unitPrice,
+        });
+        const identityName =
+          normalizeProductName(item.name) ||
+          item.normalizedName ||
+          item.name;
+        rankedHits.push({
+          itemName: identityName,
+          normalizedName: item.normalizedName,
+          rawText: item.rawText,
+          expenseId: expense.id,
+          date: expense.date,
+          store:
+            normalizeMerchantName(expense.merchantName) || expense.merchantName,
+          price: item.totalPrice ?? expense.totalAmount,
+          unitPrice: item.normalizedUnitPrice ?? unitInfo.unitPrice,
+          unitLabel: unitInfo.unitLabel,
+          quantity: item.quantity ?? unitInfo.packAmount,
+          unit: item.unit ?? unitInfo.packUnit,
+          currency: expense.currency,
+          hasReceipt: !!expense.imageDataUrl,
+          matchRank: MATCH_EXACT_PRODUCT,
+          matchSpecificity: 100,
+        });
+      }
+      if (expense.items.length === 0 && expense.category === "sigara") {
+        rankedHits.push({
+          itemName: "Sigara",
+          normalizedName: null,
+          rawText: expense.rawText,
+          expenseId: expense.id,
+          date: expense.date,
+          store:
+            normalizeMerchantName(expense.merchantName) || expense.merchantName,
+          price: expense.totalAmount,
+          unitPrice:
+            expense.packCount && expense.packCount > 0
+              ? expense.totalAmount / expense.packCount
+              : expense.totalAmount,
+          unitLabel: "₺/paket",
+          quantity: expense.packCount ?? 1,
+          unit: "paket",
+          currency: expense.currency,
+          hasReceipt: !!expense.imageDataUrl,
+          matchRank: MATCH_EXACT_PRODUCT,
+          matchSpecificity: 90,
+        });
+      }
+    }
+  } else for (const expense of rows) {
     let anyItemMatched = false;
 
     for (const item of expense.items) {
@@ -859,8 +1161,9 @@ export function searchPurchaseMemory(
         quantity: item.quantity,
         unit: item.unit,
         name: item.name,
-        existingUnitPrice: item.unitPrice,
+        existingUnitPrice: item.normalizedUnitPrice ?? item.unitPrice,
       });
+      const fuelPrice = fuelUnitPrice(expense);
       const identityName =
         normalizeProductName(item.name) ||
         item.normalizedName ||
@@ -874,8 +1177,8 @@ export function searchPurchaseMemory(
         store:
           normalizeMerchantName(expense.merchantName) || expense.merchantName,
         price: item.totalPrice ?? expense.totalAmount,
-        unitPrice: unitInfo.unitPrice,
-        unitLabel: unitInfo.unitLabel,
+        unitPrice: fuelPrice ?? item.normalizedUnitPrice ?? unitInfo.unitPrice,
+        unitLabel: fuelPrice != null ? "₺/L" : unitInfo.unitLabel,
         quantity: item.quantity ?? unitInfo.packAmount,
         unit: item.unit ?? unitInfo.packUnit,
         currency: expense.currency,
@@ -893,8 +1196,12 @@ export function searchPurchaseMemory(
         queryNormalized
       );
       if (merchantVerdict != null) {
+        const fuelPrice = fuelUnitPrice(expense);
+        const isFuelHit = fuelPrice != null;
         rankedHits.push({
-          itemName: expense.merchantName || q,
+          itemName: isFuelHit
+            ? expense.fuel!.fuelType?.trim() || expense.merchantName || q
+            : expense.merchantName || q,
           normalizedName: null,
           rawText: null,
           expenseId: expense.id,
@@ -902,10 +1209,10 @@ export function searchPurchaseMemory(
           store:
             normalizeMerchantName(expense.merchantName) || expense.merchantName,
           price: expense.totalAmount,
-          unitPrice: null,
-          unitLabel: null,
-          quantity: null,
-          unit: null,
+          unitPrice: fuelPrice,
+          unitLabel: fuelPrice != null ? "₺/L" : null,
+          quantity: isFuelHit ? expense.fuel!.liters : null,
+          unit: isFuelHit ? "LT" : null,
           currency: expense.currency,
           hasReceipt: !!expense.imageDataUrl,
           matchRank: merchantVerdict.rank,
@@ -958,7 +1265,7 @@ export function searchPurchaseMemory(
   const values = priced.map((p) => p.value);
   const unitValues = hits
     .map((h) => h.unitPrice)
-    .filter((v): v is number => v != null);
+    .filter((v): v is number => v != null && v > 0);
 
   const stores = Array.from(
     new Set(hits.map((h) => h.store).filter(Boolean) as string[])
@@ -1011,6 +1318,11 @@ export function searchPurchaseMemory(
     (min, h) => Math.min(min, h.matchRank),
     Number.POSITIVE_INFINITY
   );
+  const merchantVisitCount = countMerchantVisitMatches(expenses, q);
+  const purchaseCount =
+    merchantVisitCount > 0 && bestRank > MATCH_WORD_PRODUCT
+      ? merchantVisitCount
+      : hits.length;
   const topRankHits = rankedHits.filter((h) => h.matchRank === bestRank);
   const bestSpecificity = topRankHits.reduce(
     (max, h) => Math.max(max, h.matchSpecificity),
@@ -1026,6 +1338,22 @@ export function searchPurchaseMemory(
     last?.itemName ||
     q;
 
+  const fuelExpenseIds = new Set(hits.map((h) => h.expenseId));
+  const fuelBreakdowns =
+    fuelQuery && fuelExpenseIds.size > 0
+      ? buildFuelMemoryBreakdowns(
+          rows.filter((e) => fuelExpenseIds.has(e.id))
+        )
+      : null;
+
+  const tobaccoExpenseIds = new Set(hits.map((h) => h.expenseId));
+  const tobaccoBreakdowns =
+    tobaccoQuery && tobaccoExpenseIds.size > 0
+      ? buildTobaccoMemoryBreakdowns(
+          rows.filter((e) => tobaccoExpenseIds.has(e.id))
+        )
+      : null;
+
   return {
     query: q,
     displayName,
@@ -1033,7 +1361,7 @@ export function searchPurchaseMemory(
     last,
     previous,
     first,
-    purchaseCount: hits.length,
+    purchaseCount,
     merchantCount: stores.length,
     priceTrend: priceChangePct,
     priceIncreasePct: priceChangePct,
@@ -1058,6 +1386,8 @@ export function searchPurchaseMemory(
     mostExpensive,
     cheapest,
     stores,
+    fuelBreakdowns,
+    tobaccoBreakdowns,
   };
 }
 
@@ -1118,7 +1448,7 @@ export function getTopMerchants(
   limit = 4
 ): { name: string; total: number }[] {
   const { start, end } = getPeriodRange(scope, now);
-  const scoped = expenses.filter((e) => inRange(e, start, end));
+  const scoped = spendingExpenses(expenses).filter((e) => inRange(e, start, end));
   const map = new Map<string, number>();
   for (const e of scoped) {
     const name = normalizeMerchantName(e.merchantName) || e.merchantName;
@@ -1214,13 +1544,14 @@ export function getSmartInsights(
   const mover = catTrends.find(
     (c) => c.trend != null && Math.abs(c.trend) >= 15 && c.total > 0
   );
-  if (mover) {
+  if (mover && isMonthTrendReady(now)) {
     const meta = categories.find((c) => c.id === mover.category);
     const pct = Math.round(Math.abs(mover.trend!));
-    const dir = mover.trend! < 0 ? "az" : "fazla";
+    const dir = mover.trend! < 0 ? "azaldı" : "arttı";
+    const bounds = getSamePeriodMonthBounds(now);
     insights.push({
       id: `cat-${mover.category}`,
-      text: `Bu ay ${meta?.label ?? "bu kategoride"} harcaman geçen aya göre %${pct} daha ${dir}.`,
+      text: `${meta?.label ?? "Bu kategoride"} harcaman ayın ilk ${bounds.dayCount} gününde geçen ayın aynı dönemine göre %${pct} ${dir}.`,
     });
   }
 
@@ -1298,13 +1629,17 @@ export type CategoryProductStat = {
 };
 
 function lineUnitInfo(item: ReceiptItem) {
-  return computeUnitPrice({
+  const computed = computeUnitPrice({
     totalPrice: item.totalPrice,
     quantity: item.quantity,
     unit: item.unit,
     name: item.name,
-    existingUnitPrice: item.unitPrice,
+    existingUnitPrice: item.normalizedUnitPrice ?? item.unitPrice,
   });
+  return {
+    ...computed,
+    unitPrice: item.normalizedUnitPrice ?? computed.unitPrice,
+  };
 }
 
 /**

@@ -79,16 +79,16 @@ function classifyLineSection(
     return { section: "header", nextState: "HEADER" };
   }
 
-  if (isCardSlipLine(trimmed)) {
-    return { section: "card_slip", nextState: totalsSeen ? "CARD_SLIP" : "CARD_SLIP" };
-  }
-
   if (TOPKDV_HINT.test(trimmed) || (matchesVatLabel(trimmed) && totalsSeen)) {
     return { section: "vat_summary", nextState: "VAT_SUMMARY" };
   }
 
   if (matchesPayment(trimmed)) {
     return { section: "payments", nextState: "PAYMENTS" };
+  }
+
+  if (isCardSlipLine(trimmed)) {
+    return { section: "card_slip", nextState: totalsSeen ? "CARD_SLIP" : "CARD_SLIP" };
   }
 
   if (matchesTotal(trimmed) || matchesSubtotal(trimmed)) {

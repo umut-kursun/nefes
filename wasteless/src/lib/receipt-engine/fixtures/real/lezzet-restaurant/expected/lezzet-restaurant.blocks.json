@@ -194,9 +194,9 @@
         "metadataClassifier:date",
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.8666666666666667
+      "confidence": 0.8833333333333333
     },
-    "confidence": 0.8666666666666667,
+    "confidence": 0.8833333333333333,
     "merchant": "LEZZET RESTORAN A.S.",
     "date": "29.07.2026 21:30",
     "time": null,
@@ -235,5 +235,5 @@
       }
     ]
   },
-  "confidence": 0.7333333333333333
+  "confidence": 0.7366666666666666
 }

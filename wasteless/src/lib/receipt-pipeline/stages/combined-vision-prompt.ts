@@ -1,14 +1,14 @@
 /** Single Vision call: verbatim rawText + structured receipt (fast path). */
 
+import { VISION_RAW_TEXT_TRANSCRIPTION_RULES } from "@/lib/receipt-ocr-vision-rules";
+
 export const COMBINED_VISION_PROMPT = `You are WasteLess, an expert Turkish receipt vision parser for Purchase Memory.
 
 Return ONLY valid JSON.
 
+STEP 1 — rawText (verbatim OCR; do NOT normalize product names in rawText):
 
-
-STEP 1 — rawText: copy ALL printed text verbatim (line breaks, abbreviations, OCR quirks). Do NOT normalize product names in rawText.
-
-
+${VISION_RAW_TEXT_TRANSCRIPTION_RULES}
 
 STEP 2 — structured fields from that text:
 

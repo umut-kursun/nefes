@@ -162,28 +162,24 @@
     "id": "metadata:main",
     "kind": "metadata",
     "nodeRefs": [
-      "frag:L0:name",
-      "frag:L1:name"
+      "frag:L0:name"
     ],
     "provenance": {
       "graphNodeIds": [
-        "frag:L0:name",
-        "frag:L1:name"
+        "frag:L0:name"
       ],
       "layoutLineIndices": [
-        0,
-        1
+        0
       ],
       "rawTexts": [
-        "MIGROS A.S.",
-        "ISTANBUL"
+        "MIGROS A.S."
       ],
       "classificationRules": [
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.8375
+      "confidence": 0.95
     },
-    "confidence": 0.8375,
+    "confidence": 0.95,
     "merchant": "MIGROS A.S.",
     "date": null,
     "time": null,
@@ -196,12 +192,14 @@
     "kind": "unknown",
     "nodeRefs": [
       "raw:L0",
-      "raw:L1"
+      "raw:L1",
+      "frag:L1:name"
     ],
     "provenance": {
       "graphNodeIds": [
         "raw:L0",
-        "raw:L1"
+        "raw:L1",
+        "frag:L1:name"
       ],
       "layoutLineIndices": [
         0,
@@ -212,7 +210,8 @@
         "ISTANBUL"
       ],
       "classificationRules": [
-        "headerClassifier:raw_line"
+        "headerClassifier:raw_line",
+        "headerClassifier:header_fragment"
       ],
       "confidence": 0.65
     },
@@ -229,8 +228,14 @@
         "text": "ISTANBUL",
         "semanticKind": "header",
         "confidence": 0.65
+      },
+      {
+        "nodeRef": "frag:L1:name",
+        "text": "ISTANBUL",
+        "semanticKind": "header",
+        "confidence": 0.65
       }
     ]
   },
-  "confidence": 0.7274999999999999
+  "confidence": 0.7499999999999999
 }

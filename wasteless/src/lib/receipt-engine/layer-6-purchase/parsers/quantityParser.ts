@@ -1,4 +1,5 @@
 import { PURCHASED_QTY_EXPLICIT } from "../../patterns/document";
+import { isVatOcrQuantityMatch } from "../../patterns/neutral";
 import { parseTrNumber } from "./parseNumber";
 import type { ParsedField } from "../../types/models/purchase";
 import { parseUnit } from "./unitParser";
@@ -17,6 +18,9 @@ export function parseQuantity(text: string): QuantityParseResult {
   if (!raw) return { raw: text };
 
   const explicit = raw.match(PURCHASED_QTY_EXPLICIT);
+  if (explicit?.[0] && isVatOcrQuantityMatch(explicit[0])) {
+    return { raw };
+  }
   if (explicit) {
     const qtyRaw = explicit[1] ?? explicit[2];
     if (qtyRaw) {

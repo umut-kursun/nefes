@@ -1,5 +1,5 @@
 {
-  "confidence": 0.7783333333333332,
+  "confidence": 0.7899999999999999,
   "nodes": [
     {
       "id": "raw:L0",
@@ -146,7 +146,7 @@
       "id": "frag:L0:name",
       "graphNodeId": "frag:L0:name",
       "semanticKind": "merchant",
-      "confidence": 0.775,
+      "confidence": 0.95,
       "matchedRules": [
         "headerClassifier:merchant_scored"
       ],
@@ -169,7 +169,7 @@
         "classificationRules": [
           "headerClassifier:merchant_scored"
         ],
-        "confidence": 0.775
+        "confidence": 0.95
       },
       "amount": null
     },

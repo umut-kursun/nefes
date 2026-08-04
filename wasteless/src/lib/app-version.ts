@@ -1,5 +1,5 @@
-/** App semver — bump on each production release (keep in sync with package.json). */
-export const APP_VERSION = "1.0.0-beta.1";
+/** App semver â€” bump on each production release (keep in sync with package.json). */
+export const APP_VERSION = "1.0.0-beta.66";
 
 export type RemoteVersion = {
   version: string;
@@ -21,10 +21,6 @@ export async function fetchRemoteVersion(): Promise<RemoteVersion | null> {
 /**
  * Activate a waiting service worker (SKIP_WAITING via custom sw snippet; skipWaiting: false),
  * then reload so the new controller serves the updated app shell.
- *
- * Root cause previously: postMessage(SKIP_WAITING) with no SW listener, then
- * unregister()+reload while the old controller still owned the client navigation
- * and kept serving precached assets.
  */
 export async function applyAppUpdate(): Promise<void> {
   if (typeof window === "undefined") return;
@@ -53,8 +49,6 @@ export async function applyAppUpdate(): Promise<void> {
         }
       }
 
-      // No waiting worker to activate (stale registration / first migration):
-      // drop registrations and Cache Storage so the reload is network-fresh.
       if (!activatedWaiting) {
         const regs = await navigator.serviceWorker.getRegistrations();
         await Promise.all(
@@ -98,7 +92,6 @@ function activateWaitingWorker(waiting: ServiceWorker): Promise<boolean> {
     waiting.postMessage({ type: "SKIP_WAITING" });
     window.setTimeout(() => {
       navigator.serviceWorker.removeEventListener("controllerchange", onChange);
-      // Message was delivered; even without controllerchange, reload next.
       done(true);
     }, 2000);
   });

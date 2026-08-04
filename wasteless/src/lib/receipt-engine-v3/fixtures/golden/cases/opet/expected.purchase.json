@@ -1,0 +1,9 @@
+{
+  "profile": "fuel",
+  "merchant": "OPET",
+  "purchaseDate": "2026-07-30",
+  "products": [
+    { "name": "Benzin", "quantity": 42.15, "unit": "LT", "lineTotal": 1917.82 }
+  ],
+  "total": 1917.82
+}

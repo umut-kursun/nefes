@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Camera, ImagePlus, Keyboard, Loader2, Sparkles, X } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
@@ -21,6 +21,10 @@ import {
   toAliasEntries,
 } from "@/lib/product-knowledge";
 import { createId } from "@/lib/utils";
+import {
+  createProcessingReceiptExpense,
+  runBackgroundReceiptParse,
+} from "@/lib/background-receipt-processor";
 import { analysisToExpenseDraft, createManualExpense } from "@/lib/expense-factory";
 import {
   applyCorrectionsToExpense,
@@ -40,7 +44,13 @@ import { OcrTextPanel } from "@/components/ocr-text-panel";
 import type { AnalysisResult, Expense } from "@/lib/types";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
-import type { ReceiptDebugExport } from "@/lib/receipt-engine-debug/exportSchema";
+import { isDebugClipboardUiEnabled } from "@/lib/receipt-engine-debug/devGuard";
+import { parseStoredParserPayload } from "@/lib/receipt-engine-debug/parseParserPayload";
+import {
+  buildReceiptEngineOcrSummary,
+  type ReceiptEngineOcrSummary,
+} from "@/lib/receipt-engine-debug/buildReceiptEngineOcrSummary";
+import { APP_VERSION } from "@/lib/app-version";
 import {
   onLaunchFile,
   takePendingLaunchFile,
@@ -58,6 +68,14 @@ const ReviewForm = dynamic(
       </div>
     ),
   }
+);
+
+const CopyAllDebugButton = dynamic(
+  () =>
+    import("@/components/copy-all-debug-button").then((m) => ({
+      default: m.CopyAllDebugButton,
+    })),
+  { ssr: false }
 );
 
 const ReceiptEngineResult = dynamic(
@@ -88,7 +106,9 @@ function AddPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const showWelcome = searchParams.get("welcome") === "1";
-  const { addExpense, categories, expenses } = useWasteLessStore();
+  const reviewId = searchParams.get("review");
+  const { addExpense, addExpenseOptimistic, updateExpense, removeExpense, categories, expenses } =
+    useWasteLessStore();
   const { toast } = useToast();
   const cameraRef = useRef<HTMLInputElement>(null);
   const galleryRef = useRef<HTMLInputElement>(null);
@@ -100,99 +120,94 @@ function AddPageInner() {
   /** Unedited OCR draft — used to detect user corrections on save. */
   const [ocrBaseline, setOcrBaseline] = useState<Expense | null>(null);
   const [correctionsApplied, setCorrectionsApplied] = useState(0);
-  const [ocrSummary, setOcrSummary] = useState<{
-    productCount: number;
-    reviewCount: number;
-    totalVerified: boolean;
-    issues: ReturnType<typeof findLineItemIssues>;
-  } | null>(null);
+  const [ocrSummary, setOcrSummary] = useState<ReceiptEngineOcrSummary | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [sourceHint, setSourceHint] = useState<"receipt" | "bank_screenshot">(
     "receipt"
   );
-  const [enginePurchase, setEnginePurchase] = useState<PurchaseDraft | null>(
-    null
-  );
+  const [enginePurchase, setEnginePurchase] = useState<PurchaseDraft | null>(null);
   const [engineValidation, setEngineValidation] =
     useState<ValidationReportGolden | null>(null);
   const [engineImageUrl, setEngineImageUrl] = useState<string | null>(null);
-  const [engineDebugExport, setEngineDebugExport] =
-    useState<ReceiptDebugExport | null>(null);
+  const [engineRawVision, setEngineRawVision] = useState<string>("");
+
+  const parserPayload = useMemo(
+    () => parseStoredParserPayload(draft?.aiResponseJson),
+    [draft?.aiResponseJson]
+  );
+  const showDebugClipboard = isDebugClipboardUiEnabled();
   const analyzeFileRef = useRef<(file: File) => Promise<void>>(async () => {});
 
+  useEffect(() => {
+    if (!reviewId || !expenses.length) return;
+    const pending = expenses.find(
+      (e) => e.id === reviewId && e.parseStatus === "pending_approval"
+    );
+    if (!pending) return;
+    setDraft(pending);
+    setOcrBaseline(JSON.parse(JSON.stringify(pending)) as Expense);
+    setMode("review");
+  }, [reviewId, expenses]);
+
+  useEffect(() => {
+    if (mode !== "review" || !parserPayload) return;
+    setOcrSummary(
+      buildReceiptEngineOcrSummary(parserPayload.purchase, parserPayload.validation)
+    );
+  }, [mode, parserPayload]);
+
   const analyzeWithReceiptEngine = async (file: File) => {
-    setLoading(true);
     setError(null);
-    setEnginePurchase(null);
-    setEngineValidation(null);
-    setEngineImageUrl(null);
-    setEngineDebugExport(null);
+    scanStartRef.current = performance.now();
     try {
-      const t0 = performance.now();
-      const originalDataUrl = await fileToDataUrl(file);
-      const enhanced = await preprocessReceiptImage(file, "enhanced");
-      const threshold = await preprocessReceiptImage(file, "threshold");
-      const preprocessMs = Math.round(performance.now() - t0);
+      const previewUrl = await fileToDataUrl(file);
+      const placeholder = createProcessingReceiptExpense(previewUrl);
+      await addExpenseOptimistic(placeholder);
+      toast("Fişiniz arka planda işleniyor…", "default");
+      setMode("chooser");
+      router.push("/");
 
-      const body = new FormData();
-      body.append(
-        "image",
-        new File([enhanced.blob], "receipt-enhanced.jpg", {
-          type: "image/jpeg",
-        })
-      );
-      body.append(
-        "imageAlt",
-        new File([threshold.blob], "receipt-threshold.jpg", {
-          type: "image/jpeg",
-        })
-      );
-      body.append("originalDataUrl", originalDataUrl);
-      body.append("sourceHint", "receipt");
-      body.append("preprocessMs", String(preprocessMs));
-
-      const res = await fetch("/api/receipt-engine", {
-        method: "POST",
-        body,
+      void runBackgroundReceiptParse({
+        expenseId: placeholder.id,
+        file,
+        imageDataUrl: previewUrl,
+        categories,
+        onUpdate: (expense) => updateExpense(expense),
+        onSuccess: (expense) => {
+          toast("Fişiniz hazır! İncelemek ve onaylamak için dokunun.", "success", {
+            actionLabel: "İncele",
+            onAction: () =>
+              router.push(`/add?review=${encodeURIComponent(expense.id)}`),
+          });
+          trackProductEvent("receipt_scan_success", {
+            feature: "receipt-engine-background",
+          });
+          if (scanStartRef.current != null) {
+            trackTiming(
+              "time_to_parse_complete",
+              Math.round(performance.now() - scanStartRef.current)
+            );
+          }
+        },
+        onError: (message) => {
+          toast(message, "danger");
+          trackProductEvent("receipt_scan_fail", {
+            feature: "receipt-engine-background",
+            meta: { message: message.slice(0, 120) },
+          });
+        },
       });
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json.error || "Receipt Engine analizi başarısız");
-      }
-
-      setEnginePurchase(json.purchase as PurchaseDraft);
-      setEngineValidation(json.validation as ValidationReportGolden);
-      setEngineImageUrl(
-        typeof json.imageDataUrl === "string" ? json.imageDataUrl : originalDataUrl
-      );
-      setEngineDebugExport(
-        json.debugExport && typeof json.debugExport === "object"
-          ? (json.debugExport as ReceiptDebugExport)
-          : null
-      );
-      setMode("engine-result");
-      setLastScanConfidence(
-        (json.purchase as PurchaseDraft)?.confidence ?? undefined
-      );
-      trackProductEvent("receipt_scan_success", {
-        feature: "receipt-engine",
-      });
-      if (scanStartRef.current != null) {
-        trackTiming(
-          "time_to_parse_complete",
-          Math.round(performance.now() - scanStartRef.current)
-        );
-      }
     } catch (err) {
       trackProductEvent("receipt_scan_fail", {
-        feature: "receipt-engine",
-        meta: { message: err instanceof Error ? err.message.slice(0, 120) : "unknown" },
+        feature: "receipt-engine-background",
+        meta: {
+          message: err instanceof Error ? err.message.slice(0, 120) : "unknown",
+        },
       });
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -320,6 +335,8 @@ function AddPageInner() {
           (i) => (i.confidence ?? 1) < ITEM_CONFIRM_THRESHOLD
         ).length,
         totalVerified: !consistency.inconsistent,
+        ocrConfidence: next.confidence ?? null,
+        mathValidationPassed: !consistency.inconsistent,
         issues,
       });
 
@@ -427,14 +444,47 @@ function AddPageInner() {
           afterAliasPersisted();
         }
       }
-      await addExpense(expense);
+      const approved: Expense = {
+        ...expense,
+        parseStatus: null,
+        updatedAt: new Date().toISOString(),
+      };
+      if (
+        expense.parseStatus === "pending_approval" ||
+        expenses.some((e) => e.id === expense.id)
+      ) {
+        await updateExpense(approved);
+      } else {
+        await addExpense(approved);
+      }
       if (expenses.length === 0) {
         trackFirstReceiptSaved();
       }
-      toast("Harcama kaydedildi", "success");
+      toast(
+        expense.parseStatus === "pending_approval" || reviewId
+          ? "Fiş onaylandı ve kaydedildi!"
+          : "Harcama kaydedildi",
+        "success"
+      );
       router.push("/");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeletePending = async () => {
+    if (!draft) return;
+    setDeleting(true);
+    try {
+      await removeExpense(draft.id);
+      toast("Fiş silindi", "default");
+      setDraft(null);
+      setOcrBaseline(null);
+      setOcrSummary(null);
+      setMode("chooser");
+      router.push("/");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -443,7 +493,7 @@ function AddPageInner() {
       <header className="mb-5">
         <h1 className="font-display text-2xl tracking-tight">Harcama ekle</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Fiş, banka ekran görüntüsü veya hızlı manuel giriş
+          Fiş, banka ekran görüntüsü veya hızlı manuel giriş · v{APP_VERSION}
         </p>
       </header>
 
@@ -593,27 +643,53 @@ function AddPageInner() {
         <ReceiptEngineResult
           purchase={enginePurchase}
           validation={engineValidation}
-          imageDataUrl={engineImageUrl ?? undefined}
-          debugExport={engineDebugExport ?? undefined}
+          imageDataUrl={engineImageUrl ?? draft?.imageDataUrl ?? undefined}
           ocrRawText={draft?.rawText ?? undefined}
+          rawVisionResponse={engineRawVision || parserPayload?.rawVisionResponse}
+          analyzeResult={parserPayload ?? undefined}
           onBack={() => {
-            setMode("chooser");
-            setEnginePurchase(null);
-            setEngineValidation(null);
-            setEngineImageUrl(null);
-            setEngineDebugExport(null);
-            setError(null);
+            setMode("review");
           }}
         />
       )}
 
       {(mode === "review" || mode === "manual") && draft && (
         <div className="space-y-4">
+          {mode === "review" && parserPayload && (
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                setEnginePurchase(parserPayload.purchase);
+                setEngineValidation(parserPayload.validation);
+                setEngineImageUrl(draft.imageDataUrl);
+                setEngineRawVision(parserPayload.rawVisionResponse ?? "");
+                setMode("engine-result");
+              }}
+            >
+              Parser detayını göster
+            </Button>
+          )}
+          {mode === "review" &&
+            showDebugClipboard &&
+            parserPayload &&
+            draft.rawText?.trim() && (
+              <CopyAllDebugButton
+                purchase={parserPayload.purchase}
+                validation={parserPayload.validation}
+                ocrText={draft.rawText.trim()}
+                rawVisionResponse={parserPayload.rawVisionResponse ?? ""}
+                analyzeResult={parserPayload}
+              />
+            )}
           {mode === "review" && ocrSummary && (
             <OcrResultSummary
               productCount={ocrSummary.productCount}
               reviewCount={ocrSummary.reviewCount}
               totalVerified={ocrSummary.totalVerified}
+              ocrConfidence={ocrSummary.ocrConfidence}
+              mathValidationPassed={ocrSummary.mathValidationPassed}
               issues={ocrSummary.issues}
             />
           )}
@@ -632,7 +708,9 @@ function AddPageInner() {
           )}
           {mode === "review" && (
             <div className="rounded-2xl border border-white/70 bg-white/75 p-3 text-sm text-muted-foreground">
-              AI çıkarımı hazır. Kaydetmeden önce düzenleyebilirsiniz.
+              {draft?.parseStatus === "pending_approval"
+                ? "Fişiniz hazır. Onaylamadan önce satırları kontrol edip düzenleyebilirsiniz."
+                : "AI çıkarımı hazır. Kaydetmeden önce düzenleyebilirsiniz."}
               {correctionsApplied > 0 && (
                 <p className="mt-1 text-teal-800">
                   Önceki düzeltmen uygulandı ({correctionsApplied}).
@@ -643,7 +721,23 @@ function AddPageInner() {
           <ReviewForm
             initial={draft}
             saving={saving}
+            deleting={deleting}
             compactProducts={mode === "review"}
+            saveLabel={
+              draft?.parseStatus === "pending_approval"
+                ? "Onayla & Kaydet"
+                : undefined
+            }
+            deleteLabel={
+              draft?.parseStatus === "pending_approval"
+                ? "Fişi Sil"
+                : "İptal Et"
+            }
+            onDelete={
+              draft?.parseStatus === "pending_approval"
+                ? handleDeletePending
+                : undefined
+            }
             onCancel={() => {
               setMode("chooser");
               setDraft(null);

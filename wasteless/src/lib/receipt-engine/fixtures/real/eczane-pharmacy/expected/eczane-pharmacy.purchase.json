@@ -105,11 +105,11 @@
     },
     "amount": 205.5
   },
-  "confidence": 0.7233333333333334,
+  "confidence": 0.7266666666666667,
   "provenance": {
     "metadataBlockId": "metadata:main",
     "footerBlockId": "footer:main",
-    "blockDocumentConfidence": 0.7233333333333334,
+    "blockDocumentConfidence": 0.7266666666666667,
     "rawTexts": [
       "Ilac A %1 120,00",
       "Ilac B %1 85,50",

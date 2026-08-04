@@ -1,12 +1,8 @@
 import type { OcrExtractInput, OcrExtractOutput, OcrProvider } from "./ocrProvider";
+import { OCR_EXTRACT_SYSTEM_RULES } from "@/lib/receipt-ocr-vision-rules";
 
 const OCR_SYSTEM_PROMPT = `You are an OCR engine. Extract ALL visible text from the receipt image verbatim.
-Return JSON only: { "rawText": string, "lines": [{ "text": string, "confidence": number }] }
-Rules:
-- Verbatim transcription only. No interpretation, categorization, or correction.
-- Preserve line order top-to-bottom.
-- confidence is 0-1 per line based on OCR certainty.
-- Do not add fields beyond rawText and lines.`;
+${OCR_EXTRACT_SYSTEM_RULES}`;
 
 export interface OpenAiOcrProviderOptions {
   readonly apiKey: string;
@@ -72,7 +68,11 @@ export function createOpenAiOcrProvider(
         throw new Error("OpenAI OCR returned empty content");
       }
 
-      return parseOpenAiOcrJson(content, input.altImageDataUrl ? "vision_alt" : "vision_primary");
+      const parsed = parseOpenAiOcrJson(
+        content,
+        input.altImageDataUrl ? "vision_alt" : "vision_primary"
+      );
+      return { ...parsed, rawVisionResponse: content };
     },
   };
 }

@@ -128,33 +128,29 @@
     "nodeRefs": [
       "raw:L2",
       "frag:L0:name",
-      "frag:L1:name",
       "frag:L2:name"
     ],
     "provenance": {
       "graphNodeIds": [
         "raw:L2",
         "frag:L0:name",
-        "frag:L1:name",
         "frag:L2:name"
       ],
       "layoutLineIndices": [
         0,
-        1,
         2
       ],
       "rawTexts": [
         "29.07.2026 09:15",
-        "SHELL & TURCAS PETROL A.S.",
-        "34 ABC 123"
+        "SHELL & TURCAS PETROL A.S."
       ],
       "classificationRules": [
         "metadataClassifier:date",
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.8250000000000001
+      "confidence": 0.8833333333333333
     },
-    "confidence": 0.8250000000000001,
+    "confidence": 0.8833333333333333,
     "merchant": "SHELL & TURCAS PETROL A.S.",
     "date": "29.07.2026 09:15",
     "time": null,
@@ -168,13 +164,15 @@
     "nodeRefs": [
       "raw:L0",
       "raw:L1",
-      "raw:L4"
+      "raw:L4",
+      "frag:L1:name"
     ],
     "provenance": {
       "graphNodeIds": [
         "raw:L0",
         "raw:L1",
-        "raw:L4"
+        "raw:L4",
+        "frag:L1:name"
       ],
       "layoutLineIndices": [
         0,
@@ -188,7 +186,8 @@
       ],
       "classificationRules": [
         "headerClassifier:raw_line",
-        "footerClassifier:footer_region"
+        "footerClassifier:footer_region",
+        "headerClassifier:header_fragment"
       ],
       "confidence": 0.65
     },
@@ -211,8 +210,14 @@
         "text": "2356,10 TL",
         "semanticKind": "footer",
         "confidence": 0.65
+      },
+      {
+        "nodeRef": "frag:L1:name",
+        "text": "34 ABC 123",
+        "semanticKind": "header",
+        "confidence": 0.65
       }
     ]
   },
-  "confidence": 0.74375
+  "confidence": 0.7583333333333333
 }

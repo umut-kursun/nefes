@@ -157,9 +157,9 @@
       "classificationRules": [
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.775
+      "confidence": 0.95
     },
-    "confidence": 0.775,
+    "confidence": 0.95,
     "merchant": "A101",
     "date": null,
     "time": null,
@@ -198,5 +198,5 @@
       }
     ]
   },
-  "confidence": 0.73125
+  "confidence": 0.775
 }

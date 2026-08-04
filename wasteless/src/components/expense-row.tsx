@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import type { Expense } from "@/lib/types";
 import { getCategoryMeta } from "@/lib/categories";
 import { formatDate, formatTime } from "@/lib/datetime";
+import { displayMerchantName } from "@/lib/merchants";
 import { formatMoney } from "@/lib/utils";
 import { AppIcon } from "@/components/icons";
 import { TagChips } from "@/components/tag-picker";
@@ -37,7 +38,7 @@ export function ExpenseRow({
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate text-[15px] font-semibold leading-tight">
-            {expense.merchantName || meta.label}
+            {displayMerchantName(expense.merchantName, meta.label)}
           </p>
           <p className="mt-0.5 text-xs text-muted-foreground tabular-nums">
             {formatDate(expense.date)}

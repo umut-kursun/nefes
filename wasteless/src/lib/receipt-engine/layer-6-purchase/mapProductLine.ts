@@ -9,8 +9,10 @@ import {
   parseVatRate,
 } from "./parsers";
 import {
+  isFuelProductBlock,
   isFuelProductLabel,
   parseFuelProductFields,
+  parseMultiLineFuelBlock,
 } from "./section-parsers/fuelProductParser";
 
 export function mapProductBlock(block: ProductBlock): PurchaseLine {
@@ -24,8 +26,34 @@ export function mapProductBlock(block: ProductBlock): PurchaseLine {
     undefined;
   let unitPrice = block.unitPrice ?? undefined;
   let lineTotal = block.totalPrice ?? undefined;
+  let displayName = block.label;
+  let fuelVatRate: number | undefined;
 
-  if (isFuelProductLabel(block.label)) {
+  if (isFuelProductBlock(block.rawLines, block.label)) {
+    const fuel = parseMultiLineFuelBlock(block.rawLines, block.label);
+    if (fuel.quantity !== undefined) quantity = fuel.quantity;
+    if (fuel.unit) unit = fuel.unit;
+    if (fuel.unitPrice !== undefined) {
+      unitPrice = fuel.unitPrice;
+    } else if (
+      block.unitPrice != null &&
+      (block.unitPrice >= 20 || quantity == null)
+    ) {
+      unitPrice = block.unitPrice;
+    }
+    if (fuel.lineTotal !== undefined && fuel.lineTotal >= 200) {
+      lineTotal = fuel.lineTotal;
+    } else if (quantity != null && unitPrice != null) {
+      const roundedUnit = Math.round(unitPrice * 100) / 100;
+      lineTotal = Math.round(quantity * roundedUnit * 100) / 100;
+    } else if (block.totalPrice != null && block.totalPrice >= 200) {
+      lineTotal = block.totalPrice;
+    } else if (block.totalPrice != null) {
+      lineTotal = block.totalPrice;
+    }
+    if (fuel.name) displayName = fuel.name;
+    if (fuel.vatRate !== undefined) fuelVatRate = fuel.vatRate;
+  } else if (isFuelProductLabel(block.label)) {
     const fuel = parseFuelProductFields(
       block.label,
       block.totalPrice,
@@ -34,13 +62,21 @@ export function mapProductBlock(block: ProductBlock): PurchaseLine {
     if (fuel.quantity !== undefined) quantity = fuel.quantity;
     if (fuel.unit) unit = fuel.unit;
     if (fuel.unitPrice !== undefined) unitPrice = fuel.unitPrice;
-    if (fuel.lineTotal !== undefined) lineTotal = fuel.lineTotal;
+    if (block.totalPrice != null && block.totalPrice >= 200) {
+      lineTotal = block.totalPrice;
+    } else if (fuel.lineTotal !== undefined) {
+      lineTotal = fuel.lineTotal;
+    }
   }
 
-  const vatParsed = block.vatToken ? parseVatRate(block.vatToken) : null;
+  const vatParsed = block.vatToken
+    ? parseVatRate(block.vatToken)
+    : fuelVatRate !== undefined
+      ? { raw: `×${fuelVatRate}`, normalized: fuelVatRate }
+      : null;
 
   const line: PurchaseLine = {
-    name: block.label,
+    name: displayName,
     confidence: block.confidence,
     provenance: Object.freeze({
       productBlockId: block.id,

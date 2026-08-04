@@ -1,5 +1,5 @@
 {
-  "confidence": 0.7480769230769231,
+  "confidence": 0.75,
   "nodes": [
     {
       "id": "raw:L0",
@@ -34,12 +34,6 @@
         "metadataClassifier:date"
       ],
       "alternativeCandidates": [
-        {
-          "semanticKind": "time",
-          "confidence": 0.85,
-          "ruleId": "metadataClassifier:time",
-          "reason": "time pattern: 29.07.2026 16:00"
-        },
         {
           "semanticKind": "header",
           "confidence": 0.65,
@@ -248,7 +242,7 @@
       "id": "frag:L0:name",
       "graphNodeId": "frag:L0:name",
       "semanticKind": "merchant",
-      "confidence": 0.9,
+      "confidence": 0.95,
       "matchedRules": [
         "headerClassifier:merchant_scored"
       ],
@@ -271,7 +265,7 @@
         "classificationRules": [
           "headerClassifier:merchant_scored"
         ],
-        "confidence": 0.9
+        "confidence": 0.95
       },
       "amount": null
     },
@@ -284,12 +278,6 @@
         "metadataClassifier:date"
       ],
       "alternativeCandidates": [
-        {
-          "semanticKind": "time",
-          "confidence": 0.85,
-          "ruleId": "metadataClassifier:time",
-          "reason": "time pattern: 29.07.2026 16:00"
-        },
         {
           "semanticKind": "header",
           "confidence": 0.65,

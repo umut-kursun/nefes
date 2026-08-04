@@ -52,11 +52,31 @@ describe("buildReceiptDebugExport", () => {
           source: "vision_primary",
           quality: { charCount: 10, lineCount: 2, score: 0.9 },
         },
-        layout: { profileId: "generic-tr", lines: [] },
+        layout: {
+          profileId: "generic-tr",
+          lines: [],
+          readingOrder: [],
+          regions: { header: [], body: [], footer: [] },
+          segmentation: {
+            sections: [],
+            sectionByLineIndex: [],
+            lineTypes: [],
+            parserStates: [],
+          },
+          confidence: 0.8,
+        },
         receiptGraph: { nodes: [] },
         classifiedGraph: { confidence: 0.8, nodes: [] },
         blockDocument: { blocks: [] },
-        purchaseDraft: { products: [], provenance: {} },
+        purchaseDraft: {
+          products: [],
+          provenance: {},
+          confidence: 0.8,
+          payments: [],
+          charges: [],
+          discounts: [],
+          vatSummary: [],
+        },
         validationReport: { isValid: true, score: 90, errors: [], warnings: [] },
       },
       textDebug: {
@@ -80,7 +100,12 @@ describe("buildReceiptDebugExport", () => {
 
     expect(exported.version.schemaVersion).toBe(DEBUG_SCHEMA_VERSION);
     expect(exported.version.buildVersion).toBeTruthy();
-    expect(exported.image).toEqual({ width: 100, height: 200, sizeBytes: 4096 });
+    expect(exported.image).toEqual({
+      width: 100,
+      height: 200,
+      sizeBytes: 4096,
+      orientation: "portrait",
+    });
     expect(exported.ocr.provider).toBe("openai");
     expect(exported.ocr.rawText).toBe("LINE1\nLINE2");
     expect(exported.layout).toEqual(trace.stages.layout);

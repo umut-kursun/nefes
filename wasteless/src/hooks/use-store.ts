@@ -50,6 +50,8 @@ type StoreValue = {
   settings: AppSettings;
   refresh: () => Promise<void>;
   addExpense: (expense: Expense) => Promise<void>;
+  addExpenseOptimistic: (expense: Expense) => Promise<void>;
+  updateExpense: (expense: Expense) => Promise<void>;
   removeExpense: (id: string) => Promise<void>;
   tapQuickButton: (button: QuickButton) => Promise<Expense>;
   upsertQuickButton: (button: QuickButton) => Promise<void>;
@@ -108,6 +110,24 @@ export function WasteLessProvider({ children }: { children: ReactNode }) {
       await refresh();
     },
     [refresh]
+  );
+
+  const addExpenseOptimistic = useCallback(
+    async (expense: Expense) => {
+      setExpenses((prev) => [expense, ...prev]);
+      await saveExpense(expense);
+    },
+    []
+  );
+
+  const updateExpense = useCallback(
+    async (expense: Expense) => {
+      setExpenses((prev) =>
+        prev.map((e) => (e.id === expense.id ? expense : e))
+      );
+      await saveExpense(expense);
+    },
+    []
   );
 
   const removeExpense = useCallback(
@@ -215,6 +235,8 @@ export function WasteLessProvider({ children }: { children: ReactNode }) {
       settings,
       refresh,
       addExpense,
+      addExpenseOptimistic,
+      updateExpense,
       removeExpense,
       tapQuickButton,
       upsertQuickButton,
@@ -238,6 +260,8 @@ export function WasteLessProvider({ children }: { children: ReactNode }) {
       settings,
       refresh,
       addExpense,
+      addExpenseOptimistic,
+      updateExpense,
       removeExpense,
       tapQuickButton,
       upsertQuickButton,

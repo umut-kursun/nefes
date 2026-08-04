@@ -74,7 +74,7 @@ export function BottomSheet({
           visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
         )}
       >
-        <div className="relative flex items-center gap-1 border-b border-black/[0.04] px-3 pb-3 pt-4">
+        <div className="relative flex items-center gap-4 border-b border-black/[0.04] px-4 py-3 pt-4">
           <div className="absolute left-1/2 top-2 h-1 w-10 -translate-x-1/2 rounded-full bg-black/10" />
           {headerStart}
           <h2
@@ -88,7 +88,7 @@ export function BottomSheet({
             type="button"
             onClick={onClose}
             aria-label="Kapat"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-muted/60 active:scale-95"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-all duration-200 hover:bg-muted/60 active:scale-95"
           >
             <X className="h-5 w-5" />
           </button>

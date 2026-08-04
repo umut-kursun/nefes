@@ -3,6 +3,12 @@ import type { GraphIndex } from "../graph/graphIndex";
 import type { RowView } from "../graph/rowView";
 import type { FooterBlock, FooterLineEntry } from "../types/models/blocks";
 import { averageConfidence, provenanceFromNodes } from "./blockProvenance";
+import { matchesPayment } from "../patterns/neutral";
+import {
+  extractInlineAmount,
+  isBankIssuerOnlyLine,
+  stripAmountFromLabel,
+} from "../patterns/lineSanitize";
 
 const FOOTER_KINDS = new Set<SemanticKind>([
   "charge",
@@ -33,8 +39,15 @@ function rowLabel(index: GraphIndex, row: RowView): string {
 
 function rowAmount(index: GraphIndex, row: RowView): number | null {
   const amountId = row.amountNodeIds[0] ?? row.boundAmountNodeIds[0];
-  if (!amountId) return null;
-  return index.node(amountId)?.amount ?? null;
+  if (amountId) {
+    const fromGraph = index.node(amountId)?.amount ?? null;
+    if (fromGraph != null) return fromGraph;
+  }
+  return extractInlineAmount(rowLabel(index, row));
+}
+
+function rowLabelClean(index: GraphIndex, row: RowView): string {
+  return stripAmountFromLabel(rowLabel(index, row));
 }
 
 function buildFooterEntry(
@@ -47,7 +60,7 @@ function buildFooterEntry(
   const confidences = nodeRefs.map((id) => classified.get(id)?.confidence ?? 0);
 
   return Object.freeze({
-    label: rowLabel(index, row),
+    label: rowLabelClean(index, row),
     amount: rowAmount(index, row),
     nodeRefs,
     semanticKind: kind,
@@ -62,6 +75,24 @@ function pushEntry(
 ): void {
   entry.nodeRefs.forEach((id) => assigned.add(id));
   target.push(entry);
+}
+
+function isLegalPaymentFooter(label: string): boolean {
+  const payLabel = label.toLowerCase();
+  return /kart\s*hizmet|hakkında|hakkinda|saklayınız|belgeyi|yukarıda\s*yazılı|kart\s*sahib|bu\s*i[sş]lem|temassiz|nus[iİ]la/i.test(
+    payLabel
+  );
+}
+
+function shouldIncludePayment(
+  entry: FooterLineEntry,
+  section: string | null
+): boolean {
+  if (isLegalPaymentFooter(entry.label)) return false;
+  if (isBankIssuerOnlyLine(entry.label) && entry.amount == null) return false;
+  if (entry.semanticKind === "payment" && matchesPayment(entry.label)) return true;
+  if (entry.amount != null || /\d/.test(entry.label)) return true;
+  return section === "payments" && matchesPayment(entry.label);
 }
 
 export function buildFooterBlock(
@@ -123,9 +154,14 @@ export function buildFooterBlock(
       case "discount":
         pushEntry(discounts, entry, assigned);
         break;
-      case "payment":
+      case "payment": {
+        if (!shouldIncludePayment(entry, section)) {
+          pushEntry(unassigned, entry, assigned);
+          break;
+        }
         pushEntry(payments, entry, assigned);
         break;
+      }
       case "subtotal":
         pushEntry(subtotals, entry, assigned);
         break;
@@ -135,9 +171,17 @@ export function buildFooterBlock(
       case "vat":
         pushEntry(vatSummaries, entry, assigned);
         break;
-      default:
-        pushEntry(unassigned, entry, assigned);
+      default: {
+        const paymentSection =
+          section === "payments" ||
+          (section === "totals" && matchesPayment(entry.label));
+        if (paymentSection && matchesPayment(entry.label) && shouldIncludePayment(entry, section)) {
+          pushEntry(payments, entry, assigned);
+        } else {
+          pushEntry(unassigned, entry, assigned);
+        }
         break;
+      }
     }
   }
 

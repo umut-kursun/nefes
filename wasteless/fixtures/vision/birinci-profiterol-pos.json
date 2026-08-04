@@ -1,0 +1,41 @@
+{
+  "merchant": {
+    "title": "BİRİNCİ PROFİTEROL FİKRET DELİBAŞ",
+    "vknTckn": "1234567890",
+    "taxOffice": "KADIKÖY VD.",
+    "address": "CUMHURİYET MH.CUMHURİYET CD. ÇANDARLI SK. NO: 6/58 B.DÜZÜ İST.",
+    "category": "RESTAURANT"
+  },
+  "metadata": {
+    "purchaseDate": "2026-07-30",
+    "purchaseTime": "14:30:00",
+    "receiptNumber": "0123",
+    "currency": "TRY"
+  },
+  "products": [
+    {
+      "name": "TATLI",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 625,
+      "lineTotal": 625,
+      "vatRatePercentage": 10
+    }
+  ],
+  "discounts": [],
+  "payments": [
+    {
+      "type": "CREDIT_CARD",
+      "bankName": "YapıKredi",
+      "cardLastFour": null,
+      "approvalCode": null,
+      "amount": 625
+    }
+  ],
+  "financials": {
+    "vatTotal": 56.82,
+    "totalAmount": 625
+  },
+  "rawText": "BİRİNCİ PROFİTEROL FİKRET DELİBAŞ CUMHURİYET MH.CUMHURİYET CD.\nÇANDARLI SK. NO: 6/58 B.DÜZÜ İST.\n1234567890\nKADIKÖY VD.\nTARİH 30/07/2026\nSAAT 14:30:00\nFIŞ NO 0123\nTATLI %10 *625,00\nTOPKDV *56,82\nTOPLAM *625,00\nKredi Kartı *625,00\nYapıKredi\nMERSİS: 0123456789000001\nEKU NO: 0001 Z NO: 0424",
+  "confidence": 0.75
+}

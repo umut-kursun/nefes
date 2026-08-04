@@ -8,20 +8,25 @@ export function OcrResultSummary({
   productCount,
   reviewCount,
   totalVerified,
+  ocrConfidence,
+  mathValidationPassed,
   issues = [],
 }: {
   productCount: number;
   reviewCount: number;
   totalVerified: boolean;
+  ocrConfidence?: number | null;
+  mathValidationPassed?: boolean;
   issues?: LineItemIssue[];
 }) {
+  const showSeparateConfidence =
+    ocrConfidence != null && mathValidationPassed != null && !mathValidationPassed;
+
   return (
     <div className="space-y-2 rounded-2xl border border-white/70 bg-white/80 p-4 text-sm">
       <div className="flex items-center gap-2 text-teal-900">
         <CheckCircle2 className="h-4 w-4 shrink-0" />
-        <span>
-          {productCount} ürün tanındı
-        </span>
+        <span>{productCount} ürün tanındı</span>
       </div>
       {reviewCount > 0 && (
         <div className="flex items-center gap-2 text-amber-900">
@@ -29,7 +34,18 @@ export function OcrResultSummary({
           <span>{reviewCount} ürün kontrol gerektiriyor</span>
         </div>
       )}
-      {totalVerified ? (
+      {showSeparateConfidence ? (
+        <>
+          <div className="flex items-center gap-2 text-teal-900">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            <span>OCR güveni: {Math.round(ocrConfidence * 100)}%</span>
+          </div>
+          <div className="flex items-center gap-2 text-amber-900">
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <span>Matematik doğrulama: Başarısız</span>
+          </div>
+        </>
+      ) : totalVerified ? (
         <div className="flex items-center gap-2 text-teal-900">
           <CheckCircle2 className="h-4 w-4 shrink-0" />
           <span>Fiş toplamı doğrulandı</span>

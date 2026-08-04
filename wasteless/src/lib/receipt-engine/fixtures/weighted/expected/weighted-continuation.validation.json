@@ -1,7 +1,7 @@
 {
   "isValid": true,
   "consistent": true,
-  "score": 85,
+  "score": 90,
   "errors": [],
   "warnings": [
     {
@@ -15,21 +15,7 @@
       },
       "provenance": {
         "validatorId": "DateValidator",
-        "purchaseConfidence": 0.75
-      }
-    },
-    {
-      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
-      "severity": "WARNING",
-      "category": "business",
-      "code": "CURRENCY_MISSING",
-      "message": "Currency is not declared on the receipt.",
-      "location": {
-        "path": "currency"
-      },
-      "provenance": {
-        "validatorId": "CurrencyValidator",
-        "purchaseConfidence": 0.75
+        "purchaseConfidence": 0.775
       }
     },
     {
@@ -43,7 +29,7 @@
       },
       "provenance": {
         "validatorId": "MetadataCompletenessValidator",
-        "purchaseConfidence": 0.75
+        "purchaseConfidence": 0.775
       }
     }
   ],
@@ -59,7 +45,7 @@
       },
       "provenance": {
         "validatorId": "ReceiptNumberValidator",
-        "purchaseConfidence": 0.75
+        "purchaseConfidence": 0.775
       }
     },
     {
@@ -75,7 +61,7 @@
       },
       "provenance": {
         "validatorId": "UnknownFieldValidator",
-        "purchaseConfidence": 0.75,
+        "purchaseConfidence": 0.775,
         "graphNodeIds": [
           "raw:L1",
           "frag:L1:name",
@@ -89,10 +75,10 @@
       }
     }
   ],
-  "confidenceAdjustment": -0.15000000000000002,
-  "overallConfidence": 0.6,
+  "confidenceAdjustment": -0.1,
+  "overallConfidence": 0.675,
   "provenance": {
-    "purchaseConfidence": 0.75,
+    "purchaseConfidence": 0.775,
     "structuralValidators": [
       "ReceiptTotalValidator",
       "SubtotalValidator",
@@ -112,7 +98,7 @@
       "UnknownFieldValidator",
       "AnomalyValidator"
     ],
-    "issueCount": 5
+    "issueCount": 4
   },
   "blocking": false
 }

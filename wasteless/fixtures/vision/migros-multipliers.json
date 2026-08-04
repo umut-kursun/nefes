@@ -1,0 +1,64 @@
+{
+  "merchant": {
+    "title": "MİGROS TİCARET A.Ş.",
+    "vknTckn": "6220529513",
+    "taxOffice": "Sarıgazi VD.",
+    "address": "İstanbul",
+    "category": "MARKET"
+  },
+  "metadata": {
+    "purchaseDate": "2026-07-15",
+    "purchaseTime": "18:42:00",
+    "receiptNumber": "0042",
+    "currency": "TRY"
+  },
+  "products": [
+    {
+      "name": "ALGIDA FRIGOLA",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 360,
+      "lineTotal": 360,
+      "vatRatePercentage": 1
+    },
+    {
+      "name": "MARLBORO EDGE SLIMS",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 460,
+      "lineTotal": 460,
+      "vatRatePercentage": 20
+    },
+    {
+      "name": "COLA TURKA 1,5 LT",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 55,
+      "lineTotal": 55,
+      "vatRatePercentage": 10
+    }
+  ],
+  "discounts": [
+    {
+      "name": "% 25 % İNDİRİM",
+      "amount": 57.49,
+      "vatRatePercentage": 20,
+      "linkedProductName": "MARLBORO EDGE SLIMS"
+    }
+  ],
+  "payments": [
+    {
+      "type": "CREDIT_CARD",
+      "bankName": "İş Bankası",
+      "cardLastFour": "1234",
+      "approvalCode": null,
+      "amount": 817.51
+    }
+  ],
+  "financials": {
+    "vatTotal": 45.2,
+    "totalAmount": 817.51
+  },
+  "rawText": "MİGROS TİCARET A.Ş.\nALGIDA FRIGOLA  %1.  *360,00\n9 AD x 40,00 TL/AD\nMARLBORO EDGE SLIMS  %20.  *460,00\n4 AD x 115,00 TL/AD\n% 25 % İNDİRİM %20 *-57,49\nCOLA TURKA 1,5 LT  %10.  *55,00\nTOPLAM  *817,51",
+  "confidence": 0.85
+}

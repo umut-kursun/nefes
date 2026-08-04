@@ -18,6 +18,8 @@ export interface ReceiptResult {
   performance: Partial<PipelineLayerTimings>;
   rawOcr: { rawText: string; lines: string[] };
   normalizedOcr: { lines: string[]; rawText: string };
+  /** Exact OpenAI vision `message.content` before parser post-processing (vision_first only). */
+  rawVisionResponse?: string;
   versions: ReceiptEngineVersions;
   error?: { code: string; message: string };
 }

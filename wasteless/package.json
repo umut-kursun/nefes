@@ -1,6 +1,6 @@
 {
   "name": "wasteless",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.66",
   "private": true,
   "engines": {
     "node": ">=20"
@@ -12,6 +12,7 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:v3-golden": "vitest run src/lib/receipt-engine-v3/__tests__/golden.test.ts src/lib/receipt-engine-v3/__tests__/v3-regression.test.ts",
     "corpus:build": "tsx src/lib/receipt-engine-quality/scripts/buildCorpus.ts",
     "quality:dashboard": "tsx src/lib/receipt-engine-quality/scripts/generateRegressionDashboard.ts",
     "test:quality": "vitest run src/lib/receipt-engine-quality && vitest run src/lib/receipt-engine/__tests__/real-receipt-golden.test.ts && npm run quality:dashboard",

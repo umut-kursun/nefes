@@ -1,24 +1,9 @@
 {
   "isValid": true,
   "consistent": true,
-  "score": 95,
+  "score": 100,
   "errors": [],
-  "warnings": [
-    {
-      "id": "CurrencyValidator:CURRENCY_MISSING:currency",
-      "severity": "WARNING",
-      "category": "business",
-      "code": "CURRENCY_MISSING",
-      "message": "Currency is not declared on the receipt.",
-      "location": {
-        "path": "currency"
-      },
-      "provenance": {
-        "validatorId": "CurrencyValidator",
-        "purchaseConfidence": 0.74375
-      }
-    }
-  ],
+  "warnings": [],
   "info": [
     {
       "id": "ReceiptNumberValidator:RECEIPT_NUMBER_MISSING:receiptNumber",
@@ -31,7 +16,7 @@
       },
       "provenance": {
         "validatorId": "ReceiptNumberValidator",
-        "purchaseConfidence": 0.74375
+        "purchaseConfidence": 0.7583333333333333
       }
     },
     {
@@ -39,13 +24,13 @@
       "severity": "INFO",
       "category": "business",
       "code": "METADATA_PARTIAL",
-      "message": "Some metadata fields are missing: purchaseTime, receiptNumber, currency.",
+      "message": "Some metadata fields are missing: purchaseTime, receiptNumber.",
       "location": {
         "path": "metadata"
       },
       "provenance": {
         "validatorId": "MetadataCompletenessValidator",
-        "purchaseConfidence": 0.74375
+        "purchaseConfidence": 0.7583333333333333
       }
     },
     {
@@ -53,7 +38,7 @@
       "severity": "INFO",
       "category": "business",
       "code": "VAT_RATE_MISSING",
-      "message": "Product \"Benzin 42,150 LT 45,50 TL/L\" has no VAT rate token.",
+      "message": "Product \"Benzin\" has no VAT rate token.",
       "location": {
         "path": "products",
         "index": 0,
@@ -61,7 +46,7 @@
       },
       "provenance": {
         "validatorId": "UnknownFieldValidator",
-        "purchaseConfidence": 0.74375,
+        "purchaseConfidence": 0.7583333333333333,
         "graphNodeIds": [
           "raw:L3",
           "frag:L3:name",
@@ -71,10 +56,10 @@
       }
     }
   ],
-  "confidenceAdjustment": -0.05,
-  "overallConfidence": 0.69375,
+  "confidenceAdjustment": 0,
+  "overallConfidence": 0.7583333333333333,
   "provenance": {
-    "purchaseConfidence": 0.74375,
+    "purchaseConfidence": 0.7583333333333333,
     "structuralValidators": [
       "ReceiptTotalValidator",
       "SubtotalValidator",
@@ -94,7 +79,7 @@
       "UnknownFieldValidator",
       "AnomalyValidator"
     ],
-    "issueCount": 4
+    "issueCount": 3
   },
   "blocking": false
 }

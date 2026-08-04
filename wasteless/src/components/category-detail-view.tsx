@@ -15,11 +15,15 @@ import { AppIcon } from "@/components/icons";
 import { TrendBadge } from "@/components/trend-badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SegmentedControl } from "@/components/segmented-control";
 import { useWasteLessStore } from "@/hooks/use-store";
 import {
   getCategoryInsights,
+  formatSamePeriodMonthCaption,
   getFuelStats,
+  getPeriodRange,
   getSigaraStats,
+  type PeriodScope,
 } from "@/lib/analytics";
 import {
   getChildren,
@@ -33,7 +37,8 @@ import {
 } from "@/lib/categories";
 import { formatPlate, normalizePlate } from "@/lib/plate";
 import { cn, formatMoney, formatNumber } from "@/lib/utils";
-import { useMemo, useState } from "react";
+import { format } from "date-fns";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -51,6 +56,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 export function CategoryDetailView() {
   const params = useSearchParams();
   const categoryId = params.get("id") || "other";
+  const periodFromUrl = params.get("period");
   const { categories, expenses, ready } = useWasteLessStore();
   const category = resolveCategory(categories, categoryId);
 
@@ -58,8 +64,23 @@ export function CategoryDetailView() {
   const [plateFilter, setPlateFilter] = useState("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [periodPreset, setPeriodPreset] = useState<PeriodScope | "all">("all");
   const [showFilters, setShowFilters] = useState(false);
   const [showPlateSummary, setShowPlateSummary] = useState(false);
+
+  useEffect(() => {
+    if (
+      periodFromUrl === "day" ||
+      periodFromUrl === "week" ||
+      periodFromUrl === "month" ||
+      periodFromUrl === "year"
+    ) {
+      setPeriodPreset(periodFromUrl);
+      const { start, end } = getPeriodRange(periodFromUrl);
+      setDateFrom(format(start, "yyyy-MM-dd"));
+      setDateTo(format(end, "yyyy-MM-dd"));
+    }
+  }, [periodFromUrl]);
 
   const isFuel = isFuelCategory(category);
   const isCigarette = isCigaretteCategory(category);
@@ -204,9 +225,22 @@ export function CategoryDetailView() {
   const activeFilterCount = [
     merchantFilter !== "all",
     plateFilter !== "all",
+    periodPreset !== "all",
     !!dateFrom,
     !!dateTo,
   ].filter(Boolean).length;
+
+  const applyPeriodPreset = (preset: PeriodScope | "all") => {
+    setPeriodPreset(preset);
+    if (preset === "all") {
+      setDateFrom("");
+      setDateTo("");
+      return;
+    }
+    const { start, end } = getPeriodRange(preset);
+    setDateFrom(format(start, "yyyy-MM-dd"));
+    setDateTo(format(end, "yyyy-MM-dd"));
+  };
 
   const backHref = parentCategory
     ? `/category?id=${encodeURIComponent(parentCategory.id)}`
@@ -255,7 +289,21 @@ export function CategoryDetailView() {
         </div>
       </header>
 
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-4 space-y-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <SegmentedControl
+            value={periodPreset}
+            onChange={(v) => applyPeriodPreset(v as PeriodScope | "all")}
+            options={[
+              { value: "all", label: "Tümü" },
+              { value: "day", label: "Bugün" },
+              { value: "week", label: "Bu hafta" },
+              { value: "month", label: "Bu ay" },
+            ]}
+            className="min-w-0 flex-1"
+          />
+        </div>
+        <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={() => setShowFilters((v) => !v)}
@@ -283,12 +331,14 @@ export function CategoryDetailView() {
               setPlateFilter("all");
               setDateFrom("");
               setDateTo("");
+              setPeriodPreset("all");
             }}
           >
             <X className="h-3.5 w-3.5" />
             Temizle
           </button>
         )}
+        </div>
       </div>
 
       {showFilters && (
@@ -377,7 +427,7 @@ export function CategoryDetailView() {
           <div className="mt-1">
             <TrendBadge
               value={insights.monthlyTrend}
-              comparedTo="geçen aya göre"
+              comparedTo={formatSamePeriodMonthCaption(new Date())}
             />
           </div>
           <p className="mt-1 text-xs text-muted-foreground tabular-nums">

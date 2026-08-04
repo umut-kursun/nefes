@@ -1,49 +1,59 @@
-import { endOfMonth, isWithinInterval, parseISO, startOfMonth, subMonths } from "date-fns";
+import { isWithinInterval, parseISO } from "date-fns";
 import { formatMoney } from "@/lib/utils";
+import {
+  formatSamePeriodMonthInsight,
+  getSamePeriodMonthBounds,
+  isMonthTrendReady,
+} from "@/lib/analytics/month-comparison";
+import { spendingExpenses } from "@/lib/analytics";
 import { categoryHref, type Insight, type InsightContext } from "./types";
 
-function sumCigarette(expenses: InsightContext["expenses"]): number {
-  return expenses.reduce((acc, e) => acc + (e.totalAmount || 0), 0);
+function sumInRange(
+  expenses: InsightContext["expenses"],
+  categoryId: string,
+  start: Date,
+  end: Date
+): number {
+  return spendingExpenses(expenses)
+    .filter((e) => e.category === categoryId)
+    .filter((e) => {
+      try {
+        return isWithinInterval(parseISO(e.date), { start, end });
+      } catch {
+        return false;
+      }
+    })
+    .reduce((acc, e) => acc + (e.totalAmount || 0), 0);
 }
 
-/** Sigara category spend with month trend and ₺ amount. */
+/** Sigara category spend with same-period month trend. */
 export function getCigaretteSpending(ctx: InsightContext): Insight | null {
   const sigaraId = "sigara";
   const entries = ctx.expenses.filter((e) => e.category === sigaraId);
   if (entries.length < 2) return null;
 
-  const monthStart = startOfMonth(ctx.now);
-  const monthEnd = endOfMonth(ctx.now);
-  const prevStart = startOfMonth(subMonths(ctx.now, 1));
-  const prevEnd = endOfMonth(subMonths(ctx.now, 1));
-
-  const inMonth = entries.filter((e) => {
-    try {
-      return isWithinInterval(parseISO(e.date), { start: monthStart, end: monthEnd });
-    } catch {
-      return false;
-    }
-  });
-  const prevMonth = entries.filter((e) => {
-    try {
-      return isWithinInterval(parseISO(e.date), { start: prevStart, end: prevEnd });
-    } catch {
-      return false;
-    }
-  });
-
-  const current = sumCigarette(inMonth);
+  const bounds = getSamePeriodMonthBounds(ctx.now);
+  const current = sumInRange(
+    ctx.expenses,
+    sigaraId,
+    bounds.currentStart,
+    bounds.currentEnd
+  );
   if (current <= 0) return null;
 
-  const previous = sumCigarette(prevMonth);
   let trendText = "";
-  if (previous > 0) {
-    const pct = Math.round(((current - previous) / previous) * 100);
-    if (Math.abs(pct) >= 5) {
-      trendText =
-        pct > 0
-          ? ` Geçen aya göre %${Math.abs(pct)} arttı.`
-          : ` Geçen aya göre %${Math.abs(pct)} azaldı.`;
+  if (isMonthTrendReady(ctx.now)) {
+    const previous = sumInRange(
+      ctx.expenses,
+      sigaraId,
+      bounds.previousStart,
+      bounds.previousEnd
+    );
+    if (previous > 0) {
+      const pct = Math.round(((current - previous) / previous) * 100);
+      if (Math.abs(pct) >= 5) {
+        trendText = ` ${formatSamePeriodMonthInsight(pct, bounds.dayCount)}`;
+      }
     }
   }
 

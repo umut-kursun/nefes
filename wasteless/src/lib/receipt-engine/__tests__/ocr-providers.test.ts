@@ -54,6 +54,14 @@ describe("OpenAIOcrProvider", () => {
     const result = await provider.extract({
       imageDataUrl: "data:image/jpeg;base64,abc",
     });
+    const rawContent = JSON.stringify({
+      rawText: "A101\nTOPLAM 8,90",
+      lines: [
+        { text: "A101", confidence: 0.92 },
+        { text: "TOPLAM 8,90", confidence: 0.88 },
+      ],
+    });
+    expect(result.rawVisionResponse).toBe(rawContent);
     const doc = normalizeOcrExtractOutput(result);
     expect(doc.lines).toEqual(["A101", "TOPLAM 8,90"]);
     expect(doc.source).toBe("vision_primary");

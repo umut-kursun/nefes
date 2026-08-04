@@ -36,6 +36,26 @@ function dedupeAdjacentWords(value: string): string {
 }
 
 const X_TOTAL_IN_NAME = /\bx\s*\d{1,3}(?:[.\s]\d{3})*(?:[,.]\d{2})\b/gi;
+const STAR_TOTAL_IN_NAME = /\s*\*\s*\d{1,3}(?:[.\s]\d{3})*(?:[,.]\d{2})\b/gi;
+
+const TRAILING_UNIT_TOKEN =
+  /\s+(?:ADET|AD|PCS|PC|EA|UNIT|PK|PAKET)\s*$/i;
+
+/** OCR brand misreads — canonical spellings for memory/search. */
+const BRAND_OCR_FIXES: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bCOLA\s+TÜRK(?:IYE|İYE)\b/gi, "COLA TURKA"],
+  [/\bCOLA\s+TÜRK\b/gi, "COLA TURKA"],
+  [/\bCOLA\s+TURK\b/gi, "COLA TURKA"],
+  [/\bULUDA[ĞG]\s+L[İI]MONADA\s+[ŞS]EKS[İI]Z\b/gi, "Uludağ Limonata Şekersiz"],
+];
+
+function applyBrandOcrFixes(value: string): string {
+  let out = value;
+  for (const [pattern, replacement] of BRAND_OCR_FIXES) {
+    out = out.replace(pattern, replacement);
+  }
+  return out;
+}
 
 /**
  * Clean a raw OCR product line for display / memory.
@@ -48,8 +68,12 @@ export function cleanProductName(raw: string | null | undefined): string {
 
   s = s.replace(VAT_TOKEN, " ");
   s = s.replace(BARE_PERCENT, " ");
+  s = s.replace(/\s*\*+\s*$/g, " ");
+  s = s.replace(/\s*\*+\s*(?=%)/g, " ");
   // "x999,99" is a line total marker — never keep in the product name
   s = s.replace(X_TOTAL_IN_NAME, " ");
+  s = s.replace(STAR_TOTAL_IN_NAME, " ");
+  s = s.replace(TRAILING_UNIT_TOKEN, " ");
   s = s.replace(LONG_CODE, " ");
   s = s.replace(TRAILING_CODE, " ");
   s = s.replace(SYMBOL_NOISE, " ");
@@ -58,6 +82,7 @@ export function cleanProductName(raw: string | null | undefined): string {
   s = s.replace(/^[.,;:/\\-]+\s*/g, "").trim();
   s = s.replace(/\s{2,}/g, " ").trim();
   s = dedupeAdjacentWords(s);
+  s = applyBrandOcrFixes(s);
 
   return s.trim();
 }

@@ -1,5 +1,6 @@
 import {
   createEngineDependencies,
+  createOcrProvider,
   createDefaultLayerStack,
   executeLayer,
   formatGraphDebug,
@@ -17,6 +18,12 @@ import type { LayoutDocument } from "@/lib/receipt-engine/types/models/layout";
 import type { ReceiptEngineInput } from "@/lib/receipt-engine/types/pipeline";
 import type { EngineDependencies } from "@/lib/receipt-engine/pipeline/dependencies";
 import { toPlainJson } from "./serialize";
+import {
+  wrapOcrProviderWithCapture,
+  type OcrDebugCapture,
+} from "./ocrDebugCapture";
+
+export type { OcrDebugCapture };
 
 export type PipelineTraceStageKey =
   | "ocr"
@@ -52,6 +59,8 @@ export type PipelineTrace = {
   textDebug: PipelineTraceText;
   timings: PipelineLayerTimings;
   savedTo?: string;
+  /** Exact OpenAI vision message.content (vision_first capture). */
+  rawVisionResponse?: string;
 };
 
 async function runInstrumentedPipeline(
@@ -187,22 +196,32 @@ function formatLayoutDebug(layout: LayoutDocument): string {
   return lines.join("\n");
 }
 
-export function createTraceDependencies(options: {
-  apiKey: string;
-  model?: string;
-}): EngineDependencies {
+export function createTraceDependencies(
+  options: {
+    apiKey: string;
+    model?: string;
+  },
+  ocrCapture?: OcrDebugCapture
+): EngineDependencies {
   const config = resolveEngineConfig({ debug: true });
+  const model = options.model ?? process.env.OPENAI_OCR_MODEL ?? "gpt-4o-mini";
+  const baseOcrProvider = createOcrProvider({
+    kind: "openai",
+    openAi: {
+      apiKey: options.apiKey,
+      model,
+    },
+  });
+  const ocrProvider =
+    ocrCapture != null
+      ? wrapOcrProviderWithCapture(baseOcrProvider, ocrCapture)
+      : baseOcrProvider;
+
   return createEngineDependencies({
     config,
     layoutProfiles: createStubLayoutProfileRegistry(
       config.defaultLayoutProfileId
     ),
-    ocrProviderOptions: {
-      kind: "openai",
-      openAi: {
-        apiKey: options.apiKey,
-        model: options.model ?? process.env.OPENAI_OCR_MODEL ?? "gpt-4o-mini",
-      },
-    },
+    ocrProvider,
   });
 }

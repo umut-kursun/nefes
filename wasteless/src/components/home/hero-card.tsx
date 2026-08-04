@@ -63,7 +63,7 @@ export function HeroCard({
   children?: ReactNode;
 }) {
   return (
-    <div className="rounded-3xl border border-black/[0.04] bg-white p-4 shadow-[0_8px_30px_rgba(15,23,42,0.05)] sm:p-5">
+    <div className="rounded-3xl border border-teal-100/80 bg-gradient-to-br from-teal-50/40 via-white to-blue-50/30 p-4 shadow-[0_8px_30px_rgba(15,23,42,0.05)] sm:p-5">
       <SegmentedControl
         value={period}
         onChange={onPeriodChange}

@@ -1,0 +1,11 @@
+{
+  "profile": "market",
+  "merchant": "CARREFOURSA",
+  "purchaseDate": "2026-07-29",
+  "receiptNumber": "445566",
+  "products": [
+    { "name": "PEYNIR", "lineTotal": 89.9 },
+    { "name": "MAKARNA", "lineTotal": 24.5 }
+  ],
+  "total": 114.4
+}

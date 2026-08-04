@@ -91,11 +91,17 @@ export function pickHomeInsights(
   }
 
   // Remember what we surfaced this session (for next Home visit / remount)
-  writeShown([...readShown(), ...picked.map((p) => p.id)]);
+  const prevShown = readShown();
+  const newIds = picked.map((p) => p.id);
+  const alreadyRecorded = newIds.every((id) => prevShown.includes(id));
+  if (!alreadyRecorded) {
+    writeShown([...prevShown, ...newIds]);
+  }
 
-  // Rotate start so the first card isn't always the same family
+  // Stable daily rotation — do not use growing session length (causes carousel flicker)
   if (picked.length > 1) {
-    const offset = readShown().length % picked.length;
+    const daySeed = new Date().getDate() + new Date().getMonth() * 31;
+    const offset = daySeed % picked.length;
     return [...picked.slice(offset), ...picked.slice(0, offset)];
   }
   return picked;

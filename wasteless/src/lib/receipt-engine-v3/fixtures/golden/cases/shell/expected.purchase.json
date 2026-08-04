@@ -1,0 +1,10 @@
+{
+  "profile": "fuel",
+  "merchant": "SHELL",
+  "purchaseDate": "2026-07-29",
+  "products": [
+    { "name": "Motorin", "quantity": 29.766, "unit": "LT", "lineTotal": 2356.1 }
+  ],
+  "payments": [{ "label": "Kredi Kart", "amount": 2356.1 }],
+  "total": 2356.1
+}

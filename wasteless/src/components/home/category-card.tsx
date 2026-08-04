@@ -41,7 +41,7 @@ export function CategoryCard({
   return (
     <Link
       href={href}
-      className="flex items-start gap-3 rounded-2xl border border-black/[0.05] bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-0.5 active:scale-[0.99]"
+      className="flex items-start gap-3 rounded-2xl border border-teal-100/70 bg-gradient-to-br from-white via-teal-50/25 to-blue-50/20 p-3 shadow-sm transition duration-200 hover:-translate-y-0.5 active:scale-[0.99]"
     >
       <span
         className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl"

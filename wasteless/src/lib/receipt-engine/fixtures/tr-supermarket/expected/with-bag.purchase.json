@@ -102,11 +102,11 @@
     },
     "amount": 61.4
   },
-  "confidence": 0.7274999999999999,
+  "confidence": 0.7499999999999999,
   "provenance": {
     "metadataBlockId": "metadata:main",
     "footerBlockId": "footer:main",
-    "blockDocumentConfidence": 0.7274999999999999,
+    "blockDocumentConfidence": 0.7499999999999999,
     "rawTexts": [
       "Sut 1 L %1 45,90",
       "Ekmek %1 15,00",

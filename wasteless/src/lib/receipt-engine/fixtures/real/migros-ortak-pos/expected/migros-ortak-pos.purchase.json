@@ -124,11 +124,11 @@
     },
     "amount": 61.4
   },
-  "confidence": 0.712,
+  "confidence": 0.714,
   "provenance": {
     "metadataBlockId": "metadata:main",
     "footerBlockId": "footer:main",
-    "blockDocumentConfidence": 0.712,
+    "blockDocumentConfidence": 0.714,
     "rawTexts": [
       "EKMEK 750 GR %1 15,00",
       "SUT 1 LT %1 45,90",

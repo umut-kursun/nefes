@@ -1,0 +1,46 @@
+{
+  "merchant": {
+    "title": "SHELL & TURCAS PETROL A.S.",
+    "vknTckn": null,
+    "taxOffice": null,
+    "address": null,
+    "category": "FUEL"
+  },
+  "metadata": {
+    "purchaseDate": "2026-07-29",
+    "purchaseTime": "09:15:00",
+    "receiptNumber": null,
+    "currency": "TRY"
+  },
+  "products": [
+    {
+      "name": "MOTORİN EURO",
+      "quantity": 35.85,
+      "unit": "LT",
+      "unitPrice": 77.21,
+      "lineTotal": 2767.98,
+      "vatRatePercentage": 20
+    }
+  ],
+  "payments": [
+    {
+      "type": "CREDIT_CARD",
+      "bankName": "GARANTİ",
+      "cardLastFour": "1234",
+      "approvalCode": "123456",
+      "amount": 2767.98
+    }
+  ],
+  "financials": {
+    "vatTotal": 461.33,
+    "totalAmount": 2767.98
+  },
+  "fuelDetails": {
+    "plateNumber": "34 UK 1234",
+    "pumpNumber": 3,
+    "liters": 35.85,
+    "pricePerLiter": 77.21
+  },
+  "rawText": "SHELL\n34 UK 1234\nMOTORİN EURO 35,850 LT x 77,21 TL/L\n2767,98 TL",
+  "confidence": 0.9
+}

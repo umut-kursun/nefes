@@ -6,10 +6,13 @@
   },
   "purchaseTime": null,
   "receiptNumber": null,
-  "currency": null,
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
   "products": [
     {
-      "name": "Motorin 29,766 LT 79,17 TL/L",
+      "name": "Motorin",
       "confidence": 0.65,
       "provenance": {
         "productBlockId": "product:raw:L3",
@@ -80,11 +83,11 @@
     },
     "amount": 2356.1
   },
-  "confidence": 0.74375,
+  "confidence": 0.7583333333333333,
   "provenance": {
     "metadataBlockId": "metadata:main",
     "footerBlockId": "footer:main",
-    "blockDocumentConfidence": 0.74375,
+    "blockDocumentConfidence": 0.7583333333333333,
     "rawTexts": [
       "Motorin 29,766 LT 79,17 TL/L",
       "2356,10 TL",

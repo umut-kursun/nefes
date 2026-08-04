@@ -8,7 +8,7 @@ import { BackButton } from "@/components/back-button";
 import { GroupedExpenseList } from "@/components/grouped-expense-list";
 import { TrendBadge } from "@/components/trend-badge";
 import { useWasteLessStore } from "@/hooks/use-store";
-import { getTagInsights } from "@/lib/analytics";
+import { getTagInsights, formatSamePeriodMonthCaption } from "@/lib/analytics";
 import { getCategoryMeta } from "@/lib/categories";
 import { formatMoney } from "@/lib/utils";
 
@@ -83,7 +83,7 @@ function TagDetailInner() {
           <div className="mt-1">
             <TrendBadge
               value={insights.monthlyTrend}
-              comparedTo="geçen aya göre"
+              comparedTo={formatSamePeriodMonthCaption(new Date())}
             />
           </div>
         </div>

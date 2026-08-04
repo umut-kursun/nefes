@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { BarChart3, Plus, Settings2, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { AmountInput } from "@/components/amount-input";
 import { DashboardSkeleton } from "@/components/skeleton";
 import { SectionHeader } from "@/components/section-header";
 import { useToast } from "@/components/toast";
@@ -16,17 +17,28 @@ import { PurchaseSearch } from "@/components/home/purchase-search";
 import { QuickActionCard } from "@/components/home/quick-action-card";
 import { RecentExpenseCard } from "@/components/home/recent-expense-card";
 import { CategoryCard } from "@/components/home/category-card";
-import { InsightCard } from "@/components/insight-card";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { useWasteLessStore } from "@/hooks/use-store";
+import type { QuickButton } from "@/lib/types";
 import { getCategoryMeta } from "@/lib/categories";
 import {
   getParentCategoryBreakdownWithTrend,
   getPeriodOverview,
   getPeriodRange,
   getPeriodTotals,
+  formatSamePeriodMonthCaption,
+  spendingExpenses,
   type PeriodScope,
 } from "@/lib/analytics";
-import { getHomeAssistantInsights, getTopInsight } from "@/lib/insights";
+import { getHomeAssistantInsights } from "@/lib/insights";
 import { formatRelativeDate, formatTime } from "@/lib/datetime";
 import { normalizeMerchantName } from "@/lib/merchants";
 import { isWithinInterval, parseISO } from "date-fns";
@@ -58,7 +70,7 @@ function periodTitle(period: PeriodScope): string {
   }
 }
 
-function periodCaption(period: PeriodScope): string {
+function periodCaption(period: PeriodScope, now?: Date | null): string {
   switch (period) {
     case "day":
       return "Düne göre";
@@ -67,7 +79,7 @@ function periodCaption(period: PeriodScope): string {
     case "year":
       return "Geçen yıla göre";
     default:
-      return "Geçen aya göre";
+      return now ? formatSamePeriodMonthCaption(now) : "Geçen aya göre";
   }
 }
 
@@ -81,10 +93,13 @@ export default function HomePage() {
     tags,
     settings,
     tapQuickButton,
+    upsertQuickButton,
   } = useWasteLessStore();
   const { toast } = useToast();
   const [period, setPeriod] = useState<PeriodScope>("day");
   const [now, setNow] = useState<Date | null>(null);
+  const [amountEdit, setAmountEdit] = useState<QuickButton | null>(null);
+  const [editAmount, setEditAmount] = useState(0);
 
   useEffect(() => {
     if (ready && !settings.onboardingCompleted) {
@@ -111,7 +126,7 @@ export default function HomePage() {
       };
     }
     const { start, end } = getPeriodRange(period, now);
-    const scoped = expenses.filter((e) => {
+    const scoped = spendingExpenses(expenses).filter((e) => {
       try {
         return isWithinInterval(parseISO(e.date), { start, end });
       } catch {
@@ -209,22 +224,13 @@ export default function HomePage() {
     return () => window.clearInterval(id);
   }, []);
 
-  const topInsight = useMemo(
-    () =>
-      now
-        ? getTopInsight({ expenses, categories, tags, now })
-        : null,
-    [expenses, categories, tags, now]
-  );
-
   const assistantInsights = useMemo(
     () =>
       now
         ? getHomeAssistantInsights({ expenses, categories, tags, now }, 6)
         : [],
-    // Recompute when data changes — not every clock tick
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [expenses, categories, tags, now]
+    // Stable per calendar day — avoid recomputing every clock tick (breaks carousel)
+    [expenses, categories, tags, now?.toDateString()]
   );
 
   return (
@@ -244,7 +250,7 @@ export default function HomePage() {
         <Link
           href="/settings"
           aria-label="Ayarlar"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-black/[0.05] bg-white text-foreground/70 shadow-sm transition duration-200 hover:-translate-y-0.5 active:scale-95"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-black/[0.05] bg-white/80 text-foreground/70 shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
         >
           <Settings2 className="h-[18px] w-[18px]" />
         </Link>
@@ -259,7 +265,7 @@ export default function HomePage() {
               period={period}
               onPeriodChange={setPeriod}
               periodTitle={periodTitle(period)}
-              caption={periodCaption(period)}
+              caption={periodCaption(period, now)}
               total={heroTotal ?? 0}
               trend={heroTrend ?? null}
               purchaseCount={periodMemory.purchaseCount}
@@ -278,7 +284,7 @@ export default function HomePage() {
           <div className="flex gap-2 animate-fade-up delay-2">
             <Link
               href="/reports"
-              className="flex flex-1 items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-white px-3 py-3 shadow-sm transition duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+              className="flex flex-1 items-center gap-4 rounded-2xl border border-black/[0.05] bg-white px-4 py-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
                 <BarChart3 className="h-4 w-4" />
@@ -287,7 +293,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/insights"
-              className="flex flex-1 items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-white px-3 py-3 shadow-sm transition duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
+              className="flex flex-1 items-center gap-4 rounded-2xl border border-black/[0.05] bg-white px-4 py-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
                 <Sparkles className="h-4 w-4" />
@@ -295,13 +301,6 @@ export default function HomePage() {
               <span className="text-sm font-semibold">İçgörüler</span>
             </Link>
           </div>
-
-          {topInsight && (
-            <div className="animate-fade-up delay-2">
-              <SectionHeader title="Öne çıkan" actionLabel="Tümü" href="/insights" />
-              <InsightCard insight={topInsight} className="shadow-[0_8px_30px_rgba(15,23,42,0.06)]" />
-            </div>
-          )}
 
           {assistantInsights.length > 0 && (
             <div className="animate-fade-up delay-2">
@@ -328,6 +327,10 @@ export default function HomePage() {
                       await tapQuickButton(button);
                       toast(`${button.title} eklendi`, "success");
                     })();
+                  }}
+                  onLongPress={() => {
+                    setAmountEdit(button);
+                    setEditAmount(button.defaultAmount);
                   }}
                 />
               ))}
@@ -384,7 +387,7 @@ export default function HomePage() {
                     total={row.total}
                     count={row.count}
                     trend={row.trend}
-                    trendComparedTo={periodCaption(period)}
+                    trendComparedTo={periodCaption(period, now)}
                     progress={progress}
                     childrenPreview={childrenPreview}
                   />
@@ -420,6 +423,60 @@ export default function HomePage() {
           </section>
         </div>
       )}
+
+      <Dialog
+        open={!!amountEdit}
+        onOpenChange={(open) => {
+          if (!open) setAmountEdit(null);
+        }}
+      >
+        <DialogContent className="max-w-sm rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>
+              {amountEdit ? `${amountEdit.title} tutarı` : "Tutar güncelle"}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2 py-2">
+            <Label htmlFor="quick-amount">Varsayılan tutar</Label>
+            <AmountInput
+              id="quick-amount"
+              value={editAmount}
+              onChange={setEditAmount}
+              allowEmpty={false}
+            />
+            <p className="text-xs text-muted-foreground">
+              Basılı tutarak bu ekranı açabilirsin.
+            </p>
+          </div>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setAmountEdit(null)}
+            >
+              İptal
+            </Button>
+            <Button
+              type="button"
+              disabled={!amountEdit || editAmount <= 0}
+              onClick={() => {
+                if (!amountEdit || editAmount <= 0) return;
+                void (async () => {
+                  await upsertQuickButton({
+                    ...amountEdit,
+                    defaultAmount: editAmount,
+                    updatedAt: new Date().toISOString(),
+                  });
+                  toast(`${amountEdit.title} tutarı güncellendi`, "success");
+                  setAmountEdit(null);
+                })();
+              }}
+            >
+              Kaydet
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppShell>
   );
 }

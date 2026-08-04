@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal, X } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BackButton } from "@/components/back-button";
@@ -14,9 +15,16 @@ import { useWasteLessStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import type { ExpenseFilters } from "@/lib/filters";
 
-export default function HistoryPage() {
+function HistoryPageInner() {
+  const searchParams = useSearchParams();
   const { expenses, ready } = useWasteLessStore();
-  const [filters, setFilters] = useState<ExpenseFilters>({});
+  const [filters, setFilters] = useState<ExpenseFilters>(() => ({
+    categoryId: searchParams.get("categoryId") || undefined,
+    merchant: searchParams.get("merchant") || undefined,
+    dateFrom: searchParams.get("dateFrom") || undefined,
+    dateTo: searchParams.get("dateTo") || undefined,
+    tagId: searchParams.get("tagId") || undefined,
+  }));
   const [showFilters, setShowFilters] = useState(false);
   const filtered = useFilteredExpenses(expenses, filters);
 
@@ -38,80 +46,77 @@ export default function HistoryPage() {
       <header className="mb-5 flex items-center gap-3 animate-fade-up">
         <BackButton />
         <div className="min-w-0 flex-1">
-          <h1 className="font-display text-2xl tracking-tight">
-            Tüm harcamalar
-          </h1>
-          <p className="mt-0.5 text-sm text-muted-foreground">
-            {filtersActive ? `${filtered.length} / ${expenses.length}` : expenses.length}{" "}
-            kayıt
+          <h1 className="font-display text-2xl tracking-tight">Geçmiş</h1>
+          <p className="text-sm text-muted-foreground">
+            Tüm harcamalarını filtrele ve incele
           </p>
         </div>
-      </header>
-
-      <div className="mb-4 flex items-center gap-2 animate-fade-up delay-1">
         <button
           type="button"
+          aria-label="Filtreler"
           onClick={() => setShowFilters((v) => !v)}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-medium transition active:scale-95",
+            "relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border transition active:scale-95",
             showFilters || filtersActive
-              ? "border-primary/30 bg-primary/10 text-primary"
-              : "border-white/70 bg-white/75 text-foreground/80 hover:bg-white"
+              ? "border-teal-200 bg-teal-50 text-teal-900"
+              : "border-black/[0.06] bg-white text-muted-foreground"
           )}
         >
-          <SlidersHorizontal className="h-4 w-4" />
-          Filtrele
+          <SlidersHorizontal className="h-5 w-5" />
           {filtersActive && (
-            <span className="ml-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
+            <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-teal-700 text-[10px] font-bold text-white">
               {activeCount}
             </span>
           )}
         </button>
-        {filtersActive && (
-          <button
-            type="button"
-            className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground"
-            onClick={() => setFilters({})}
-          >
-            <X className="h-3.5 w-3.5" />
-            Temizle
-          </button>
-        )}
-      </div>
+      </header>
 
       {showFilters && (
-        <ExpenseFilterBar
-          value={filters}
-          onChange={setFilters}
-          className="mb-4 animate-fade-up"
-        />
+        <div className="mb-4 animate-fade-up">
+          <ExpenseFilterBar value={filters} onChange={setFilters} />
+          {filtersActive && (
+            <button
+              type="button"
+              onClick={() => setFilters({})}
+              className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+              Filtreleri temizle
+            </button>
+          )}
+        </div>
       )}
 
       {!ready ? (
         <p className="text-sm text-muted-foreground">Yükleniyor…</p>
-      ) : expenses.length === 0 && !filtersActive ? (
+      ) : filtered.length === 0 ? (
         <EmptyState
-          emoji="🧾"
-          title="Henüz harcama yok"
-          description="Fiş tara veya manuel giriş yap; harcama geçmişin burada birikir. İlk kayıttan sonra filtreleme ve arama da açılır."
-          actionLabel="İlk harcamayı ekle"
-          actionHref="/add"
+          title="Kayıt yok"
+          description={
+            filtersActive
+              ? "Bu filtrelere uyan harcama bulunamadı."
+              : "Henüz kayıtlı harcama yok."
+          }
+          actionLabel={filtersActive ? undefined : "Harcama ekle"}
+          actionHref={filtersActive ? undefined : "/add"}
         />
       ) : (
-        <div className="animate-fade-up delay-2">
-          <GroupedExpenseList
-            expenses={filtered}
-            emptyTitle={
-              filtersActive ? "Filtreye uyan kayıt yok" : "Henüz kayıt yok"
-            }
-            emptyDescription={
-              filtersActive
-                ? "Filtreleri gevşet veya yeni harcama ekle."
-                : "Fiş yükle veya hızlı butonla ekle."
-            }
-          />
-        </div>
+        <GroupedExpenseList expenses={filtered} />
       )}
     </AppShell>
+  );
+}
+
+export default function HistoryPage() {
+  return (
+    <Suspense
+      fallback={
+        <AppShell>
+          <p className="text-sm text-muted-foreground">Yükleniyor…</p>
+        </AppShell>
+      }
+    >
+      <HistoryPageInner />
+    </Suspense>
   );
 }

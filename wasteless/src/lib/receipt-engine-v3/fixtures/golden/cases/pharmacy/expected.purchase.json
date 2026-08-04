@@ -1,0 +1,8 @@
+{
+  "merchant": "ECZANE",
+  "purchaseDate": "2026-07-29",
+  "productCount": 2,
+  "payments": [{ "label": "Kredi Kart", "amount": 205.5 }],
+  "total": 205.5,
+  "forbiddenProductPatterns": ["Kasiyer"]
+}

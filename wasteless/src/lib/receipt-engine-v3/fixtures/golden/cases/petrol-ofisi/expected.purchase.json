@@ -1,0 +1,9 @@
+{
+  "profile": "fuel",
+  "merchant": "PETROL OFISI",
+  "purchaseDate": "2026-07-29",
+  "products": [
+    { "name": "Benzin", "quantity": 40, "unit": "LT", "lineTotal": 1796 }
+  ],
+  "total": 1796
+}

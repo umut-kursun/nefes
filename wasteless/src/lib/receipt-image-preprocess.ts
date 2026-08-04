@@ -5,6 +5,17 @@
 
 export type PreprocessVariant = "enhanced" | "threshold" | "original";
 
+/** Default vision fast-path edge — balances speed and OCR quality. */
+export const DEFAULT_MAX_EDGE = 1280;
+/** Higher-res fallback when first-pass OCR quality is low. */
+export const HIGH_RES_MAX_EDGE = 2048;
+/** Validation score below this triggers a high-res re-preprocess retry. */
+export const LOW_VISION_QUALITY_THRESHOLD = 75;
+
+export type PreprocessOptions = {
+  readonly maxEdge?: number;
+};
+
 function loadImage(file: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
@@ -40,7 +51,7 @@ function canvasToBlob(
 
 function drawFit(
   img: HTMLImageElement,
-  maxEdge = 1800
+  maxEdge = DEFAULT_MAX_EDGE
 ): { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D } {
   const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
   const w = Math.max(1, Math.round(img.width * scale));
@@ -223,14 +234,16 @@ function adaptiveThreshold(canvas: HTMLCanvasElement): HTMLCanvasElement {
 
 export async function preprocessReceiptImage(
   file: File,
-  variant: PreprocessVariant = "enhanced"
+  variant: PreprocessVariant = "enhanced",
+  options?: PreprocessOptions
 ): Promise<{ blob: Blob; dataUrl: string }> {
   if (typeof document === "undefined") {
     return { blob: file, dataUrl: "" };
   }
 
+  const maxEdge = options?.maxEdge ?? DEFAULT_MAX_EDGE;
   const img = await loadImage(file);
-  const drawn = drawFit(img);
+  const drawn = drawFit(img, maxEdge);
   let canvas = drawn.canvas;
   canvas = autoCropDocument(canvas);
   const ctxAfterCrop = canvas.getContext("2d", { willReadFrequently: true })!;
@@ -252,6 +265,23 @@ export async function preprocessReceiptImage(
     reader.readAsDataURL(blob);
   });
   return { blob, dataUrl };
+}
+
+/** True when a second pass at HIGH_RES_MAX_EDGE may improve vision OCR. */
+export function shouldRetryWithHigherResolution(input: {
+  validationScore?: number;
+  consistent?: boolean;
+  confidence?: number;
+}): boolean {
+  if (input.consistent === false) return true;
+  if (
+    input.validationScore != null &&
+    input.validationScore < LOW_VISION_QUALITY_THRESHOLD
+  ) {
+    return true;
+  }
+  if (input.confidence != null && input.confidence < 0.65) return true;
+  return false;
 }
 
 /** Original file as data URL for storage (never replace with OCR text). */

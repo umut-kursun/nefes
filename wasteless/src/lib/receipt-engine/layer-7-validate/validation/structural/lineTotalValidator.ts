@@ -10,7 +10,7 @@ export function validateLineTotals(purchase: PurchaseDraft): ValidatorResult {
 
   purchase.products.forEach((line, index) => {
     if (
-      line.quantity === undefined ||
+      line.quantity == null ||
       line.unitPrice === undefined ||
       line.lineTotal === undefined
     ) {

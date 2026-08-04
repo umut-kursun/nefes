@@ -145,9 +145,9 @@
         "metadataClassifier:date",
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.8666666666666667
+      "confidence": 0.8833333333333333
     },
-    "confidence": 0.8666666666666667,
+    "confidence": 0.8833333333333333,
     "merchant": "TOYZZ SHOP A.S.",
     "date": "27.07.2026 14:10",
     "time": null,
@@ -186,5 +186,5 @@
       }
     ]
   },
-  "confidence": 0.7541666666666667
+  "confidence": 0.7583333333333333
 }

@@ -5,5 +5,9 @@ export { parseVatRate } from "./vatRateParser";
 export { parseCurrency } from "./currencyParser";
 export { parseDate } from "./dateParser";
 export { parseTime } from "./timeParser";
-export { parseReceiptNumber } from "./receiptNumberParser";
+export {
+  parseReceiptNumber,
+  pickBestReceiptNumberText,
+  receiptNumberPriority,
+} from "./receiptNumberParser";
 export { parseTrNumber } from "./parseNumber";

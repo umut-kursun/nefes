@@ -212,9 +212,9 @@
         "metadataClassifier:date",
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.8666666666666667
+      "confidence": 0.8833333333333333
     },
-    "confidence": 0.8666666666666667,
+    "confidence": 0.8833333333333333,
     "merchant": "ECZANE NO 12",
     "date": "29.07.2026 11:05",
     "time": null,
@@ -253,5 +253,5 @@
       }
     ]
   },
-  "confidence": 0.7233333333333334
+  "confidence": 0.7266666666666667
 }

@@ -235,9 +235,9 @@
         "metadataClassifier:receipt_number",
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.86
+      "confidence": 0.8699999999999999
     },
-    "confidence": 0.86,
+    "confidence": 0.8699999999999999,
     "merchant": "MIGROS TICARET A.S.",
     "date": "29.07.2026 16:00",
     "time": null,
@@ -276,5 +276,5 @@
       }
     ]
   },
-  "confidence": 0.712
+  "confidence": 0.714
 }

@@ -157,7 +157,12 @@ export async function analyzeReceipt(
   config?: PartialSdkEngineConfig,
   options?: Omit<AnalyzeReceiptOptions, "config">
 ): Promise<ReceiptResult> {
-  const resolvedConfig = resolveSdkConfig(config);
+  const resolvedConfig = resolveSdkConfig({
+    ...config,
+    parserMode:
+      config?.parserMode ??
+      (!isOcrTextInput(input) ? "vision_first" : undefined),
+  });
   const emitter = options?.events ?? createEventEmitter();
   const versions = resolveVersionMetadata();
 
@@ -209,6 +214,10 @@ export async function analyzeReceipt(
       confidence: pipelineResult.confidence,
       performance: pipelineResult.performance,
       ...ocrViews,
+      rawVisionResponse:
+        "rawVisionResponse" in pipelineResult
+          ? pipelineResult.rawVisionResponse
+          : undefined,
       versions,
     };
 

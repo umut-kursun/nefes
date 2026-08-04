@@ -14,14 +14,21 @@ import { cn } from "@/lib/utils";
 
 type ToastTone = "default" | "success" | "danger";
 
+export type ToastOptions = {
+  actionLabel?: string;
+  onAction?: () => void;
+};
+
 type ToastItem = {
   id: string;
   message: string;
   tone: ToastTone;
+  actionLabel?: string;
+  onAction?: () => void;
 };
 
 type ToastApi = {
-  toast: (message: string, tone?: ToastTone) => void;
+  toast: (message: string, tone?: ToastTone, options?: ToastOptions) => void;
 };
 
 const ToastContext = createContext<ToastApi | null>(null);
@@ -40,13 +47,26 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setMounted(true);
   }, []);
 
-  const toast = useCallback((message: string, tone: ToastTone = "default") => {
-    const id = `t_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-    setItems((prev) => [...prev, { id, message, tone }]);
-    window.setTimeout(() => {
-      setItems((prev) => prev.filter((item) => item.id !== id));
-    }, 2800);
-  }, []);
+  const toast = useCallback(
+    (message: string, tone: ToastTone = "default", options?: ToastOptions) => {
+      const id = `t_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+      setItems((prev) => [
+        ...prev,
+        {
+          id,
+          message,
+          tone,
+          actionLabel: options?.actionLabel,
+          onAction: options?.onAction,
+        },
+      ]);
+      const duration = options?.onAction ? 8000 : 2800;
+      window.setTimeout(() => {
+        setItems((prev) => prev.filter((item) => item.id !== id));
+      }, duration);
+    },
+    []
+  );
 
   const value = useMemo(() => ({ toast }), [toast]);
 
@@ -66,7 +86,19 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   item.tone === "default" && "bg-stone-900 text-white"
                 )}
               >
-                {item.message}
+                <p>{item.message}</p>
+                {item.actionLabel && item.onAction && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      item.onAction?.();
+                      setItems((prev) => prev.filter((t) => t.id !== item.id));
+                    }}
+                    className="mt-2 w-full rounded-xl bg-white/15 px-3 py-1.5 text-xs font-semibold transition hover:bg-white/25"
+                  >
+                    {item.actionLabel}
+                  </button>
+                )}
               </div>
             ))}
           </div>,

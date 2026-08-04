@@ -1,0 +1,9 @@
+{
+  "profile": "restaurant",
+  "merchant": "LEZZET",
+  "purchaseDate": "2026-07-29",
+  "productCount": 2,
+  "payments": [{ "label": "Nakit", "amount": 405 }],
+  "total": 405,
+  "forbiddenProductPatterns": ["TOPLAM", "Nakit"]
+}

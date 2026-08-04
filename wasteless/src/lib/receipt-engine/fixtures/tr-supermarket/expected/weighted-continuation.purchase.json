@@ -68,11 +68,11 @@
     },
     "amount": 66.89
   },
-  "confidence": 0.75,
+  "confidence": 0.775,
   "provenance": {
     "metadataBlockId": "metadata:main",
     "footerBlockId": "footer:main",
-    "blockDocumentConfidence": 0.75,
+    "blockDocumentConfidence": 0.775,
     "rawTexts": [
       "0,744 kg x 89,90",
       "Domates",

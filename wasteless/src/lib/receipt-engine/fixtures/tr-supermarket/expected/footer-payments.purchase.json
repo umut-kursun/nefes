@@ -87,11 +87,11 @@
     },
     "amount": 8.9
   },
-  "confidence": 0.73125,
+  "confidence": 0.775,
   "provenance": {
     "metadataBlockId": "metadata:main",
     "footerBlockId": "footer:main",
-    "blockDocumentConfidence": 0.73125,
+    "blockDocumentConfidence": 0.775,
     "rawTexts": [
       "Su 1.5 L %1 8,90",
       "Nakit 50,00",

@@ -15,6 +15,7 @@ import { useSmartBack } from "@/hooks/use-smart-back";
 import { useWasteLessStore } from "@/hooks/use-store";
 import { getCategoryMeta } from "@/lib/categories";
 import { formatDateTime } from "@/lib/datetime";
+import { displayMerchantName } from "@/lib/merchants";
 import { buildCorrectionRecords } from "@/lib/ocr-correction-memory";
 import { saveOcrCorrections } from "@/lib/db";
 import { formatMoney } from "@/lib/utils";
@@ -126,7 +127,7 @@ function ExpenseDetailInner() {
           <BackButton className="mt-0.5" />
           <div className="min-w-0">
             <h1 className="truncate font-display text-2xl tracking-tight">
-              {expense.merchantName || meta.label}
+              {displayMerchantName(expense.merchantName, meta.label)}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground tabular-nums">
               {formatDateTime(expense.date, expense.time)} · {meta.label}

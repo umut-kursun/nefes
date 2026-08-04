@@ -55,15 +55,32 @@ export type PackSize = {
 };
 
 const SIZE_RE =
-  /(\d+(?:[.,]\d+)?)\s*(ml|lt|l|litre|liter|kg|gr|g|gram|adet|pk|paket)\b/i;
+  /(\d+(?:[.,]\d+)?)\s*(ml|cc|lt|l|litre|liter|kg|gr|g|gram|adet|pk|paket)\b/i;
 
 function canonicalizeUnit(raw: string): PackUnit {
   const u = raw.toLocaleLowerCase("tr-TR");
-  if (u === "ml") return "ml";
+  if (u === "ml" || u === "cc") return "ml";
   if (u === "lt" || u === "l" || u === "litre" || u === "liter") return "l";
   if (u === "kg") return "kg";
   if (u === "gr" || u === "g" || u === "gram") return "g";
   return "adet";
+}
+
+/** Normalize weight/volume to kg and L for comparable unit pricing. */
+export function normalizeMeasureForPricing(
+  amount: number,
+  unit: PackUnit
+): { amount: number; unit: PackUnit; unitLabel: string } {
+  if (unit === "g") {
+    return { amount: amount / 1000, unit: "kg", unitLabel: "₺/kg" };
+  }
+  if (unit === "ml") {
+    return { amount: amount / 1000, unit: "l", unitLabel: "₺/L" };
+  }
+  if (unit === "kg" || unit === "l") {
+    return { amount, unit, unitLabel: unitLabelFor(unit) };
+  }
+  return { amount, unit, unitLabel: unitLabelFor(unit) };
 }
 
 export function parsePackSize(raw: string | null | undefined): PackSize | null {
@@ -225,7 +242,7 @@ function parseUnitToken(unit: string | null | undefined): PackUnit | null {
   if (!unit) return null;
   const u = unit.toLocaleLowerCase("tr-TR").trim();
   if (!u) return null;
-  if (["ml"].includes(u)) return "ml";
+  if (["ml", "cc"].includes(u)) return "ml";
   if (["l", "lt", "litre", "liter"].includes(u)) return "l";
   if (["kg"].includes(u)) return "kg";
   if (["g", "gr", "gram"].includes(u)) return "g";
@@ -234,9 +251,39 @@ function parseUnitToken(unit: string | null | undefined): PackUnit | null {
 }
 
 /**
- * Unit price = paid price / numeric pack size.
- * 700 g → total/700 (₺/g). 2.5 kg → total/2.5 (₺/kg). 1.5 L → total/1.5 (₺/L).
- * Prefers explicit quantity+unit on the line item; falls back to size in the name.
+ * Purchased count on the expense line — pack size in the name is NOT quantity.
+ * Fuel litres and explicit "2 adet" from the receipt are kept.
+ */
+export function resolvePurchaseQuantity(input: {
+  quantity: number | null | undefined;
+  unit: string | null | undefined;
+  name: string | null | undefined;
+}): { quantity: number; unit: string } {
+  const explicitUnit = parseUnitToken(input.unit);
+  if (
+    input.quantity != null &&
+    input.quantity > 0 &&
+    explicitUnit &&
+    explicitUnit !== "adet"
+  ) {
+    return { quantity: input.quantity, unit: input.unit!.toUpperCase() };
+  }
+  if (input.quantity != null && input.quantity > 0) {
+    const fromName = parsePackSize(input.name);
+    if (
+      fromName &&
+      fromName.unit !== "adet" &&
+      Math.abs(fromName.amount - input.quantity) < 0.001
+    ) {
+      return { quantity: 1, unit: "adet" };
+    }
+    return { quantity: input.quantity, unit: "adet" };
+  }
+  return { quantity: 1, unit: "adet" };
+}
+
+/**
+ * Unit price = paid price ÷ normalized pack size (always ₺/kg or ₺/L when applicable).
  */
 export function computeUnitPrice(input: {
   totalPrice: number | null | undefined;
@@ -262,26 +309,26 @@ export function computeUnitPrice(input: {
     explicitUnit &&
     explicitUnit !== "adet"
   ) {
+    const normalized = normalizeMeasureForPricing(input.quantity, explicitUnit);
     return {
-      unitPrice: total / input.quantity,
-      unitLabel: unitLabelFor(explicitUnit),
-      packAmount: input.quantity,
-      packUnit: explicitUnit,
+      unitPrice: total / normalized.amount,
+      unitLabel: normalized.unitLabel,
+      packAmount: normalized.amount,
+      packUnit: normalized.unit,
     };
   }
 
   const fromName = parsePackSize(input.name);
   if (fromName && fromName.unit !== "adet") {
+    const normalized = normalizeMeasureForPricing(fromName.amount, fromName.unit);
     return {
-      unitPrice: total / fromName.amount,
-      unitLabel: unitLabelFor(fromName.unit),
-      packAmount: fromName.amount,
-      packUnit: fromName.unit,
+      unitPrice: total / normalized.amount,
+      unitLabel: normalized.unitLabel,
+      packAmount: normalized.amount,
+      packUnit: normalized.unit,
     };
   }
 
-  // OCR sometimes puts pack size only in quantity with missing unit —
-  // treat as adet if quantity > 1.
   if (input.quantity != null && input.quantity > 1) {
     return {
       unitPrice: total / input.quantity,
@@ -293,9 +340,9 @@ export function computeUnitPrice(input: {
 
   return {
     unitPrice: input.existingUnitPrice ?? null,
-    unitLabel: input.existingUnitPrice != null ? "₺" : null,
-    packAmount: fromName?.amount ?? input.quantity ?? null,
-    packUnit: fromName?.unit ?? explicitUnit,
+    unitLabel: input.existingUnitPrice != null ? "₺/adet" : null,
+    packAmount: fromName?.amount ?? input.quantity ?? 1,
+    packUnit: fromName?.unit ?? explicitUnit ?? "adet",
   };
 }
 

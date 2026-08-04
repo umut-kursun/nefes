@@ -21,6 +21,7 @@ import { BottomSheet } from "@/components/bottom-sheet";
 import { EmptyState } from "@/components/empty-state";
 import { PurchaseCardCompact } from "@/components/purchase-card";
 import { useWasteLessStore } from "@/hooks/use-store";
+import { spendingExpenses } from "@/lib/analytics";
 import type { Expense } from "@/lib/types";
 import { cn, formatMoney } from "@/lib/utils";
 import "react-day-picker/style.css";
@@ -41,6 +42,7 @@ export default function CalendarPage() {
   const [month, setMonth] = useState(() => startOfMonth(today));
   const [selected, setSelected] = useState<Date | undefined>();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [monthSheetOpen, setMonthSheetOpen] = useState(false);
   const [monthAnim, setMonthAnim] = useState<"in" | "left" | "right">("in");
   const [monthKey, setMonthKey] = useState(() => dateKey(startOfMonth(today)));
 
@@ -95,6 +97,36 @@ export default function CalendarPage() {
     () => dayPurchases.reduce((sum, e) => sum + (e.totalAmount || 0), 0),
     [dayPurchases]
   );
+
+  const monthLabel = format(month, "MMMM yyyy", { locale: tr });
+
+  const monthExpenses = useMemo(() => {
+    return spendingExpenses(expenses)
+      .filter((e) => {
+        if (!e.date) return false;
+        try {
+          return isSameMonth(parseISO(e.date), month);
+        } catch {
+          return false;
+        }
+      })
+      .sort((a, b) => {
+        const byDate = b.date.localeCompare(a.date);
+        if (byDate !== 0) return byDate;
+        const at = a.time || "99:99";
+        const bt = b.time || "99:99";
+        const t = at.localeCompare(bt);
+        if (t !== 0) return t;
+        return (b.createdAt || "").localeCompare(a.createdAt || "");
+      });
+  }, [expenses, month]);
+
+  const monthSummary = useMemo(() => {
+    return {
+      total: monthExpenses.reduce((sum, e) => sum + (e.totalAmount || 0), 0),
+      count: monthExpenses.length,
+    };
+  }, [monthExpenses]);
 
   const sheetTitle = selected
     ? format(selected, "d MMMM yyyy · EEEE", { locale: tr })
@@ -209,71 +241,112 @@ export default function CalendarPage() {
           actionHref="/add"
         />
       ) : (
-        <div className="animate-fade-up delay-1 rounded-3xl border border-black/[0.04] bg-white p-3 shadow-[0_8px_30px_rgba(15,23,42,0.05)] sm:p-4">
-          <div className="mb-2 flex items-center justify-between gap-2 px-1">
-            <button
-              type="button"
-              aria-label="Önceki ay"
-              onClick={() => changeMonth(addMonths(month, -1), "right")}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-muted/60 active:scale-95"
+        <>
+          <div className="animate-fade-up delay-1 rounded-3xl border border-white/40 bg-white/80 p-3 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-sm sm:p-4">
+            <div className="mb-2 flex items-center justify-between gap-2 px-1">
+              <button
+                type="button"
+                aria-label="Önceki ay"
+                onClick={() => changeMonth(addMonths(month, -1), "right")}
+                className="flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-white/60 active:scale-95"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <p className="font-display text-lg tracking-tight capitalize">
+                {monthLabel}
+              </p>
+              <button
+                type="button"
+                aria-label="Sonraki ay"
+                onClick={() => changeMonth(addMonths(month, 1), "left")}
+                className="flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-white/60 active:scale-95"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div
+              key={monthKey}
+              className={cn(
+                "wl-month-pane",
+                monthAnim === "left" && "wl-month-enter-left",
+                monthAnim === "right" && "wl-month-enter-right",
+                monthAnim === "in" && "wl-month-idle"
+              )}
             >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <p className="font-display text-lg tracking-tight capitalize">
-              {format(month, "MMMM yyyy", { locale: tr })}
-            </p>
-            <button
-              type="button"
-              aria-label="Sonraki ay"
-              onClick={() => changeMonth(addMonths(month, 1), "left")}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition hover:bg-muted/60 active:scale-95"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
+              <DayPicker
+                mode="single"
+                locale={dayPickerTr}
+                weekStartsOn={1}
+                month={month}
+                onMonthChange={onMonthChange}
+                hideNavigation
+                selected={selected}
+                onSelect={onSelectDay}
+                modifiers={{ purchased: purchasedDays }}
+                modifiersClassNames={{
+                  purchased: "wl-day-purchased",
+                }}
+                components={{ DayButton }}
+                className="wl-calendar mx-auto"
+              />
+            </div>
+
+            <div className="mt-3 flex items-center justify-between gap-2 px-1">
+              <p className="text-[11px] text-muted-foreground">
+                Rozetli günlerde satın alma var
+              </p>
+              {!isViewingTodayMonth && (
+                <button
+                  type="button"
+                  onClick={goToday}
+                  className="text-[11px] font-semibold text-primary"
+                >
+                  Bu aya dön
+                </button>
+              )}
+            </div>
           </div>
 
           <div
-            key={monthKey}
-            className={cn(
-              "wl-month-pane",
-              monthAnim === "left" && "wl-month-enter-left",
-              monthAnim === "right" && "wl-month-enter-right",
-              monthAnim === "in" && "wl-month-idle"
-            )}
+            className="pointer-events-none fixed inset-x-0 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-20 mx-auto max-w-lg px-4"
+            aria-live="polite"
+            aria-atomic="true"
           >
-            <DayPicker
-              mode="single"
-              locale={dayPickerTr}
-              weekStartsOn={1}
-              month={month}
-              onMonthChange={onMonthChange}
-              hideNavigation
-              selected={selected}
-              onSelect={onSelectDay}
-              modifiers={{ purchased: purchasedDays }}
-              modifiersClassNames={{
-                purchased: "wl-day-purchased",
-              }}
-              components={{ DayButton }}
-              className="wl-calendar mx-auto"
-            />
+            <button
+              type="button"
+              key={monthKey}
+              onClick={() => setMonthSheetOpen(true)}
+              className={cn(
+                "pointer-events-auto wl-month-summary-enter w-full text-left",
+                "rounded-2xl border border-white/20 bg-white/65 px-5 py-4 shadow-lg backdrop-blur-md",
+                "ring-1 ring-black/[0.04]",
+                "cursor-pointer transition duration-200 hover:bg-white/80 hover:shadow-xl active:scale-95"
+              )}
+            >
+              <div className="flex items-end justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+                    {monthLabel} toplamı
+                  </p>
+                  <p className="font-amount mt-1 text-[2rem] font-extrabold leading-none tabular-nums tracking-tight text-primary transition-opacity duration-300">
+                    {formatMoney(monthSummary.total)}
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                    Alışveriş
+                  </p>
+                  <p className="mt-0.5 text-lg font-bold tabular-nums text-[color:var(--ink)]">
+                    {monthSummary.count}
+                  </p>
+                </div>
+              </div>
+            </button>
           </div>
 
-          <div className="mt-3 flex items-center justify-between gap-2 px-1">
-            <p className="text-[11px] text-muted-foreground">
-              Rozetli günlerde satın alma var
-            </p>
-            {!isViewingTodayMonth && (
-              <button
-                type="button"
-                onClick={goToday}
-                className="text-[11px] font-semibold text-primary"
-              >
-                Bu aya dön
-              </button>
-            )}
-          </div>
-        </div>
+          <div className="h-28" aria-hidden />
+        </>
       )}
 
       <BottomSheet
@@ -342,6 +415,44 @@ export default function CalendarPage() {
             <ul className="space-y-2 pb-2">
               {dayPurchases.map((expense) => (
                 <li key={expense.id} onClick={() => setSheetOpen(false)}>
+                  <PurchaseCardCompact expense={expense} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </BottomSheet>
+
+      <BottomSheet
+        open={monthSheetOpen}
+        onClose={() => setMonthSheetOpen(false)}
+        title={`${monthLabel} · Aylık özet`}
+      >
+        {monthExpenses.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-black/[0.08] bg-muted/25 px-4 py-10 text-center">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-teal-800 shadow-sm">
+              <CalendarDays className="h-5 w-5" />
+            </div>
+            <p className="font-medium">Bu ayda satın alma yok</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Fiş ekleyerek bu ayı hafızana ekleyebilirsin.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-semibold tabular-nums text-foreground">
+                {monthExpenses.length}
+              </span>{" "}
+              alışveriş
+              <span className="text-black/20"> · </span>
+              <span className="font-semibold tabular-nums text-foreground">
+                {formatMoney(monthSummary.total)}
+              </span>
+            </p>
+            <ul className="space-y-2 pb-2">
+              {monthExpenses.map((expense) => (
+                <li key={expense.id} onClick={() => setMonthSheetOpen(false)}>
                   <PurchaseCardCompact expense={expense} />
                 </li>
               ))}

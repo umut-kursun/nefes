@@ -20,10 +20,14 @@ export interface PurchaseLineProvenance {
 /** One product line — exactly one ProductBlock. */
 export interface PurchaseLine {
   readonly name: string;
-  readonly quantity?: number;
+  readonly quantity?: number | null;
   readonly unit?: string;
   readonly unitPrice?: number;
   readonly lineTotal?: number;
+  readonly baseUnit?: "L" | "kg" | "ad";
+  readonly normalizedUnitPrice?: number;
+  readonly variantSize?: string | null;
+  readonly productKey?: string;
   readonly vatRate?: number;
   readonly confidence: Confidence;
   readonly provenance: PurchaseLineProvenance;
@@ -50,6 +54,15 @@ export interface PurchaseDraftProvenance {
   readonly rawTexts: readonly string[];
 }
 
+/** Fuel metadata from vision parser or product-line inference. */
+export interface PurchaseFuelMetadata {
+  readonly fuelType: string | null;
+  readonly liters: number | null;
+  readonly pricePerLiter: number | null;
+  readonly plateNumber: string | null;
+  readonly stationName: string | null;
+}
+
 /** Layer 6 output — canonical receipt understanding (no AI, no inference). */
 export interface PurchaseDraft {
   readonly merchant: string | null;
@@ -66,6 +79,7 @@ export interface PurchaseDraft {
   readonly total: PurchaseFooterLine | null;
   readonly confidence: Confidence;
   readonly provenance: PurchaseDraftProvenance;
+  readonly fuel?: PurchaseFuelMetadata | null;
 }
 
 export function emptyPurchaseDraft(): PurchaseDraft {

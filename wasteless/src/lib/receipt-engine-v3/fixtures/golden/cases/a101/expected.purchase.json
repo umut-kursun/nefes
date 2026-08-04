@@ -1,0 +1,11 @@
+{
+  "profile": "market",
+  "merchant": "A101",
+  "purchaseDate": "2026-07-29",
+  "receiptNumber": "789012",
+  "products": [
+    { "name": "SU", "lineTotal": 12.5 },
+    { "name": "CAY", "lineTotal": 89.9 }
+  ],
+  "total": 102.4
+}

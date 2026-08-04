@@ -1,0 +1,7 @@
+{
+  "merchant": "LC WAIKIKI",
+  "purchaseDate": "2026-07-28",
+  "productCount": 2,
+  "payments": [{ "label": "Kredi Kart", "amount": 799.98 }],
+  "total": 799.98
+}

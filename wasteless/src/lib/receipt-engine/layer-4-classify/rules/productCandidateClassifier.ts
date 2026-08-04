@@ -1,3 +1,7 @@
+/**
+ * @deprecated Legacy L4 product row classifier — only used when parserMode is
+ * `ocr_then_deterministic`. Production vision_first pipeline bypasses L2–L6 entirely.
+ */
 import { RULE_CONFIDENCE } from "../constants";
 import { matchesSpecialFooterLabel } from "../patterns";
 import { candidate, type NodeClassifier } from "../classifierTypes";

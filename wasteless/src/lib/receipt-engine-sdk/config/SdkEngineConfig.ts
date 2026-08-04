@@ -23,6 +23,8 @@ export interface SdkEngineModes {
   readonly validation: boolean;
 }
 
+export type ParserMode = "ocr_then_deterministic" | "vision_first";
+
 export interface SdkEngineConfig extends EngineConfig {
   readonly language: string;
   readonly currency: string;
@@ -31,6 +33,7 @@ export interface SdkEngineConfig extends EngineConfig {
   readonly modes: SdkEngineModes;
   readonly confidenceThresholds: SdkConfidenceThresholds;
   readonly ocrProviderId: string;
+  readonly parserMode: ParserMode;
 }
 
 const DEFAULT_MODES: SdkEngineModes = {
@@ -56,6 +59,7 @@ export const DEFAULT_SDK_ENGINE_CONFIG: SdkEngineConfig = {
   modes: DEFAULT_MODES,
   confidenceThresholds: DEFAULT_CONFIDENCE_THRESHOLDS,
   ocrProviderId: "mock",
+  parserMode: "vision_first",
 };
 
 export type PartialSdkEngineConfig = Partial<
@@ -88,6 +92,8 @@ export function resolveSdkConfig(
       partial?.merchantProfiles ?? DEFAULT_SDK_ENGINE_CONFIG.merchantProfiles,
     ocrProviderId:
       partial?.ocrProviderId ?? DEFAULT_SDK_ENGINE_CONFIG.ocrProviderId,
+    parserMode:
+      partial?.parserMode ?? DEFAULT_SDK_ENGINE_CONFIG.parserMode,
     language: partial?.language ?? DEFAULT_SDK_ENGINE_CONFIG.language,
     currency: partial?.currency ?? DEFAULT_SDK_ENGINE_CONFIG.currency,
     country: partial?.country ?? DEFAULT_SDK_ENGINE_CONFIG.country,

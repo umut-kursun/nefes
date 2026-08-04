@@ -1,37 +1,22 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- debug page previews receipt data URLs */
+/* eslint-disable @next/next/no-img-element */
 
 import { useRef, useState } from "react";
-import { Loader2, Upload, Download } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PipelineTrace } from "@/lib/receipt-engine-debug/tracePipeline";
-import { STAGE_FILENAMES } from "@/lib/receipt-engine-debug/stageFilenames";
+import { CopyAllDebugButton } from "@/components/copy-all-debug-button";
+import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
+import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 
-const STAGES: {
-  key: keyof PipelineTrace["stages"];
-  label: string;
-  layer: string;
-}[] = [
-  { key: "ocr", label: "OCR", layer: "L1" },
-  { key: "layout", label: "Layout", layer: "L2" },
-  { key: "receiptGraph", label: "ReceiptGraph", layer: "L3" },
-  { key: "classifiedGraph", label: "ClassifiedGraph", layer: "L4" },
-  { key: "blockDocument", label: "BlockDocument", layer: "L5" },
-  { key: "purchaseDraft", label: "PurchaseDraft", layer: "L6" },
-  { key: "validationReport", label: "ValidationReport", layer: "L7" },
-];
-
-function downloadJson(filename: string, data: unknown) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], {
-    type: "application/json",
-  });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.click();
-  URL.revokeObjectURL(url);
+function traceOcrText(trace: PipelineTrace): string {
+  const ocrStage = trace.stages.ocr as { rawText?: string; lines?: string[] };
+  return (
+    ocrStage.rawText?.trim() ||
+    ocrStage.lines?.join("\n").trim() ||
+    ""
+  );
 }
 
 export function ReceiptEngineDebugPanel() {
@@ -39,9 +24,6 @@ export function ReceiptEngineDebugPanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [trace, setTrace] = useState<PipelineTrace | null>(null);
-  const [activeStage, setActiveStage] =
-    useState<(typeof STAGES)[number]["key"]>("ocr");
-  const [view, setView] = useState<"json" | "text">("json");
 
   const runTrace = async (file: File) => {
     setLoading(true);
@@ -60,7 +42,6 @@ export function ReceiptEngineDebugPanel() {
         throw new Error("error" in data ? data.error : "Trace failed.");
       }
       setTrace(data);
-      setActiveStage("ocr");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Trace failed.");
     } finally {
@@ -68,22 +49,25 @@ export function ReceiptEngineDebugPanel() {
     }
   };
 
-  const stageJson = trace?.stages[activeStage];
-  const stageText = trace?.textDebug[activeStage];
+  const purchase = trace?.stages.purchaseDraft as PurchaseDraft | undefined;
+  const validation = trace?.stages.validationReport as
+    | ValidationReportGolden
+    | undefined;
+  const rawVision = trace?.rawVisionResponse ?? "";
+  const ocrText = trace ? traceOcrText(trace) : "";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div className="rounded-2xl border border-black/[0.05] bg-white p-4 shadow-sm">
         <h1 className="font-display text-xl font-semibold tracking-tight">
-          Receipt Engine — Pipeline Debug
+          Receipt Engine Debug
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Upload one receipt to capture OCR → Layout → Graph → Classify →
-          Blocks → Purchase → Validation. Compare stages to find where output
-          first diverges from the fiş.
+          Upload a receipt, then use Copy All Debug to export everything in one
+          plain-text blob.
         </p>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap items-center gap-2">
           <input
             ref={fileRef}
             type="file"
@@ -104,8 +88,17 @@ export function ReceiptEngineDebugPanel() {
             ) : (
               <Upload className="mr-2 h-4 w-4" />
             )}
-            Fiş yükle ve izle
+            Upload receipt
           </Button>
+          {trace && purchase && validation && (
+            <CopyAllDebugButton
+              purchase={purchase}
+              validation={validation}
+              ocrText={ocrText}
+              rawVisionResponse={rawVision}
+              analyzeResult={trace}
+            />
+          )}
         </div>
 
         {error && (
@@ -115,114 +108,17 @@ export function ReceiptEngineDebugPanel() {
         )}
       </div>
 
-      {trace && (
-        <>
-          <div className="rounded-2xl border border-black/[0.05] bg-white p-4 shadow-sm">
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-              <div>
-                <dt className="text-muted-foreground">Trace ID</dt>
-                <dd className="font-mono text-xs">{trace.traceId}</dd>
-              </div>
-              <div>
-                <dt className="text-muted-foreground">Created</dt>
-                <dd>{trace.createdAt}</dd>
-              </div>
-              {trace.savedTo && (
-                <div className="col-span-2">
-                  <dt className="text-muted-foreground">Saved to disk</dt>
-                  <dd className="font-mono text-xs break-all">{trace.savedTo}</dd>
-                </div>
-              )}
-            </dl>
-
-            {trace.imageDataUrl && (
-              <img
-                src={trace.imageDataUrl}
-                alt="Receipt"
-                className="mt-4 max-h-48 rounded-xl border object-contain"
-              />
-            )}
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  downloadJson(`${trace.traceId}-full-trace.json`, trace)
-                }
-              >
-                <Download className="mr-1 h-3.5 w-3.5" />
-                Full trace
-              </Button>
-              {STAGES.map((stage) => (
-                <Button
-                  key={stage.key}
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    downloadJson(
-                      STAGE_FILENAMES[stage.key] ??
-                        `${stage.key}.json`,
-                      trace.stages[stage.key]
-                    )
-                  }
-                >
-                  <Download className="mr-1 h-3.5 w-3.5" />
-                  {STAGE_FILENAMES[stage.key]?.replace(".json", "") ??
-                    stage.key}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-black/[0.05] bg-white shadow-sm">
-            <div className="flex flex-wrap gap-1 border-b border-black/[0.05] p-2">
-              {STAGES.map((stage) => (
-                <button
-                  key={stage.key}
-                  type="button"
-                  onClick={() => setActiveStage(stage.key)}
-                  className={`rounded-xl px-3 py-1.5 text-xs font-medium transition ${
-                    activeStage === stage.key
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted/60"
-                  }`}
-                >
-                  {stage.layer} {stage.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex gap-2 border-b border-black/[0.05] px-3 py-2">
-              <button
-                type="button"
-                onClick={() => setView("json")}
-                className={`text-xs font-medium ${
-                  view === "json" ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                JSON
-              </button>
-              <button
-                type="button"
-                onClick={() => setView("text")}
-                className={`text-xs font-medium ${
-                  view === "text" ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                Text summary
-              </button>
-            </div>
-
-            <pre className="max-h-[min(60vh,520px)] overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words">
-              {view === "json"
-                ? JSON.stringify(stageJson, null, 2)
-                : stageText}
-            </pre>
-          </div>
-        </>
+      {trace && purchase && validation && (
+        <div className="rounded-2xl border border-black/[0.05] bg-white p-3 shadow-sm text-xs text-muted-foreground">
+          <span className="font-mono">{trace.traceId}</span>
+          {trace.imageDataUrl && (
+            <img
+              src={trace.imageDataUrl}
+              alt="Receipt"
+              className="mt-3 max-h-40 rounded-lg border object-contain"
+            />
+          )}
+        </div>
       )}
     </div>
   );

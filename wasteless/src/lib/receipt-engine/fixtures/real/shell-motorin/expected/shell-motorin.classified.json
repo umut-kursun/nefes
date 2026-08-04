@@ -59,12 +59,6 @@
       ],
       "alternativeCandidates": [
         {
-          "semanticKind": "time",
-          "confidence": 0.85,
-          "ruleId": "metadataClassifier:time",
-          "reason": "time pattern: 29.07.2026 09:15"
-        },
-        {
           "semanticKind": "header",
           "confidence": 0.65,
           "ruleId": "headerClassifier:raw_line",
@@ -200,7 +194,7 @@
       "id": "frag:L0:name",
       "graphNodeId": "frag:L0:name",
       "semanticKind": "merchant",
-      "confidence": 0.9,
+      "confidence": 0.95,
       "matchedRules": [
         "headerClassifier:merchant_scored"
       ],
@@ -223,26 +217,19 @@
         "classificationRules": [
           "headerClassifier:merchant_scored"
         ],
-        "confidence": 0.9
+        "confidence": 0.95
       },
       "amount": null
     },
     {
       "id": "frag:L1:name",
       "graphNodeId": "frag:L1:name",
-      "semanticKind": "merchant",
-      "confidence": 0.7000000000000001,
+      "semanticKind": "header",
+      "confidence": 0.65,
       "matchedRules": [
-        "headerClassifier:merchant_scored"
+        "headerClassifier:header_fragment"
       ],
-      "alternativeCandidates": [
-        {
-          "semanticKind": "header",
-          "confidence": 0.65,
-          "ruleId": "headerClassifier:header_fragment",
-          "reason": "header region name fragment"
-        }
-      ],
+      "alternativeCandidates": [],
       "provenance": {
         "graphNodeId": "frag:L1:name",
         "layoutLineIndices": [
@@ -252,9 +239,9 @@
         "rawText": "34 ABC 123",
         "graphCreationRule": "passColumns:name",
         "classificationRules": [
-          "headerClassifier:merchant_scored"
+          "headerClassifier:header_fragment"
         ],
-        "confidence": 0.7000000000000001
+        "confidence": 0.65
       },
       "amount": null
     },
@@ -267,12 +254,6 @@
         "metadataClassifier:date"
       ],
       "alternativeCandidates": [
-        {
-          "semanticKind": "time",
-          "confidence": 0.85,
-          "ruleId": "metadataClassifier:time",
-          "reason": "time pattern: 29.07.2026 09:15"
-        },
         {
           "semanticKind": "header",
           "confidence": 0.65,

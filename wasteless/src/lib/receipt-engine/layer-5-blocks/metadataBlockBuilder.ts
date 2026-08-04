@@ -1,8 +1,10 @@
 import type { ClassifiedGraph } from "../types/models/classify";
 import type { MetadataBlock } from "../types/models/blocks";
 import { buildGraphIndex } from "../graph/graphIndex";
-import { selectBestMerchant } from "./merchantScorer";
+import { selectBestMerchant, selectBestMerchantFromLines } from "./merchantScorer";
 import { averageConfidence, provenanceFromNodes } from "./blockProvenance";
+import { parseReceiptNumber, pickBestReceiptNumberText } from "../layer-6-purchase/parsers/receiptNumberParser";
+import { parseDate } from "../layer-6-purchase/parsers/dateParser";
 
 const METADATA_KINDS = new Set([
   "merchant",
@@ -44,7 +46,6 @@ export function buildMetadataBlock(
         time = cn.provenance.sourceText;
         break;
       case "receipt_number":
-        receiptNumber = cn.provenance.sourceText;
         break;
       case "loyalty":
         loyalty = cn.provenance.sourceText;
@@ -57,10 +58,46 @@ export function buildMetadataBlock(
     }
   }
 
+  const receiptCandidates: string[] = [];
+  for (const cn of classified.nodes) {
+    if (cn.semanticKind === "receipt_number") {
+      receiptCandidates.push(cn.provenance.sourceText);
+    }
+  }
+
   const index = buildGraphIndex(classified.graph);
   const scoredMerchant = selectBestMerchant(index.headerLinesForMerchant());
   if (scoredMerchant) {
     merchant = scoredMerchant;
+  }
+
+  if (!merchant || isGreetingMerchant(merchant)) {
+    const allLines = classified.graph.nodes
+      .filter((n) => n.kind === "raw_line")
+      .map((n) => n.text);
+    const fallback = selectBestMerchantFromLines(allLines);
+    if (fallback) merchant = fallback;
+  }
+
+  if (!receiptNumber) {
+    const candidates = [...receiptCandidates];
+    for (const n of classified.graph.nodes) {
+      if (n.kind !== "raw_line") continue;
+      const parsed = parseReceiptNumber(n.text);
+      if (parsed.normalized) candidates.push(n.text);
+    }
+    receiptNumber = pickBestReceiptNumberText(candidates);
+  }
+
+  if (!date) {
+    for (const n of classified.graph.nodes) {
+      if (n.kind !== "raw_line") continue;
+      const parsed = parseDate(n.text);
+      if (parsed.normalized) {
+        date = n.text;
+        break;
+      }
+    }
   }
 
   const refs = Object.freeze([...nodeRefs]);
@@ -79,4 +116,8 @@ export function buildMetadataBlock(
     loyalty,
     barcodes: Object.freeze(barcodes),
   });
+}
+
+function isGreetingMerchant(text: string): boolean {
+  return /^(teşekkür|tesekkur|teşekkürler|tesekkurler)\b/i.test(text.trim());
 }

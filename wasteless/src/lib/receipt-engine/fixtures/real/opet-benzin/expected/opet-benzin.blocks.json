@@ -106,33 +106,29 @@
     "nodeRefs": [
       "raw:L2",
       "frag:L0:name",
-      "frag:L1:name",
       "frag:L2:name"
     ],
     "provenance": {
       "graphNodeIds": [
         "raw:L2",
         "frag:L0:name",
-        "frag:L1:name",
         "frag:L2:name"
       ],
       "layoutLineIndices": [
         0,
-        1,
         2
       ],
       "rawTexts": [
         "30.07.2026 20:01",
-        "OPET PETROLCULUK A.S.",
-        "06 XYZ 987"
+        "OPET PETROLCULUK A.S."
       ],
       "classificationRules": [
         "metadataClassifier:date",
         "headerClassifier:merchant_scored"
       ],
-      "confidence": 0.8250000000000001
+      "confidence": 0.8833333333333333
     },
-    "confidence": 0.8250000000000001,
+    "confidence": 0.8833333333333333,
     "merchant": "OPET PETROLCULUK A.S.",
     "date": "30.07.2026 20:01",
     "time": null,
@@ -146,13 +142,15 @@
     "nodeRefs": [
       "raw:L0",
       "raw:L1",
-      "raw:L4"
+      "raw:L4",
+      "frag:L1:name"
     ],
     "provenance": {
       "graphNodeIds": [
         "raw:L0",
         "raw:L1",
-        "raw:L4"
+        "raw:L4",
+        "frag:L1:name"
       ],
       "layoutLineIndices": [
         0,
@@ -166,7 +164,8 @@
       ],
       "classificationRules": [
         "headerClassifier:raw_line",
-        "footerClassifier:footer_region"
+        "footerClassifier:footer_region",
+        "headerClassifier:header_fragment"
       ],
       "confidence": 0.65
     },
@@ -189,8 +188,14 @@
         "text": "1917,82 TL",
         "semanticKind": "footer",
         "confidence": 0.65
+      },
+      {
+        "nodeRef": "frag:L1:name",
+        "text": "06 XYZ 987",
+        "semanticKind": "header",
+        "confidence": 0.65
       }
     ]
   },
-  "confidence": 0.74375
+  "confidence": 0.7583333333333333
 }

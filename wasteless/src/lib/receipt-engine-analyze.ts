@@ -10,6 +10,8 @@ export type ReceiptEngineAnalyzeSuccess = {
   imageDataUrl: string;
   /** Verbatim OCR text for review / detail UI. */
   ocrRawText: string;
+  /** Exact vision model response before parser post-processing (debug). */
+  rawVisionResponse?: string;
 };
 
 export type ReceiptEngineAnalyzeFailure = {
@@ -58,6 +60,11 @@ export async function analyzeReceiptEngineFormData(
     altImageDataUrl = await fileToDataUrl(altFile);
   }
 
+  const parserMode =
+    process.env.RECEIPT_PARSER_MODE === "ocr_then_deterministic"
+      ? "ocr_then_deterministic"
+      : "vision_first";
+
   const result = await analyzeReceipt(
     {
       imageDataUrl: primaryDataUrl,
@@ -68,6 +75,7 @@ export async function analyzeReceiptEngineFormData(
     {
       debug: process.env.NODE_ENV === "development",
       ocrProviderId: "openai",
+      parserMode,
     },
     {
       ocrFactoryOptions: {
@@ -96,5 +104,6 @@ export async function analyzeReceiptEngineFormData(
     }),
     imageDataUrl: displayDataUrl,
     ocrRawText: result.rawOcr.rawText,
+    rawVisionResponse: result.rawVisionResponse,
   };
 }

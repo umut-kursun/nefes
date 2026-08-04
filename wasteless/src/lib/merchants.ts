@@ -1,4 +1,6 @@
 /** Canonical merchant names for Turkish retailers / chains. */
+import { cleanMerchantName } from "@/lib/receipt-engine-sdk/normalize/cleanMerchantName";
+
 const MERCHANT_ALIASES: Record<string, string[]> = {
   Migros: [
     "migros",
@@ -29,7 +31,7 @@ const MERCHANT_ALIASES: Record<string, string[]> = {
   A101: ["a101", "a 101", "a-101"],
   BİM: ["bim", "bіm", "bim birleşik mağazalar"],
   Şok: ["sok", "şok", "sok market", "şok market"],
-  File: ["file", "file market"],
+  "File Market": ["file", "file market", "fıle market", "file mağaza"],
   Macrocenter: ["macrocenter", "macro center"],
   "Happy Center": ["happy center", "happycenter"],
   Watsons: ["watsons", "watson's"],
@@ -98,6 +100,16 @@ export function normalizeMerchantName(
   return trimmed
     .toLocaleLowerCase("tr-TR")
     .replace(/(^|\s)\S/g, (c) => c.toLocaleUpperCase("tr-TR"));
+}
+
+/** Clean legal OCR noise then collapse to a concise display name for UI cards. */
+export function displayMerchantName(
+  raw: string | null | undefined,
+  fallback = ""
+): string {
+  if (!raw?.trim()) return fallback;
+  const cleaned = cleanMerchantName(raw);
+  return normalizeMerchantName(cleaned) ?? cleaned ?? raw.trim();
 }
 
 export function merchantsMatch(

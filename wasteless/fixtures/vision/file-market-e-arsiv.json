@@ -1,0 +1,111 @@
+{
+  "merchant": {
+    "title": "FİLE MARKET MAĞAZACILIK ANONİM ŞİRKETİ",
+    "vknTckn": "3871427058",
+    "taxOffice": "Sarıgazi VD",
+    "address": "YENİ MAH.VARNALI SİLİVRİ DREAM SİTESİ NO :32/A G SİLİVRİ / İSTANBUL",
+    "category": "MARKET"
+  },
+  "metadata": {
+    "purchaseDate": "2023-07-27",
+    "purchaseTime": "18:47:00",
+    "receiptNumber": "V072023008377067",
+    "currency": "TRY"
+  },
+  "products": [
+    {
+      "name": "SKRPR.KAYISI 500G",
+      "quantity": 5,
+      "unit": "ad",
+      "unitPrice": 18.9,
+      "lineTotal": 94.5,
+      "vatRatePercentage": 1
+    },
+    {
+      "name": "LAKTOZSUZSUT200MLSUT",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 99.9,
+      "lineTotal": 99.9,
+      "vatRatePercentage": 1
+    },
+    {
+      "name": "ALIŞVERİŞ POŞETİ",
+      "quantity": 3,
+      "unit": "ad",
+      "unitPrice": 1,
+      "lineTotal": 3,
+      "vatRatePercentage": 20
+    },
+    {
+      "name": "ÇEKİRDEKSİZ KARPUZ",
+      "quantity": 5.59,
+      "unit": "kg",
+      "unitPrice": 19.5,
+      "lineTotal": 109.01,
+      "vatRatePercentage": 1
+    },
+    {
+      "name": "COLA TURKA 1,5 LT",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 55,
+      "lineTotal": 55,
+      "vatRatePercentage": 10
+    },
+    {
+      "name": "DUŞ JELİ FRESH DURU",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 144,
+      "lineTotal": 144,
+      "vatRatePercentage": 20
+    },
+    {
+      "name": "DİŞFIRÇ EXTRCLEAN1+1",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 90,
+      "lineTotal": 90,
+      "vatRatePercentage": 10
+    },
+    {
+      "name": "SADE BAGET 250G",
+      "quantity": 2,
+      "unit": "ad",
+      "unitPrice": 37.5,
+      "lineTotal": 75,
+      "vatRatePercentage": 1
+    },
+    {
+      "name": "NEKTARIN",
+      "quantity": 0.744,
+      "unit": "kg",
+      "unitPrice": 89.9,
+      "lineTotal": 66.89,
+      "vatRatePercentage": 1
+    },
+    {
+      "name": "İTHAL MUZ",
+      "quantity": 0.798,
+      "unit": "kg",
+      "unitPrice": 99.9,
+      "lineTotal": 79.72,
+      "vatRatePercentage": 1
+    }
+  ],
+  "payments": [
+    {
+      "type": "CREDIT_CARD",
+      "bankName": "İş Bankası",
+      "cardLastFour": null,
+      "approvalCode": "370355",
+      "amount": 817.02
+    }
+  ],
+  "financials": {
+    "vatTotal": 42.88,
+    "totalAmount": 817.02
+  },
+  "confidence": 0.92
+}

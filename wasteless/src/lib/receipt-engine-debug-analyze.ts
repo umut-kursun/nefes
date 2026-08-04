@@ -1,4 +1,5 @@
 import { arrayBufferToBase64 } from "@/lib/analyze-receipt-helpers";
+import { analyzeReceipt } from "@/lib/receipt-engine-sdk";
 import {
   createTraceDependencies,
   traceReceiptEngine,
@@ -59,6 +60,11 @@ export async function debugReceiptEngineFormData(
 
   const deps = createTraceDependencies(options);
 
+  const parserMode =
+    process.env.RECEIPT_PARSER_MODE === "ocr_then_deterministic"
+      ? "ocr_then_deterministic"
+      : "vision_first";
+
   try {
     const trace = await traceReceiptEngine(
       {
@@ -75,6 +81,33 @@ export async function debugReceiptEngineFormData(
       },
       deps
     );
+
+    if (parserMode === "vision_first") {
+      const visionResult = await analyzeReceipt(
+        {
+          imageDataUrl: primaryDataUrl,
+          altImageDataUrl,
+          sourceHint: hint,
+          preprocessMs: Number.isFinite(preprocessMs) ? preprocessMs : undefined,
+        },
+        { parserMode: "vision_first" },
+        {
+          ocrFactoryOptions: {
+            kind: "openai",
+            openAi: {
+              apiKey: options.apiKey,
+              model:
+                options.model ??
+                process.env.OPENAI_VISION_MODEL ??
+                process.env.OPENAI_OCR_MODEL,
+            },
+          },
+        }
+      );
+      if (visionResult.success && visionResult.rawVisionResponse) {
+        trace.rawVisionResponse = visionResult.rawVisionResponse;
+      }
+    }
 
     if (shouldSaveTraceToDisk()) {
       const savedTo = saveTraceArtifacts(

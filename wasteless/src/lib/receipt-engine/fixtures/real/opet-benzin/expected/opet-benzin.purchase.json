@@ -6,10 +6,13 @@
   },
   "purchaseTime": null,
   "receiptNumber": null,
-  "currency": null,
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
   "products": [
     {
-      "name": "Benzin 42,150 LT 45,50 TL/L",
+      "name": "Benzin",
       "confidence": 0.65,
       "provenance": {
         "productBlockId": "product:raw:L3",
@@ -64,11 +67,11 @@
     },
     "amount": 1917.82
   },
-  "confidence": 0.74375,
+  "confidence": 0.7583333333333333,
   "provenance": {
     "metadataBlockId": "metadata:main",
     "footerBlockId": "footer:main",
-    "blockDocumentConfidence": 0.74375,
+    "blockDocumentConfidence": 0.7583333333333333,
     "rawTexts": [
       "Benzin 42,150 LT 45,50 TL/L",
       "1917,82 TL",

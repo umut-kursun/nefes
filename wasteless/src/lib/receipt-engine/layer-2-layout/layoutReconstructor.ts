@@ -60,6 +60,10 @@ function buildLayoutLine(
 
   const hasColumnData = Boolean(columns.name || columns.vat || columns.amount);
 
+  const tokens: LayoutLine["tokens"] = {};
+  if (features.quantityToken) tokens.quantity = features.quantityToken;
+  if (features.vatToken) tokens.vat = features.vatToken;
+
   return {
     index,
     text: normalized,
@@ -77,10 +81,7 @@ function buildLayoutLine(
       isLikelyContinuation: features.isLikelyContinuation,
       isRightAlignedPrice: features.isRightAlignedPrice,
     },
-    tokens: {
-      quantity: features.quantityToken ?? undefined,
-      vat: features.vatToken ?? undefined,
-    },
+    tokens: Object.keys(tokens).length > 0 ? tokens : {},
     confidence: clampConfidence(
       lineConfidence(hasColumnData, split.trailingAmount != null, isNoise)
     ),

@@ -7,6 +7,7 @@ import {
   parseDate,
   parseTime,
   parseReceiptNumber,
+  pickBestReceiptNumberText,
 } from "@/lib/receipt-engine/layer-6-purchase/parsers";
 
 describe("QuantityParser", () => {
@@ -38,8 +39,16 @@ describe("QuantityParser", () => {
     expect(parseQuantity("750 GR")).toEqual({ raw: "750 GR" });
   });
 
-  it("returns raw only for unparseable text", () => {
-    expect(parseQuantity("n/a")).toEqual({ raw: "n/a" });
+  it("does not treat OCR VAT token X10 as purchased quantity", () => {
+    expect(parseQuantity("X10")).toEqual({ raw: "X10" });
+    expect(parseQuantity("x10")).toEqual({ raw: "x10" });
+  });
+
+  it("still parses non-VAT explicit x quantity", () => {
+    expect(parseQuantity("2 x")).toEqual({
+      raw: "2 x",
+      normalized: 2,
+    });
   });
 
   it("does not fabricate quantity when missing", () => {
@@ -62,6 +71,11 @@ describe("UnitParser", () => {
 describe("VatRateParser", () => {
   it("parses inline VAT token", () => {
     expect(parseVatRate("%1")).toEqual({ raw: "%1", normalized: 1 });
+  });
+
+  it("parses OCR VAT token X10", () => {
+    expect(parseVatRate("X10")).toEqual({ raw: "X10", normalized: 10 });
+    expect(parseVatRate("%10")).toEqual({ raw: "%10", normalized: 10 });
   });
 
   it("leaves missing VAT undefined", () => {
@@ -126,5 +140,11 @@ describe("ReceiptNumberParser", () => {
       raw: "9876",
       normalized: "9876",
     });
+  });
+
+  it("prefers Fiş No over Z No when both appear", () => {
+    expect(
+      pickBestReceiptNumberText(["Z No: 0261 EKÜ No: 0002", "Fiş No: 1132"])
+    ).toBe("Fiş No: 1132");
   });
 });

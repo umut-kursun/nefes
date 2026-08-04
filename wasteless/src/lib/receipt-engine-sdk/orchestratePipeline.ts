@@ -13,6 +13,16 @@ import { buildPurchaseDraft } from "@/lib/receipt-engine/layer-6-purchase/buildP
 import { buildValidationReport } from "@/lib/receipt-engine/layer-7-validate/buildValidationReport";
 import { stripValidatedPurchase } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import { ocrDocumentFromRaw } from "@/lib/receipt-engine/layer-1-ocr/normalizeOcrDocument";
+import {
+  emptyBlockDocument,
+  emptyClassifiedGraph,
+  emptyReceiptGraph,
+} from "@/lib/receipt-engine/types/index";
+import { emptyLayoutDocument } from "@/lib/receipt-engine/types/models/layout";
+import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
+import type { ValidationReport } from "@/lib/receipt-engine/types/models/validation";
+import { parsedReceiptToPurchaseDraft } from "./adapters/parsedReceiptToPurchaseDraft";
+import { parseReceiptWithVisionRetry } from "./vision/visionParseWithRetry";
 import type { OcrDocument } from "@/lib/receipt-engine/types/models/image";
 import type { ReceiptEngineInput } from "@/lib/receipt-engine/types/pipeline";
 import type { EngineDependencies } from "@/lib/receipt-engine/pipeline/dependencies";
@@ -187,18 +197,129 @@ export async function orchestrateFromOcrText(
   };
 }
 
+function buildVisionOnlyQualityOutputs(
+  purchase: PurchaseDraft,
+  validation: ValidationReport,
+  ocr: OcrDocument,
+  timings: Partial<PipelineLayerTimings>,
+  profileId: string
+): QualityPipelineOutputs {
+  const layout = emptyLayoutDocument(profileId);
+  const graph = emptyReceiptGraph(profileId);
+  const classified = emptyClassifiedGraph(graph);
+  const blocks = emptyBlockDocument();
+  return {
+    ocr,
+    layout,
+    graph,
+    classified,
+    blocks,
+    purchase,
+    validation,
+    timings,
+  };
+}
+
+function canUseDirectVision(
+  input: ReceiptEngineInput,
+  config: SdkEngineConfig,
+  ocrFactoryOptions?: OcrProviderFactoryOptions
+): boolean {
+  return (
+    config.parserMode === "vision_first" &&
+    Boolean(input.imagePrimary?.dataUrl && ocrFactoryOptions?.openAi?.apiKey)
+  );
+}
+
 export async function orchestrateFromImage(
   input: ReceiptEngineInput,
   config: SdkEngineConfig,
   ocrFactoryOptions?: OcrProviderFactoryOptions,
   emitter?: ReceiptEngineEventEmitter
 ) {
-  const deps = createDeps(config, ocrFactoryOptions);
-  const layers = createDefaultLayerStack();
-  const ctx = createLayerContext(deps);
   const collectTimings = config.modes.performance;
   const timings = emptyTimings();
   const pipelineStart = collectTimings ? Date.now() : 0;
+
+  if (canUseDirectVision(input, config, ocrFactoryOptions)) {
+    try {
+      const visionStart = collectTimings ? Date.now() : 0;
+      const visionInput = {
+        imageDataUrl: input.imagePrimary!.dataUrl,
+        altImageDataUrl: input.imageAlt?.dataUrl,
+      };
+      const visionOptions = {
+        apiKey: ocrFactoryOptions!.openAi!.apiKey,
+        model: ocrFactoryOptions!.openAi!.model,
+        maxRetries: 1,
+      };
+
+      const { parsed, rawVisionResponse } = await parseReceiptWithVisionRetry(
+        visionInput,
+        visionOptions
+      );
+      const purchase = await parsedReceiptToPurchaseDraft(parsed);
+      const validation = buildValidationReport(purchase);
+
+      if (collectTimings) timings.ocrMs = Date.now() - visionStart;
+
+      const validationGolden = stripValidatedPurchase(validation);
+      const ocr = ocrDocumentFromRaw(parsed.rawText ?? purchase.merchant ?? "");
+      emitter?.emit("onOCRFinished", { ocr, durationMs: timings.ocrMs ?? 0 });
+      emitter?.emit("onPurchaseDraftCreated", { purchase, durationMs: 0 });
+      emitter?.emit("onValidationFinished", {
+        validation: validationGolden,
+        purchase,
+        durationMs: 0,
+      });
+
+      if (collectTimings) timings.totalMs = Date.now() - pipelineStart;
+
+      const outputs = buildVisionOnlyQualityOutputs(
+        purchase,
+        validation,
+        ocr,
+        timings,
+        config.defaultLayoutProfileId
+      );
+      const confidence = buildConfidenceModel(outputs);
+      const debugReport = buildDebugReport(outputs, {
+        receiptId: input.sourceHint ?? "vision",
+      });
+
+      return {
+        ocr,
+        purchase,
+        validation: validationGolden,
+        debugReport: config.modes.quality
+          ? debugReport
+          : { ...debugReport, confidence },
+        confidence,
+        performance: timings,
+        rawVisionResponse,
+      };
+    } catch (visionError) {
+      const message =
+        visionError instanceof Error
+          ? visionError.message
+          : String(visionError);
+      throw new Error(`vision_first parse failed: ${message}`, {
+        cause: visionError,
+      });
+    }
+  }
+
+  if (config.parserMode === "vision_first" && input.imagePrimary?.dataUrl) {
+    throw new Error(
+      "vision_first requires an OpenAI API key for image parsing. " +
+        "Legacy OCR/classifier pipeline (L2–L6) is disabled in vision_first mode."
+    );
+  }
+
+  /** @deprecated Legacy L2–L6 path — only when parserMode is ocr_then_deterministic. */
+  const deps = createDeps(config, ocrFactoryOptions);
+  const layers = createDefaultLayerStack();
+  const ctx = createLayerContext(deps);
 
   let layerStart = collectTimings ? Date.now() : 0;
   const l0 = await executeLayer(layers.l0, input, ctx);

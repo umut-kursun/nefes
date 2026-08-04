@@ -9,7 +9,7 @@ export function validateQuantities(purchase: PurchaseDraft): ValidatorResult {
   const issues: ValidationIssue[] = [];
 
   purchase.products.forEach((line, index) => {
-    if (line.quantity === undefined) return;
+    if (line.quantity == null) return;
 
     if (!Number.isFinite(line.quantity) || line.quantity <= 0) {
       issues.push(
