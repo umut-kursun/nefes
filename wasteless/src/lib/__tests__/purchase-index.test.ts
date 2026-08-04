@@ -241,4 +241,88 @@ describe("purchase index analytics", () => {
     const result = searchMemory(expenses, "Süt");
     expect(result?.purchaseCount).toBe(2);
   });
+
+  it("returns null price trend for a single purchase", () => {
+    const expenses = [
+      expense({
+        id: "1",
+        date: "2026-07-01",
+        merchantName: "Migros",
+        items: [line("1", "Süt", 30, { unit: "ad" })],
+      }),
+    ];
+
+    const result = searchMemory(expenses, "Süt");
+    expect(result?.priceChangePct).toBeNull();
+    expect(result?.previousComparablePrice).toBeNull();
+    expect(result?.latestComparablePrice).toBeNull();
+  });
+
+  it("skips price trend when units are not comparable", () => {
+    const expenses = [
+      expense({
+        id: "1",
+        date: "2026-07-05",
+        merchantName: "Migros",
+        items: [
+          line("1", "Süt", 120, {
+            quantity: 1,
+            unit: "LT",
+            unitPrice: 120,
+          }),
+        ],
+      }),
+      expense({
+        id: "2",
+        date: "2026-07-01",
+        merchantName: "Migros",
+        items: [line("2", "Süt", 30, { quantity: 1, unit: "ad" })],
+      }),
+    ];
+
+    const result = searchMemory(expenses, "Süt");
+    expect(result?.priceChangePct).toBeNull();
+  });
+
+  it("hides absurd price trend percentages", () => {
+    const expenses = [
+      expense({
+        id: "1",
+        date: "2026-07-05",
+        merchantName: "Migros",
+        items: [line("1", "Süt", 500, { quantity: 1, unit: "ad" })],
+      }),
+      expense({
+        id: "2",
+        date: "2026-07-01",
+        merchantName: "Migros",
+        items: [line("2", "Süt", 10, { quantity: 1, unit: "ad" })],
+      }),
+    ];
+
+    const result = searchMemory(expenses, "Süt");
+    expect(result?.priceChangePct).toBeNull();
+  });
+
+  it("computes price trend for comparable unit purchases", () => {
+    const expenses = [
+      expense({
+        id: "1",
+        date: "2026-07-05",
+        merchantName: "Migros",
+        items: [line("1", "Süt", 33, { quantity: 1, unit: "ad" })],
+      }),
+      expense({
+        id: "2",
+        date: "2026-07-01",
+        merchantName: "Migros",
+        items: [line("2", "Süt", 30, { quantity: 1, unit: "ad" })],
+      }),
+    ];
+
+    const result = searchMemory(expenses, "Süt");
+    expect(result?.priceChangePct).toBe(10);
+    expect(result?.latestComparablePrice).toBe(33);
+    expect(result?.previousComparablePrice).toBe(30);
+  });
 });

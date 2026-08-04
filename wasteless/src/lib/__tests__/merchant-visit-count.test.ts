@@ -129,4 +129,53 @@ describe("merchant visit counts", () => {
     expect(memory?.purchaseCount).toBe(2);
     expect(countMerchantVisitMatches(expenses, "Süt")).toBe(0);
   });
+
+  it("merchant search shows visits not product lines containing merchant name", () => {
+    const expenses = [
+      expense({
+        id: "1",
+        date: "2026-07-01",
+        merchantName: "Migros",
+        items: [
+          {
+            name: "Migros Plastik Poşet",
+            quantity: 1,
+            unitPrice: 0.5,
+            totalPrice: 0.5,
+          },
+        ],
+      }),
+      expense({
+        id: "2",
+        date: "2026-07-02",
+        merchantName: "Migros",
+        items: [
+          {
+            name: "Migros Plastik Poşet",
+            quantity: 1,
+            unitPrice: 0.5,
+            totalPrice: 0.5,
+          },
+          { name: "Süt", quantity: 1, unitPrice: 30, totalPrice: 30 },
+        ],
+      }),
+    ];
+
+    const insight = getMostVisitedMerchant({
+      expenses,
+      categories: [],
+      tags: [],
+      now: new Date("2026-07-10"),
+    });
+    expect(insight).not.toBeNull();
+    const match = insight!.description.match(/\((\d+) kez\)/);
+    expect(match).not.toBeNull();
+    const carouselCount = Number(match![1]);
+
+    const memory = searchPurchaseMemory(expenses, "Migros");
+    expect(memory).not.toBeNull();
+    expect(memory!.purchaseCount).toBe(2);
+    expect(memory!.purchaseCount).toBe(carouselCount);
+    expect(memory!.hits.every((h) => h.store === "Migros")).toBe(true);
+  });
 });

@@ -17,7 +17,7 @@ export function getAverageReceipt(ctx: InsightContext): Insight | null {
     id: "average-receipt",
     icon: "receipt",
     title: "Ortalama fiş",
-    description: `Bu ay ortalama fiş tutarın ${formatMoney(avg)} (${overview.count} alışveriş).`,
+    description: `Bu ay ortalama fiş tutarın ${formatMoney(avg)} — ${overview.count} alışverişin ortalaması.`,
     priority: 58,
     href: "/history",
   };

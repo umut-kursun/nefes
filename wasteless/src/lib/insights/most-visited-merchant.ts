@@ -12,7 +12,7 @@ export function getMostVisitedMerchant(
     id: "most-visited-merchant",
     icon: "building",
     title: "En çok ziyaret edilen işyeri",
-    description: `Bu dönemde en çok ${top.name}'da alışveriş yapıyorsun (${top.count} kez).`,
+    description: `Kayıtlarına göre en çok ${top.name}'da alışveriş yapıyorsun (${top.count} kez).`,
     priority: 65,
     href: memorySearchHref(top.name),
   };

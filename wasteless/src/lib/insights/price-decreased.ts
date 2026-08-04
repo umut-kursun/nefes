@@ -1,5 +1,9 @@
 import { memorySearchHref, type Insight, type InsightContext } from "./types";
-import { comparePrice, getProductPurchases } from "./helpers";
+import {
+  comparePrice,
+  getProductPurchases,
+  resolveComparablePrices,
+} from "./helpers";
 
 /** Product whose latest purchase is meaningfully cheaper than the previous. */
 export function getPriceDecrease(ctx: InsightContext): Insight | null {
@@ -16,9 +20,9 @@ export function getPriceDecrease(ctx: InsightContext): Insight | null {
 
   for (const list of Array.from(byKey.values())) {
     if (list.length < 2) continue;
-    const newer = list[0]!.unitPrice ?? list[0]!.price;
-    const older = list[1]!.unitPrice ?? list[1]!.price;
-    const pct = comparePrice(newer, older);
+    const prices = resolveComparablePrices(list[0]!, list[1]!);
+    if (!prices) continue;
+    const pct = comparePrice(prices.newer, prices.older);
     if (pct == null || pct > -5) continue;
     const drop = Math.abs(pct);
     if (!best || drop > best.pct) {

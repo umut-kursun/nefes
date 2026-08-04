@@ -57,7 +57,7 @@ export function getSamePeriodMonthInsight(ctx: InsightContext): Insight | null {
     id: "same-period-month",
     icon: "wallet",
     title: up ? "Bu dönem harcaman arttı" : "Bu dönem harcaman azaldı",
-    description: `${formatSamePeriodMonthInsight(trend, bounds.dayCount)} Toplam: ${formatMoney(current)}.`,
+    description: `${formatSamePeriodMonthInsight(trend, bounds.dayCount)} Toplam: ${formatMoney(current)} — raporlarda detaylı gör.`,
     priority: 90,
     href: "/reports",
   };

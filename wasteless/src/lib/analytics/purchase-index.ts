@@ -688,6 +688,49 @@ function effectivePrice(hit: PurchaseMemoryHit): number | null {
   return hit.unitPrice ?? hit.price;
 }
 
+const MAX_PRICE_TREND_PCT = 500;
+
+function arePricesComparable(a: PurchaseMemoryHit, b: PurchaseMemoryHit): boolean {
+  const labelA = a.unitLabel ?? null;
+  const labelB = b.unitLabel ?? null;
+  if (labelA || labelB) return labelA === labelB;
+  return true;
+}
+
+function resolvePriceTrend(hits: PurchaseMemoryHit[]): {
+  priceChangePct: number | null;
+  previousComparablePrice: number | null;
+  latestComparablePrice: number | null;
+} {
+  for (let i = 0; i < hits.length - 1; i++) {
+    const latest = hits[i]!;
+    const previous = hits[i + 1]!;
+    const latestPrice = effectivePrice(latest);
+    const previousPrice = effectivePrice(previous);
+    if (latestPrice == null || previousPrice == null) continue;
+    if (!arePricesComparable(latest, previous)) continue;
+    const pct = toPercent(latestPrice, previousPrice);
+    if (pct == null) continue;
+    if (Math.abs(pct) > MAX_PRICE_TREND_PCT) {
+      return {
+        priceChangePct: null,
+        previousComparablePrice: null,
+        latestComparablePrice: null,
+      };
+    }
+    return {
+      priceChangePct: pct,
+      previousComparablePrice: previousPrice,
+      latestComparablePrice: latestPrice,
+    };
+  }
+  return {
+    priceChangePct: null,
+    previousComparablePrice: null,
+    latestComparablePrice: null,
+  };
+}
+
 function modeLabel(values: string[]): string | null {
   if (values.length === 0) return null;
   const counts = new Map<string, number>();
@@ -727,14 +770,10 @@ function assembleMemoryResult(
     .map((h) => ({ hit: h, value: effectivePrice(h) }))
     .filter((x): x is { hit: PurchaseMemoryHit; value: number } => x.value != null);
 
-  let priceChangePct: number | null = null;
-  let previousComparablePrice: number | null = null;
-  let latestComparablePrice: number | null = null;
-  if (priced.length >= 2) {
-    latestComparablePrice = priced[0]!.value;
-    previousComparablePrice = priced[1]!.value;
-    priceChangePct = toPercent(latestComparablePrice, previousComparablePrice);
-  }
+  const trend = resolvePriceTrend(hits);
+  const priceChangePct = trend.priceChangePct;
+  const previousComparablePrice = trend.previousComparablePrice;
+  const latestComparablePrice = trend.latestComparablePrice;
 
   const values = priced.map((p) => p.value);
   const unitValues = hits
@@ -915,13 +954,38 @@ export function searchPurchaseIndex(
     });
   }
 
-  const matchedExpenseIds = new Set<string>();
+  const merchantMatchedExpenses: Expense[] = [];
+  for (const expense of rows) {
+    const verdict = merchantMatchRank(expense, tokens, normalized);
+    if (
+      verdict &&
+      (verdict.rank === MATCH_EXACT_MERCHANT ||
+        verdict.rank === MATCH_WORD_MERCHANT)
+    ) {
+      merchantMatchedExpenses.push(expense);
+    }
+  }
+
+  if (merchantMatchedExpenses.length > 0) {
+    for (const expense of merchantMatchedExpenses) {
+      const verdict = merchantMatchRank(expense, tokens, normalized)!;
+      const visit = recordFromMerchantVisit(expense);
+      rankedHits.push({
+        ...recordToHit(visit),
+        matchRank: verdict.rank,
+        matchSpecificity: verdict.specificity,
+      });
+    }
+    return assembleMemoryResult(trimmed, rankedHits, expenses, {
+      fuelQuery: false,
+      tobaccoQuery: false,
+    });
+  }
 
   for (const record of index.records) {
     if (record.isMerchantVisit) continue;
     const verdict = recordMatchRank(record, tokens, normalized);
     if (verdict == null) continue;
-    matchedExpenseIds.add(record.expenseId);
     rankedHits.push({
       ...recordToHit(record),
       matchRank: verdict.rank,
@@ -930,9 +994,14 @@ export function searchPurchaseIndex(
   }
 
   for (const expense of rows) {
-    if (matchedExpenseIds.has(expense.id)) continue;
     const verdict = merchantMatchRank(expense, tokens, normalized);
     if (verdict == null) continue;
+    if (
+      verdict.rank === MATCH_EXACT_MERCHANT ||
+      verdict.rank === MATCH_WORD_MERCHANT
+    ) {
+      continue;
+    }
     const visit = recordFromMerchantVisit(expense);
     rankedHits.push({
       ...recordToHit(visit),

@@ -36,7 +36,7 @@ export function getShoppingWeekday(ctx: InsightContext): Insight | null {
     id: "shopping-weekday",
     icon: "ticket",
     title: "Alışveriş rutinin",
-    description: `Genellikle ${weekdayNameTr(bestDay)} günleri alışveriş yapıyorsun.`,
+    description: `Genellikle ${weekdayNameTr(bestDay)} günleri alışveriş yapıyorsun — geçmiş kayıtlara bak.`,
     priority: 45,
     href: "/history",
   };

@@ -21,12 +21,33 @@ export function getProductPurchases(ctx: InsightContext): ProductPurchase[] {
   return ctx.productPurchases;
 }
 
+const MAX_PRICE_INSIGHT_PCT = 500;
+
+export function resolveComparablePrices(
+  newer: ProductPurchase,
+  older: ProductPurchase
+): { newer: number; older: number } | null {
+  if (newer.unitPrice != null && older.unitPrice != null) {
+    return { newer: newer.unitPrice, older: older.unitPrice };
+  }
+  if (
+    newer.baseUnit &&
+    older.baseUnit &&
+    newer.baseUnit === older.baseUnit
+  ) {
+    return { newer: newer.price, older: older.price };
+  }
+  return null;
+}
+
 export function comparePrice(
   newer: number,
   older: number
 ): number | null {
   if (older <= 0) return null;
-  return ((newer - older) / older) * 100;
+  const pct = ((newer - older) / older) * 100;
+  if (Math.abs(pct) > MAX_PRICE_INSIGHT_PCT) return null;
+  return pct;
 }
 
 export function weekdayNameTr(day: number): string {

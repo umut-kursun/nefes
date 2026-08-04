@@ -28,7 +28,7 @@ export function PurchaseSearch() {
         placeholder="Ne ödemiştim…"
         enterKeyHint="search"
         aria-label="Satın alma hafızasında ara"
-        className="h-12 w-full rounded-2xl border border-black/[0.05] bg-white pl-12 pr-4 text-base shadow-sm outline-none transition duration-200 placeholder:text-muted-foreground focus:border-primary/30 focus:shadow-[0_0_0_4px_rgba(15,118,110,0.08)]"
+        className="h-12 w-full rounded-2xl border border-border/60 bg-card pl-12 pr-4 text-base shadow-sm outline-none transition duration-200 placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
       />
     </form>
   );

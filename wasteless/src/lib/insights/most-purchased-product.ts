@@ -22,7 +22,7 @@ export function getMostPurchasedProduct(
     id: "most-purchased-product",
     icon: "shopping",
     title: "En sık alınan ürün",
-    description: `“${top.name}” ürününü ${top.count} kez aldın.`,
+    description: `“${top.name}” ürününü ${top.count} kez aldın — en sık tekrarlayan alışverişin.`,
     priority: 70,
     href: memorySearchHref(top.name),
   };
