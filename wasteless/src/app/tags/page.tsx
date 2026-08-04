@@ -77,7 +77,7 @@ export default function TagsPage() {
           <Input
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            placeholder="Weekend Trip, Eskişehir…"
+            placeholder="Hafta sonu gezisi, Eskişehir…"
           />
         </div>
         <div className="flex flex-wrap gap-2">

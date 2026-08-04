@@ -89,7 +89,7 @@ export function TagPicker({
           <Input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder="Örn. Weekend Trip"
+            placeholder="Örn. Hafta sonu gezisi"
             autoFocus
             onKeyDown={(e) => {
               if (e.key === "Enter") {

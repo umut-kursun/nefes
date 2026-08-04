@@ -2,15 +2,13 @@
 
 import { CheckCircle2, AlertTriangle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  resolveTrustLevel,
+  shouldShowOcrTrustBanner,
+  type TrustLevel,
+} from "@/lib/ocr-trust";
 
-export type TrustLevel = "high" | "medium" | "low";
-
-export function resolveTrustLevel(confidence: number | null | undefined): TrustLevel {
-  const c = confidence ?? 1;
-  if (c >= 0.85) return "high";
-  if (c >= 0.7) return "medium";
-  return "low";
-}
+export { resolveTrustLevel, shouldShowOcrTrustBanner, type TrustLevel };
 
 const TRUST_COPY: Record<
   TrustLevel,
@@ -41,8 +39,9 @@ export function TrustBanner({
   className?: string;
 }) {
   const level = resolveTrustLevel(confidence);
+  if (level == null || confidence == null) return null;
   const config = TRUST_COPY[level];
-  const pct = Math.round((confidence ?? 0) * 100);
+  const pct = Math.round(confidence * 100);
 
   return (
     <div

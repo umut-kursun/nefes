@@ -285,7 +285,7 @@ export default function SettingsPage() {
       <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
         <h2 className="font-semibold">Etiketler</h2>
         <p className="text-sm text-muted-foreground">
-          Weekend Trip, Eskişehir, Vacation 2026…
+          Hafta sonu gezisi, Eskişehir, Tatil 2026…
         </p>
         <Button asChild className="w-full" variant="secondary">
           <Link href="/tags">Etiketleri aç</Link>
@@ -303,7 +303,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="mb-4 space-y-3 rounded-2xl border border-white/70 bg-white/75 p-4">
-        <h2 className="font-semibold">📦 Product Knowledge Base</h2>
+        <h2 className="font-semibold">📦 Ürün bilgi tabanı</h2>
         <p className="text-sm text-muted-foreground">
           Ürün kataloğu, markalar ve global OCR eşleşmeleri.
         </p>
@@ -312,7 +312,7 @@ export default function SettingsPage() {
           variant="secondary"
           onClick={() => setKbDialogOpen(true)}
         >
-          Update Product Catalog
+          Ürün kataloğunu güncelle
         </Button>
       </section>
 

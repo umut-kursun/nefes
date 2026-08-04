@@ -26,8 +26,12 @@ export function UpdatePrompt() {
   if (!updateReady || hidden) return null;
 
   return (
-    <div className="fixed inset-x-0 top-[calc(0.5rem+env(safe-area-inset-top))] z-50 px-4">
-      <div className="mx-auto flex max-w-lg items-center gap-3 rounded-2xl border border-teal-200/80 bg-teal-50/95 p-3 shadow-md backdrop-blur-md animate-fade-up">
+    <div
+      className="pointer-events-none fixed inset-x-0 top-[calc(0.5rem+env(safe-area-inset-top))] z-50 flex justify-center px-4"
+      role="region"
+      aria-label="Uygulama güncellemesi"
+    >
+      <div className="pointer-events-auto mx-auto flex w-full max-w-lg items-center gap-3 rounded-2xl border border-teal-200/80 bg-teal-50/95 p-3 shadow-md backdrop-blur-md animate-fade-up">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-700 text-white">
           <RefreshCw className={`h-4 w-4 ${applying ? "animate-spin" : ""}`} />
         </div>

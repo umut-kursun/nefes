@@ -612,7 +612,7 @@ export async function createExpenseFromQuickButton(
     createdAt: now,
     updatedAt: now,
     rawText: null,
-    confidence: 1,
+    confidence: null,
     imageDataUrl: null,
     aiResponseJson: null,
     fuel:
