@@ -7,13 +7,17 @@ import {
 } from "@/lib/categories";
 import { normalizeMerchantName } from "@/lib/merchants";
 import { formatPlate } from "@/lib/plate";
-import { checkReceiptConsistency, findLineItemIssues, sumItemPrices } from "@/lib/receipt-quality";
+import {
+  findLineItemIssues,
+  resolveReviewReceiptConsistency,
+  sumItemPrices,
+} from "@/lib/receipt-quality";
 import { getRecentMerchants } from "@/lib/recent-values";
 import { AmountInput } from "@/components/amount-input";
 import { CategoryDropdownPicker } from "@/components/category-dropdown-picker";
 import { LineItemsEditor } from "@/components/line-items-editor";
 import { ReceiptChargesEditor } from "@/components/receipt-charges-editor";
-import { TrustBanner } from "@/components/trust-banner";
+import { shouldShowOcrTrustBanner, TrustBanner } from "@/components/trust-banner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -106,13 +110,14 @@ export function ReviewForm({
 
   const consistency = useMemo(
     () =>
-      checkReceiptConsistency(
+      resolveReviewReceiptConsistency(
         form.items,
         form.totalAmount,
         form.charges,
-        form.discounts
+        form.discounts,
+        form.aiResponseJson
       ),
-    [form.items, form.totalAmount, form.charges, form.discounts]
+    [form.items, form.totalAmount, form.charges, form.discounts, form.aiResponseJson]
   );
 
   const lineIssues = useMemo(
@@ -240,7 +245,7 @@ export function ReviewForm({
         });
       }}
     >
-      {form.confidence != null && (
+      {shouldShowOcrTrustBanner(form.sourceType, form.confidence) && (
         <TrustBanner confidence={form.confidence} />
       )}
 

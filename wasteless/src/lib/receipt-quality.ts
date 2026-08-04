@@ -1,5 +1,7 @@
 import type { AnalysisItem, AnalysisResult } from "@/lib/types";
+import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ChargeLine, DiscountLine, PaymentLine, UnknownLine } from "@/lib/receipt-model";
+import { parseStoredParserPayload } from "@/lib/receipt-engine-debug/parseParserPayload";
 import {
   normalizeChargeLine,
   normalizeDiscountLine,
@@ -70,6 +72,64 @@ export function computeExpectedReceiptTotal(
     sumChargeAmounts(charges) -
     sumChargeAmounts(discounts)
   );
+}
+
+/** Mirror ReceiptTotalValidator: productSum + chargeSum + discountSum (discounts negative). */
+export function computeExpectedReceiptTotalFromPurchaseDraft(
+  purchase: PurchaseDraft
+): number {
+  const productSum = purchase.products.reduce(
+    (acc, line) => acc + (line.lineTotal ?? 0),
+    0
+  );
+  const chargeSum = purchase.charges.reduce(
+    (acc, line) => acc + (line.amount ?? 0),
+    0
+  );
+  const discountSum = purchase.discounts.reduce(
+    (acc, line) => acc + (line.amount ?? 0),
+    0
+  );
+  return Math.round((productSum + chargeSum + discountSum) * 100) / 100;
+}
+
+/**
+ * Review UI consistency: suppress false alarms when the receipt engine validated
+ * the purchase draft but legacy expense line math temporarily disagrees.
+ */
+export function resolveReviewReceiptConsistency(
+  items: Array<{ totalPrice?: number | null }>,
+  total: number | null | undefined,
+  charges: Array<{ amount?: number | null }> = [],
+  discounts: Array<{ amount?: number | null }> = [],
+  aiResponseJson?: string | null
+): ReceiptConsistency {
+  const legacy = checkReceiptConsistency(items, total, charges, discounts);
+  const parserPayload = parseStoredParserPayload(aiResponseJson);
+  if (!parserPayload?.validation.isValid || !legacy.inconsistent) return legacy;
+
+  const declared = parserPayload.purchase.total?.amount ?? total ?? null;
+  const engineSum = computeExpectedReceiptTotalFromPurchaseDraft(
+    parserPayload.purchase
+  );
+  const expenseSum = computeExpectedReceiptTotal(items, charges, discounts);
+
+  if (
+    declared != null &&
+    Math.abs(expenseSum - engineSum) <= TOLERANCE_ABS &&
+    Math.abs(engineSum - declared) <= TOLERANCE_ABS
+  ) {
+    return {
+      itemsSum: engineSum,
+      total: total ?? declared,
+      delta: null,
+      relativeError: null,
+      inconsistent: false,
+      warning: null,
+    };
+  }
+
+  return legacy;
 }
 
 export function checkReceiptConsistency(

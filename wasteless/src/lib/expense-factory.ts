@@ -37,7 +37,8 @@ import {
   normalizeDiscountLine,
   normalizePaymentLine,
 } from "@/lib/receipt-model";
-import { classifyReceiptCharge } from "@/lib/receipt-charges";
+import { classifyReceiptCharge, isReceiptDiscountLine } from "@/lib/receipt-charges";
+import { parseMultiplierText } from "@/lib/receipt-engine-sdk/vision/mergeStandaloneMultiplierProducts";
 
 const FUEL_PRODUCT = /\b(motorin|benzin|dizel|lpg|fuel|akaryak[iı]t)\b/i;
 
@@ -79,6 +80,7 @@ function extractPlateFromSources(...sources: (string | null | undefined)[]): str
 }
 
 function isNonProductPurchaseLine(line: PurchaseLine): boolean {
+  const name = line.name.trim();
   const blob = [
     line.name,
     ...line.provenance.rawTexts,
@@ -89,7 +91,13 @@ function isNonProductPurchaseLine(line: PurchaseLine): boolean {
   if (!blob) return true;
   if (TOPKDV_HINT.test(blob)) return true;
   if (NON_PRODUCT_LINE.test(blob) && !FUEL_PRODUCT.test(blob)) return true;
-  if (PLATE_HINT.test(line.name.trim()) && line.lineTotal == null) return true;
+  if (PLATE_HINT.test(name) && line.lineTotal == null) return true;
+  if (isReceiptDiscountLine(name)) return true;
+  if (/%/.test(name) && /İNDİRİM|INDIRIM/i.test(name)) return true;
+  if (line.lineTotal != null && line.lineTotal < 0) return true;
+  if (parseMultiplierText(name)) return true;
+  if (/TL\/AD/i.test(name)) return true;
+  if (/^\d+(?:[.,]\d+)?\s*AD\b/i.test(name)) return true;
   return false;
 }
 
@@ -445,7 +453,7 @@ export function createManualExpense(partial?: Partial<Expense>): Expense {
     createdAt: now,
     updatedAt: now,
     rawText: null,
-    confidence: 1,
+    confidence: null,
     imageDataUrl: null,
     aiResponseJson: null,
     fuel: partial?.fuel ?? null,
