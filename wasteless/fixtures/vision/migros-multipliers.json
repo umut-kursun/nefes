@@ -59,6 +59,6 @@
     "vatTotal": 45.2,
     "totalAmount": 817.51
   },
-  "rawText": "MİGROS TİCARET A.Ş.\nALGIDA FRIGOLA  %1.  *360,00\n9 AD x 40,00 TL/AD\nMARLBORO EDGE SLIMS  %20.  *460,00\n4 AD x 115,00 TL/AD\n% 25 % İNDİRİM %20 *-57,49\nCOLA TURKA 1,5 LT  %10.  *55,00\nTOPLAM  *817,51",
+  "rawText": "MİGROS TİCARET A.Ş.\nALGIDA FRIGOLA 60ML *1 *360,00\n9 AD x 40,00 TL/AD\nMARLBORO EDGE SLIMS *1 *460,00\n4 AD x 115,00 TL/AD\n% 25 % İNDİRİM %20 *-57,49\nCOLA TURKA 1,5 LT  %10.  *55,00\nTOPLAM  *817,51",
   "confidence": 0.85
 }

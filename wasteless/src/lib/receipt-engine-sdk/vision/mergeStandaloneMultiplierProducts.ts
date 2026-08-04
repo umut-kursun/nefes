@@ -1,5 +1,9 @@
 import { parseTrNumber } from "@/lib/receipt-engine/layer-6-purchase/parsers/parseNumber";
 import type { ParsedReceipt, ReceiptItem } from "../types/ParsedReceipt";
+import {
+  attachMigrosMultiplierMetadata,
+  migrosMultiplierMustPreserveQuantity,
+} from "./migrosReceiptRules";
 import { roundLineTotal } from "./parsedReceiptPostProcess";
 import {
   multiplierMathMatchesLine,
@@ -198,7 +202,12 @@ export function mergeStandaloneMultiplierProducts(
 
     if (targetIdx == null) continue;
 
-    updated[targetIdx] = applyMultiplierToProduct(updated[targetIdx]!, multiplier);
+    const target = updated[targetIdx]!;
+    if (migrosMultiplierMustPreserveQuantity(parsed, target)) {
+      updated[targetIdx] = attachMigrosMultiplierMetadata(target);
+    } else {
+      updated[targetIdx] = applyMultiplierToProduct(target, multiplier);
+    }
     remove.add(i);
   }
 

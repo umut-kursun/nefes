@@ -10,6 +10,14 @@ import { disambiguatePosFooter } from "./disambiguatePosFooter";
 
 import { mergeStandaloneMultiplierProducts } from "./mergeStandaloneMultiplierProducts";
 
+import {
+  attachMigrosMultiplierMetadata,
+  dedupeMigrosPlasticBag,
+  findExplicitQuantityForProduct,
+  isMigrosReceipt,
+  recoverSplitMigrosProducts,
+} from "./migrosReceiptRules";
+
 import { normalizeVisionProductNames } from "./normalizeVisionProductNames";
 
 import { sanitizeHallucinatedQuantities } from "./parsedReceiptReconcile";
@@ -82,7 +90,11 @@ export function normalizeVisionReceipt(parsed: ParsedReceipt): ParsedReceipt {
 
   const merged = mergeStandaloneMultiplierProducts(enriched);
 
-  const vatApplied = applyProductLineVatRates(merged);
+  const migrosRecovered = recoverSplitMigrosProducts(merged);
+
+  const migrosBagDeduped = dedupeMigrosPlasticBag(migrosRecovered);
+
+  const vatApplied = applyProductLineVatRates(migrosBagDeduped);
 
   const upperBound = bindUpperLineQuantities(vatApplied);
 
@@ -110,9 +122,24 @@ export function normalizeVisionReceipt(parsed: ParsedReceipt): ParsedReceipt {
 
   const rebound = bindUpperLineQuantities(sanitized);
 
+  const migrosMetadata =
+    isMigrosReceipt(rebound) && rebound.rawText?.trim()
+      ? {
+          ...rebound,
+          products: rebound.products.map((item) => {
+            const explicit = findExplicitQuantityForProduct(
+              rebound.rawText!,
+              item.name
+            );
+            if (explicit != null) return attachMigrosMultiplierMetadata(item);
+            return item;
+          }),
+        }
+      : rebound;
+
   const finalParsed = {
 
-    ...rebound,
+    ...migrosMetadata,
 
     discounts: sanitized.discounts,
 
