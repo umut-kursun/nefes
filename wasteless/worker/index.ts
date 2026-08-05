@@ -37,6 +37,29 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
+/** PWA shell files must bypass CDN/browser cache so updates propagate. */
+function noStoreAssetResponse(response: Response): Response {
+  const headers = new Headers(response.headers);
+  headers.set("cache-control", "no-store, no-cache, must-revalidate");
+  headers.set("cdn-cache-control", "no-store");
+  headers.set("cloudflare-cdn-cache-control", "no-store");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+function isPwaShellPath(pathname: string): boolean {
+  return (
+    pathname === "/version.json" ||
+    pathname === "/sw.js" ||
+    /^\/workbox-[^/]+\.js$/.test(pathname) ||
+    /^\/worker-[^/]+\.js$/.test(pathname) ||
+    /^\/fallback-[^/]+\.js$/.test(pathname)
+  );
+}
+
 async function loadWorkerCatalog(env: Env): Promise<{
   snapshot: import("../src/lib/product-knowledge/catalogSnapshot").CatalogSnapshot | null;
   fallbackNote?: string;
@@ -314,6 +337,10 @@ export default {
     }
 
     // Static Next.js export (out/) — SPA fallback for unknown paths
-    return env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (isPwaShellPath(url.pathname)) {
+      return noStoreAssetResponse(assetResponse);
+    }
+    return assetResponse;
   },
 } satisfies ExportedHandler<Env>;

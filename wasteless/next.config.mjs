@@ -12,6 +12,8 @@ const withPWA = withPWAInit({
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
   customWorkerSrc: "sw-custom",
+  // version.json must never be precached — stale copy blocks update detection.
+  publicExcludes: ["!noprecache/**/*", "!version.json"],
   fallbacks: {
     document: "/offline",
   },

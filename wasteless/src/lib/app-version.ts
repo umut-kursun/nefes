@@ -1,5 +1,5 @@
-/** App semver ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â bump on each production release (keep in sync with package.json). */
-export const APP_VERSION = "1.0.0-beta.81";
+/** App semver â€” bump on each production release (keep in sync with package.json). */
+export const APP_VERSION = "1.0.0-beta.82";
 
 export type RemoteVersion = {
   version: string;
@@ -9,12 +9,25 @@ export type RemoteVersion = {
 export async function fetchRemoteVersion(): Promise<RemoteVersion | null> {
   try {
     const res = await fetch(`/version.json?t=${Date.now()}`, {
-      cache: "no-store",
+      cache: "reload",
+      headers: { "cache-control": "no-cache" },
     });
     if (!res.ok) return null;
     return (await res.json()) as RemoteVersion;
   } catch {
     return null;
+  }
+}
+
+/** Ask the browser to check for a new service worker on the server. */
+export async function checkForServiceWorkerUpdate(): Promise<void> {
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+  const reg = await navigator.serviceWorker.getRegistration();
+  if (!reg) return;
+  try {
+    await reg.update();
+  } catch {
+    /* ignore */
   }
 }
 
@@ -31,21 +44,16 @@ export async function applyAppUpdate(): Promise<void> {
     if ("serviceWorker" in navigator) {
       const reg = await navigator.serviceWorker.getRegistration();
       if (reg) {
-        try {
-          await reg.update();
-        } catch {
-          /* ignore */
-        }
+        await checkForServiceWorkerUpdate();
 
-        const waiting =
-          reg.waiting ??
-          (await navigator.serviceWorker.getRegistration())?.waiting ??
-          null;
+        let waiting = reg.waiting;
+        if (!waiting && reg.installing) {
+          activatedWaiting = await waitForInstallThenActivate(reg);
+          waiting = reg.waiting;
+        }
 
         if (waiting) {
           activatedWaiting = await activateWaitingWorker(waiting);
-        } else if (reg.installing) {
-          activatedWaiting = await waitForInstallThenActivate(reg);
         }
       }
 
@@ -93,7 +101,7 @@ function activateWaitingWorker(waiting: ServiceWorker): Promise<boolean> {
     window.setTimeout(() => {
       navigator.serviceWorker.removeEventListener("controllerchange", onChange);
       done(true);
-    }, 2000);
+    }, 3000);
   });
 }
 
@@ -119,6 +127,6 @@ function waitForInstallThenActivate(
       }
       if (worker.state === "activated") finish(true);
     });
-    window.setTimeout(() => finish(false), 2500);
+    window.setTimeout(() => finish(false), 8000);
   });
 }

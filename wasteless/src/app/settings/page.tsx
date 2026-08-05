@@ -22,6 +22,7 @@ import { useToast } from "@/components/toast";
 import {
   APP_VERSION,
   applyAppUpdate,
+  checkForServiceWorkerUpdate,
   fetchRemoteVersion,
 } from "@/lib/app-version";
 import { verifyKbAdminPassword } from "@/lib/product-knowledge/adminAuth";
@@ -126,6 +127,7 @@ export default function SettingsPage() {
     setUpdating(true);
     setMessage("Güncelleme kontrol ediliyor…");
     try {
+      await checkForServiceWorkerUpdate();
       const remote = await fetchRemoteVersion();
       if (remote?.version) setRemoteVersion(remote.version);
 
