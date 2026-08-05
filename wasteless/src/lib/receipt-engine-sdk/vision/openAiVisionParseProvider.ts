@@ -53,15 +53,19 @@ export async function parseReceiptWithVision(
 
   const content: Array<
     | { type: "text"; text: string }
-    | { type: "image_url"; image_url: { url: string; detail: "high" | "low" } }
+    | { type: "image_url"; image_url: { url: string; detail?: "high" | "low" } }
   > = [{ type: "text", text: OKC_VISION_PARSE_PROMPT }];
   if (options.retryInstruction) {
     content.push({ type: "text", text: options.retryInstruction });
   }
   for (const url of images) {
+    const image_url: { url: string; detail?: "high" | "low" } = { url };
+    if (imageDetail === "high" || imageDetail === "low") {
+      image_url.detail = imageDetail;
+    }
     content.push({
       type: "image_url",
-      image_url: { url, detail: imageDetail },
+      image_url,
     });
   }
 

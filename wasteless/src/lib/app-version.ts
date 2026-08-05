@@ -1,5 +1,5 @@
-/** App semver — bump on each production release (keep in sync with package.json). */
-export const APP_VERSION = "1.0.0-beta.78";
+/** App semver ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â bump on each production release (keep in sync with package.json). */
+export const APP_VERSION = "1.0.0-beta.79";
 
 export type RemoteVersion = {
   version: string;
