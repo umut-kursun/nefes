@@ -6,6 +6,7 @@ import {
   OKC_VISION_PARSE_PROMPT,
   PARSED_RECEIPT_VISION_JSON_SCHEMA,
 } from "./okcVisionPrompt";
+import { stampTimeline } from "@/lib/receipt-scan-timeline";
 
 export interface VisionParseInput {
   imageDataUrl: string;
@@ -21,6 +22,8 @@ export interface OpenAiVisionParseOptions {
   includeAltImage?: boolean;
   /** OpenAI vision detail level. Default "auto" on first pass; use "high" on retry. */
   imageDetail?: "auto" | "high" | "low";
+  /** Mutable server timeline — stamps t5–t7 on OpenAI fetch. */
+  scanTimeline?: import("@/lib/receipt-scan-timeline").ScanTimeline;
 }
 
 function extractJson(content: string): unknown {
@@ -70,6 +73,10 @@ export async function parseReceiptWithVision(
   }
 
   const requestStart = Date.now();
+  if (options.scanTimeline) {
+    stampTimeline(options.scanTimeline, "t5_openai_request_start");
+  }
+
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -85,6 +92,10 @@ export async function parseReceiptWithVision(
     }),
   });
 
+  if (options.scanTimeline) {
+    stampTimeline(options.scanTimeline, "t6_openai_first_byte");
+  }
+
   if (!res.ok) {
     const errText = await res.text();
     throw new Error(`Vision parse failed (${res.status}): ${errText.slice(0, 280)}`);
@@ -97,6 +108,10 @@ export async function parseReceiptWithVision(
   };
   const rawContent = completion.choices?.[0]?.message?.content;
   if (!rawContent) throw new Error("Vision parse returned empty content");
+
+  if (options.scanTimeline) {
+    stampTimeline(options.scanTimeline, "t7_openai_response_complete");
+  }
 
   const jsonParseStart = Date.now();
   const rawVisionOutput = extractJson(rawContent);

@@ -81,6 +81,7 @@ export async function parseReceiptWithVisionRetry(
       ),
       includeAltImage: Boolean(input.altImageDataUrl),
       imageDetail: "high",
+      scanTimeline: options.scanTimeline,
     });
     lineChecks = validateParsedReceiptLineItems(visionResult.parsed);
     const retryFinalize = finalizeWithTiming(visionResult.parsed);

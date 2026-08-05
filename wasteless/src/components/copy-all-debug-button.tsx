@@ -6,6 +6,11 @@ import { Button } from "@/components/ui/button";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import { formatCopyAllDebug } from "@/lib/receipt-engine-debug/formatCopyAllDebug";
+import {
+  extractPerformanceTimings,
+  type ReceiptStageTimings,
+} from "@/lib/receipt-engine-debug/formatStageTimings";
+import type { ScanTimelinePayload } from "@/lib/receipt-scan-timeline";
 
 type Props = {
   purchase: PurchaseDraft;
@@ -14,6 +19,7 @@ type Props = {
   rawVisionResponse?: string;
   analyzeResult?: unknown;
   parserJson?: string;
+  stageTimings?: ReceiptStageTimings;
 };
 
 async function copyText(text: string): Promise<boolean> {
@@ -48,8 +54,14 @@ export function CopyAllDebugButton({
   rawVisionResponse = "",
   analyzeResult,
   parserJson,
+  stageTimings,
 }: Props) {
   const [copied, setCopied] = useState(false);
+
+  const resolvedTimings =
+    stageTimings ??
+    extractPerformanceTimings(analyzeResult) ??
+    undefined;
 
   const blob = formatCopyAllDebug({
     rawVision: rawVisionResponse,
@@ -58,6 +70,15 @@ export function CopyAllDebugButton({
     validation,
     analyzeResult,
     parserJson,
+    stageTimings: resolvedTimings,
+    scanTimeline:
+      analyzeResult &&
+      typeof analyzeResult === "object" &&
+      analyzeResult !== null &&
+      "scanTimeline" in analyzeResult
+        ? (analyzeResult as { scanTimeline?: ScanTimelinePayload | null })
+            .scanTimeline
+        : undefined,
   });
 
   const onCopy = async () => {

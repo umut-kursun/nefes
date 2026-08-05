@@ -240,7 +240,8 @@ export async function orchestrateFromImage(
   input: ReceiptEngineInput,
   config: SdkEngineConfig,
   ocrFactoryOptions?: OcrProviderFactoryOptions,
-  emitter?: ReceiptEngineEventEmitter
+  emitter?: ReceiptEngineEventEmitter,
+  scanTimeline?: import("@/lib/receipt-scan-timeline").ScanTimeline
 ) {
   const collectTimings = config.modes.performance;
   const timings = emptyTimings();
@@ -262,6 +263,7 @@ export async function orchestrateFromImage(
         apiKey: ocrFactoryOptions!.openAi!.apiKey,
         model: ocrFactoryOptions!.openAi!.model,
         maxRetries: 1,
+        scanTimeline,
       };
 
       const {

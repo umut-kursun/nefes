@@ -2,7 +2,13 @@ import { analyzeReceipt } from "@/lib/receipt-engine-sdk";
 import { stripValidatedPurchase } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
+import type { ReceiptStageTimings } from "@/lib/receipt-engine-debug/formatStageTimings";
 import { arrayBufferToBase64 } from "@/lib/analyze-receipt-helpers";
+import {
+  mergeTimelines,
+  type ScanTimeline,
+  type ScanTimelinePayload,
+} from "@/lib/receipt-scan-timeline";
 
 export type ReceiptEngineAnalyzeSuccess = {
   purchase: PurchaseDraft;
@@ -12,6 +18,10 @@ export type ReceiptEngineAnalyzeSuccess = {
   ocrRawText: string;
   /** Exact vision model response before parser post-processing (debug). */
   rawVisionResponse?: string;
+  /** Per-stage pipeline timings (ms). */
+  performance: ReceiptStageTimings;
+  /** Wall-clock scan timeline (t0–t9). */
+  scanTimeline?: ScanTimelinePayload;
 };
 
 export type ReceiptEngineAnalyzeFailure = {
@@ -29,7 +39,13 @@ async function fileToDataUrl(file: File): Promise<string> {
 
 export async function analyzeReceiptEngineFormData(
   form: FormData,
-  options: { apiKey: string; model?: string }
+  options: {
+    apiKey: string;
+    model?: string;
+    /** Mutable — stamped t5–t7 during OpenAI fetch. */
+    serverTimeline?: ScanTimeline;
+    scanTraceId?: string;
+  }
 ): Promise<ReceiptEngineAnalyzeSuccess | ReceiptEngineAnalyzeFailure> {
   const file = form.get("image");
   const altFile = form.get("imageAlt");
@@ -50,6 +66,24 @@ export async function analyzeReceiptEngineFormData(
     typeof base64EncodeMsRaw === "string" && base64EncodeMsRaw.trim()
       ? Number(base64EncodeMsRaw)
       : undefined;
+
+  const scanTraceId =
+    options.scanTraceId ??
+    (typeof form.get("scanTraceId") === "string"
+      ? String(form.get("scanTraceId"))
+      : undefined);
+
+  let clientTimeline: ScanTimeline | undefined;
+  const clientTimelineRaw = form.get("clientTimeline");
+  if (typeof clientTimelineRaw === "string" && clientTimelineRaw.trim()) {
+    try {
+      clientTimeline = JSON.parse(clientTimelineRaw) as ScanTimeline;
+    } catch {
+      clientTimeline = undefined;
+    }
+  }
+
+  const serverTimeline = options.serverTimeline ?? {};
 
   if (!(file instanceof File)) {
     return { error: "Görsel gerekli.", status: 400 };
@@ -102,6 +136,7 @@ export async function analyzeReceiptEngineFormData(
           model: options.model ?? process.env.OPENAI_OCR_MODEL ?? "gpt-4o-mini",
         },
       },
+      scanTimeline: serverTimeline,
     }
   );
 
@@ -122,5 +157,10 @@ export async function analyzeReceiptEngineFormData(
     imageDataUrl: displayDataUrl,
     ocrRawText: result.rawOcr.rawText,
     rawVisionResponse: result.rawVisionResponse,
+    performance: result.performance ?? {},
+    scanTimeline:
+      scanTraceId != null
+        ? mergeTimelines(scanTraceId, clientTimeline, serverTimeline)
+        : undefined,
   };
 }

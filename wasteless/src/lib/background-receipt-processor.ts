@@ -24,6 +24,14 @@ import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-valida
 
 import { createId, todayISO } from "@/lib/utils";
 
+import {
+  createScanTraceId,
+  logScanTimelineReport,
+  stampTimeline,
+  type ScanTimeline,
+  type ScanTimelinePayload,
+} from "@/lib/receipt-scan-timeline";
+
 
 
 export function createProcessingReceiptExpense(
@@ -114,6 +122,10 @@ export interface BackgroundReceiptJob {
 
   readonly onError: (message: string) => void;
 
+  readonly scanTraceId?: string;
+
+  readonly clientTimeline?: ScanTimeline;
+
 }
 
 
@@ -130,20 +142,20 @@ async function analyzePreprocessedImages(
 
   resizeMs: number,
 
-  base64EncodeMs: number
+  base64EncodeMs: number,
+
+  scanTraceId: string,
+
+  clientTimeline: ScanTimeline
 
 ): Promise<{
-
   purchase: PurchaseDraft;
-
   validation: ValidationReportGolden;
-
   ocrRawText: string;
-
   rawVisionResponse?: string;
-
   imageDataUrl: string;
-
+  performance: import("@/lib/receipt-engine-debug/formatStageTimings").ReceiptStageTimings;
+  scanTimeline?: ScanTimelinePayload;
 }> {
 
   const body = new FormData();
@@ -178,9 +190,15 @@ async function analyzePreprocessedImages(
 
   body.append("base64EncodeMs", String(base64EncodeMs));
 
+  body.append("scanTraceId", scanTraceId);
 
+  body.append("clientTimeline", JSON.stringify(clientTimeline));
+
+  stampTimeline(clientTimeline, "t3_fetch_start");
 
   const res = await fetch("/api/receipt-engine", { method: "POST", body });
+  const fetchEnd = Date.now();
+  stampTimeline(clientTimeline, "t9_browser_response_received");
 
   const json = await res.json();
 
@@ -190,7 +208,21 @@ async function analyzePreprocessedImages(
 
   }
 
+  const scanTimeline =
+    json.scanTimeline && typeof json.scanTimeline === "object"
+      ? (json.scanTimeline as ScanTimelinePayload)
+      : undefined;
 
+  if (scanTimeline) {
+    const merged = {
+      ...scanTimeline.merged,
+      t9_browser_response_received: clientTimeline.t9_browser_response_received,
+    };
+    const payload: ScanTimelinePayload = { ...scanTimeline, merged };
+    logScanTimelineReport(payload);
+  }
+
+  const networkMs = fetchEnd - (clientTimeline.t3_fetch_start ?? fetchEnd);
 
   return {
 
@@ -209,8 +241,15 @@ async function analyzePreprocessedImages(
 
       typeof json.imageDataUrl === "string" ? json.imageDataUrl : originalDataUrl,
 
-  };
+    performance: {
+      ...(json.performance && typeof json.performance === "object"
+        ? (json.performance as import("@/lib/receipt-engine-debug/formatStageTimings").ReceiptStageTimings)
+        : {}),
+      networkMs,
+    },
 
+    scanTimeline,
+  };
 }
 
 
@@ -223,6 +262,14 @@ export async function runBackgroundReceiptParse(
 
   try {
 
+    const pipelineStart = performance.now();
+
+    const scanTraceId = job.scanTraceId ?? createScanTraceId();
+
+    const clientTimeline: ScanTimeline = { ...job.clientTimeline };
+
+    stampTimeline(clientTimeline, "t1_preprocess_start");
+
     const originalStart = performance.now();
 
     const originalDataUrl = await fileToDataUrl(job.file);
@@ -232,6 +279,8 @@ export async function runBackgroundReceiptParse(
     const enhanced = await preprocessReceiptImage(job.file, "enhanced");
 
     const threshold = await preprocessReceiptImage(job.file, "threshold");
+
+    stampTimeline(clientTimeline, "t2_preprocess_end");
 
     let preprocessMs = enhanced.timings.totalMs + threshold.timings.totalMs;
 
@@ -256,7 +305,11 @@ export async function runBackgroundReceiptParse(
 
       resizeMs,
 
-      base64EncodeMs
+      base64EncodeMs,
+
+      scanTraceId,
+
+      clientTimeline
 
     );
 
@@ -309,7 +362,11 @@ export async function runBackgroundReceiptParse(
 
         resizeMs,
 
-        base64EncodeMs
+        base64EncodeMs,
+
+        scanTraceId,
+
+        clientTimeline
 
       );
 
@@ -339,6 +396,11 @@ export async function runBackgroundReceiptParse(
           purchase: result.purchase,
           validation: result.validation,
           rawVisionResponse: result.rawVisionResponse ?? null,
+          performance: {
+            ...result.performance,
+            clientTotalMs: Math.round(performance.now() - pipelineStart),
+          },
+          scanTimeline: result.scanTimeline ?? null,
         },
 
         null,

@@ -149,6 +149,8 @@ function emptyFailureResult(
 
 export type AnalyzeReceiptOptions = ReceiptEngineSDKOptions & {
   ocrFactoryOptions?: OcrProviderFactoryOptions;
+  /** Mutable server timeline — stamps t5–t7 during OpenAI vision fetch. */
+  scanTimeline?: import("@/lib/receipt-scan-timeline").ScanTimeline;
 };
 
 /** Primary SDK entry — analyze a receipt from image or OCR text. */
@@ -205,7 +207,8 @@ export async function analyzeReceipt(
         },
         resolvedConfig,
         options?.ocrFactoryOptions,
-        emitter
+        emitter,
+        options?.scanTimeline
       );
     }
 

@@ -25,6 +25,11 @@ import {
   createProcessingReceiptExpense,
   runBackgroundReceiptParse,
 } from "@/lib/background-receipt-processor";
+import {
+  createScanTraceId,
+  stampTimeline,
+  type ScanTimeline,
+} from "@/lib/receipt-scan-timeline";
 import { analysisToExpenseDraft, createManualExpense } from "@/lib/expense-factory";
 import {
   applyCorrectionsToExpense,
@@ -162,6 +167,9 @@ function AddPageInner() {
   const analyzeWithReceiptEngine = async (file: File) => {
     setError(null);
     scanStartRef.current = performance.now();
+    const scanTraceId = createScanTraceId();
+    const clientTimeline: ScanTimeline = {};
+    stampTimeline(clientTimeline, "t0_camera_finished");
     try {
       const previewUrl = await fileToDataUrl(file);
       const placeholder = createProcessingReceiptExpense(previewUrl);
@@ -175,6 +183,8 @@ function AddPageInner() {
         file,
         imageDataUrl: previewUrl,
         categories,
+        scanTraceId,
+        clientTimeline,
         onUpdate: (expense) => updateExpense(expense),
         onSuccess: (expense) => {
           toast("Fişiniz hazır! İncelemek ve onaylamak için dokunun.", "success", {
@@ -652,6 +662,7 @@ function AddPageInner() {
           ocrRawText={draft?.rawText ?? undefined}
           rawVisionResponse={engineRawVision || parserPayload?.rawVisionResponse}
           analyzeResult={parserPayload ?? undefined}
+          stageTimings={parserPayload?.performance}
           onBack={() => {
             setMode("review");
           }}
@@ -686,6 +697,7 @@ function AddPageInner() {
                 ocrText={draft.rawText.trim()}
                 rawVisionResponse={parserPayload.rawVisionResponse ?? ""}
                 analyzeResult={parserPayload}
+                stageTimings={parserPayload.performance}
               />
             )}
           {mode === "review" && ocrSummary && (

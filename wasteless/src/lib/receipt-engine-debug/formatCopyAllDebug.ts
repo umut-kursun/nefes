@@ -4,6 +4,14 @@ import {
   finalizeVisionParsedReceipt,
   parseParsedReceiptJson,
 } from "@/lib/receipt-engine-sdk/types/ParsedReceipt";
+import {
+  formatStageTimingsSection,
+  type ReceiptStageTimings,
+} from "./formatStageTimings";
+import {
+  formatScanTimelineReport,
+  type ScanTimelinePayload,
+} from "@/lib/receipt-scan-timeline";
 
 const RAW_VISION_HDR = "===== RAW VISION =====";
 const OCR_HDR = "===== OCR =====";
@@ -32,6 +40,8 @@ export function formatCopyAllDebug(options: {
   validation: ValidationReportGolden;
   analyzeResult?: unknown;
   parserJson?: string;
+  stageTimings?: ReceiptStageTimings;
+  scanTimeline?: ScanTimelinePayload | null;
 }): string {
   const parserSection = deriveParserJson(options.rawVision, options.parserJson);
   const purchaseDraft = JSON.stringify(options.purchase, null, 2);
@@ -41,7 +51,15 @@ export function formatCopyAllDebug(options: {
       ? JSON.stringify(options.analyzeResult, null, 2)
       : "{}";
 
-  return [
+  const timingsSection =
+    options.stageTimings &&
+    Object.values(options.stageTimings).some(
+      (v) => typeof v === "number" && v > 0
+    )
+      ? formatStageTimingsSection(options.stageTimings)
+      : null;
+
+  const sections = [
     RAW_VISION_HDR,
     options.rawVision,
     OCR_HDR,
@@ -52,9 +70,19 @@ export function formatCopyAllDebug(options: {
     purchaseDraft,
     VALIDATION_HDR,
     validationJson,
-    RESULT_HDR,
-    resultJson,
-  ].join("\n");
+  ];
+
+  if (timingsSection) {
+    sections.push(timingsSection);
+  }
+
+  if (options.scanTimeline) {
+    sections.push(formatScanTimelineReport(options.scanTimeline));
+  }
+
+  sections.push(RESULT_HDR, resultJson);
+
+  return sections.join("\n");
 }
 
 /** @deprecated Use formatCopyAllDebug */

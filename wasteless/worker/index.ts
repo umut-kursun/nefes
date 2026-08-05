@@ -3,6 +3,10 @@ import { analyzeReceiptEngineFormData } from "../src/lib/receipt-engine-analyze"
 import { analyzeReceiptEngineWithDebug } from "../src/lib/receipt-engine-analyze-debug";
 import { debugReceiptEngineFormData } from "../src/lib/receipt-engine-debug-analyze";
 import { isDebugExportEnabled } from "../src/lib/receipt-engine-debug/devGuard";
+import {
+  stampTimeline,
+  type ScanTimeline,
+} from "../src/lib/receipt-scan-timeline";
 import { loadCanonicalCatalog } from "../src/lib/product-knowledge/catalogLoader";
 import { readCatalogFromKv } from "../src/lib/product-knowledge/catalogKv";
 import {
@@ -113,16 +117,28 @@ async function handleReceiptEngine(request: Request, env: Env): Promise<Response
 
   try {
     const form = await request.formData();
+    const serverTimeline: ScanTimeline = {};
+    stampTimeline(serverTimeline, "t4_worker_request_received");
+
+    const scanTraceId =
+      typeof form.get("scanTraceId") === "string"
+        ? String(form.get("scanTraceId"))
+        : undefined;
+
     const model = env.OPENAI_OCR_MODEL ?? env.OPENAI_VISION_MODEL;
     const debugEnabled = isDebugExportEnabled(env);
     const result = debugEnabled
       ? await analyzeReceiptEngineWithDebug(form, {
           apiKey: env.OPENAI_API_KEY,
           model,
+          serverTimeline,
+          scanTraceId,
         })
       : await analyzeReceiptEngineFormData(form, {
           apiKey: env.OPENAI_API_KEY,
           model,
+          serverTimeline,
+          scanTraceId,
         });
 
     if ("error" in result) {
@@ -130,6 +146,15 @@ async function handleReceiptEngine(request: Request, env: Env): Promise<Response
         { error: result.error, failureCode: result.failureCode },
         result.status
       );
+    }
+
+    stampTimeline(serverTimeline, "t8_worker_response_sent");
+    if (result.scanTimeline) {
+      result.scanTimeline = {
+        ...result.scanTimeline,
+        server: { ...serverTimeline },
+        merged: { ...result.scanTimeline.merged, ...serverTimeline },
+      };
     }
 
     return json(result);
