@@ -4,6 +4,11 @@ import { applyProductLineVatRates } from "../vision/applyProductLineVatRate";
 import { bindUpperLineQuantities } from "../vision/bindUpperLineQuantities";
 import { disambiguatePosFooter } from "../vision/disambiguatePosFooter";
 import { coerceRawVisionOutput } from "../vision/coerceRawVisionOutput";
+import {
+  coerceVisionOcrExtract,
+  isVisionOcrExtract,
+} from "../vision/visionOcrExtract";
+import { visionOcrToParsedReceipt } from "../vision/visionOcrToParsedReceipt";
 import { mergeStandaloneMultiplierProducts } from "../vision/mergeStandaloneMultiplierProducts";
 import { normalizeVisionReceipt } from "../vision/normalizeVisionReceipt";
 import { postProcessParsedReceipt } from "../vision/parsedReceiptPostProcess";
@@ -122,6 +127,10 @@ export type ParsedReceipt = z.infer<typeof parsedReceiptSchema> & {
 };
 
 export function parseParsedReceiptJson(raw: unknown): ParsedReceipt {
+  if (isVisionOcrExtract(raw)) {
+    return visionOcrToParsedReceipt(coerceVisionOcrExtract(raw));
+  }
+
   const coerced = coerceRawVisionOutput(raw) as Record<string, unknown>;
   const result = parsedReceiptSchema.safeParse(coerced);
   if (!result.success) {

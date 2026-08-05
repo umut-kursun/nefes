@@ -67,6 +67,16 @@ export async function analyzeReceiptFormData(
     typeof preprocessMsRaw === "string" && preprocessMsRaw.trim()
       ? Number(preprocessMsRaw)
       : undefined;
+  const resizeMsRaw = form.get("resizeMs");
+  const resizeMs =
+    typeof resizeMsRaw === "string" && resizeMsRaw.trim()
+      ? Number(resizeMsRaw)
+      : undefined;
+  const base64EncodeMsRaw = form.get("base64EncodeMs");
+  const base64EncodeMs =
+    typeof base64EncodeMsRaw === "string" && base64EncodeMsRaw.trim()
+      ? Number(base64EncodeMsRaw)
+      : undefined;
 
   if (!(file instanceof File)) {
     return { error: "Görsel gerekli.", status: 400 };
@@ -92,6 +102,17 @@ export async function analyzeReceiptFormData(
     options.fallbackModel ||
     process.env.OPENAI_VISION_FALLBACK_MODEL ||
     model;
+
+  if (Number.isFinite(preprocessMs)) {
+    console.info(
+      `[receipt-pipeline:${hint}] client stage timings:\n` +
+        `  image preprocessing: ${preprocessMs}ms\n` +
+        (Number.isFinite(resizeMs) ? `  image resize: ${resizeMs}ms\n` : "") +
+        (Number.isFinite(base64EncodeMs)
+          ? `  base64 encoding: ${base64EncodeMs}ms\n`
+          : "")
+    );
+  }
 
   const result = await runReceiptPipeline({
     imageDataUrl: primaryDataUrl,

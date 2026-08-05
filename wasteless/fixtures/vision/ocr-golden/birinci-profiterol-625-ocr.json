@@ -1,0 +1,19 @@
+{
+  "merchant": { "title": "BİRİNCİ PROFİTEROL", "category": "RESTAURANT" },
+  "metadata": {
+    "purchaseDate": "2026-07-30",
+    "purchaseTime": "20:34:00",
+    "receiptNumber": "0013",
+    "currency": "TRY"
+  },
+  "productLines": [
+    { "text": "TATLI  %10  *625,00", "kind": "product" }
+  ],
+  "footerLines": [
+    "TOPKDV  *56,82",
+    "TOPLAM  *625,00"
+  ],
+  "paymentLines": ["Kredi Kartı  *625,00"],
+  "rawText": "BİRİNCİ PROFİTEROL\nFİKRET DELİBAŞ\nCUMHURİYET MH.CUMHURİYET CD.\nÇANDARLI SK.BEYAZ PARK EVLERİ2\nNO:6/58 B.DÜZÜ/İST.\nTARİH: 30-07-2026\nSAAT: 20:34\nFİŞ NO: 0013\nTATLI  %10  *625,00\nTOPKDV  *56,82\nTOPLAM  *625,00\nKredi Kartı  *625,00",
+  "confidence": 0.88
+}

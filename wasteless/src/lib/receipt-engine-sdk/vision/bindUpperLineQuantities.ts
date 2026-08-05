@@ -228,6 +228,13 @@ function bindProductsToBindings(
     }
     if (candidates.length !== 1) continue;
     const idx = candidates[0]!;
+    if (
+      migros &&
+      rawText?.trim() &&
+      findExplicitQuantityForProduct(rawText, updated[idx]!.name) != null
+    ) {
+      continue;
+    }
     updated[idx] = applyBinding(updated[idx]!, binding);
     usedBindings.add(b);
   }

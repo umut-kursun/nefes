@@ -1,0 +1,40 @@
+{
+  "merchant": { "title": "MIGROS TICARET A.S.", "category": "MARKET" },
+  "metadata": {
+    "purchaseDate": "2026-07-31",
+    "purchaseTime": "19:26:00",
+    "receiptNumber": "0220",
+    "currency": "TRY"
+  },
+  "productLines": [
+    { "text": "BURCU NAPOLITEN SOS  %1  *74,95", "kind": "product" },
+    { "text": "BURCU NAPOLITEN SOS  %1  *74,95", "kind": "product" },
+    { "text": "BURCU NAPOLITEN SOS  %1  *74,95", "kind": "product" },
+    { "text": "MIGROS PLASTIK POSET  %20  *1,00", "kind": "charge" },
+    { "text": "SOFRA EKMEK ADET  %1  *20,00", "kind": "product" },
+    { "text": "SOFRA EKMEK ADET  %1  *20,00", "kind": "product" },
+    { "text": "** VIVIDENT 45DK CUZ  %1  *39,95", "kind": "product" },
+    { "text": "MLIFE ORG.YUMURTA  %1  *149,95", "kind": "product" },
+    { "text": "** JOHNSONS ISILD.SA  %20  *229,95", "kind": "product" },
+    { "text": "3 AD x 25,90 TL/AD", "kind": "quantity" },
+    { "text": "ICIM RAHAT LAKTOZSUZ  %1  *77,70", "kind": "product" },
+    { "text": "SUTAS SUZ.Y. 750G  %1  *147,95", "kind": "product" },
+    { "text": "SFRESH PATAIES 1 KG  %1  *229,95", "kind": "product" },
+    { "text": "% 25 % INDIRIM  %1  *-57,49", "kind": "discount" },
+    { "text": "UZMAN KASAP KLASIK K  %1  *275,95", "kind": "product" },
+    { "text": "% 20 % INDIRIM  %1  *-55,19", "kind": "discount" },
+    { "text": "9 AD x 40,00 TL/AD", "kind": "quantity" },
+    { "text": "ALGIDA FRIGOLA 60ML *1 *360,00", "kind": "product" },
+    { "text": "MIGROS PLASTIK POSET  %20  *1,00", "kind": "charge" },
+    { "text": "4 AD x 115,00 TL/AD", "kind": "quantity" },
+    { "text": "MARLBORO TBLUE PAKET *1 *460,00", "kind": "product" }
+  ],
+  "footerLines": [
+    "ARA TOPLAM  *2.125,57",
+    "TOPKDV  *52,85",
+    "TOPLAM  *2.125,57"
+  ],
+  "paymentLines": [],
+  "rawText": "MIGROS TICARET A.S.\nINONU CD SILIVRI ISTANBUL M JET SIS MGZ.\nTARIH:31/07/2026 SAAT:19:26\nFIS NO:0220\n#6002080104801290\nBURCU NAPOLITEN SOS  %1  *74,95\nBURCU NAPOLITEN SOS  %1  *74,95\nBURCU NAPOLITEN SOS  %1  *74,95\nMIGROS PLASTIK POSET  %20  *1,00\nSOFRA EKMEK ADET  %1  *20,00\nSOFRA EKMEK ADET  %1  *20,00\n** VIVIDENT 45DK CUZ  %1  *39,95\nMLIFE ORG.YUMURTA  %1  *149,95\n** JOHNSONS ISILD.SA  %20  *229,95\n3 AD x 25,90 TL/AD\nICIM RAHAT LAKTOZSUZ  %1  *77,70\nSUTAS SUZ.Y. 750G  %1  *147,95\nSFRESH PATAIES 1 KG  %1  *229,95\n% 25 % INDIRIM  %1  *-57,49\nUZMAN KASAP KLASIK K  %1  *275,95\n% 20 % INDIRIM  %1  *-55,19\n9 AD x 40,00 TL/AD\nALGIDA FRIGOLA 60ML *1 *360,00\nMIGROS PLASTIK POSET  %20  *1,00\n4 AD x 115,00 TL/AD\nMARLBORO TBLUE PAKET *1 *460,00\nARA TOPLAM  *2.125,57\nTOPKDV  *52,85\nTOPLAM  *2.125,57",
+  "confidence": 0.9
+}

@@ -4,6 +4,7 @@ import {
   type ParsedReceipt,
 } from "../types/ParsedReceipt";
 import {
+  applyExplicitMigrosQuantities,
   dedupeMigrosPlasticBag,
   findExplicitQuantityForProduct,
   isMigrosReceipt,
@@ -275,5 +276,57 @@ describe("Migros receipt rules", () => {
     });
 
     expect(finalized.products[0]!.quantity).toBe(1);
+  });
+
+  it("applyExplicitMigrosQuantities restores *1 when multiplier misbound qty", () => {
+    const rawText =
+      "MARLBORO TBLUE PAKET *1 *460,00\n4 AD x 115,00 TL/AD";
+    const corrected = applyExplicitMigrosQuantities({
+      ...migrosBase,
+      products: [
+        {
+          name: "MARLBORO TBLUE PAKET",
+          quantity: 4,
+          unit: "ad",
+          unitPrice: 115,
+          lineTotal: 460,
+        },
+      ],
+      financials: { totalAmount: 460 },
+      rawText,
+    });
+
+    expect(corrected.products[0]!.quantity).toBe(1);
+    expect(corrected.products[0]!.unitPrice).toBe(460);
+    expect(corrected.products[0]!.normalizedUnitPrice).toBe(460);
+  });
+
+  it("applyExplicitMigrosQuantities runs inside finalizeVisionParsedReceipt", () => {
+    const finalized = finalizeVisionParsedReceipt({
+      ...migrosBase,
+      products: [
+        {
+          name: "ALGIDA FRIGOLA 60ML",
+          quantity: 9,
+          unit: "ad",
+          unitPrice: 40,
+          lineTotal: 360,
+        },
+        {
+          name: "9 AD x 40,00 TL/AD",
+          quantity: 9,
+          unit: "ad",
+          unitPrice: 40,
+          lineTotal: 360,
+        },
+      ],
+      financials: { totalAmount: 360 },
+      rawText:
+        "ALGIDA FRIGOLA 60ML *1 *360,00\n9 AD x 40,00 TL/AD",
+    });
+
+    expect(finalized.products).toHaveLength(1);
+    expect(finalized.products[0]!.quantity).toBe(1);
+    expect(finalized.products[0]!.unitPrice).toBe(360);
   });
 });

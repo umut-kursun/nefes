@@ -29,6 +29,8 @@ export type ReceiptImageDataUrlInput = {
   altImageDataUrl?: string;
   sourceHint?: string;
   preprocessMs?: number;
+  resizeMs?: number;
+  base64EncodeMs?: number;
 };
 
 export type ReceiptImageBufferInput = {

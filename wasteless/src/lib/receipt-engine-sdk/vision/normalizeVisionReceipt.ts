@@ -12,6 +12,7 @@ import { mergeStandaloneMultiplierProducts } from "./mergeStandaloneMultiplierPr
 
 import {
   attachMigrosMultiplierMetadata,
+  applyExplicitMigrosQuantities,
   dedupeMigrosPlasticBag,
   findExplicitQuantityForProduct,
   isMigrosReceipt,
@@ -33,6 +34,8 @@ import {
 } from "./parsedReceiptValidation";
 
 import { stripMisclassifiedDiscountProducts } from "./stripMisclassifiedDiscountProducts";
+
+import { extractReceiptNumberFromRawText } from "./extractReceiptNumberFromRawText";
 
 
 
@@ -78,6 +81,15 @@ export function normalizeVisionReceipt(parsed: ParsedReceipt): ParsedReceipt {
 
     rawText: parsed.rawText ?? "",
 
+    metadata: {
+      ...parsed.metadata,
+      receiptNumber:
+        parsed.metadata.receiptNumber?.trim() ||
+        (parsed.rawText?.trim()
+          ? extractReceiptNumberFromRawText(parsed.rawText)
+          : null),
+    },
+
     discounts: parsed.discounts ?? [],
 
     payments: parsed.payments ?? [],
@@ -122,20 +134,22 @@ export function normalizeVisionReceipt(parsed: ParsedReceipt): ParsedReceipt {
 
   const rebound = bindUpperLineQuantities(sanitized);
 
+  const explicitMigros = applyExplicitMigrosQuantities(rebound);
+
   const migrosMetadata =
-    isMigrosReceipt(rebound) && rebound.rawText?.trim()
+    isMigrosReceipt(explicitMigros) && explicitMigros.rawText?.trim()
       ? {
-          ...rebound,
-          products: rebound.products.map((item) => {
+          ...explicitMigros,
+          products: explicitMigros.products.map((item) => {
             const explicit = findExplicitQuantityForProduct(
-              rebound.rawText!,
+              explicitMigros.rawText!,
               item.name
             );
             if (explicit != null) return attachMigrosMultiplierMetadata(item);
             return item;
           }),
         }
-      : rebound;
+      : explicitMigros;
 
   const finalParsed = {
 

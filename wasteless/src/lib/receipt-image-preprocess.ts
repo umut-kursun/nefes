@@ -12,9 +12,36 @@ export const HIGH_RES_MAX_EDGE = 2048;
 /** Validation score below this triggers a high-res re-preprocess retry. */
 export const LOW_VISION_QUALITY_THRESHOLD = 75;
 
+export type PreprocessTimings = {
+  loadMs: number;
+  resizeMs: number;
+  cropDeskewMs: number;
+  filterMs: number;
+  base64EncodeMs: number;
+  totalMs: number;
+};
+
+export type PreprocessResult = {
+  blob: Blob;
+  dataUrl: string;
+  timings: PreprocessTimings;
+};
+
 export type PreprocessOptions = {
   readonly maxEdge?: number;
 };
+
+function logPreprocessTimings(timings: PreprocessTimings, variant: PreprocessVariant): void {
+  console.info(
+    `[receipt-preprocess:${variant}] stage timings:\n` +
+      `  image load: ${timings.loadMs}ms\n` +
+      `  image resize: ${timings.resizeMs}ms\n` +
+      `  crop/deskew: ${timings.cropDeskewMs}ms\n` +
+      `  filter (${variant}): ${timings.filterMs}ms\n` +
+      `  base64 encoding: ${timings.base64EncodeMs}ms\n` +
+      `  total: ${timings.totalMs}ms`
+  );
+}
 
 function loadImage(file: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -236,35 +263,71 @@ export async function preprocessReceiptImage(
   file: File,
   variant: PreprocessVariant = "enhanced",
   options?: PreprocessOptions
-): Promise<{ blob: Blob; dataUrl: string }> {
+): Promise<PreprocessResult> {
   if (typeof document === "undefined") {
-    return { blob: file, dataUrl: "" };
+    return {
+      blob: file,
+      dataUrl: "",
+      timings: {
+        loadMs: 0,
+        resizeMs: 0,
+        cropDeskewMs: 0,
+        filterMs: 0,
+        base64EncodeMs: 0,
+        totalMs: 0,
+      },
+    };
   }
 
+  const totalStart = Date.now();
   const maxEdge = options?.maxEdge ?? DEFAULT_MAX_EDGE;
+
+  const loadStart = Date.now();
   const img = await loadImage(file);
+  const loadMs = Date.now() - loadStart;
+
+  const resizeStart = Date.now();
   const drawn = drawFit(img, maxEdge);
   let canvas = drawn.canvas;
+  const resizeMs = Date.now() - resizeStart;
+
+  const cropStart = Date.now();
   canvas = autoCropDocument(canvas);
   const ctxAfterCrop = canvas.getContext("2d", { willReadFrequently: true })!;
   const skew = estimateSkewDegrees(ctxAfterCrop, canvas.width, canvas.height);
   canvas = applyDeskew(canvas, skew);
+  const cropDeskewMs = Date.now() - cropStart;
 
+  const filterStart = Date.now();
   if (variant === "threshold") {
     enhanceContrast(canvas);
     adaptiveThreshold(canvas);
   } else if (variant === "enhanced") {
     enhanceContrast(canvas);
   }
+  const filterMs = Date.now() - filterStart;
 
   const blob = await canvasToBlob(canvas);
+  const encodeStart = Date.now();
   const dataUrl = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result));
     reader.onerror = () => reject(new Error("dataUrl failed"));
     reader.readAsDataURL(blob);
   });
-  return { blob, dataUrl };
+  const base64EncodeMs = Date.now() - encodeStart;
+
+  const timings: PreprocessTimings = {
+    loadMs,
+    resizeMs,
+    cropDeskewMs,
+    filterMs,
+    base64EncodeMs,
+    totalMs: Date.now() - totalStart,
+  };
+  logPreprocessTimings(timings, variant);
+
+  return { blob, dataUrl, timings };
 }
 
 /** True when a second pass at HIGH_RES_MAX_EDGE may improve vision OCR. */

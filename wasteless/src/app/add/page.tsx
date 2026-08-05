@@ -221,14 +221,17 @@ function AddPageInner() {
     setCorrectionsApplied(0);
     setOcrSummary(null);
     try {
-      const t0 = performance.now();
+      const originalStart = performance.now();
       const originalDataUrl = await fileToDataUrl(file);
+      const originalEncodeMs = Math.round(performance.now() - originalStart);
       const enhanced = await preprocessReceiptImage(file, "enhanced");
       const threshold = await preprocessReceiptImage(file, "threshold");
-      const preprocessMs = Math.round(performance.now() - t0);
-      if (process.env.NODE_ENV === "development") {
-        console.info(`[receipt] preprocess: ${preprocessMs}ms`);
-      }
+      const preprocessMs = enhanced.timings.totalMs + threshold.timings.totalMs;
+      const resizeMs = enhanced.timings.resizeMs + threshold.timings.resizeMs;
+      const base64EncodeMs =
+        enhanced.timings.base64EncodeMs +
+        threshold.timings.base64EncodeMs +
+        originalEncodeMs;
 
       const body = new FormData();
       body.append(
@@ -246,6 +249,8 @@ function AddPageInner() {
       body.append("originalDataUrl", originalDataUrl);
       body.append("sourceHint", sourceHint);
       body.append("preprocessMs", String(preprocessMs));
+      body.append("resizeMs", String(resizeMs));
+      body.append("base64EncodeMs", String(base64EncodeMs));
 
       const allCorrections = await getAllOcrCorrections();
       const learnedRecords = await getAllProductAliases();

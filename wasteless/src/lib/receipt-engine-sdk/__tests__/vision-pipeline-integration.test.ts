@@ -41,6 +41,9 @@ describe("direct vision pipeline (orchestrateFromImage)", () => {
       retried: false,
       math: { ok: true, itemSum: 817.02, total: 817.02, delta: 0 },
       lineChecks: [],
+      openAiRequestMs: 100,
+      jsonParseMs: 2,
+      normalizeVisionReceiptMs: 5,
     });
 
     const config = resolveSdkConfig({ parserMode: "vision_first" });
@@ -132,6 +135,9 @@ describe("direct vision pipeline (orchestrateFromImage)", () => {
         delta: 100,
       },
       lineChecks: [],
+      openAiRequestMs: 50,
+      jsonParseMs: 1,
+      normalizeVisionReceiptMs: 3,
     });
 
     const config = resolveSdkConfig({ parserMode: "vision_first" });
@@ -153,32 +159,21 @@ describe("direct vision pipeline (orchestrateFromImage)", () => {
 });
 
 describe("OKC_VISION_PARSE_PROMPT", () => {
-  it("includes deterministic quantity and VAT rules", () => {
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/prefer missing values over hallucinated/i);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/quantity = null/i);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/TATLI %10 \*625,00/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/%10 is VAT, NOT quantity/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/NEVER infer quantity/i);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/9 AD x 40,00 TL\/AD/);
-  });
-
-  it("includes discounts, charges, and accounting total", () => {
+  it("uses full Vision JSON contract with concise rules", () => {
+    expect(OKC_VISION_PARSE_PROMPT).toMatch(/products\[\]/);
     expect(OKC_VISION_PARSE_PROMPT).toMatch(/discounts\[\]/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/charges\[\]/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/amount = -57\.49/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/KARGO/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/POŞET/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(
-      /sum\(products\.lineTotal\) \+ sum\(charges\.amount\) - sum\(abs\(discounts\.amount\)\)/
-    );
+    expect(OKC_VISION_PARSE_PROMPT).toMatch(/financials/);
+    expect(OKC_VISION_PARSE_PROMPT).toMatch(/linkedProductName/);
+    expect(OKC_VISION_PARSE_PROMPT).toMatch(/unitPrice/);
+    expect(OKC_VISION_PARSE_PROMPT).not.toMatch(/productLines\[\]/);
+    expect(OKC_VISION_PARSE_PROMPT).not.toMatch(/footerLines\[\]/);
   });
 
-  it("includes spatial multiplier patterns and rawText rules", () => {
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/PATTERN A/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/PATTERN B/);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/DO NOT skip any lines/i);
-    expect(OKC_VISION_PARSE_PROMPT).toMatch(/3 AD x 25,90/i);
+  it("preserves Migros extraction rules", () => {
+    expect(OKC_VISION_PARSE_PROMPT).toMatch(/9 AD x 40,00 TL\/AD/);
+    expect(OKC_VISION_PARSE_PROMPT).toMatch(/0\.425 KG x 199,95 TL\/KG/);
     expect(OKC_VISION_PARSE_PROMPT).toMatch(/\*-57,49/);
+    expect(OKC_VISION_PARSE_PROMPT).toMatch(/MARLBORO/);
   });
 });
 

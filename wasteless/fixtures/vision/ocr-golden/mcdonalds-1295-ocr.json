@@ -1,0 +1,35 @@
+{
+  "merchant": { "title": "ANADOLU RESTORAN ISL. LTD. STI.", "category": "RESTAURANT" },
+  "metadata": {
+    "purchaseDate": "2026-08-03",
+    "purchaseTime": "19:19:00",
+    "receiptNumber": "0061",
+    "currency": "TRY"
+  },
+  "productLines": [
+    { "text": "McCrispy Deluxe M3 %10 *545,00", "kind": "product" },
+    { "text": "(McCrispy Deluxe)", "kind": "component" },
+    { "text": "(Super Coca Cola)", "kind": "component" },
+    { "text": "(Super Patates)", "kind": "component" },
+    { "text": "(Mayonez)", "kind": "component" },
+    { "text": "(AddOn Istemiyorum)", "kind": "component" },
+    { "text": "Big Mac M3 %10 *570,00", "kind": "product" },
+    { "text": "(Big Mac)", "kind": "component" },
+    { "text": "(Super Coca Cola)", "kind": "component" },
+    { "text": "(Super Patates)", "kind": "component" },
+    { "text": "(Ketcap)", "kind": "component" },
+    { "text": "Citir Tavuk Eks Add %10 *75,00", "kind": "product" },
+    { "text": "Ranch Sos %10 *10,00", "kind": "product" },
+    { "text": "Buyuk Patates %10 *95,00", "kind": "product" },
+    { "text": "(Ketcap)", "kind": "component" },
+    { "text": "(Mayonez)", "kind": "component" }
+  ],
+  "footerLines": [
+    "TOPKDV *117,73",
+    "TOPLAM *1.295,00",
+    "KDV %10 KDV TUTARI *117,73 KDV'LI TOPLAM *1.295,00"
+  ],
+  "paymentLines": ["Kredi Karti Odeme *1.295,00"],
+  "rawText": "ANADOLU RESTORAN ISL. LTD. STI.\nMcD SILIVRI DT\nMIMAR SINAN MAH. AHMET HAMOGLU CD. NO:6\nTARIH:03/08/2026 SAAT:19:19\nFIS NO :0061\nMcCrispy Deluxe M3 %10 *545,00\n(McCrispy Deluxe)\n(Super Coca Cola)\n(Super Patates)\n(Mayonez)\n(AddOn Istemiyorum)\nBig Mac M3 %10 *570,00\n(Big Mac)\n(Super Coca Cola)\n(Super Patates)\n(Ketcap)\nCitir Tavuk Eks Add %10 *75,00\nRanch Sos %10 *10,00\nBuyuk Patates %10 *95,00\n(Ketcap)\n(Mayonez)\nTOPKDV *117,73\nTOPLAM *1.295,00\nKredi Karti Odeme *1.295,00",
+  "confidence": 0.91
+}

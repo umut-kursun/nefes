@@ -1,4 +1,4 @@
-/** Vision-first ÖKC / e-Arşiv / supermarket receipt extraction prompt. */
+/** Vision-first ÖKC / e-Arşiv receipt extraction prompt — full JSON contract, concise rules. */
 
 import { VISION_RAW_TEXT_TRANSCRIPTION_RULES } from "@/lib/receipt-ocr-vision-rules";
 
@@ -52,128 +52,35 @@ export const PARSED_RECEIPT_VISION_JSON_SCHEMA = `{
   "confidence": number
 }`;
 
-export const OKC_VISION_PARSE_PROMPT = `You are WasteLess, an expert Turkish fiscal receipt (ÖKC / e-Arşiv / market / restaurant) vision parser.
+export const OKC_VISION_PARSE_PROMPT = `Turkish fiscal receipt (ÖKC / e-Arşiv / market / restaurant) vision parser.
 
-Analyze the receipt IMAGE holistically — read visual hierarchy, column alignment, spatial proximity, and footer layout. Do NOT treat this as plain OCR text.
-
-Return ONLY valid JSON matching this schema. No markdown. Use response_format json_object.
+Read the image holistically — columns, spacing, print order. Return ONLY valid JSON (response_format json_object). No markdown.
 
 ${PARSED_RECEIPT_VISION_JSON_SCHEMA}
 
-DETERMINISTIC EXTRACTION — prefer missing values over hallucinated values. Never invent fields by arithmetic.
+ARRAY ROUTING:
+- products[] — item rows with printed lineTotal. Optional quantity, unit, unitPrice, vatRatePercentage when explicitly visible.
+- discounts[] — İNDİRİM, KAMPANYA, İSKONTO, KUPON rows. NOT products. amount negative when printed with minus (*-57,49).
+- charges[] — POŞET, PLASTİK POŞET, KARGO, SERVİS, AMBALAJ fees. NOT products. Always positive.
+- payments[] — Kredi Kartı, Nakit, card slip payment amounts.
+- financials.totalAmount — TOPLAM / grand total on receipt.
 
-RECEIPT TOTAL ACCOUNTING (must hold on printed totals):
-  sum(products.lineTotal) + sum(charges.amount) - sum(abs(discounts.amount)) = financials.totalAmount
-Never ignore charges. Never put discounts or charges in products[].
+QUANTITY (explicit only — null when not printed):
+- Valid: "3 AD", "9 AD x 40,00 TL/AD", "0.744 KG", "0.425 KG x 199,95 TL/KG", same-line *5 *125,00
+- Multiplier line may be above OR below product — bind by spatial proximity.
+- NEVER infer qty from VAT % (%10 → vatRatePercentage only, NOT quantity).
+- NEVER infer from pack size in name (60ML, 1 LT, 750G, 1 KG).
 
---- DISCOUNTS (discounts[] ONLY — NEVER products[]) ---
+MIGROS (critical):
+- "9 AD x 40,00 TL/AD" → quantity=9, unitPrice=40.00 on nearest product block (e.g. ALGIDA FRIGOLA).
+- "4 AD x 115,00 TL/AD" → bind to MARLBORO / tobacco row below or above.
+- "0.425 KG x 199,95 TL/KG" → quantity=0.425, unit=kg, unitPrice=199.95 on weighted product.
+- "% 25 % İNDİRİM *-57,49" → discounts[] with linkedProductName when visually bound.
 
-Discount rows are NOT products. Keywords (case-insensitive, partial match OK):
-  İNDİRİM, KAMPANYA, İSKONTO, PROMOSYON, KUPON, COUPON
+NEVER in products[]: address, VKN, dates, receipt numbers, TOPKDV, TOPLAM, payment lines, discount rows, charge rows, VAT summary tables.
 
-Examples that belong in discounts[]:
-  %20 İNDİRİM
-  % 25 % İNDİRİM
-  KAMPANYA -12,50
+Combo/menu sub-lines in parentheses with no price (e.g. "(Super Coca Cola)") — omit from products[] unless they carry a line total.
 
-Discount amounts on the receipt are NEGATIVE when printed with minus (e.g. *-57,49 or -57,49 TL).
-Store amount as a negative number: amount = -57.49
-
-When a discount is visually attached to the product directly above or below, set linkedProductName to that product name.
-Keep the product lineTotal as the gross printed price before discount when both are visible.
-
-Example:
-  FRESH PATATES *229,95
-  %25 İNDİRİM *-57,49
-→ products: [{ name: "FRESH PATATES", lineTotal: 229.95, ... }]
-→ discounts: [{ name: "%25 İNDİRİM", amount: -57.49, linkedProductName: "FRESH PATATES" }]
-Effective paid for that item = 172.46 (informational only — do not rewrite product lineTotal unless that is what is printed).
-
---- CHARGES (charges[] ONLY — NEVER products[]) ---
-
-Additional fees are NOT products. Keywords:
-  KARGO, TESLİMAT, SERVİS, SERVİS BEDELİ, POŞET, PLASTİK POŞET, AMBALAJ, KURYE, BAĞIŞ, YUVARLAMA, DELIVERY, BAG
-
-Charge amounts are always POSITIVE.
-They MUST be included in charges[] and contribute to financials.totalAmount.
-
---- QUANTITY (explicit only) ---
-
-Extract quantity ONLY when explicitly written on the receipt.
-
-Valid explicit quantity patterns:
-  3 AD, 3 ADET, 2 x, 2X, 9 AD x 40,00 TL/AD, 4 AD x 115,00 TL/AD
-  29,766 LT, 0,744 KG, 1,250 KG, 6 PK, 12'Lİ
-  POS asterisk qty: NAME *5 *125,00 → quantity=5 (fuel *QTY uses fuelDetails)
-
-The quantity line may appear on the same line, immediately above, or immediately below the product name.
-Bind by spatial proximity to the nearest matching product block.
-
-NEVER infer quantity from:
-  VAT tokens (%1, %8, %10, %20)
-  percentages or discount rates
-  arithmetic (lineTotal ÷ unitPrice)
-  package size in the product name (1 LT, 500 ML, 330 ML, 750 G, 60ML, 1 KG, 250G)
-  product names or total price alone
-
-If quantity is not explicitly written: quantity = null
-If unitPrice cannot be read without guessing: unitPrice = null
-Do NOT default quantity to 1 when unknown.
-
-When quantity IS extracted, classify its source internally (no extra JSON field):
-  explicit_same_line | explicit_previous_line | explicit_next_line | fuel_pattern | weighted_scale
-If none of those apply, quantity must remain null.
-
-VAT vs quantity (critical):
-  TATLI %10 *625,00 → quantity=null, vatRatePercentage=10, lineTotal=625.00
-  WRONG: quantity=10, unitPrice=62.50 (%10 is VAT, NOT quantity)
-
---- VAT ---
-
-Tokens beginning with % followed by a Turkish VAT rate (1, 8, 10, 18, 20) are VAT unless clearly a discount label.
-  %1 %8 %10 %20 → vatRatePercentage
-  NEVER use VAT tokens as quantity.
-
---- PACKAGE SIZE ---
-
-1 LT, 500 ML, 330 ML, 750 G, 750GR, 60ML, 1 KG, 250G in product names describe the product variant.
-They are NOT purchased quantity. Keep them in the product name only.
-
---- MULTIPLIER LINES (when explicit) ---
-
-When a separate multiplier line exists (e.g. "3 AD x 25,90 TL/AD" above/below product):
-  quantity = 3, unitPrice = 25.90, lineTotal = printed line total for that product.
-Ensure quantity * unitPrice ≈ lineTotal when both are explicit.
-
---- SPATIAL BINDING ---
-
-PATTERN A — multiplier ABOVE product name:
-  Line 1: 2 ad X 37.50
-  Line 2: PRODUCT NAME *75,00
-→ quantity=2, unitPrice=37.50, lineTotal=75.00
-
-PATTERN B — multiplier BELOW product name:
-  Line 1: PRODUCT NAME %1. *66,89
-  Line 2: 0.744 kg X 89.90
-→ quantity=0.744, unit=kg, unitPrice=89.90, lineTotal=66.89, vatRatePercentage=1
-
-Never shift a multiplier from one product onto the next product.
-
---- NEVER IN products[] ---
-
-Address, VKN, dates, receipt numbers, TOPKDV, TOPLAM, payment/card slip lines,
-discount rows, charge/fee rows, VAT summary table rows.
-
---- PAYMENTS vs VAT ---
-
-payments[] = KREDİ KARTI, NAKİT, bank names, card last 4, ONAY KODU — amounts customer paid.
-financials.vatTotal = TOPLAM KDV / TOPKDV (tax summary — NOT a payment).
-
---- FINANCIALS ---
-
-financials.totalAmount = grand total / Ödenecek Tutar (what customer paid).
-currency defaults to TRY.
-
---- rawText ---
+Prefer null over guessing. lineTotal must match printed amount on each row.
 
 ${VISION_RAW_TEXT_TRANSCRIPTION_RULES}`;

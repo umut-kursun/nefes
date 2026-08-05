@@ -1,10 +1,27 @@
 import { parseTrNumber } from "@/lib/receipt-engine/layer-6-purchase/parsers/parseNumber";
+import { TOPKDV_HINT } from "@/lib/receipt-engine/patterns/document";
 import type { ParsedReceipt, PaymentInfo, ReceiptItem } from "../types/ParsedReceipt";
 
 const FOOTER_AMOUNT = /\*+\s*(\d+(?:[.,]\d+)?)\s*$/;
 
-const TOPKDV_LINE = /\btop\s*k?\s*d?v\b/i;
+const TOPKDV_LINE = TOPKDV_HINT;
 const TOPLAM_LINE = /^\s*toplam\b/i;
+const KDV_TOPLAM_LINE = /\bkdv\s*toplam\b/i;
+const VAT_SUMMARY_ROW = /^%\s*\d{1,2}\s+\*?\s*\d/i;
+const STANDALONE_KDV_ROW = /^kdv\b/i;
+
+/** Footer / VAT summary rows Vision sometimes emits as products[]. */
+export function isMisclassifiedFooterProduct(item: ReceiptItem): boolean {
+  const name = item.name.trim();
+  if (!name) return false;
+  if (TOPKDV_LINE.test(name)) return true;
+  if (KDV_TOPLAM_LINE.test(name)) return true;
+  if (TOPLAM_LINE.test(name)) return true;
+  if (/^\s*ara\s*toplam\b/i.test(name)) return true;
+  if (VAT_SUMMARY_ROW.test(name)) return true;
+  if (STANDALONE_KDV_ROW.test(name)) return true;
+  return false;
+}
 
 function isPaymentLine(line: string): boolean {
   const lower = line.toLocaleLowerCase("tr-TR");
@@ -171,6 +188,7 @@ export function disambiguatePosFooter(parsed: ParsedReceipt): ParsedReceipt {
       : grandTotal;
 
   const products = parsed.products
+    .filter((item) => !isMisclassifiedFooterProduct(item))
     .map(sanitizeUnreadableName)
     .map((item) => applyInlineVatRate(item, rawText));
 

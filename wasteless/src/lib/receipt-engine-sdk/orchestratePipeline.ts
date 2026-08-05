@@ -23,6 +23,11 @@ import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReport } from "@/lib/receipt-engine/types/models/validation";
 import { parsedReceiptToPurchaseDraft } from "./adapters/parsedReceiptToPurchaseDraft";
 import { parseReceiptWithVisionRetry } from "./vision/visionParseWithRetry";
+import {
+  createEmptyVisionStageTimings,
+  logVisionPipelineTimings,
+  type VisionPipelineStageTimings,
+} from "./vision/pipelineStageTiming";
 import type { OcrDocument } from "@/lib/receipt-engine/types/models/image";
 import type { ReceiptEngineInput } from "@/lib/receipt-engine/types/pipeline";
 import type { EngineDependencies } from "@/lib/receipt-engine/pipeline/dependencies";
@@ -243,7 +248,12 @@ export async function orchestrateFromImage(
 
   if (canUseDirectVision(input, config, ocrFactoryOptions)) {
     try {
-      const visionStart = collectTimings ? Date.now() : 0;
+      const stageTimings = createEmptyVisionStageTimings();
+      stageTimings.preprocessMs = input.imagePrimary?.preprocessMs;
+      stageTimings.resizeMs = input.imagePrimary?.resizeMs;
+      stageTimings.base64EncodeMs = input.imagePrimary?.base64EncodeMs;
+      const pipelineStart = Date.now();
+
       const visionInput = {
         imageDataUrl: input.imagePrimary!.dataUrl,
         altImageDataUrl: input.imageAlt?.dataUrl,
@@ -254,26 +264,48 @@ export async function orchestrateFromImage(
         maxRetries: 1,
       };
 
-      const { parsed, rawVisionResponse } = await parseReceiptWithVisionRetry(
-        visionInput,
-        visionOptions
-      );
-      const purchase = await parsedReceiptToPurchaseDraft(parsed);
-      const validation = buildValidationReport(purchase);
+      const {
+        parsed,
+        rawVisionResponse,
+        openAiRequestMs,
+        jsonParseMs,
+        normalizeVisionReceiptMs,
+      } = await parseReceiptWithVisionRetry(visionInput, visionOptions);
+      stageTimings.openAiRequestMs = openAiRequestMs;
+      stageTimings.jsonParseMs = jsonParseMs;
+      stageTimings.normalizeVisionReceiptMs = normalizeVisionReceiptMs;
 
-      if (collectTimings) timings.ocrMs = Date.now() - visionStart;
+      const purchaseStart = Date.now();
+      const purchase = await parsedReceiptToPurchaseDraft(parsed);
+      stageTimings.purchaseDraftMs = Date.now() - purchaseStart;
+
+      const validationStart = Date.now();
+      const validation = buildValidationReport(purchase);
+      stageTimings.validationMs = Date.now() - validationStart;
+
+      stageTimings.totalMs = Date.now() - pipelineStart;
+      logVisionPipelineTimings(stageTimings, input.sourceHint);
+
+      if (collectTimings) timings.ocrMs = stageTimings.openAiRequestMs;
 
       const validationGolden = stripValidatedPurchase(validation);
       const ocr = ocrDocumentFromRaw(parsed.rawText ?? purchase.merchant ?? "");
       emitter?.emit("onOCRFinished", { ocr, durationMs: timings.ocrMs ?? 0 });
-      emitter?.emit("onPurchaseDraftCreated", { purchase, durationMs: 0 });
+      emitter?.emit("onPurchaseDraftCreated", {
+        purchase,
+        durationMs: stageTimings.purchaseDraftMs,
+      });
       emitter?.emit("onValidationFinished", {
         validation: validationGolden,
         purchase,
-        durationMs: 0,
+        durationMs: stageTimings.validationMs,
       });
 
-      if (collectTimings) timings.totalMs = Date.now() - pipelineStart;
+      if (collectTimings) {
+        timings.purchaseMs = stageTimings.purchaseDraftMs;
+        timings.validationMs = stageTimings.validationMs;
+        timings.totalMs = stageTimings.totalMs;
+      }
 
       const outputs = buildVisionOnlyQualityOutputs(
         purchase,
@@ -295,7 +327,10 @@ export async function orchestrateFromImage(
           ? debugReport
           : { ...debugReport, confidence },
         confidence,
-        performance: timings,
+        performance: {
+          ...timings,
+          ...stageTimings,
+        } as Partial<PipelineLayerTimings> & VisionPipelineStageTimings,
         rawVisionResponse,
       };
     } catch (visionError) {

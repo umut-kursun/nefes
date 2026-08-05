@@ -1,3 +1,5 @@
+import { extractReceiptNumberFromRawText } from "./extractReceiptNumberFromRawText";
+
 const MERCHANT_CATEGORIES = new Set([
   "RESTAURANT",
   "MARKET",
@@ -116,6 +118,12 @@ export function coerceRawVisionOutput(raw: unknown): unknown {
     /^\d{4}-\d{2}-\d{2}$/.test(metadata.purchaseDate)
       ? metadata.purchaseDate
       : todayIsoDate();
+  const rawText =
+    typeof out.rawText === "string" ? out.rawText : "";
+  const receiptNumberFromRaw =
+    rawText.trim().length > 0
+      ? extractReceiptNumberFromRawText(rawText)
+      : null;
   out.metadata = {
     ...metadata,
     purchaseDate,
@@ -123,6 +131,11 @@ export function coerceRawVisionOutput(raw: unknown): unknown {
       typeof metadata.currency === "string" && metadata.currency.trim()
         ? metadata.currency
         : "TRY",
+    receiptNumber:
+      typeof metadata.receiptNumber === "string" &&
+      metadata.receiptNumber.trim()
+        ? metadata.receiptNumber.trim()
+        : receiptNumberFromRaw,
   };
 
   const productsRaw = Array.isArray(out.products) ? out.products : [];
@@ -191,6 +204,8 @@ export function coerceRawVisionOutput(raw: unknown): unknown {
 
   if (typeof out.rawText !== "string") {
     out.rawText = "";
+  } else {
+    out.rawText = rawText;
   }
 
   return out;

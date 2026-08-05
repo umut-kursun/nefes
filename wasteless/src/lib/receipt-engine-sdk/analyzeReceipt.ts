@@ -192,6 +192,10 @@ export async function analyzeReceipt(
             preprocessMs: isImageBufferInput(input)
               ? undefined
               : input.preprocessMs,
+            resizeMs: isImageBufferInput(input) ? undefined : input.resizeMs,
+            base64EncodeMs: isImageBufferInput(input)
+              ? undefined
+              : input.base64EncodeMs,
           },
           imageAlt: altImageDataUrl
             ? { dataUrl: altImageDataUrl, variant: "threshold" }

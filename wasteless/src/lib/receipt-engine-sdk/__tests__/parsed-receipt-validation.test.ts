@@ -60,7 +60,12 @@ function incompleteFileMarketFixture(): ParsedReceipt {
 }
 
 function wrapVision(parsed: ParsedReceipt, rawVisionResponse = '{"mock":true}') {
-  return { parsed, rawVisionResponse };
+  return {
+    parsed,
+    rawVisionResponse,
+    openAiRequestMs: 10,
+    jsonParseMs: 1,
+  };
 }
 
 describe("roundLineTotal", () => {
@@ -184,7 +189,7 @@ describe("parseReceiptWithVisionRetry", () => {
     expect(result.math.itemSum).toBe(817.02);
     expect(result.rawVisionResponse).toBe('{"attempt":2}');
     expect(mockParse.mock.calls[1]?.[1]?.retryInstruction).toMatch(
-      /SHIFTED A MULTIPLIER|YOU HAVE SHIFTED/i
+      /Previous items summed|SHIFTED A MULTIPLIER/i
     );
   });
 

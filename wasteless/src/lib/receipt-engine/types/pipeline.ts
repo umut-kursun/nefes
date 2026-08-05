@@ -13,6 +13,8 @@ export interface ImagePayload {
   width?: number;
   height?: number;
   preprocessMs?: number;
+  resizeMs?: number;
+  base64EncodeMs?: number;
 }
 
 export interface ReceiptEngineInput {

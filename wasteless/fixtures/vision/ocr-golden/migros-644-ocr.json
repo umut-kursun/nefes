@@ -1,0 +1,38 @@
+{
+  "merchant": { "title": "MIGROS TICARET A.S.", "category": "MARKET" },
+  "metadata": {
+    "purchaseDate": "2026-08-04",
+    "purchaseTime": "18:58:00",
+    "receiptNumber": "0302",
+    "currency": "TRY"
+  },
+  "productLines": [
+    { "text": "SALATA ATOM ADET  %1  *42,95", "kind": "product" },
+    { "text": "0.900 KG x 59,95 TL/KG", "kind": "quantity" },
+    { "text": "HIYAR BADEM PKT KG.  %1  *53,96", "kind": "product" },
+    { "text": "0.125 KG x 139,95 TL/KG", "kind": "quantity" },
+    { "text": "BIBER SIVRI(1) KG  %1  *17,49", "kind": "product" },
+    { "text": "2 AD x 20,00 TL/AD", "kind": "quantity" },
+    { "text": "SOFRA EKMEK ADET  %1  *40,00", "kind": "product" },
+    { "text": "ULKER PROBIS 10 LU  %1  *79,95", "kind": "product" },
+    { "text": "ULKER CUBUK KRAKER  %1  *17,50", "kind": "product" },
+    { "text": "ULKER CUBUK KRAKER  %1  *17,50", "kind": "product" },
+    { "text": "** MACROMAX MIKROFIB  %10  *164,95", "kind": "product" },
+    { "text": "MIGROS BANYO TEMIZL.  %20  *83,95", "kind": "product" },
+    { "text": "ETI GONG 64 G  %1  *25,90", "kind": "product" },
+    { "text": "ETI GONG 64 G  %1  *25,90", "kind": "product" },
+    { "text": "PEPSI COLA 1 L  %10  *57,00", "kind": "product" },
+    { "text": "COCA-COLA 1L  %10  *65,00", "kind": "product" },
+    { "text": "iNDiRiM  %10  *-50,00", "kind": "discount" },
+    { "text": "2 AD x 1,00 TL/AD", "kind": "quantity" },
+    { "text": "MIGROS PLASTIK POSET  %20  *2,00", "kind": "charge" }
+  ],
+  "footerLines": [
+    "ARA TOPLAM  *644,05",
+    "TOPKDV  *39,05",
+    "TOPLAM  *644,05"
+  ],
+  "paymentLines": [],
+  "rawText": "MIGROS TICARET A.S.\nINONU CD SILIVRI ISTANBUL M JET STS MGZ.\nTARIH:04/08/2026 SAAT:18:58\nFIS NO:0302\n#6002080104801290\nSALATA ATOM ADET  %1  *42,95\n0.900 KG x 59,95 TL/KG\nHIYAR BADEM PKT KG.  %1  *53,96\n0.125 KG x 139,95 TL/KG\nBIBER SIVRI(1) KG  %1  *17,49\n2 AD x 20,00 TL/AD\nSOFRA EKMEK ADET  %1  *40,00\nULKER PROBIS 10 LU  %1  *79,95\nULKER CUBUK KRAKER  %1  *17,50\nULKER CUBUK KRAKER  %1  *17,50\n** MACROMAX MIKROFIB  %10  *164,95\nMIGROS BANYO TEMIZL.  %20  *83,95\nETI GONG 64 G  %1  *25,90\nETI GONG 64 G  %1  *25,90\nPEPSI COLA 1 L  %10  *57,00\nCOCA-COLA 1L  %10  *65,00\niNDiRiM  %10  *-50,00\n2 AD x 1,00 TL/AD\nMIGROS PLASTIK POSET  %20  *2,00\nARA TOPLAM  *644,05\nTOPKDV  *39,05\nTOPLAM  *644,05",
+  "confidence": 0.92
+}

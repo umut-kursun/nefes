@@ -99,6 +99,35 @@ export function migrosMultiplierMustPreserveQuantity(
   return findExplicitQuantityForProduct(parsed.rawText, product.name) != null;
 }
 
+/**
+ * When rawText prints `*N *PRICE` on the product row, force quantity=N and
+ * recompute unitPrice from lineTotal — multiplier lines must not override.
+ */
+export function applyExplicitMigrosQuantities(
+  parsed: ParsedReceipt
+): ParsedReceipt {
+  if (!isMigrosReceipt(parsed) || !parsed.rawText?.trim()) return parsed;
+
+  const rawText = parsed.rawText;
+  const products = parsed.products.map((item) => {
+    const explicit = findExplicitQuantityForProduct(rawText, item.name);
+    if (explicit == null) return item;
+
+    const quantity = explicit;
+    const unitPrice =
+      quantity > 0 ? item.lineTotal / quantity : item.lineTotal;
+
+    return attachMigrosMultiplierMetadata({
+      ...item,
+      quantity,
+      unit: item.unit ?? "ad",
+      unitPrice,
+    });
+  });
+
+  return { ...parsed, products };
+}
+
 export function attachMigrosMultiplierMetadata(
   product: ReceiptItem
 ): ReceiptItem {
@@ -238,13 +267,26 @@ export function dedupeMigrosPlasticBag(parsed: ParsedReceipt): ParsedReceipt {
 
   let products = parsed.products;
   if (hasBagProduct) {
-    let seen = false;
-    products = products.filter((p) => {
-      if (!MIGROS_PLASTIC_BAG.test(p.name)) return true;
-      if (seen) return false;
-      seen = true;
-      return true;
-    });
+    const bagProducts = products.filter((p) => MIGROS_PLASTIC_BAG.test(p.name));
+    const nonBagProducts = products.filter((p) => !MIGROS_PLASTIC_BAG.test(p.name));
+    if (bagProducts.length > 1) {
+      const mergedTotal = bagProducts.reduce((sum, p) => sum + p.lineTotal, 0);
+      const mergedQty = bagProducts.reduce(
+        (sum, p) => sum + (p.quantity ?? 1),
+        0
+      );
+      products = [
+        ...nonBagProducts,
+        {
+          ...bagProducts[0]!,
+          quantity: mergedQty,
+          lineTotal: mergedTotal,
+          unitPrice: mergedQty > 0 ? mergedTotal / mergedQty : mergedTotal,
+        },
+      ];
+    } else if (bagProducts.length === 1) {
+      products = [...nonBagProducts, bagProducts[0]!];
+    }
   }
 
   const platformCharges = (parsed.platformCharges ?? []).filter(

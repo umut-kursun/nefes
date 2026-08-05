@@ -126,7 +126,11 @@ async function analyzePreprocessedImages(
 
   originalDataUrl: string,
 
-  preprocessMs: number
+  preprocessMs: number,
+
+  resizeMs: number,
+
+  base64EncodeMs: number
 
 ): Promise<{
 
@@ -169,6 +173,10 @@ async function analyzePreprocessedImages(
   body.append("sourceHint", "receipt");
 
   body.append("preprocessMs", String(preprocessMs));
+
+  body.append("resizeMs", String(resizeMs));
+
+  body.append("base64EncodeMs", String(base64EncodeMs));
 
 
 
@@ -215,15 +223,24 @@ export async function runBackgroundReceiptParse(
 
   try {
 
-    const t0 = performance.now();
+    const originalStart = performance.now();
 
     const originalDataUrl = await fileToDataUrl(job.file);
+
+    const originalEncodeMs = Math.round(performance.now() - originalStart);
 
     const enhanced = await preprocessReceiptImage(job.file, "enhanced");
 
     const threshold = await preprocessReceiptImage(job.file, "threshold");
 
-    let preprocessMs = Math.round(performance.now() - t0);
+    let preprocessMs = enhanced.timings.totalMs + threshold.timings.totalMs;
+
+    let resizeMs = enhanced.timings.resizeMs + threshold.timings.resizeMs;
+
+    let base64EncodeMs =
+      enhanced.timings.base64EncodeMs +
+      threshold.timings.base64EncodeMs +
+      originalEncodeMs;
 
 
 
@@ -235,7 +252,11 @@ export async function runBackgroundReceiptParse(
 
       originalDataUrl,
 
-      preprocessMs
+      preprocessMs,
+
+      resizeMs,
+
+      base64EncodeMs
 
     );
 
@@ -255,8 +276,6 @@ export async function runBackgroundReceiptParse(
 
     ) {
 
-      const tRetry = performance.now();
-
       const enhancedHi = await preprocessReceiptImage(job.file, "enhanced", {
 
         maxEdge: HIGH_RES_MAX_EDGE,
@@ -269,7 +288,12 @@ export async function runBackgroundReceiptParse(
 
       });
 
-      preprocessMs += Math.round(performance.now() - tRetry);
+      preprocessMs += enhancedHi.timings.totalMs + thresholdHi.timings.totalMs;
+
+      resizeMs += enhancedHi.timings.resizeMs + thresholdHi.timings.resizeMs;
+
+      base64EncodeMs +=
+        enhancedHi.timings.base64EncodeMs + thresholdHi.timings.base64EncodeMs;
 
 
 
@@ -281,7 +305,11 @@ export async function runBackgroundReceiptParse(
 
         originalDataUrl,
 
-        preprocessMs
+        preprocessMs,
+
+        resizeMs,
+
+        base64EncodeMs
 
       );
 
