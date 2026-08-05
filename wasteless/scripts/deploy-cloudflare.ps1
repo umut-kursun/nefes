@@ -68,9 +68,7 @@ try {
   npm run build
   if ($LASTEXITCODE -ne 0) { throw "next build failed" }
 
-  if (-not (Test-Path "out\version.json")) {
-    Copy-Item "public\version.json" "out\version.json" -Force
-  }
+  Copy-Item "public\version.json" "out\version.json" -Force
 
   npx wrangler deploy --config wrangler.toml
   if ($LASTEXITCODE -ne 0) { throw "wrangler deploy failed" }
