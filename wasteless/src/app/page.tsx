@@ -41,6 +41,7 @@ import {
 import { getHomeAssistantInsights } from "@/lib/insights";
 import { formatRelativeDate, formatTime } from "@/lib/datetime";
 import { normalizeMerchantName } from "@/lib/merchants";
+import { expenseNavigationHref } from "@/lib/expense-navigation";
 import { isWithinInterval, parseISO } from "date-fns";
 
 function greetingLine(now: Date, displayName?: string | null): string {
@@ -169,7 +170,7 @@ export default function HomePage() {
     return {
       merchant,
       timeLabel,
-      href: `/expense?id=${encodeURIComponent(newest.id)}`,
+      href: expenseNavigationHref(newest),
     };
   }, [periodMemory.scoped, categories]);
 

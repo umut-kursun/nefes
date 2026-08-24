@@ -118,6 +118,17 @@ MARLBORO EDGE  *460,00
     expect(marlboro.unitPrice).toBe(115);
     expect(marlboro.lineTotal).toBe(460);
   });
+
+  it("parses *1 *360 product rows with multiplier above (migros-2125 Frigola)", () => {
+    const rawText =
+      "9 AD x 40,00 TL/AD\nALGIDA FRIGOLA 60ML *1 *360,00";
+    const bindings = extractUpperLineBindings(rawText);
+    expect(bindings).toHaveLength(1);
+    expect(bindings[0]!.nameHint).toMatch(/FRIGOLA/i);
+    expect(bindings[0]!.quantity).toBe(9);
+    expect(bindings[0]!.unitPrice).toBe(40);
+    expect(bindings[0]!.lineTotal).toBe(360);
+  });
 });
 
 describe("bindUpperLineQuantities", () => {

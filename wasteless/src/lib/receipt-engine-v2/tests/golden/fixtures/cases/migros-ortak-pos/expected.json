@@ -1,0 +1,35 @@
+{
+  "merchant": "MIGROS TICARET A.S.",
+  "purchaseDate": "29.07.2026",
+  "purchaseTime": "16:00",
+  "receiptNumber": "123456",
+  "currency": null,
+  "productCount": 2,
+  "products": [
+    {
+      "rawName": "EKMEK 750 GR",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 15,
+      "lineTotal": 15,
+      "vatRate": 1
+    },
+    {
+      "rawName": "SUT 1 LT",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 45.9,
+      "lineTotal": 45.9,
+      "vatRate": 1
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 61.4,
+    "vatTotal": 0.55,
+    "payments": []
+  },
+  "total": 61.4,
+  "vatTotal": 0.55,
+  "payment": null
+}

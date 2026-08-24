@@ -5,12 +5,12 @@ import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
+import type { ReceiptEngineV2Result } from "@/lib/receipt-engine-v2/engine/types";
 import { formatCopyAllDebug } from "@/lib/receipt-engine-debug/formatCopyAllDebug";
 import {
   extractPerformanceTimings,
   type ReceiptStageTimings,
 } from "@/lib/receipt-engine-debug/formatStageTimings";
-import type { ScanTimelinePayload } from "@/lib/receipt-scan-timeline";
 
 type Props = {
   purchase: PurchaseDraft;
@@ -20,6 +20,9 @@ type Props = {
   analyzeResult?: unknown;
   parserJson?: string;
   stageTimings?: ReceiptStageTimings;
+  engineResult?: ReceiptEngineV2Result;
+  engineUsed?: "v1" | "v2";
+  engineFallback?: boolean;
 };
 
 async function copyText(text: string): Promise<boolean> {
@@ -55,6 +58,9 @@ export function CopyAllDebugButton({
   analyzeResult,
   parserJson,
   stageTimings,
+  engineResult: engineResultProp,
+  engineUsed: engineUsedProp,
+  engineFallback: engineFallbackProp,
 }: Props) {
   const [copied, setCopied] = useState(false);
 
@@ -63,22 +69,26 @@ export function CopyAllDebugButton({
     extractPerformanceTimings(analyzeResult) ??
     undefined;
 
+  const payload =
+    analyzeResult && typeof analyzeResult === "object" && analyzeResult !== null
+      ? (analyzeResult as {
+          engineResult?: ReceiptEngineV2Result;
+          engineUsed?: "v1" | "v2";
+          engineFallback?: boolean;
+        })
+      : undefined;
+
   const blob = formatCopyAllDebug({
-    rawVision: rawVisionResponse,
     ocr: ocrText,
     purchase,
     validation,
+    engineResult: engineResultProp ?? payload?.engineResult,
+    engineUsed: engineUsedProp ?? payload?.engineUsed,
+    engineFallback: engineFallbackProp ?? payload?.engineFallback,
+    stageTimings: resolvedTimings,
+    rawVision: rawVisionResponse,
     analyzeResult,
     parserJson,
-    stageTimings: resolvedTimings,
-    scanTimeline:
-      analyzeResult &&
-      typeof analyzeResult === "object" &&
-      analyzeResult !== null &&
-      "scanTimeline" in analyzeResult
-        ? (analyzeResult as { scanTimeline?: ScanTimelinePayload | null })
-            .scanTimeline
-        : undefined,
   });
 
   const onCopy = async () => {

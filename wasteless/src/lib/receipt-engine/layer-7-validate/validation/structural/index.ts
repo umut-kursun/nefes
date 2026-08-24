@@ -1,5 +1,6 @@
 import type { PurchaseDraft } from "../../../types/models/purchase";
 import type { ValidatorResult } from "../../../types/models/validation";
+import { validateFinancialSafety } from "./financialSafetyValidator";
 import { validateReceiptTotal } from "./receiptTotalValidator";
 import { validateSubtotal } from "./subtotalValidator";
 import { validatePaymentSum } from "./paymentSumValidator";
@@ -8,10 +9,20 @@ import { validateLineTotals } from "./lineTotalValidator";
 import { validateQuantities } from "./quantityValidator";
 import { validateCharges } from "./chargeValidator";
 import { validateDiscounts } from "./discountValidator";
+import { validateDateTime } from "./dateTimeValidator";
+import { validateCategoryAuthority } from "./categoryAuthorityValidator";
+import { validateMerchantAuthority } from "./merchantAuthorityValidator";
+import { validateApprovalCompleteness } from "./approvalCompletenessValidator";
+import { validateSemanticIntegrity } from "./semanticIntegrityValidator";
 
 export type StructuralValidator = (purchase: PurchaseDraft) => ValidatorResult;
 
 export const STRUCTURAL_VALIDATORS: readonly StructuralValidator[] = [
+  validateFinancialSafety,
+  validateSemanticIntegrity,
+  validateDateTime,
+  validateMerchantAuthority,
+  validateCategoryAuthority,
   validateReceiptTotal,
   validateSubtotal,
   validatePaymentSum,
@@ -20,6 +31,7 @@ export const STRUCTURAL_VALIDATORS: readonly StructuralValidator[] = [
   validateQuantities,
   validateCharges,
   validateDiscounts,
+  validateApprovalCompleteness,
 ];
 
 export function runStructuralValidation(

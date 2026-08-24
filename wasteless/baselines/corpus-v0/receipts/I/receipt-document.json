@@ -1,0 +1,194 @@
+{
+  "rawLines": [
+    "ÖZYILDIZ PETROL VE LPG",
+    "ÜR.İNŞ.SAN.TİC.LTD.ŞTİ",
+    "SAİPLER MH.PHİLSA CAD.",
+    "NO:203 TORBALI/İZMİR",
+    "TEL: 0534 6443045",
+    "TORBALI VD: 7160262667",
+    "MERSİS NO: 071626266700014",
+    "EPDK: BAY/939-82/36409",
+    "ADA NO: 7/8/9/10",
+    "08-08-2026",
+    "12:19",
+    "Fiş No:0014",
+    "34 UP 8195",
+    "12,50 LT X 79,99",
+    "MOTORİN",
+    "*%20 *1.000,00",
+    "KDV",
+    "*166,67",
+    "TOPLAM",
+    "*1.000,00",
+    "NAKİT",
+    "*1.000,00"
+  ],
+  "products": [
+    {
+      "rawName": "ÖZYILDIZ PETROL VE LPG",
+      "quantity": 12.5,
+      "unit": "LT",
+      "unitPrice": 79.99,
+      "lineTotal": 1000,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          0
+        ],
+        "method": "semantic:fuel-merge",
+        "confidence": 0.9
+      }
+    },
+    {
+      "rawName": "NO:203 TORBALI/İZMİR",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          3
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "TEL: 0534 6443045",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          4
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "TORBALI VD: 7160262667",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          5
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "EPDK: BAY/939-82/36409",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          7
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "ADA NO: 7/8/9/10",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          8
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "MOTORİN",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 1000,
+      "lineTotal": 1000,
+      "vatRate": 20,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          14,
+          15
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "footer": {
+    "subtotal": null,
+    "total": 1000,
+    "vatTotal": 166.67,
+    "payments": [
+      {
+        "type": "cash",
+        "amount": 1000,
+        "rawLabel": "NAKİT"
+      }
+    ]
+  },
+  "fuel": {
+    "fuelType": "MOTORİN",
+    "quantity": 12.5,
+    "unit": "LT",
+    "unitPrice": 79.99,
+    "lineTotal": 1000,
+    "plateNumber": "34 UP 8195",
+    "provenance": {
+      "value": 1000,
+      "confidence": 0.9,
+      "sourceLineIndices": [
+        0,
+        12,
+        13,
+        14,
+        15
+      ],
+      "method": "semantic:fuel"
+    }
+  },
+  "footerStartIndex": 16,
+  "extractionMs": 1,
+  "vatProvenance": {
+    "value": 166.67,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      17
+    ],
+    "method": "footer:orphan-amount→vat"
+  },
+  "totalProvenance": {
+    "value": 1000,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      19
+    ],
+    "method": "footer:post-vat-total"
+  },
+  "subtotalProvenance": null
+}

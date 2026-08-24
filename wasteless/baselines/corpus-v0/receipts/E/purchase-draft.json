@@ -1,0 +1,390 @@
+{
+  "merchant": "Altınkılıçlar Kahve",
+  "purchaseDate": {
+    "raw": "2026-08-08",
+    "normalized": "2026-08-08"
+  },
+  "purchaseTime": {
+    "raw": "10:49:30",
+    "normalized": "10:49:30"
+  },
+  "receiptNumber": {
+    "raw": "0044",
+    "normalized": "0044"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "Altınkılıçlar kahve",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          0
+        ],
+        "rawTexts": [
+          "Altınkılıçlar kahve"
+        ],
+        "ocrTexts": [
+          "Altınkılıçlar kahve"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "Kakao Ürünleri Tic.ve San.A.ş",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "Kakao Ürünleri Tic.ve San.A.ş"
+        ],
+        "ocrTexts": [
+          "Kakao Ürünleri Tic.ve San.A.ş"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "Oksijen 266-A",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "Oksijen 266-A"
+        ],
+        "ocrTexts": [
+          "Oksijen 266-A"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "Marmara Kurumlar V.DQ",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          4
+        ],
+        "rawTexts": [
+          "Marmara Kurumlar V.DQ"
+        ],
+        "ocrTexts": [
+          "Marmara Kurumlar V.DQ"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "Füme Keten Tohumlu",
+      "quantity": 1,
+      "vatRate": 10,
+      "confidence": 0.83,
+      "provenance": {
+        "productBlockId": "semantic:product:4",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          9
+        ],
+        "rawTexts": [
+          "Füme Keten Tohumlu %10"
+        ],
+        "ocrTexts": [
+          "Füme Keten Tohumlu %10"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.83
+      }
+    },
+    {
+      "name": "*215,00",
+      "quantity": 1,
+      "unitPrice": 215,
+      "lineTotal": 215,
+      "confidence": 0.7000000000000001,
+      "provenance": {
+        "productBlockId": "semantic:product:5",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          10
+        ],
+        "rawTexts": [
+          "*215,00"
+        ],
+        "ocrTexts": [
+          "*215,00"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.7000000000000001
+      }
+    },
+    {
+      "name": "Espresso Double Ag",
+      "quantity": 1,
+      "vatRate": 10,
+      "confidence": 0.83,
+      "provenance": {
+        "productBlockId": "semantic:product:6",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          11
+        ],
+        "rawTexts": [
+          "Espresso Double Ag %10"
+        ],
+        "ocrTexts": [
+          "Espresso Double Ag %10"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.83
+      }
+    },
+    {
+      "name": "*125,00",
+      "quantity": 1,
+      "unitPrice": 125,
+      "lineTotal": 125,
+      "confidence": 0.7000000000000001,
+      "provenance": {
+        "productBlockId": "semantic:product:7",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          12
+        ],
+        "rawTexts": [
+          "*125,00"
+        ],
+        "ocrTexts": [
+          "*125,00"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.7000000000000001
+      }
+    },
+    {
+      "name": "Capuccino Küçük Ag",
+      "quantity": 1,
+      "vatRate": 10,
+      "confidence": 0.83,
+      "provenance": {
+        "productBlockId": "semantic:product:8",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          13
+        ],
+        "rawTexts": [
+          "Capuccino Küçük Ag %10"
+        ],
+        "ocrTexts": [
+          "Capuccino Küçük Ag %10"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.83
+      }
+    },
+    {
+      "name": "*165,00",
+      "quantity": 1,
+      "unitPrice": 165,
+      "lineTotal": 165,
+      "confidence": 0.7000000000000001,
+      "provenance": {
+        "productBlockId": "semantic:product:9",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          14
+        ],
+        "rawTexts": [
+          "*165,00"
+        ],
+        "ocrTexts": [
+          "*165,00"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.7000000000000001
+      }
+    },
+    {
+      "name": "Draft Americano Ag",
+      "quantity": 1,
+      "vatRate": 10,
+      "confidence": 0.83,
+      "provenance": {
+        "productBlockId": "semantic:product:10",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          15
+        ],
+        "rawTexts": [
+          "Draft Americano Ag %10"
+        ],
+        "ocrTexts": [
+          "Draft Americano Ag %10"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.83
+      }
+    },
+    {
+      "name": "*190,00",
+      "quantity": 1,
+      "unitPrice": 190,
+      "lineTotal": 190,
+      "confidence": 0.7000000000000001,
+      "provenance": {
+        "productBlockId": "semantic:product:11",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          16
+        ],
+        "rawTexts": [
+          "*190,00"
+        ],
+        "ocrTexts": [
+          "*190,00"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.7000000000000001
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "KREDİ",
+      "amount": 695,
+      "confidence": 0.82,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.82,
+        "layoutLineIndices": [],
+        "extractionMethod": "semantic:payment:0",
+        "rawLineCount": 31
+      }
+    }
+  ],
+  "vatSummary": [
+    {
+      "label": "TOPKDV",
+      "amount": 63.18,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "vat",
+        "confidence": 0.9,
+        "layoutLineIndices": [
+          18
+        ],
+        "extractionMethod": "footer:orphan-amount→vat",
+        "rawLineCount": 31
+      }
+    }
+  ],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 695,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:semantic",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9,
+      "layoutLineIndices": [
+        20
+      ],
+      "extractionMethod": "footer:post-vat-total",
+      "rawLineCount": 31
+    }
+  },
+  "confidence": 0.55,
+  "fuel": null,
+  "provenance": {
+    "metadataBlockId": "metadata:v2",
+    "footerBlockId": "footer:semantic",
+    "blockDocumentConfidence": 0.55,
+    "rawTexts": [
+      "Altınkılıçlar kahve",
+      "Kakao Ürünleri Tic.ve San.A.ş",
+      "Oksijen 266-A",
+      "0630236290",
+      "Marmara Kurumlar V.DQ",
+      "TARİH : 08/08/2026",
+      "SAAT  : 10:49:30",
+      "FIŞ NO : 0044",
+      "Sandvic Hindi",
+      "Füme Keten Tohumlu %10",
+      "*215,00",
+      "Espresso Double Ag %10",
+      "*125,00",
+      "Capuccino Küçük Ag %10",
+      "*165,00",
+      "Draft Americano Ag %10",
+      "*190,00",
+      "TOPKDV",
+      "*63,18",
+      "TOPLAM",
+      "*695,00",
+      "KREDİ",
+      "İŞ BANKASI",
+      "************4421",
+      "T.SİCİL NO:",
+      "EKÜ NO:0001",
+      "Z NO:0758",
+      "SİPARİŞ NUMARANIZ",
+      "412",
+      "İADE KODU",
+      "D0998314"
+    ]
+  }
+}

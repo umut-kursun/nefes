@@ -1,0 +1,45 @@
+{
+  "merchant": "ECZANE NO 12",
+  "purchaseDate": "29.07.2026",
+  "purchaseTime": "11:05",
+  "receiptNumber": null,
+  "currency": null,
+  "productCount": 2,
+  "products": [
+    {
+      "rawName": "Ilac A",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 120,
+      "lineTotal": 120,
+      "vatRate": 1
+    },
+    {
+      "rawName": "Ilac B",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 85.5,
+      "lineTotal": 85.5,
+      "vatRate": 1
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 205.5,
+    "vatTotal": null,
+    "payments": [
+      {
+        "type": "credit_card",
+        "amount": 205.5,
+        "rawLabel": "Kredi Kart 205,50"
+      }
+    ]
+  },
+  "total": 205.5,
+  "vatTotal": null,
+  "payment": {
+    "type": "credit_card",
+    "amount": 205.5,
+    "rawLabel": "Kredi Kart 205,50"
+  }
+}

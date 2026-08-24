@@ -7,8 +7,10 @@ import {
   applyExplicitMigrosQuantities,
   dedupeMigrosPlasticBag,
   findExplicitQuantityForProduct,
+  findMatchingMultiplierBinding,
   isMigrosReceipt,
   recoverSplitMigrosProducts,
+  resolveMigrosProductQuantity,
 } from "../vision/migrosReceiptRules";
 import { isStandaloneMultiplierProduct } from "../vision/mergeStandaloneMultiplierProducts";
 import { sumParsedReceiptLineTotals } from "../vision/parsedReceiptValidation";
@@ -20,18 +22,46 @@ const migrosBase = {
   payments: [] as ParsedReceipt["payments"],
 };
 
+const frigolaRawText =
+  "9 AD x 40,00 TL/AD\nALGIDA FRIGOLA 60ML *1 *360,00";
+const marlboroRawText =
+  "4 AD x 115,00 TL/AD\nMARLBORO TBLUE PAKET *1 *460,00";
+
 describe("Migros receipt rules", () => {
   it("detects Migros merchant", () => {
     expect(isMigrosReceipt({ ...migrosBase, products: [], financials: { totalAmount: 0 } } as ParsedReceipt)).toBe(true);
   });
 
-  it("parses explicit *1 quantity from product line", () => {
-    const raw =
-      "ALGIDA FRIGOLA 60ML *1 *360,00\n9 AD x 40,00 TL/AD";
-    expect(findExplicitQuantityForProduct(raw, "ALGIDA FRIGOLA")).toBe(1);
+  it("parses explicit *1 quantity marker from product line", () => {
+    expect(findExplicitQuantityForProduct(frigolaRawText, "ALGIDA FRIGOLA")).toBe(1);
   });
 
-  it("preserves *1 quantity for ALGIDA with multiplier metadata", () => {
+  it("findMatchingMultiplierBinding math-matches FRIGOLA line total", () => {
+    const binding = findMatchingMultiplierBinding(frigolaRawText, "ALGIDA FRIGOLA", 360);
+    expect(binding).not.toBeNull();
+    expect(binding!.quantity).toBe(9);
+    expect(binding!.unitPrice).toBeCloseTo(40, 2);
+  });
+
+  it("resolveMigrosProductQuantity prefers multiplier over *1 marker", () => {
+    const resolved = resolveMigrosProductQuantity(frigolaRawText, "ALGIDA FRIGOLA", 360);
+    expect(resolved).not.toBeNull();
+    expect(resolved!.source).toBe("multiplier");
+    expect(resolved!.quantity).toBe(9);
+    expect(resolved!.unitPrice).toBeCloseTo(40, 2);
+  });
+
+  it("resolveMigrosProductQuantity binds MARLBORO 4-pack", () => {
+    const resolved = resolveMigrosProductQuantity(
+      marlboroRawText,
+      "MARLBORO TBLUE",
+      460
+    );
+    expect(resolved!.quantity).toBe(4);
+    expect(resolved!.unitPrice).toBeCloseTo(115, 2);
+  });
+
+  it("finalizeVisionParsedReceipt binds ALGIDA qty=9 unitPrice=40", () => {
     const finalized = finalizeVisionParsedReceipt({
       ...migrosBase,
       products: [
@@ -51,19 +81,18 @@ describe("Migros receipt rules", () => {
         },
       ],
       financials: { totalAmount: 360 },
-      rawText:
-        "ALGIDA FRIGOLA 60ML *1 *360,00\n9 AD x 40,00 TL/AD",
+      rawText: frigolaRawText,
     });
 
     expect(finalized.products).toHaveLength(1);
     const algida = finalized.products[0]!;
-    expect(algida.quantity).toBe(1);
-    expect(algida.unitPrice).toBe(360);
+    expect(algida.quantity).toBe(9);
+    expect(algida.unitPrice).toBeCloseTo(40, 2);
     expect(algida.lineTotal).toBe(360);
     expect(finalized.products.some((p) => /9 AD/i.test(p.name))).toBe(false);
   });
 
-  it("preserves *1 quantity for cigarette multiplier lines", () => {
+  it("finalizeVisionParsedReceipt binds MARLBORO qty=4 unitPrice=115", () => {
     const finalized = finalizeVisionParsedReceipt({
       ...migrosBase,
       products: [
@@ -83,13 +112,12 @@ describe("Migros receipt rules", () => {
         },
       ],
       financials: { totalAmount: 460 },
-      rawText:
-        "MARLBORO TBLUE PAKET *1 *460,00\n4 AD x 115,00 TL/AD",
+      rawText: marlboroRawText,
     });
 
     const marlboro = finalized.products.find((p) => /MARLBORO/i.test(p.name))!;
-    expect(marlboro.quantity).toBe(1);
-    expect(marlboro.unitPrice).toBe(460);
+    expect(marlboro.quantity).toBe(4);
+    expect(marlboro.unitPrice).toBeCloseTo(115, 2);
     expect(finalized.products.some((p) => isStandaloneMultiplierProduct(p))).toBe(
       false
     );
@@ -108,13 +136,13 @@ describe("Migros receipt rules", () => {
         },
       ],
       financials: { totalAmount: 460 },
-      rawText:
-        "MARLBORO TBLUE PAKET *1 *460,00\n4 AD x 115,00 TL/AD",
+      rawText: marlboroRawText,
     });
 
     expect(recovered.products).toHaveLength(1);
     expect(recovered.products[0]!.name).toMatch(/MARLBORO TBLUE/i);
-    expect(recovered.products[0]!.quantity).toBe(1);
+    expect(recovered.products[0]!.quantity).toBe(4);
+    expect(recovered.products[0]!.unitPrice).toBeCloseTo(115, 2);
     expect(recovered.products[0]!.lineTotal).toBe(460);
   });
 
@@ -152,8 +180,8 @@ describe("Migros receipt rules", () => {
       products: [
         {
           name: "MARLBORO EDGE SLIMS",
-          quantity: 1,
-          unitPrice: 460,
+          quantity: 4,
+          unitPrice: 115,
           lineTotal: 460,
         },
         {
@@ -180,15 +208,15 @@ describe("Migros receipt rules", () => {
       products: [
         {
           name: "ALGIDA FRIGOLA 60ML",
-          quantity: 1,
-          unitPrice: 360,
+          quantity: 9,
+          unitPrice: 40,
           lineTotal: 360,
           vatRatePercentage: 1,
         },
         {
           name: "MARLBORO EDGE SLIMS",
-          quantity: 1,
-          unitPrice: 460,
+          quantity: 4,
+          unitPrice: 115,
           lineTotal: 460,
           vatRatePercentage: 20,
         },
@@ -251,9 +279,9 @@ describe("Migros receipt rules", () => {
     expect(finalized.products.filter((p) => isStandaloneMultiplierProduct(p))).toHaveLength(
       0
     );
-    expect(finalized.products.find((p) => /FRIGOLA/i.test(p.name))!.quantity).toBe(1);
-    expect(finalized.products.find((p) => /MARLBORO/i.test(p.name))!.quantity).toBe(1);
-    expect(finalized.products.find((p) => /EKMEK/i.test(p.name))!.quantity).toBe(1);
+    expect(finalized.products.find((p) => /FRIGOLA/i.test(p.name))!.quantity).toBe(9);
+    expect(finalized.products.find((p) => /MARLBORO/i.test(p.name))!.quantity).toBe(4);
+    expect(finalized.products.find((p) => /EKMEK/i.test(p.name))!.quantity).toBe(12);
   });
 
   it("does not apply Migros multiplier rules to Shell fuel receipts", () => {
@@ -278,27 +306,25 @@ describe("Migros receipt rules", () => {
     expect(finalized.products[0]!.quantity).toBe(1);
   });
 
-  it("applyExplicitMigrosQuantities restores *1 when multiplier misbound qty", () => {
-    const rawText =
-      "MARLBORO TBLUE PAKET *1 *460,00\n4 AD x 115,00 TL/AD";
+  it("applyExplicitMigrosQuantities applies multiplier when misbound to explicit *1", () => {
     const corrected = applyExplicitMigrosQuantities({
       ...migrosBase,
       products: [
         {
-          name: "MARLBORO TBLUE PAKET",
-          quantity: 4,
+          name: "ALGIDA FRIGOLA 60ML",
+          quantity: 1,
           unit: "ad",
-          unitPrice: 115,
-          lineTotal: 460,
+          unitPrice: 360,
+          lineTotal: 360,
         },
       ],
-      financials: { totalAmount: 460 },
-      rawText,
+      financials: { totalAmount: 360 },
+      rawText: frigolaRawText,
     });
 
-    expect(corrected.products[0]!.quantity).toBe(1);
-    expect(corrected.products[0]!.unitPrice).toBe(460);
-    expect(corrected.products[0]!.normalizedUnitPrice).toBe(460);
+    expect(corrected.products[0]!.quantity).toBe(9);
+    expect(corrected.products[0]!.unitPrice).toBeCloseTo(40, 2);
+    expect(corrected.products[0]!.normalizedUnitPrice).toBeCloseTo(40, 2);
   });
 
   it("applyExplicitMigrosQuantities runs inside finalizeVisionParsedReceipt", () => {
@@ -307,9 +333,9 @@ describe("Migros receipt rules", () => {
       products: [
         {
           name: "ALGIDA FRIGOLA 60ML",
-          quantity: 9,
+          quantity: 1,
           unit: "ad",
-          unitPrice: 40,
+          unitPrice: 360,
           lineTotal: 360,
         },
         {
@@ -321,12 +347,11 @@ describe("Migros receipt rules", () => {
         },
       ],
       financials: { totalAmount: 360 },
-      rawText:
-        "ALGIDA FRIGOLA 60ML *1 *360,00\n9 AD x 40,00 TL/AD",
+      rawText: frigolaRawText,
     });
 
     expect(finalized.products).toHaveLength(1);
-    expect(finalized.products[0]!.quantity).toBe(1);
-    expect(finalized.products[0]!.unitPrice).toBe(360);
+    expect(finalized.products[0]!.quantity).toBe(9);
+    expect(finalized.products[0]!.unitPrice).toBeCloseTo(40, 2);
   });
 });

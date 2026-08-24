@@ -1,33 +1,9 @@
 {
-  "isValid": false,
-  "consistent": false,
-  "score": 85,
-  "errors": [
-    {
-      "id": "LineTotalValidator:LINE_TOTAL_MISMATCH:products[0]",
-      "severity": "ERROR",
-      "category": "structural",
-      "code": "LINE_TOTAL_MISMATCH",
-      "message": "Line total for \"Motorin\" does not match quantity × unit price.",
-      "location": {
-        "path": "products",
-        "index": 0,
-        "field": "lineTotal"
-      },
-      "provenance": {
-        "validatorId": "LineTotalValidator",
-        "purchaseConfidence": 0.7583333333333333,
-        "graphNodeIds": [
-          "raw:L3",
-          "frag:L3:name",
-          "qty:L3",
-          "amt:L4"
-        ]
-      },
-      "expected": 2356.57422,
-      "actual": 2356.1
-    }
-  ],
+  "isValid": true,
+  "consistent": true,
+  "analysisStatus": "approved",
+  "score": 100,
+  "errors": [],
   "warnings": [],
   "info": [
     {
@@ -81,11 +57,12 @@
       }
     }
   ],
-  "confidenceAdjustment": -0.15,
-  "overallConfidence": 0.6083333333333333,
+  "confidenceAdjustment": 0,
+  "overallConfidence": 0.7583333333333333,
   "provenance": {
     "purchaseConfidence": 0.7583333333333333,
     "structuralValidators": [
+      "FinancialSafetyValidator",
       "ReceiptTotalValidator",
       "SubtotalValidator",
       "PaymentSumValidator",
@@ -93,7 +70,8 @@
       "LineTotalValidator",
       "QuantityValidator",
       "ChargeValidator",
-      "DiscountValidator"
+      "DiscountValidator",
+      "ApprovalCompletenessValidator"
     ],
     "businessValidators": [
       "MerchantValidator",
@@ -104,7 +82,7 @@
       "UnknownFieldValidator",
       "AnomalyValidator"
     ],
-    "issueCount": 4
+    "issueCount": 3
   },
   "blocking": false
 }

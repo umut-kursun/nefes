@@ -336,6 +336,8 @@ export function shouldRetryWithHigherResolution(input: {
   consistent?: boolean;
   confidence?: number;
 }): boolean {
+  // First pass math validated — skip expensive 2048px re-preprocess + second API call.
+  if (input.consistent === true) return false;
   if (input.consistent === false) return true;
   if (
     input.validationScore != null &&

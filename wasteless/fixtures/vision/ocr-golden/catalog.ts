@@ -10,6 +10,9 @@ export type GoldenOcrProductExpectation = {
 };
 
 export type GoldenOcrExpectations = {
+  readonly merchantTitle: string;
+  readonly merchantCategory: string;
+  readonly purchaseDate: string;
   readonly totalAmount: number;
   readonly keyProducts: readonly string[];
   readonly forbiddenProductPatterns: readonly RegExp[];
@@ -18,6 +21,7 @@ export type GoldenOcrExpectations = {
   readonly maxProductCount?: number;
   readonly bagCount?: number;
   readonly discountCount?: number;
+  readonly paymentAmount?: number;
 };
 
 export type GoldenOcrFixtureEntry = {
@@ -38,6 +42,9 @@ export const GOLDEN_OCR_CATALOG: readonly GoldenOcrFixtureEntry[] = [
     ocrFile: "migros-644-ocr.json",
     imageFile: "migros-644.png",
     expected: {
+      merchantTitle: "MIGROS TICARET A.S.",
+      merchantCategory: "MARKET",
+      purchaseDate: "2026-08-04",
       totalAmount: 644.05,
       keyProducts: [
         "SALATA ATOM",
@@ -49,7 +56,27 @@ export const GOLDEN_OCR_CATALOG: readonly GoldenOcrFixtureEntry[] = [
         /^\d+(?:[.,]\d+)?\s*KG\s+x/i,
         /^\d+\s*AD\s+x/i,
       ],
+      productChecks: [
+        {
+          nameMatch: "HIYAR BADEM",
+          quantity: 0.9,
+          unitPrice: 59.95,
+          lineTotal: 53.96,
+        },
+        {
+          nameMatch: "SOFRA EKMEK",
+          quantity: 2,
+          unitPrice: 20,
+          lineTotal: 40,
+        },
+        {
+          nameMatch: "COCA-COLA",
+          quantity: 1,
+          lineTotal: 65,
+        },
+      ],
       discountCount: 1,
+      bagCount: 1,
       minProductCount: 14,
     },
   },
@@ -59,6 +86,9 @@ export const GOLDEN_OCR_CATALOG: readonly GoldenOcrFixtureEntry[] = [
     ocrFile: "migros-2125-ocr.json",
     imageFile: "migros-2125.png",
     expected: {
+      merchantTitle: "MIGROS TICARET A.S.",
+      merchantCategory: "MARKET",
+      purchaseDate: "2026-07-31",
       totalAmount: 2125.57,
       keyProducts: [
         "ALGIDA FRIGOLA",
@@ -74,14 +104,14 @@ export const GOLDEN_OCR_CATALOG: readonly GoldenOcrFixtureEntry[] = [
       productChecks: [
         {
           nameMatch: "ALGIDA FRIGOLA",
-          quantity: 1,
-          unitPrice: 360,
+          quantity: 9,
+          unitPrice: 40,
           lineTotal: 360,
         },
         {
           nameMatch: "MARLBORO TBLUE",
-          quantity: 1,
-          unitPrice: 460,
+          quantity: 4,
+          unitPrice: 115,
           lineTotal: 460,
         },
       ],
@@ -95,6 +125,9 @@ export const GOLDEN_OCR_CATALOG: readonly GoldenOcrFixtureEntry[] = [
     ocrFile: "mcdonalds-1295-ocr.json",
     imageFile: "mcdonalds-1295.png",
     expected: {
+      merchantTitle: "ANADOLU RESTORAN ISL. LTD. STI.",
+      merchantCategory: "RESTAURANT",
+      purchaseDate: "2026-08-03",
       totalAmount: 1295,
       keyProducts: [
         "McCrispy Deluxe",
@@ -104,8 +137,16 @@ export const GOLDEN_OCR_CATALOG: readonly GoldenOcrFixtureEntry[] = [
         "Buyuk Patates",
       ],
       forbiddenProductPatterns: [/^\(/],
+      productChecks: [
+        { nameMatch: "McCrispy Deluxe", lineTotal: 545 },
+        { nameMatch: "Big Mac", lineTotal: 570 },
+        { nameMatch: "Citir Tavuk", lineTotal: 75 },
+        { nameMatch: "Ranch Sos", lineTotal: 10 },
+        { nameMatch: "Buyuk Patates", lineTotal: 95 },
+      ],
       minProductCount: 5,
       maxProductCount: 5,
+      paymentAmount: 1295,
     },
   },
   {
@@ -114,11 +155,18 @@ export const GOLDEN_OCR_CATALOG: readonly GoldenOcrFixtureEntry[] = [
     ocrFile: "birinci-profiterol-625-ocr.json",
     imageFile: "birinci-profiterol-625.png",
     expected: {
+      merchantTitle: "BİRİNCİ PROFİTEROL",
+      merchantCategory: "RESTAURANT",
+      purchaseDate: "2026-07-30",
       totalAmount: 625,
       keyProducts: ["TATLI"],
       forbiddenProductPatterns: [],
+      productChecks: [
+        { nameMatch: "TATLI", quantity: 1, unitPrice: 625, lineTotal: 625 },
+      ],
       minProductCount: 1,
       maxProductCount: 1,
+      paymentAmount: 625,
     },
   },
 ] as const;

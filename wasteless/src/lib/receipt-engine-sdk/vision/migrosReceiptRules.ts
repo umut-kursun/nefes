@@ -4,6 +4,7 @@ import {
   isStandaloneMultiplierProduct,
   parseMultiplierText,
 } from "./mergeStandaloneMultiplierProducts";
+import { lineTotalsMatch, multiplierMathMatchesLine } from "./multiplierBindingUtils";
 
 const MIGROS_MERCHANT = /m[iİ]gros/i;
 
@@ -14,6 +15,10 @@ const EXPLICIT_QTY_BEFORE_PRICE =
 /** Product row ending with printed line total, e.g. `LAKTOSUZ SÜT 200ML  *99.50`. */
 const PRODUCT_LINE_WITH_TOTAL =
   /^(.+?)\s*\*+\s*(\d+(?:[.,]\d+)?)\s*$/;
+
+/** Migros row with printed qty + total: `ALGIDA FRIGOLA 60ML *1 *360,00`. */
+const PRODUCT_LINE_WITH_EXPLICIT_QTY =
+  /^(.+?)\s*\*(\d{1,2})\s*\*+\s*(\d+(?:[.,]\d+)?)\s*$/;
 
 const MIGROS_PLASTIC_BAG =
   /(?:migros\s+)?plastik\s+po[sş]et|alisveris\s+po[sş]et/i;
@@ -90,19 +95,120 @@ export function findExplicitQuantityForProduct(
   return null;
 }
 
+export type MigrosQuantityResolution = {
+  readonly quantity: number;
+  readonly unit: string;
+  readonly unitPrice: number;
+  readonly source: "multiplier" | "explicit";
+};
+
+/** Adjacent `{N} AD x {PRICE}` in rawText whose math matches the product line total. */
+export function findMatchingMultiplierBinding(
+  rawText: string,
+  productName: string,
+  lineTotal: number
+): { quantity: number; unit: string; unitPrice: number } | null {
+  const lines = rawText
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!;
+    if (!lineMatchesProductName(line, productName)) continue;
+
+    const product = parseProductLineFromRaw(line);
+    if (product == null || !lineTotalsMatch(product.lineTotal, lineTotal)) continue;
+
+    for (const offset of [-1, 1]) {
+      const adjIdx = i + offset;
+      if (adjIdx < 0 || adjIdx >= lines.length) continue;
+      const mult = parseMultiplierText(lines[adjIdx]!);
+      if (
+        mult == null ||
+        mult.quantity <= 1 ||
+        Number.isNaN(mult.unitPrice) ||
+        mult.unitPrice <= 0
+      ) {
+        continue;
+      }
+      if (multiplierMathMatchesLine(mult.quantity, mult.unitPrice, lineTotal)) {
+        return {
+          quantity: mult.quantity,
+          unit: mult.unit,
+          unitPrice: mult.unitPrice,
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Migros prints `*1` as a line marker on many rows; when an adjacent multiplier
+ * math-matches lineTotal, prefer multiplier qty/unitPrice over `*1`.
+ */
+export function resolveMigrosProductQuantity(
+  rawText: string,
+  productName: string,
+  lineTotal: number
+): MigrosQuantityResolution | null {
+  const explicit = findExplicitQuantityForProduct(rawText, productName);
+  const binding = findMatchingMultiplierBinding(rawText, productName, lineTotal);
+
+  if (binding) {
+    if (explicit == null || explicit === 1) {
+      return { ...binding, source: "multiplier" };
+    }
+    const explicitUnitPrice = lineTotal / explicit;
+    const explicitMatches = multiplierMathMatchesLine(
+      explicit,
+      explicitUnitPrice,
+      lineTotal
+    );
+    if (!explicitMatches || binding.quantity > explicit) {
+      return { ...binding, source: "multiplier" };
+    }
+  }
+
+  if (explicit != null) {
+    return {
+      quantity: explicit,
+      unit: "ad",
+      unitPrice: lineTotal / explicit,
+      source: "explicit",
+    };
+  }
+
+  return null;
+}
+
+/** True when printed `*N` must block multiplier binding (explicit wins). */
+export function shouldPreserveExplicitMigrosQuantity(
+  rawText: string,
+  productName: string,
+  lineTotal: number
+): boolean {
+  const resolved = resolveMigrosProductQuantity(rawText, productName, lineTotal);
+  if (resolved) return resolved.source === "explicit";
+  return findExplicitQuantityForProduct(rawText, productName) != null;
+}
+
 /** True when Migros multiplier must not overwrite printed purchase quantity. */
 export function migrosMultiplierMustPreserveQuantity(
   parsed: ParsedReceipt,
   product: ReceiptItem
 ): boolean {
   if (!isMigrosReceipt(parsed) || !parsed.rawText?.trim()) return false;
-  return findExplicitQuantityForProduct(parsed.rawText, product.name) != null;
+  return shouldPreserveExplicitMigrosQuantity(
+    parsed.rawText,
+    product.name,
+    product.lineTotal
+  );
 }
 
-/**
- * When rawText prints `*N *PRICE` on the product row, force quantity=N and
- * recompute unitPrice from lineTotal — multiplier lines must not override.
- */
+/** Apply resolved Migros quantities from rawText (multiplier wins over `*1` marker). */
 export function applyExplicitMigrosQuantities(
   parsed: ParsedReceipt
 ): ParsedReceipt {
@@ -110,18 +216,18 @@ export function applyExplicitMigrosQuantities(
 
   const rawText = parsed.rawText;
   const products = parsed.products.map((item) => {
-    const explicit = findExplicitQuantityForProduct(rawText, item.name);
-    if (explicit == null) return item;
-
-    const quantity = explicit;
-    const unitPrice =
-      quantity > 0 ? item.lineTotal / quantity : item.lineTotal;
+    const resolved = resolveMigrosProductQuantity(
+      rawText,
+      item.name,
+      item.lineTotal
+    );
+    if (!resolved) return item;
 
     return attachMigrosMultiplierMetadata({
       ...item,
-      quantity,
-      unit: item.unit ?? "ad",
-      unitPrice,
+      quantity: resolved.quantity,
+      unit: resolved.unit ?? item.unit ?? "ad",
+      unitPrice: resolved.unitPrice,
     });
   });
 
@@ -141,7 +247,17 @@ export function attachMigrosMultiplierMetadata(
 function parseProductLineFromRaw(
   line: string
 ): { nameHint: string; lineTotal: number } | null {
-  const match = line.trim().match(PRODUCT_LINE_WITH_TOTAL);
+  const trimmed = line.trim();
+  const explicit = trimmed.match(PRODUCT_LINE_WITH_EXPLICIT_QTY);
+  if (explicit?.[1] && explicit[3]) {
+    const lineTotal = parseTrNumber(explicit[3]);
+    const nameHint = explicit[1].trim();
+    if (nameHint && lineTotal != null && lineTotal >= 0) {
+      return { nameHint, lineTotal };
+    }
+  }
+
+  const match = trimmed.match(PRODUCT_LINE_WITH_TOTAL);
   if (!match) return null;
 
   const lineTotal = parseTrNumber(match[2]!);
@@ -221,14 +337,16 @@ export function recoverSplitMigrosProducts(parsed: ParsedReceipt): ParsedReceipt
       continue;
     }
 
-    const explicitQty = findExplicitQuantityForProduct(
-      parsed.rawText,
-      recovered.name
-    );
     const lineTotal = recovered.lineTotal ?? item.lineTotal;
-    const quantity = explicitQty ?? 1;
+    const resolved = resolveMigrosProductQuantity(
+      parsed.rawText,
+      recovered.name,
+      lineTotal
+    );
+    const quantity = resolved?.quantity ?? 1;
     const unitPrice =
-      quantity > 0 ? lineTotal / quantity : lineTotal;
+      resolved?.unitPrice ??
+      (quantity > 0 ? lineTotal / quantity : lineTotal);
 
     add.push({
       name: recovered.name,

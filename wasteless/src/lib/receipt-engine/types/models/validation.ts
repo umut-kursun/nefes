@@ -39,10 +39,13 @@ export interface ValidationReportProvenance {
   readonly issueCount: number;
 }
 
+export type AnalysisStatus = "approved" | "needs_review" | "failed";
+
 export interface ValidationReport {
   readonly isValid: boolean;
-  /** @deprecated Use isValid */
+  /** Financial reconciliation passed (independent of approval gate). */
   readonly consistent: boolean;
+  readonly analysisStatus: AnalysisStatus;
   readonly score: number;
   readonly errors: readonly ValidationIssue[];
   readonly warnings: readonly ValidationIssue[];
@@ -91,6 +94,7 @@ export function emptyValidationReport(
   return {
     isValid: true,
     consistent: true,
+    analysisStatus: "approved",
     score: 100,
     errors: [],
     warnings: [],

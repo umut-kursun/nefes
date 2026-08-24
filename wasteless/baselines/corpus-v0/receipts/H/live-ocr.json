@@ -1,0 +1,77 @@
+{
+  "capturedAt": "2026-08-24T07:15:32.115Z",
+  "model": "gpt-4o-mini",
+  "promptHash": "649e08ca811c7f40d02480e50e3b7faefdc6e38429bb9173f9f5ea3116740733",
+  "ocrRawText": "ŞENGÜL HEDİYELİK\nŞENOL ŞENGÜL\nGÜMÜŞLÜK MAH. 5231 SK. 14/1\nBODRUM/MUĞLA\nBODRUM VD 8060240966\n12.08.2026\nSaat: 00:05\nFiş No: 0001\nHEDİYELİK EŞYA\n%20 *1.000,00\nKDV\n*166,67\nTOPLAM\n*1.000,00\nBanka/Kredi Kartı *1.000,00\nT.VAKIFLAR BANKASI T.A.O.\nİŞYERİ: 02850000813674\nBATCH NO: VB-000243\nPOS: 02089935\n000001",
+  "lines": [
+    "ŞENGÜL HEDİYELİK",
+    "ŞENOL ŞENGÜL",
+    "GÜMÜŞLÜK MAH. 5231 SK. 14/1",
+    "BODRUM/MUĞLA",
+    "BODRUM VD 8060240966",
+    "12.08.2026",
+    "Saat: 00:05",
+    "Fiş No: 0001",
+    "HEDİYELİK EŞYA",
+    "%20 *1.000,00",
+    "KDV",
+    "*166,67",
+    "TOPLAM",
+    "*1.000,00",
+    "Banka/Kredi Kartı *1.000,00",
+    "T.VAKIFLAR BANKASI T.A.O.",
+    "İŞYERİ: 02850000813674",
+    "BATCH NO: VB-000243",
+    "POS: 02089935",
+    "000001"
+  ],
+  "merchant": {
+    "rawName": "ŞENGÜL HEDİYELİK\nŞENOL ŞENGÜL",
+    "rawAddress": "GÜMÜŞLÜK MAH. 5231 SK. 14/1\nBODRUM/MUĞLA",
+    "rawTaxNumber": "BODRUM VD 8060240966"
+  },
+  "metadata": {
+    "receiptNumber": "Fiş No: 0001",
+    "purchaseDate": "2026-08-12",
+    "purchaseTime": "00:05:00"
+  },
+  "rawVisionResponse": {
+    "merchant": {
+      "rawName": "ŞENGÜL HEDİYELİK\nŞENOL ŞENGÜL",
+      "rawAddress": "GÜMÜŞLÜK MAH. 5231 SK. 14/1\nBODRUM/MUĞLA",
+      "rawTaxNumber": "BODRUM VD 8060240966"
+    },
+    "metadata": {
+      "receiptNumber": "Fiş No: 0001",
+      "purchaseDate": "2026-08-12",
+      "purchaseTime": "00:05:00",
+      "currency": null
+    },
+    "rawText": "ŞENGÜL HEDİYELİK\nŞENOL ŞENGÜL\nGÜMÜŞLÜK MAH. 5231 SK. 14/1\nBODRUM/MUĞLA\nBODRUM VD 8060240966\n12.08.2026\nSaat: 00:05\nFiş No: 0001\nHEDİYELİK EŞYA\n%20 *1.000,00\nKDV\n*166,67\nTOPLAM\n*1.000,00\nBanka/Kredi Kartı *1.000,00\nT.VAKIFLAR BANKASI T.A.O.\nİŞYERİ: 02850000813674\nBATCH NO: VB-000243\nPOS: 02089935\n000001",
+    "lines": [
+      "ŞENGÜL HEDİYELİK",
+      "ŞENOL ŞENGÜL",
+      "GÜMÜŞLÜK MAH. 5231 SK. 14/1",
+      "BODRUM/MUĞLA",
+      "BODRUM VD 8060240966",
+      "12.08.2026",
+      "Saat: 00:05",
+      "Fiş No: 0001",
+      "HEDİYELİK EŞYA",
+      "%20 *1.000,00",
+      "KDV",
+      "*166,67",
+      "TOPLAM",
+      "*1.000,00",
+      "Banka/Kredi Kartı *1.000,00",
+      "T.VAKIFLAR BANKASI T.A.O.",
+      "İŞYERİ: 02850000813674",
+      "BATCH NO: VB-000243",
+      "POS: 02089935",
+      "000001"
+    ],
+    "confidence": null
+  },
+  "preprocessApplied": false,
+  "preprocessNote": "Node harness sends raw PNG; client enhanced+threshold preprocess not applied"
+}

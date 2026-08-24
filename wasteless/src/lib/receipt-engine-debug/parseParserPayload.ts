@@ -1,5 +1,6 @@
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
+import type { ReceiptEngineV2Result } from "@/lib/receipt-engine-v2/engine/types";
 import type { ReceiptStageTimings } from "./formatStageTimings";
 import type { ScanTimelinePayload } from "@/lib/receipt-scan-timeline";
 
@@ -9,6 +10,9 @@ export type StoredParserPayload = {
   rawVisionResponse?: string;
   performance?: ReceiptStageTimings;
   scanTimeline?: ScanTimelinePayload | null;
+  engineResult?: ReceiptEngineV2Result;
+  engineUsed?: "v1" | "v2";
+  engineFallback?: boolean;
 };
 
 export function parseStoredParserPayload(
@@ -22,6 +26,9 @@ export function parseStoredParserPayload(
       rawVisionResponse?: string;
       performance?: ReceiptStageTimings;
       scanTimeline?: ScanTimelinePayload | null;
+      engineResult?: ReceiptEngineV2Result;
+      engineUsed?: "v1" | "v2";
+      engineFallback?: boolean;
     };
     if (!parsed.purchase || !parsed.validation) return null;
     return {
@@ -38,6 +45,18 @@ export function parseStoredParserPayload(
       scanTimeline:
         parsed.scanTimeline && typeof parsed.scanTimeline === "object"
           ? parsed.scanTimeline
+          : undefined,
+      engineResult:
+        parsed.engineResult && typeof parsed.engineResult === "object"
+          ? parsed.engineResult
+          : undefined,
+      engineUsed:
+        parsed.engineUsed === "v1" || parsed.engineUsed === "v2"
+          ? parsed.engineUsed
+          : undefined,
+      engineFallback:
+        typeof parsed.engineFallback === "boolean"
+          ? parsed.engineFallback
           : undefined,
     };
   } catch {

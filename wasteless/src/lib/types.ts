@@ -71,6 +71,7 @@ export interface UserTag {
 export type ParseStatus =
   | "processing"
   | "pending_approval"
+  | "needs_review"
   | "ready"
   | "failed";
 

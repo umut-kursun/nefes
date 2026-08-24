@@ -1,0 +1,7 @@
+ECZANE NO 12
+29.07.2026 11:05
+Ilac A %1 120,00
+Ilac B %1 85,50
+TOPLAM 205,50
+Kredi Kart 205,50
+Kasiyer: Ayse

@@ -1,0 +1,430 @@
+{
+  "isValid": false,
+  "consistent": false,
+  "analysisStatus": "needs_review",
+  "score": 15,
+  "errors": [
+    {
+      "id": "FinancialSafetyValidator:PAYMENT_TOTAL_INCOHERENT:payments",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "PAYMENT_TOTAL_INCOHERENT",
+      "message": "Payment sum does not match receipt total.",
+      "location": {
+        "path": "payments"
+      },
+      "provenance": {
+        "validatorId": "FinancialSafetyValidator",
+        "purchaseConfidence": 0.55
+      },
+      "expected": 477.9,
+      "actual": 497.9
+    },
+    {
+      "id": "ReceiptTotalValidator:TOTAL_MISMATCH:total.amount",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "TOTAL_MISMATCH",
+      "message": "Declared total does not match product, charge, and discount sums.",
+      "location": {
+        "path": "total.amount"
+      },
+      "provenance": {
+        "validatorId": "ReceiptTotalValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      },
+      "suggestedFix": "Review line totals, charges, and discounts against footer total.",
+      "expected": 0,
+      "actual": 477.9
+    }
+  ],
+  "warnings": [
+    {
+      "id": "PaymentSumValidator:PAYMENT_SUM_MISMATCH:payments",
+      "severity": "WARNING",
+      "category": "structural",
+      "code": "PAYMENT_SUM_MISMATCH",
+      "message": "Payment sum exceeds total — may include cash change.",
+      "location": {
+        "path": "payments"
+      },
+      "provenance": {
+        "validatorId": "PaymentSumValidator",
+        "purchaseConfidence": 0.55
+      },
+      "suggestedFix": "Verify cash payment includes change amount.",
+      "expected": 477.9,
+      "actual": 497.9
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[0]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"MIGROS\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[1]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"BÜYÜK MÜKELLEFLER V.D. 620202529513\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[2]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"BİLGİ FİŞİ\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 2,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[3]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Tür: e-Arşiv Fatura\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 3,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[4]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Fatura/İrsaliye Seri Sıra No: 9190801827672016\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 4,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[5]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"COCA-COLA 1.5 L\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 5,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[6]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"LİPTON İCE TEA SEFTA.\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 6,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[7]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"SFRESH PATATES 1 KG\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 7,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[8]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"MİGROS PLASTİK POSET\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 8,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[9]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"SELPAK YAĞ EMİCİ HV.\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 9,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[0]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"MIGROS\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[1]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"BÜYÜK MÜKELLEFLER V.D. 620202529513\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[2]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"BİLGİ FİŞİ\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 2,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[3]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"Tür: e-Arşiv Fatura\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 3,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[4]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"Fatura/İrsaliye Seri Sıra No: 9190801827672016\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 4,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[5]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"COCA-COLA 1.5 L\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 5,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[6]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"LİPTON İCE TEA SEFTA.\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 6,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[7]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"SFRESH PATATES 1 KG\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 7,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[8]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"MİGROS PLASTİK POSET\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 8,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[9]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"SELPAK YAĞ EMİCİ HV.\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 9,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.8499999999999999,
+  "overallConfidence": 0,
+  "provenance": {
+    "purchaseConfidence": 0.55,
+    "structuralValidators": [
+      "FinancialSafetyValidator",
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 23
+  },
+  "blocking": true
+}

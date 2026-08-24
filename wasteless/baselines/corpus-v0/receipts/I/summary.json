@@ -1,0 +1,61 @@
+{
+  "id": "I",
+  "name": "Özyıldız Petrol",
+  "domain": "fuel",
+  "merchant": "Özyıldız Petrol Ve Lpg Ür.inş",
+  "total": 1000,
+  "vat": null,
+  "productCount": 7,
+  "productNames": [
+    "ÖZYILDIZ PETROL VE LPG",
+    "NO:203 TORBALI/İZMİR",
+    "TEL: 0534 6443045",
+    "TORBALI VD: 7160262667",
+    "EPDK: BAY/939-82/36409",
+    "ADA NO: 7/8/9/10",
+    "MOTORİN"
+  ],
+  "paymentCount": 1,
+  "paymentAmounts": [
+    1000
+  ],
+  "paymentMethods": [
+    null
+  ],
+  "category": "akaryakit",
+  "subcategory": "Motorin",
+  "analysisStatus": "needs_review",
+  "parseStatus": "needs_review",
+  "isValid": false,
+  "consistent": false,
+  "score": 60,
+  "reviewReason": "MISSING_CHARGE",
+  "engineUsed": "v2",
+  "engineFallback": false,
+  "parserId": "fuel-v1",
+  "classification": {
+    "family": "fuel",
+    "confidence": 0.9500000000000001,
+    "signals": [
+      "merchant:fuel",
+      "layout:fuel_lt_qty_line"
+    ]
+  },
+  "timings": {
+    "totalMs": 11233,
+    "ocrMs": 11227,
+    "visionMs": 11227,
+    "extractionMs": 1,
+    "validationMs": 0,
+    "purchaseDraftMs": 6
+  },
+  "groundTruth": {
+    "merchantContains": "Özyıldız",
+    "total": 1000,
+    "paymentAmount": 1000,
+    "categoryId": "akaryakit",
+    "date": "2026-08-08",
+    "time": "12:19"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

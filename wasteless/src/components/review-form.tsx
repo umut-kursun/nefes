@@ -27,9 +27,14 @@ import { TagPicker } from "@/components/tag-picker";
 import { useWasteLessStore } from "@/hooks/use-store";
 import { formatMoney } from "@/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Expense } from "@/lib/types";
 import { ChargeType, DiscountType, parseChargeType, parseDiscountType } from "@/lib/receipt-model";
+import {
+  formatExpenseCategoryLine,
+  ReceiptExpenseSummaryCard,
+} from "@/components/receipt-expense-summary-card";
+import { ReceiptReviewDetailsPanel } from "@/components/receipt-review-details-panel";
 
 const FUEL_ITEM = /\b(motorin|benzin|dizel|lpg|akaryak[iı]t)\b/i;
 
@@ -52,6 +57,11 @@ interface ReviewFormProps {
   saving?: boolean;
   /** When true (OCR flow), keep products collapsed for a compact first screen. */
   compactProducts?: boolean;
+  /** Consumer-first summary card; full fields expand on demand. */
+  summaryFirst?: boolean;
+  correctionsApplied?: number;
+  /** Dev-only diagnostics (OCR, parser JSON, etc.) — shown when details are expanded. */
+  debugSlot?: ReactNode;
   saveLabel?: string;
   deleteLabel?: string;
 }
@@ -64,11 +74,15 @@ export function ReviewForm({
   saving,
   deleting,
   compactProducts = false,
+  summaryFirst = false,
+  correctionsApplied = 0,
+  debugSlot,
   saveLabel = "Kaydet",
   deleteLabel = "Fişi Sil",
 }: ReviewFormProps) {
   const { categories, expenses } = useWasteLessStore();
   const merchantRef = useRef<HTMLInputElement>(null);
+  const [detailsExpanded, setDetailsExpanded] = useState(!summaryFirst);
   const [form, setForm] = useState<Expense>({
     ...initial,
     time: initial.time ?? null,
@@ -93,10 +107,20 @@ export function ReviewForm({
   );
 
   useEffect(() => {
-    if (compactProducts) {
+    if (compactProducts && !summaryFirst) {
       merchantRef.current?.focus();
     }
-  }, [compactProducts]);
+  }, [compactProducts, summaryFirst]);
+
+  const categoryLine = useMemo(
+    () =>
+      formatExpenseCategoryLine(
+        categories,
+        form.category,
+        form.subcategory
+      ),
+    [categories, form.category, form.subcategory]
+  );
 
   useEffect(() => {
     if (!initial.fuel) return;
@@ -245,9 +269,23 @@ export function ReviewForm({
         });
       }}
     >
-      {shouldShowOcrTrustBanner(form.sourceType, form.confidence) && (
-        <TrustBanner confidence={form.confidence} />
+      {summaryFirst && (
+        <ReceiptExpenseSummaryCard
+          merchantName={form.merchantName}
+          date={form.date}
+          time={form.time}
+          totalAmount={form.totalAmount}
+          currency={form.currency}
+          categoryLine={categoryLine}
+          correctionsApplied={correctionsApplied}
+          onShowDetails={() => setDetailsExpanded(true)}
+        />
       )}
+
+      {!summaryFirst &&
+        shouldShowOcrTrustBanner(form.sourceType, form.confidence) && (
+          <TrustBanner confidence={form.confidence} />
+        )}
 
       {consistency.inconsistent && (
         <div
@@ -315,7 +353,22 @@ export function ReviewForm({
         </div>
       )}
 
-      <div className="grid gap-3">
+      {summaryFirst && !detailsExpanded && (
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={() => setDetailsExpanded(true)}
+        >
+          Düzenle
+        </Button>
+      )}
+
+      {(!summaryFirst || detailsExpanded) && (
+        <>
+          {summaryFirst && <ReceiptReviewDetailsPanel expense={form} />}
+
+          <div className="grid gap-3">
         <div className="grid gap-2">
           <Label htmlFor="merchant">İşyeri</Label>
           <Input
@@ -601,6 +654,17 @@ export function ReviewForm({
             }}
           />
         </div>
+      )}
+
+          {summaryFirst && debugSlot && (
+            <div className="space-y-3 rounded-2xl border border-dashed border-muted-foreground/30 bg-muted/20 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Geliştirici araçları
+              </p>
+              {debugSlot}
+            </div>
+          )}
+        </>
       )}
 
       <div className="sticky bottom-24 space-y-2 pt-2">

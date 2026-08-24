@@ -1,0 +1,141 @@
+{
+  "rawLines": [
+    "ŞENGÜL HEDİYELİK",
+    "ŞENOL ŞENGÜL",
+    "GÜMÜŞLÜK MAH. 5231 SK. 14/1",
+    "BODRUM/MUĞLA",
+    "BODRUM VD 8060240966",
+    "12.08.2026",
+    "Saat: 00:05",
+    "Fiş No: 0001",
+    "HEDİYELİK EŞYA",
+    "%20 *1.000,00",
+    "KDV",
+    "*166,67",
+    "TOPLAM",
+    "*1.000,00",
+    "Banka/Kredi Kartı *1.000,00",
+    "T.VAKIFLAR BANKASI T.A.O.",
+    "İŞYERİ: 02850000813674",
+    "BATCH NO: VB-000243",
+    "POS: 02089935",
+    "000001"
+  ],
+  "products": [
+    {
+      "rawName": "ŞENGÜL HEDİYELİK",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          0
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "ŞENOL ŞENGÜL",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          1
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "BODRUM/MUĞLA",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          3
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "BODRUM VD 8060240966",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          4
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "HEDİYELİK EŞYA",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 1000,
+      "lineTotal": 1000,
+      "vatRate": 20,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          8,
+          9
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "footer": {
+    "subtotal": null,
+    "total": 1000,
+    "vatTotal": 166.67,
+    "payments": [
+      {
+        "type": "credit_card",
+        "amount": 1000,
+        "rawLabel": "Banka/Kredi Kartı *1.000,00"
+      }
+    ]
+  },
+  "fuel": null,
+  "footerStartIndex": 10,
+  "extractionMs": 0,
+  "vatProvenance": {
+    "value": 166.67,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      11
+    ],
+    "method": "footer:orphan-amount→vat"
+  },
+  "totalProvenance": {
+    "value": 1000,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      13
+    ],
+    "method": "footer:post-vat-total"
+  },
+  "subtotalProvenance": null
+}

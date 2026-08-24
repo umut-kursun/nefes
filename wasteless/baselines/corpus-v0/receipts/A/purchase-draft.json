@@ -1,0 +1,352 @@
+{
+  "merchant": "Migros",
+  "purchaseDate": {
+    "raw": "2026-08-16",
+    "normalized": "2026-08-16"
+  },
+  "purchaseTime": {
+    "raw": "19:33:00",
+    "normalized": "19:33:00"
+  },
+  "receiptNumber": {
+    "raw": "0347",
+    "normalized": "0347"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "MIGROS",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          0
+        ],
+        "rawTexts": [
+          "MIGROS"
+        ],
+        "ocrTexts": [
+          "MIGROS"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "BÜYÜK MÜKELLEFLER V.D. 620202529513",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          5
+        ],
+        "rawTexts": [
+          "BÜYÜK MÜKELLEFLER V.D. 620202529513"
+        ],
+        "ocrTexts": [
+          "BÜYÜK MÜKELLEFLER V.D. 620202529513"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "BİLGİ FİŞİ",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          11
+        ],
+        "rawTexts": [
+          "BİLGİ FİŞİ"
+        ],
+        "ocrTexts": [
+          "BİLGİ FİŞİ"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "Tür: e-Arşiv Fatura",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          12
+        ],
+        "rawTexts": [
+          "Tür: e-Arşiv Fatura"
+        ],
+        "ocrTexts": [
+          "Tür: e-Arşiv Fatura"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "Fatura/İrsaliye Seri Sıra No: 9190801827672016",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:4",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          13
+        ],
+        "rawTexts": [
+          "Fatura/İrsaliye Seri Sıra No: 9190801827672016"
+        ],
+        "ocrTexts": [
+          "Fatura/İrsaliye Seri Sıra No: 9190801827672016"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "COCA-COLA 1.5 L",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:5",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          15
+        ],
+        "rawTexts": [
+          "COCA-COLA 1.5 L"
+        ],
+        "ocrTexts": [
+          "COCA-COLA 1.5 L"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "LİPTON İCE TEA SEFTA.",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:6",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          16
+        ],
+        "rawTexts": [
+          "LİPTON İCE TEA SEFTA."
+        ],
+        "ocrTexts": [
+          "LİPTON İCE TEA SEFTA."
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "SFRESH PATATES 1 KG",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:7",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          17
+        ],
+        "rawTexts": [
+          "SFRESH PATATES 1 KG"
+        ],
+        "ocrTexts": [
+          "SFRESH PATATES 1 KG"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "MİGROS PLASTİK POSET",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:8",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          18
+        ],
+        "rawTexts": [
+          "MİGROS PLASTİK POSET"
+        ],
+        "ocrTexts": [
+          "MİGROS PLASTİK POSET"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "SELPAK YAĞ EMİCİ HV.",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:9",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          19
+        ],
+        "rawTexts": [
+          "SELPAK YAĞ EMİCİ HV."
+        ],
+        "ocrTexts": [
+          "SELPAK YAĞ EMİCİ HV."
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "Ödeme",
+      "amount": 20,
+      "confidence": 0.82,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.82,
+        "layoutLineIndices": [],
+        "extractionMethod": "semantic:payment:0",
+        "rawLineCount": 35
+      }
+    },
+    {
+      "label": "ORTAK POS",
+      "amount": 477.9,
+      "confidence": 0.82,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.82,
+        "layoutLineIndices": [],
+        "extractionMethod": "semantic:payment:1",
+        "rawLineCount": 35
+      }
+    }
+  ],
+  "vatSummary": [
+    {
+      "label": "TOPKDV",
+      "amount": 33.99,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "vat",
+        "confidence": 0.9,
+        "layoutLineIndices": [
+          25
+        ],
+        "extractionMethod": "footer:orphan-amount→vat",
+        "rawLineCount": 35
+      }
+    }
+  ],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 477.9,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:semantic",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9,
+      "layoutLineIndices": [
+        27
+      ],
+      "extractionMethod": "footer:post-vat-total",
+      "rawLineCount": 35
+    }
+  },
+  "confidence": 0.55,
+  "fuel": null,
+  "provenance": {
+    "metadataBlockId": "metadata:v2",
+    "footerBlockId": "footer:semantic",
+    "blockDocumentConfidence": 0.55,
+    "rawTexts": [
+      "MIGROS",
+      "MIGROS TİCARET A.Ş.",
+      "İNONÜ CD SILVRI ISTANBUL MJET STS MGZ.",
+      "MİMAR SINAN MH İNONÜ CD NO:84/A",
+      "SILIVRI/ISTANBUL",
+      "BÜYÜK MÜKELLEFLER V.D. 620202529513",
+      "MERKEZ ADRESİ: ATAATÜRK MAH. TURGUT ÖZAL",
+      "BUL. NO:7 ATAŞEHİR/ISTANBUL",
+      "TARİH:16/08/2026",
+      "SAAT:19:33",
+      "FIŞ NO: 0347",
+      "BİLGİ FİŞİ",
+      "Tür: e-Arşiv Fatura",
+      "Fatura/İrsaliye Seri Sıra No: 9190801827672016",
+      "MÜŞTERİ TCKN: 11111111111",
+      "COCA-COLA 1.5 L",
+      "LİPTON İCE TEA SEFTA.",
+      "SFRESH PATATES 1 KG",
+      "MİGROS PLASTİK POSET",
+      "SELPAK YAĞ EMİCİ HV.",
+      "İNDİRİMLER:",
+      "*SECALPA",
+      "SELPAK YAĞ EMİCİ HV.",
+      "*20",
+      "TOPKDV",
+      "*33,99",
+      "TOPLAM",
+      "*477,90",
+      "#453360****4421 ORTAK POS",
+      "MERSİS NO: 06220252951300016",
+      "www.migros.com.tr",
+      "İRSALİYE YERİNE GEÇER",
+      "İMZA:",
+      "KASİYER 004 346529",
+      "FATURA: https://earsiv.migros.com.tr"
+    ]
+  }
+}

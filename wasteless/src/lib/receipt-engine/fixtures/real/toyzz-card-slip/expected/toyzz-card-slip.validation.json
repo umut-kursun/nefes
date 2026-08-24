@@ -1,6 +1,7 @@
 {
   "isValid": false,
   "consistent": false,
+  "analysisStatus": "needs_review",
   "score": 85,
   "errors": [
     {
@@ -62,6 +63,7 @@
   "provenance": {
     "purchaseConfidence": 0.7583333333333333,
     "structuralValidators": [
+      "FinancialSafetyValidator",
       "ReceiptTotalValidator",
       "SubtotalValidator",
       "PaymentSumValidator",
@@ -69,7 +71,8 @@
       "LineTotalValidator",
       "QuantityValidator",
       "ChargeValidator",
-      "DiscountValidator"
+      "DiscountValidator",
+      "ApprovalCompletenessValidator"
     ],
     "businessValidators": [
       "MerchantValidator",
@@ -82,5 +85,5 @@
     ],
     "issueCount": 3
   },
-  "blocking": false
+  "blocking": true
 }

@@ -1,0 +1,41 @@
+{
+  "id": "exp_388b329b-6d9b-45a6-87ee-5111a19d4091",
+  "sourceType": "receipt",
+  "date": "2026-08-13",
+  "time": "20:30",
+  "merchantName": "Petrol Ofisi",
+  "merchantRaw": "Petrol Ofisi",
+  "category": "akaryakit",
+  "subcategory": "Benzin",
+  "tagIds": [],
+  "totalAmount": 2200.66,
+  "currency": "TRY",
+  "notes": null,
+  "createdAt": "2026-08-24T07:19:04.504Z",
+  "updatedAt": "2026-08-24T07:19:04.504Z",
+  "rawText": "PETROL OFİSİ A.Ş.\nÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ\nNO:221/2/3 ALTINOVA/YALOVA\nTEL: 02264656314\nB. Mükellefler VD: 7290015043\nMERSİS NO: 0729-0015-0430-0023\nLİSANS NO: BAY/939-82/48208\nTİC. SİC NO: 498819\n\n13-08-2026\nFIŞ NO: 0210\n\n3400UP8195\n20:30\n30,800 LT X 71,45\nV/MAX DİESEL\n%20  *2.200,66\n\nTOPKDV\nTOPLAM\n\n*366,78\n*2.200,66\n\n*2.200,66\n\nNAKİT",
+  "confidence": 0.55,
+  "imageDataUrl": null,
+  "aiResponseJson": "{\n  \"merchant\": \"Petrol Ofisi\",\n  \"purchaseDate\": {\n    \"raw\": \"2026-08-13\",\n    \"normalized\": \"2026-08-13\"\n  },\n  \"purchaseTime\": {\n    \"raw\": \"20:30:00\",\n    \"normalized\": \"20:30:00\"\n  },\n  \"receiptNumber\": {\n    \"raw\": \"0210\",\n    \"normalized\": \"0210\"\n  },\n  \"currency\": {\n    \"raw\": \"TRY\",\n    \"normalized\": \"TRY\"\n  },\n  \"products\": [\n    {\n      \"name\": \"ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:0\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          1\n        ],\n        \"rawTexts\": [\n          \"ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ\"\n        ],\n        \"ocrTexts\": [\n          \"ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"NO:221/2/3 ALTINOVA/YALOVA\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:1\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          2\n        ],\n        \"rawTexts\": [\n          \"NO:221/2/3 ALTINOVA/YALOVA\"\n        ],\n        \"ocrTexts\": [\n          \"NO:221/2/3 ALTINOVA/YALOVA\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"TEL: 02264656314\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:2\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          3\n        ],\n        \"rawTexts\": [\n          \"TEL: 02264656314\"\n        ],\n        \"ocrTexts\": [\n          \"TEL: 02264656314\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"B. Mükellefler VD: 7290015043\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:3\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          4\n        ],\n        \"rawTexts\": [\n          \"B. Mükellefler VD: 7290015043\"\n        ],\n        \"ocrTexts\": [\n          \"B. Mükellefler VD: 7290015043\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"LİSANS NO: BAY/939-82/48208\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:4\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          6\n        ],\n        \"rawTexts\": [\n          \"LİSANS NO: BAY/939-82/48208\"\n        ],\n        \"ocrTexts\": [\n          \"LİSANS NO: BAY/939-82/48208\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"TİC. SİC NO: 498819\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:5\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          7\n        ],\n        \"rawTexts\": [\n          \"TİC. SİC NO: 498819\"\n        ],\n        \"ocrTexts\": [\n          \"TİC. SİC NO: 498819\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"V/MAX DİESEL\",\n      \"quantity\": 1,\n      \"unitPrice\": 2200.66,\n      \"lineTotal\": 2200.66,\n      \"vatRate\": 20,\n      \"confidence\": 0.97,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:6\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          13,\n          14\n        ],\n        \"rawTexts\": [\n          \"V/MAX DİESEL\",\n          \"%20  *2.200,66\"\n        ],\n        \"ocrTexts\": [\n          \"V/MAX DİESEL\",\n          \"%20  *2.200,66\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-line\"\n        ],\n        \"confidence\": 0.97\n      }\n    }\n  ],\n  \"charges\": [],\n  \"discounts\": [],\n  \"payments\": [\n    {\n      \"label\": \"NAKİT\",\n      \"amount\": 2200.66,\n      \"confidence\": 0.82,\n      \"provenance\": {\n        \"footerBlockId\": \"footer:semantic\",\n        \"graphNodeIds\": [],\n        \"semanticKind\": \"payment\",\n        \"confidence\": 0.82,\n        \"layoutLineIndices\": [],\n        \"extractionMethod\": \"semantic:payment:0\",\n        \"rawLineCount\": 21\n      }\n    }\n  ],\n  \"vatSummary\": [\n    {\n      \"label\": \"TOPKDV\",\n      \"amount\": 366.78,\n      \"confidence\": 0.9,\n      \"provenance\": {\n        \"footerBlockId\": \"footer:semantic\",\n        \"graphNodeIds\": [],\n        \"semanticKind\": \"vat\",\n        \"confidence\": 0.9,\n        \"layoutLineIndices\": [\n          17\n        ],\n        \"extractionMethod\": \"footer:orphan-amount→vat\",\n        \"rawLineCount\": 21\n      }\n    }\n  ],\n  \"subtotal\": null,\n  \"total\": {\n    \"label\": \"TOPLAM\",\n    \"amount\": 2200.66,\n    \"confidence\": 0.9,\n    \"provenance\": {\n      \"footerBlockId\": \"footer:semantic\",\n      \"graphNodeIds\": [],\n      \"semanticKind\": \"total\",\n      \"confidence\": 0.9,\n      \"layoutLineIndices\": [\n        18\n      ],\n      \"extractionMethod\": \"footer:post-vat-total\",\n      \"rawLineCount\": 21\n    }\n  },\n  \"confidence\": 0.55,\n  \"fuel\": {\n    \"fuelType\": null,\n    \"liters\": 30.8,\n    \"pricePerLiter\": 71.45,\n    \"plateNumber\": \"00UP8195\",\n    \"stationName\": \"Petrol Ofisi\"\n  },\n  \"provenance\": {\n    \"metadataBlockId\": \"metadata:v2\",\n    \"footerBlockId\": \"footer:semantic\",\n    \"blockDocumentConfidence\": 0.55,\n    \"rawTexts\": [\n      \"PETROL OFİSİ A.Ş.\",\n      \"ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ\",\n      \"NO:221/2/3 ALTINOVA/YALOVA\",\n      \"TEL: 02264656314\",\n      \"B. Mükellefler VD: 7290015043\",\n      \"MERSİS NO: 0729-0015-0430-0023\",\n      \"LİSANS NO: BAY/939-82/48208\",\n      \"TİC. SİC NO: 498819\",\n      \"13-08-2026\",\n      \"FIŞ NO: 0210\",\n      \"3400UP8195\",\n      \"20:30\",\n      \"30,800 LT X 71,45\",\n      \"V/MAX DİESEL\",\n      \"%20  *2.200,66\",\n      \"TOPKDV\",\n      \"TOPLAM\",\n      \"*366,78\",\n      \"*2.200,66\",\n      \"*2.200,66\",\n      \"NAKİT\"\n    ]\n  }\n}",
+  "fuel": {
+    "fuelType": null,
+    "liters": 30.8,
+    "pricePerLiter": 71.45,
+    "stationName": "Petrol Ofisi",
+    "odometer": null,
+    "plate": "00 UP 8195"
+  },
+  "packCount": null,
+  "quickButtonId": null,
+  "items": [],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "type": "other",
+      "label": "NAKİT",
+      "amount": 2200.66
+    }
+  ],
+  "unknownLines": []
+}

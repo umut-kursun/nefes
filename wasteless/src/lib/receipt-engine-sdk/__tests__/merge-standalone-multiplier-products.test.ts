@@ -57,7 +57,7 @@ describe("isStandaloneMultiplierProduct", () => {
 });
 
 describe("mergeStandaloneMultiplierProducts", () => {
-  it("merges multiplier-below row into preceding product without overwriting *1 quantity", () => {
+  it("merges multiplier-below row into preceding product using adjacent multiplier qty", () => {
     const parsed: ParsedReceipt = {
       ...baseReceipt,
       rawText: "ALGIDA FRIGOLA 60ML *1 *360,00\n9 AD x 40,00 TL/AD",
@@ -82,10 +82,9 @@ describe("mergeStandaloneMultiplierProducts", () => {
     const merged = mergeStandaloneMultiplierProducts(parsed);
     expect(merged.products).toHaveLength(1);
     expect(merged.products[0]!.name).toBe("ALGIDA FRIGOLA");
-    expect(merged.products[0]!.quantity).toBe(1);
-    expect(merged.products[0]!.unitPrice).toBe(360);
+    expect(merged.products[0]!.quantity).toBe(9);
+    expect(merged.products[0]!.unitPrice).toBe(40);
     expect(merged.products[0]!.lineTotal).toBe(360);
-    expect(merged.products[0]!.normalizedUnitPrice).toBe(360);
   });
 
   it("merges multiplier-above row into following product (File layout)", () => {
@@ -170,7 +169,7 @@ describe("mergeStandaloneMultiplierProducts", () => {
 
     const finalized = finalizeVisionParsedReceipt(parsed);
     expect(finalized.products).toHaveLength(1);
-    expect(finalized.products[0]!.quantity).toBe(1);
-    expect(finalized.products[0]!.unitPrice).toBe(460);
+    expect(finalized.products[0]!.quantity).toBe(4);
+    expect(finalized.products[0]!.unitPrice).toBeCloseTo(115, 2);
   });
 });

@@ -1,0 +1,190 @@
+{
+  "rawLines": [
+    "PETROL OFİSİ A.Ş.",
+    "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+    "NO:221/2/3 ALTINOVA/YALOVA",
+    "TEL: 02264656314",
+    "B. Mükellefler VD: 7290015043",
+    "MERSİS NO: 0729-0015-0430-0023",
+    "LİSANS NO: BAY/939-82/48208",
+    "TİC. SİC NO: 498819",
+    "13-08-2026",
+    "FIŞ NO: 0210",
+    "3400UP8195",
+    "20:30",
+    "30,800 LT X 71,45",
+    "V/MAX DİESEL",
+    "%20  *2.200,66",
+    "TOPKDV",
+    "TOPLAM",
+    "*366,78",
+    "*2.200,66",
+    "*2.200,66",
+    "NAKİT"
+  ],
+  "products": [
+    {
+      "rawName": "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          1
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "NO:221/2/3 ALTINOVA/YALOVA",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          2
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "TEL: 02264656314",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          3
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "B. Mükellefler VD: 7290015043",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          4
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "LİSANS NO: BAY/939-82/48208",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          6
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "TİC. SİC NO: 498819",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          7
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "V/MAX DİESEL",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 2200.66,
+      "lineTotal": 2200.66,
+      "vatRate": 20,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          13,
+          14
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "footer": {
+    "subtotal": null,
+    "total": 2200.66,
+    "vatTotal": 366.78,
+    "payments": [
+      {
+        "type": "cash",
+        "amount": 2200.66,
+        "rawLabel": "NAKİT"
+      }
+    ]
+  },
+  "fuel": {
+    "fuelType": null,
+    "quantity": 30.8,
+    "unit": "LT",
+    "unitPrice": 71.45,
+    "lineTotal": null,
+    "plateNumber": "00UP8195",
+    "provenance": {
+      "value": null,
+      "confidence": 0.9,
+      "sourceLineIndices": [
+        10,
+        12
+      ],
+      "method": "semantic:fuel"
+    }
+  },
+  "footerStartIndex": 15,
+  "extractionMs": 1,
+  "vatProvenance": {
+    "value": 366.78,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      17
+    ],
+    "method": "footer:orphan-amount→vat"
+  },
+  "totalProvenance": {
+    "value": 2200.66,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      18
+    ],
+    "method": "footer:post-vat-total"
+  },
+  "subtotalProvenance": null
+}

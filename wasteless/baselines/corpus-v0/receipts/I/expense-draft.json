@@ -1,0 +1,59 @@
+{
+  "id": "exp_0172f6f5-fd99-4494-a15e-c287d120018e",
+  "sourceType": "receipt",
+  "date": "2026-08-08",
+  "time": "12:19",
+  "merchantName": "Özyıldız Petrol Ve Lpg Ür.inş",
+  "merchantRaw": "Özyıldız Petrol Ve Lpg Ür.inş",
+  "category": "akaryakit",
+  "subcategory": "Motorin",
+  "tagIds": [],
+  "totalAmount": 1000,
+  "currency": "TRY",
+  "notes": null,
+  "createdAt": "2026-08-24T07:19:42.486Z",
+  "updatedAt": "2026-08-24T07:19:42.486Z",
+  "rawText": "ÖZYILDIZ PETROL VE LPG\nÜR.İNŞ.SAN.TİC.LTD.ŞTİ\nSAİPLER MH.PHİLSA CAD.\nNO:203 TORBALI/İZMİR\nTEL: 0534 6443045\nTORBALI VD: 7160262667\nMERSİS NO: 071626266700014\nEPDK: BAY/939-82/36409\nADA NO: 7/8/9/10\n\n08-08-2026\n12:19\nFiş No:0014\n\n34 UP 8195\n\n12,50 LT X 79,99\nMOTORİN\n*%20 *1.000,00\n\nKDV\n*166,67\nTOPLAM\n*1.000,00\nNAKİT\n*1.000,00",
+  "confidence": 0.55,
+  "imageDataUrl": null,
+  "aiResponseJson": "{\n  \"merchant\": \"Özyıldız Petrol Ve Lpg Ür.inş\",\n  \"purchaseDate\": {\n    \"raw\": \"2026-08-08\",\n    \"normalized\": \"2026-08-08\"\n  },\n  \"purchaseTime\": {\n    \"raw\": \"12:19:00\",\n    \"normalized\": \"12:19:00\"\n  },\n  \"receiptNumber\": {\n    \"raw\": \"Fiş No:0014\",\n    \"normalized\": \"Fiş No:0014\"\n  },\n  \"currency\": {\n    \"raw\": \"TRY\",\n    \"normalized\": \"TRY\"\n  },\n  \"products\": [\n    {\n      \"name\": \"ÖZYILDIZ PETROL VE LPG\",\n      \"quantity\": 12.5,\n      \"unit\": \"LT\",\n      \"unitPrice\": 79.99,\n      \"lineTotal\": 1000,\n      \"confidence\": 0.9,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:0\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          0\n        ],\n        \"rawTexts\": [\n          \"ÖZYILDIZ PETROL VE LPG\"\n        ],\n        \"ocrTexts\": [\n          \"ÖZYILDIZ PETROL VE LPG\"\n        ],\n        \"classificationRules\": [\n          \"semantic:fuel-merge\"\n        ],\n        \"confidence\": 0.9\n      }\n    },\n    {\n      \"name\": \"NO:203 TORBALI/İZMİR\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:1\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          3\n        ],\n        \"rawTexts\": [\n          \"NO:203 TORBALI/İZMİR\"\n        ],\n        \"ocrTexts\": [\n          \"NO:203 TORBALI/İZMİR\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"TEL: 0534 6443045\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:2\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          4\n        ],\n        \"rawTexts\": [\n          \"TEL: 0534 6443045\"\n        ],\n        \"ocrTexts\": [\n          \"TEL: 0534 6443045\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"TORBALI VD: 7160262667\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:3\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          5\n        ],\n        \"rawTexts\": [\n          \"TORBALI VD: 7160262667\"\n        ],\n        \"ocrTexts\": [\n          \"TORBALI VD: 7160262667\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"EPDK: BAY/939-82/36409\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:4\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          7\n        ],\n        \"rawTexts\": [\n          \"EPDK: BAY/939-82/36409\"\n        ],\n        \"ocrTexts\": [\n          \"EPDK: BAY/939-82/36409\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"ADA NO: 7/8/9/10\",\n      \"quantity\": 1,\n      \"confidence\": 0.75,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:5\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          8\n        ],\n        \"rawTexts\": [\n          \"ADA NO: 7/8/9/10\"\n        ],\n        \"ocrTexts\": [\n          \"ADA NO: 7/8/9/10\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-name-only\"\n        ],\n        \"confidence\": 0.75\n      }\n    },\n    {\n      \"name\": \"MOTORİN\",\n      \"quantity\": 1,\n      \"unitPrice\": 1000,\n      \"lineTotal\": 1000,\n      \"vatRate\": 20,\n      \"confidence\": 0.97,\n      \"provenance\": {\n        \"productBlockId\": \"semantic:product:6\",\n        \"graphNodeIds\": [],\n        \"layoutLineIndices\": [\n          14,\n          15\n        ],\n        \"rawTexts\": [\n          \"MOTORİN\",\n          \"*%20 *1.000,00\"\n        ],\n        \"ocrTexts\": [\n          \"MOTORİN\",\n          \"*%20 *1.000,00\"\n        ],\n        \"classificationRules\": [\n          \"semantic:product-line\"\n        ],\n        \"confidence\": 0.97\n      }\n    }\n  ],\n  \"charges\": [],\n  \"discounts\": [],\n  \"payments\": [\n    {\n      \"label\": \"NAKİT\",\n      \"amount\": 1000,\n      \"confidence\": 0.82,\n      \"provenance\": {\n        \"footerBlockId\": \"footer:semantic\",\n        \"graphNodeIds\": [],\n        \"semanticKind\": \"payment\",\n        \"confidence\": 0.82,\n        \"layoutLineIndices\": [],\n        \"extractionMethod\": \"semantic:payment:0\",\n        \"rawLineCount\": 22\n      }\n    }\n  ],\n  \"vatSummary\": [\n    {\n      \"label\": \"TOPKDV\",\n      \"amount\": 166.67,\n      \"confidence\": 0.9,\n      \"provenance\": {\n        \"footerBlockId\": \"footer:semantic\",\n        \"graphNodeIds\": [],\n        \"semanticKind\": \"vat\",\n        \"confidence\": 0.9,\n        \"layoutLineIndices\": [\n          17\n        ],\n        \"extractionMethod\": \"footer:orphan-amount→vat\",\n        \"rawLineCount\": 22\n      }\n    }\n  ],\n  \"subtotal\": null,\n  \"total\": {\n    \"label\": \"TOPLAM\",\n    \"amount\": 1000,\n    \"confidence\": 0.9,\n    \"provenance\": {\n      \"footerBlockId\": \"footer:semantic\",\n      \"graphNodeIds\": [],\n      \"semanticKind\": \"total\",\n      \"confidence\": 0.9,\n      \"layoutLineIndices\": [\n        19\n      ],\n      \"extractionMethod\": \"footer:post-vat-total\",\n      \"rawLineCount\": 22\n    }\n  },\n  \"confidence\": 0.55,\n  \"fuel\": {\n    \"fuelType\": \"Motorin\",\n    \"liters\": 12.5,\n    \"pricePerLiter\": 79.99,\n    \"plateNumber\": \"34 UP 8195\",\n    \"stationName\": \"Özyıldız Petrol Ve Lpg Ür.inş\"\n  },\n  \"provenance\": {\n    \"metadataBlockId\": \"metadata:v2\",\n    \"footerBlockId\": \"footer:semantic\",\n    \"blockDocumentConfidence\": 0.55,\n    \"rawTexts\": [\n      \"ÖZYILDIZ PETROL VE LPG\",\n      \"ÜR.İNŞ.SAN.TİC.LTD.ŞTİ\",\n      \"SAİPLER MH.PHİLSA CAD.\",\n      \"NO:203 TORBALI/İZMİR\",\n      \"TEL: 0534 6443045\",\n      \"TORBALI VD: 7160262667\",\n      \"MERSİS NO: 071626266700014\",\n      \"EPDK: BAY/939-82/36409\",\n      \"ADA NO: 7/8/9/10\",\n      \"08-08-2026\",\n      \"12:19\",\n      \"Fiş No:0014\",\n      \"34 UP 8195\",\n      \"12,50 LT X 79,99\",\n      \"MOTORİN\",\n      \"*%20 *1.000,00\",\n      \"KDV\",\n      \"*166,67\",\n      \"TOPLAM\",\n      \"*1.000,00\",\n      \"NAKİT\",\n      \"*1.000,00\"\n    ]\n  }\n}",
+  "fuel": {
+    "fuelType": "Motorin",
+    "liters": 12.5,
+    "pricePerLiter": 79.99,
+    "stationName": "Özyıldız Petrol Ve Lpg Ür.inş",
+    "odometer": null,
+    "plate": "34 UP 8195"
+  },
+  "packCount": 1,
+  "quickButtonId": null,
+  "items": [
+    {
+      "id": "item_f5692f49-59d4-4db5-9e2a-c644b8b039c6",
+      "expenseId": "exp_0172f6f5-fd99-4494-a15e-c287d120018e",
+      "name": "Lpg",
+      "normalizedName": "Lpg",
+      "quantity": 12.5,
+      "unit": "LT",
+      "unitPrice": 80,
+      "normalizedUnitPrice": 80,
+      "baseUnit": null,
+      "variantSize": null,
+      "productKey": null,
+      "totalPrice": 1000,
+      "categoryGuess": "akaryakit",
+      "rawText": "ÖZYILDIZ PETROL VE LPG",
+      "confidence": 0.9
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "type": "other",
+      "label": "NAKİT",
+      "amount": 1000
+    }
+  ],
+  "unknownLines": []
+}

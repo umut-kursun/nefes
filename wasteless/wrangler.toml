@@ -11,6 +11,7 @@ workers_dev = true
 [vars]
 RECEIPT_PARSER_MODE = "vision_first"
 RECEIPT_ENGINE_DEBUG_EXPORT = "1"
+USE_RECEIPT_ENGINE_V2 = "true"
 
 [assets]
 directory = "./out"

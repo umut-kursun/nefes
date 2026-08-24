@@ -1,6 +1,7 @@
 {
   "isValid": true,
   "consistent": true,
+  "analysisStatus": "approved",
   "score": 90,
   "errors": [],
   "warnings": [
@@ -54,6 +55,7 @@
   "provenance": {
     "purchaseConfidence": 0.7499999999999999,
     "structuralValidators": [
+      "FinancialSafetyValidator",
       "ReceiptTotalValidator",
       "SubtotalValidator",
       "PaymentSumValidator",
@@ -61,7 +63,8 @@
       "LineTotalValidator",
       "QuantityValidator",
       "ChargeValidator",
-      "DiscountValidator"
+      "DiscountValidator",
+      "ApprovalCompletenessValidator"
     ],
     "businessValidators": [
       "MerchantValidator",

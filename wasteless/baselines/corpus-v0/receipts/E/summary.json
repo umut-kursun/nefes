@@ -1,0 +1,66 @@
+{
+  "id": "E",
+  "name": "Altınkılıçlar Kahve",
+  "domain": "restaurant",
+  "merchant": "Altınkılıçlar Kahve",
+  "total": 695,
+  "vat": null,
+  "productCount": 12,
+  "productNames": [
+    "Altınkılıçlar kahve",
+    "Kakao Ürünleri Tic.ve San.A.ş",
+    "Oksijen 266-A",
+    "Marmara Kurumlar V.DQ",
+    "Füme Keten Tohumlu",
+    "*215,00",
+    "Espresso Double Ag",
+    "*125,00",
+    "Capuccino Küçük Ag",
+    "*165,00",
+    "Draft Americano Ag",
+    "*190,00"
+  ],
+  "paymentCount": 1,
+  "paymentAmounts": [
+    695
+  ],
+  "paymentMethods": [
+    null
+  ],
+  "category": "market",
+  "subcategory": null,
+  "analysisStatus": "approved",
+  "parseStatus": "pending_approval",
+  "isValid": true,
+  "consistent": true,
+  "score": 60,
+  "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+  "engineUsed": "v2",
+  "engineFallback": false,
+  "parserId": "restaurant-v1",
+  "classification": {
+    "family": "restaurant",
+    "confidence": 0.4,
+    "signals": [
+      "layout:simple_pos"
+    ]
+  },
+  "timings": {
+    "totalMs": 12231,
+    "ocrMs": 12226,
+    "visionMs": 12226,
+    "extractionMs": 0,
+    "validationMs": 0,
+    "purchaseDraftMs": 5
+  },
+  "groundTruth": {
+    "merchantContains": "Altınkılıç",
+    "total": 695,
+    "vat": 63.18,
+    "paymentAmount": 695,
+    "categoryId": "yeme_icme",
+    "date": "2026-08-08",
+    "time": "10:49"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

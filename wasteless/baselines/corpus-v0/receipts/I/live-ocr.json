@@ -1,0 +1,84 @@
+{
+  "capturedAt": "2026-08-24T07:15:32.115Z",
+  "model": "gpt-4o-mini",
+  "promptHash": "649e08ca811c7f40d02480e50e3b7faefdc6e38429bb9173f9f5ea3116740733",
+  "ocrRawText": "ÖZYILDIZ PETROL VE LPG\nÜR.İNŞ.SAN.TİC.LTD.ŞTİ\nSAİPLER MH.PHİLSA CAD.\nNO:203 TORBALI/İZMİR\nTEL: 0534 6443045\nTORBALI VD: 7160262667\nMERSİS NO: 071626266700014\nEPDK: BAY/939-82/36409\nADA NO: 7/8/9/10\n\n08-08-2026\n12:19\nFiş No:0014\n\n34 UP 8195\n\n12,50 LT X 79,99\nMOTORİN\n*%20 *1.000,00\n\nKDV\n*166,67\nTOPLAM\n*1.000,00\nNAKİT\n*1.000,00\n\n",
+  "lines": [
+    "ÖZYILDIZ PETROL VE LPG",
+    "ÜR.İNŞ.SAN.TİC.LTD.ŞTİ",
+    "SAİPLER MH.PHİLSA CAD.",
+    "NO:203 TORBALI/İZMİR",
+    "TEL: 0534 6443045",
+    "TORBALI VD: 7160262667",
+    "MERSİS NO: 071626266700014",
+    "EPDK: BAY/939-82/36409",
+    "ADA NO: 7/8/9/10",
+    "08-08-2026",
+    "12:19",
+    "Fiş No:0014",
+    "34 UP 8195",
+    "12,50 LT X 79,99",
+    "MOTORİN",
+    "*%20 *1.000,00",
+    "KDV",
+    "*166,67",
+    "TOPLAM",
+    "*1.000,00",
+    "NAKİT",
+    "*1.000,00"
+  ],
+  "merchant": {
+    "rawName": "ÖZYILDIZ PETROL VE LPG\nÜR.İNŞ.SAN.TİC.LTD.ŞTİ\nSAİPLER MH.PHİLSA CAD.\nNO:203 TORBALI/İZMİR",
+    "rawTaxNumber": "TORBALI VD: 7160262667"
+  },
+  "metadata": {
+    "receiptNumber": "Fiş No:0014",
+    "purchaseDate": "2026-08-08",
+    "purchaseTime": "12:19:00"
+  },
+  "rawVisionResponse": {
+    "merchant": {
+      "rawName": "ÖZYILDIZ PETROL VE LPG\nÜR.İNŞ.SAN.TİC.LTD.ŞTİ\nSAİPLER MH.PHİLSA CAD.\nNO:203 TORBALI/İZMİR",
+      "rawAddress": null,
+      "rawTaxNumber": "TORBALI VD: 7160262667"
+    },
+    "metadata": {
+      "receiptNumber": "Fiş No:0014",
+      "purchaseDate": "2026-08-08",
+      "purchaseTime": "12:19:00",
+      "currency": null
+    },
+    "rawText": "ÖZYILDIZ PETROL VE LPG\nÜR.İNŞ.SAN.TİC.LTD.ŞTİ\nSAİPLER MH.PHİLSA CAD.\nNO:203 TORBALI/İZMİR\nTEL: 0534 6443045\nTORBALI VD: 7160262667\nMERSİS NO: 071626266700014\nEPDK: BAY/939-82/36409\nADA NO: 7/8/9/10\n\n08-08-2026\n12:19\nFiş No:0014\n\n34 UP 8195\n\n12,50 LT X 79,99\nMOTORİN\n*%20 *1.000,00\n\nKDV\n*166,67\nTOPLAM\n*1.000,00\nNAKİT\n*1.000,00\n\n",
+    "lines": [
+      "ÖZYILDIZ PETROL VE LPG",
+      "ÜR.İNŞ.SAN.TİC.LTD.ŞTİ",
+      "SAİPLER MH.PHİLSA CAD.",
+      "NO:203 TORBALI/İZMİR",
+      "TEL: 0534 6443045",
+      "TORBALI VD: 7160262667",
+      "MERSİS NO: 071626266700014",
+      "EPDK: BAY/939-82/36409",
+      "ADA NO: 7/8/9/10",
+      "",
+      "08-08-2026",
+      "12:19",
+      "Fiş No:0014",
+      "",
+      "34 UP 8195",
+      "",
+      "12,50 LT X 79,99",
+      "MOTORİN",
+      "*%20 *1.000,00",
+      "",
+      "KDV",
+      "*166,67",
+      "TOPLAM",
+      "*1.000,00",
+      "NAKİT",
+      "*1.000,00"
+    ],
+    "confidence": null
+  },
+  "preprocessApplied": false,
+  "preprocessNote": "Node harness sends raw PNG; client enhanced+threshold preprocess not applied"
+}

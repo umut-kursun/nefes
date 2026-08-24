@@ -1,0 +1,37 @@
+{
+  "merchant": "TOYZZ SHOP A.S.",
+  "purchaseDate": "27.07.2026",
+  "purchaseTime": "14:10",
+  "receiptNumber": null,
+  "currency": null,
+  "productCount": 1,
+  "products": [
+    {
+      "rawName": "Oyuncak Araba",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 249.9,
+      "lineTotal": 249.9,
+      "vatRate": 20
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 249.9,
+    "vatTotal": null,
+    "payments": [
+      {
+        "type": "credit_card",
+        "amount": 249.9,
+        "rawLabel": "Visa 249,90"
+      }
+    ]
+  },
+  "total": 249.9,
+  "vatTotal": null,
+  "payment": {
+    "type": "credit_card",
+    "amount": 249.9,
+    "rawLabel": "Visa 249,90"
+  }
+}

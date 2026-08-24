@@ -1,0 +1,310 @@
+{
+  "isValid": true,
+  "consistent": true,
+  "analysisStatus": "approved",
+  "score": 60,
+  "errors": [],
+  "warnings": [
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[0]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Altınkılıçlar kahve\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[1]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Kakao Ürünleri Tic.ve San.A.ş\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[2]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Oksijen 266-A\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 2,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[3]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Marmara Kurumlar V.DQ\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 3,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[4]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Füme Keten Tohumlu\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 4,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[6]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Espresso Double Ag\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 6,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[8]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Capuccino Küçük Ag\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 8,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[10]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"Draft Americano Ag\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 10,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[0]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"Altınkılıçlar kahve\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[1]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"Kakao Ürünleri Tic.ve San.A.ş\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[2]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"Oksijen 266-A\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 2,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[3]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"Marmara Kurumlar V.DQ\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 3,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[5]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"*215,00\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 5,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[7]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"*125,00\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 7,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[9]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"*165,00\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 9,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[11]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"*190,00\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 11,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.39999999999999997,
+  "overallConfidence": 0.15000000000000008,
+  "provenance": {
+    "purchaseConfidence": 0.55,
+    "structuralValidators": [
+      "FinancialSafetyValidator",
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 16
+  },
+  "blocking": false
+}

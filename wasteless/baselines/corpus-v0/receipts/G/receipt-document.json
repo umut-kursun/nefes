@@ -1,0 +1,215 @@
+{
+  "rawLines": [
+    "ÇEHRE GIDA İNŞAAT SAN.",
+    "VE TİCARET LMTD. ŞİRKETİ",
+    "YALIKAVAK MAH.",
+    "ÇOKERTME CAD. MARİNA 6 EF 13",
+    "BODRUM MUĞLA",
+    "PENDİK V.D. 2331236531",
+    "TARİH : 11/08/2026",
+    "SAAT  : 21:16:59",
+    "FIŞ NO : 0037",
+    "Akali Burger 160 Gr  %10 *1.049,00",
+    "Benji                %10 *229,00",
+    "Patates Kızartması   %10 *439,00",
+    "Akali Burger 160 Gr  %10 *1.049,00",
+    "Pepsi                %10 *240,00",
+    "Pepsi                %10 *240,00",
+    "KARAMELİZE SOĞAN    %10 *229,00",
+    "KARAMELİZE SOĞAN    %10 *229,00",
+    "TOPKDV  *336,73",
+    "TOPLAM  *3.704,00",
+    "KREDİ  *3.704,00",
+    "AKTİFBANK"
+  ],
+  "products": [
+    {
+      "rawName": "ÇEHRE GIDA İNŞAAT SAN.",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          0
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "BODRUM MUĞLA",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          4
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "Akali Burger 160 Gr",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 1049,
+      "lineTotal": 1049,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          9
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    },
+    {
+      "rawName": "Benji",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 229,
+      "lineTotal": 229,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          10
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    },
+    {
+      "rawName": "Patates Kızartması",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 439,
+      "lineTotal": 439,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          11
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    },
+    {
+      "rawName": "Akali Burger 160 Gr",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 1049,
+      "lineTotal": 1049,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          12
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    },
+    {
+      "rawName": "Pepsi",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 240,
+      "lineTotal": 240,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          13
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    },
+    {
+      "rawName": "Pepsi",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 240,
+      "lineTotal": 240,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          14
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    },
+    {
+      "rawName": "KARAMELİZE SOĞAN",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 229,
+      "lineTotal": 229,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          15
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    },
+    {
+      "rawName": "KARAMELİZE SOĞAN",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 229,
+      "lineTotal": 229,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          16
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "footer": {
+    "subtotal": null,
+    "total": 3704,
+    "vatTotal": 336.73,
+    "payments": []
+  },
+  "fuel": null,
+  "footerStartIndex": 17,
+  "extractionMs": 0,
+  "vatProvenance": {
+    "value": 336.73,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      17
+    ],
+    "method": "footer:vat-label-inline"
+  },
+  "totalProvenance": {
+    "value": 3704,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      18
+    ],
+    "method": "footer:total-label-inline"
+  },
+  "subtotalProvenance": null
+}

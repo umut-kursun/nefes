@@ -15,17 +15,17 @@
   "products": [
     {
       "name": "ALGIDA FRIGOLA",
-      "quantity": 1,
+      "quantity": 9,
       "unit": "ad",
-      "unitPrice": 360,
+      "unitPrice": 40,
       "lineTotal": 360,
       "vatRatePercentage": 1
     },
     {
       "name": "MARLBORO EDGE SLIMS",
-      "quantity": 1,
+      "quantity": 4,
       "unit": "ad",
-      "unitPrice": 460,
+      "unitPrice": 115,
       "lineTotal": 460,
       "vatRatePercentage": 20
     },

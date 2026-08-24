@@ -1,0 +1,260 @@
+{
+  "isValid": false,
+  "consistent": false,
+  "analysisStatus": "needs_review",
+  "score": 85,
+  "errors": [
+    {
+      "id": "ReceiptTotalValidator:TOTAL_MISMATCH:total.amount",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "TOTAL_MISMATCH",
+      "message": "Declared total does not match product, charge, and discount sums.",
+      "location": {
+        "path": "total.amount"
+      },
+      "provenance": {
+        "validatorId": "ReceiptTotalValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      },
+      "suggestedFix": "Review line totals, charges, and discounts against footer total.",
+      "expected": 1506.4800000000002,
+      "actual": 1978.99
+    }
+  ],
+  "warnings": [],
+  "info": [
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[0]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"BANVİT PİLİC BONFİLE\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[1]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"KIZILAY MADEN SUYU\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[2]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"İÇİM RAHA LTAKLOZSUZ\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 2,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[3]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"İÇİM RAHA LTAKLOZSUZ\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 3,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[7]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"KOTEX ULTRA DEV EKO\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 7,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[8]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"KECHY BADEM 100ML\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 8,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[9]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"KECHY GURME STEVIA\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 9,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[10]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"BALATLI LABNE 200G\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 10,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[11]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"İÇİM RAHA LTAKLOZSUZ\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 11,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[12]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"İÇİM RAHA LTAKLOZSUZ\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 12,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[13]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"MARVEL SPIDEY ÇOKLU\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 13,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[14]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"MERAKLI MINIK - AYLI\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 14,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.95,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.15,
+  "overallConfidence": 0.7999999999999999,
+  "provenance": {
+    "purchaseConfidence": 0.95,
+    "structuralValidators": [
+      "FinancialSafetyValidator",
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 13
+  },
+  "blocking": true
+}

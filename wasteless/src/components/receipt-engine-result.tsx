@@ -2,11 +2,23 @@ import dynamic from "next/dynamic";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import { Button } from "@/components/ui/button";
+import {
+  extractPerformanceTimings,
+  type ReceiptStageTimings,
+} from "@/lib/receipt-engine-debug/formatStageTimings";
 
 const CopyAllDebugButton = dynamic(
   () =>
     import("@/components/copy-all-debug-button").then((m) => ({
       default: m.CopyAllDebugButton,
+    })),
+  { ssr: false }
+);
+
+const StageTimingsPanel = dynamic(
+  () =>
+    import("@/components/stage-timings-panel").then((m) => ({
+      default: m.StageTimingsPanel,
     })),
   { ssr: false }
 );
@@ -18,6 +30,7 @@ type Props = {
   ocrRawText?: string;
   rawVisionResponse?: string;
   analyzeResult?: unknown;
+  stageTimings?: ReceiptStageTimings;
   onBack: () => void;
 };
 
@@ -39,12 +52,16 @@ export function ReceiptEngineResult({
   ocrRawText,
   rawVisionResponse = "",
   analyzeResult,
+  stageTimings,
   onBack,
 }: Props) {
   const ocrText =
     ocrRawText?.trim() ||
     purchase.provenance.rawTexts.filter(Boolean).join("\n").trim() ||
     "";
+
+  const timings =
+    stageTimings ?? extractPerformanceTimings(analyzeResult) ?? undefined;
 
   return (
     <div className="space-y-3">
@@ -63,8 +80,11 @@ export function ReceiptEngineResult({
           ocrText={ocrText}
           rawVisionResponse={rawVisionResponse}
           analyzeResult={analyzeResult}
+          stageTimings={timings}
         />
       </div>
+
+      {timings && <StageTimingsPanel timings={timings} />}
 
       {imageDataUrl && (
         <div className="rounded-2xl border border-white/70 bg-white/75 p-3">

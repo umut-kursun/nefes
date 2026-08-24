@@ -1,0 +1,37 @@
+{
+  "merchant": "OPET PETROLCULUK A.S.",
+  "purchaseDate": "30.07.2026",
+  "purchaseTime": "20:01",
+  "receiptNumber": null,
+  "currency": null,
+  "productCount": 1,
+  "products": [
+    {
+      "rawName": "Benzin",
+      "quantity": 1,
+      "unit": "LT",
+      "unitPrice": null,
+      "lineTotal": 1917.82,
+      "vatRate": null
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 1917.82,
+    "vatTotal": null,
+    "payments": [
+      {
+        "type": "unknown",
+        "amount": 1917.82,
+        "rawLabel": "Ödeme"
+      }
+    ]
+  },
+  "total": 1917.82,
+  "vatTotal": null,
+  "payment": {
+    "type": "unknown",
+    "amount": 1917.82,
+    "rawLabel": "Ödeme"
+  }
+}

@@ -1,6 +1,6 @@
 import type { PurchaseDraft } from "../../../types/models/purchase";
 import type { ValidationIssue, ValidatorResult } from "../../../types/models/validation";
-import { createIssue, nearlyEqual } from "../issueFactory";
+import { createIssue, nearlyEqual, lineReconciliationTolerance } from "../issueFactory";
 import { buildValidatorResult } from "../scoring";
 
 const ID = "LineTotalValidator";
@@ -18,7 +18,13 @@ export function validateLineTotals(purchase: PurchaseDraft): ValidatorResult {
     }
 
     const expected = line.quantity * line.unitPrice;
-    if (!nearlyEqual(expected, line.lineTotal)) {
+    if (
+      !nearlyEqual(
+        expected,
+        line.lineTotal,
+        lineReconciliationTolerance(line.lineTotal)
+      )
+    ) {
       issues.push(
         createIssue({
           validatorId: ID,

@@ -20,7 +20,7 @@ export function validatePaymentSum(purchase: PurchaseDraft): ValidatorResult {
         validatorId: ID,
         category: "structural",
         code: "PAYMENT_WITHOUT_TOTAL",
-        severity: "WARNING",
+        severity: "ERROR",
         message: "Payments are present but receipt total is missing.",
         path: "payments",
         purchase,

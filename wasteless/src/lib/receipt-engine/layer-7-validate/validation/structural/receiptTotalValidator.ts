@@ -7,12 +7,15 @@ import {
   diagnoseReceiptTotalMismatch,
   findProductAlignmentDiagnosis,
 } from "./receiptTotalDiagnostics";
+import { reconciliationProducts } from "../reconciliationProducts";
 
 const ID = "ReceiptTotalValidator";
 
 export function validateReceiptTotal(purchase: PurchaseDraft): ValidatorResult {
   const issues: ValidationIssue[] = [];
-  const productSum = sumAmounts(purchase.products.map((p) => p.lineTotal));
+  const productSum = sumAmounts(
+    reconciliationProducts(purchase).map((p) => p.lineTotal)
+  );
   const chargeSum = sumAmounts(purchase.charges.map((c) => c.amount));
   const discountSum = sumAmounts(purchase.discounts.map((d) => d.amount));
   const expected = productSum + chargeSum + discountSum;
@@ -24,7 +27,7 @@ export function validateReceiptTotal(purchase: PurchaseDraft): ValidatorResult {
         validatorId: ID,
         category: "structural",
         code: "TOTAL_MISSING",
-        severity: "WARNING",
+        severity: "ERROR",
         message: "Receipt total is not declared.",
         path: "total",
         purchase,

@@ -1,0 +1,106 @@
+{
+  "isValid": true,
+  "consistent": true,
+  "analysisStatus": "approved",
+  "score": 90,
+  "errors": [],
+  "warnings": [
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[0]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"ÇEHRE GIDA İNŞAAT SAN.\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[1]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"BODRUM MUĞLA\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[0]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"ÇEHRE GIDA İNŞAAT SAN.\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[1]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"BODRUM MUĞLA\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.1,
+  "overallConfidence": 0.45000000000000007,
+  "provenance": {
+    "purchaseConfidence": 0.55,
+    "structuralValidators": [
+      "FinancialSafetyValidator",
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 4
+  },
+  "blocking": false
+}

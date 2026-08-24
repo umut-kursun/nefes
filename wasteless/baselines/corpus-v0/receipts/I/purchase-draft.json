@@ -1,0 +1,274 @@
+{
+  "merchant": "Özyıldız Petrol Ve Lpg Ür.inş",
+  "purchaseDate": {
+    "raw": "2026-08-08",
+    "normalized": "2026-08-08"
+  },
+  "purchaseTime": {
+    "raw": "12:19:00",
+    "normalized": "12:19:00"
+  },
+  "receiptNumber": {
+    "raw": "Fiş No:0014",
+    "normalized": "Fiş No:0014"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "ÖZYILDIZ PETROL VE LPG",
+      "quantity": 12.5,
+      "unit": "LT",
+      "unitPrice": 79.99,
+      "lineTotal": 1000,
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "semantic:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          0
+        ],
+        "rawTexts": [
+          "ÖZYILDIZ PETROL VE LPG"
+        ],
+        "ocrTexts": [
+          "ÖZYILDIZ PETROL VE LPG"
+        ],
+        "classificationRules": [
+          "semantic:fuel-merge"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "NO:203 TORBALI/İZMİR",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "NO:203 TORBALI/İZMİR"
+        ],
+        "ocrTexts": [
+          "NO:203 TORBALI/İZMİR"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "TEL: 0534 6443045",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          4
+        ],
+        "rawTexts": [
+          "TEL: 0534 6443045"
+        ],
+        "ocrTexts": [
+          "TEL: 0534 6443045"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "TORBALI VD: 7160262667",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          5
+        ],
+        "rawTexts": [
+          "TORBALI VD: 7160262667"
+        ],
+        "ocrTexts": [
+          "TORBALI VD: 7160262667"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "EPDK: BAY/939-82/36409",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:4",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          7
+        ],
+        "rawTexts": [
+          "EPDK: BAY/939-82/36409"
+        ],
+        "ocrTexts": [
+          "EPDK: BAY/939-82/36409"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "ADA NO: 7/8/9/10",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:5",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          8
+        ],
+        "rawTexts": [
+          "ADA NO: 7/8/9/10"
+        ],
+        "ocrTexts": [
+          "ADA NO: 7/8/9/10"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "MOTORİN",
+      "quantity": 1,
+      "unitPrice": 1000,
+      "lineTotal": 1000,
+      "vatRate": 20,
+      "confidence": 0.97,
+      "provenance": {
+        "productBlockId": "semantic:product:6",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          14,
+          15
+        ],
+        "rawTexts": [
+          "MOTORİN",
+          "*%20 *1.000,00"
+        ],
+        "ocrTexts": [
+          "MOTORİN",
+          "*%20 *1.000,00"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "NAKİT",
+      "amount": 1000,
+      "confidence": 0.82,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.82,
+        "layoutLineIndices": [],
+        "extractionMethod": "semantic:payment:0",
+        "rawLineCount": 22
+      }
+    }
+  ],
+  "vatSummary": [
+    {
+      "label": "TOPKDV",
+      "amount": 166.67,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "vat",
+        "confidence": 0.9,
+        "layoutLineIndices": [
+          17
+        ],
+        "extractionMethod": "footer:orphan-amount→vat",
+        "rawLineCount": 22
+      }
+    }
+  ],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 1000,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:semantic",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9,
+      "layoutLineIndices": [
+        19
+      ],
+      "extractionMethod": "footer:post-vat-total",
+      "rawLineCount": 22
+    }
+  },
+  "confidence": 0.55,
+  "fuel": {
+    "fuelType": "Motorin",
+    "liters": 12.5,
+    "pricePerLiter": 79.99,
+    "plateNumber": "34 UP 8195",
+    "stationName": "Özyıldız Petrol Ve Lpg Ür.inş"
+  },
+  "provenance": {
+    "metadataBlockId": "metadata:v2",
+    "footerBlockId": "footer:semantic",
+    "blockDocumentConfidence": 0.55,
+    "rawTexts": [
+      "ÖZYILDIZ PETROL VE LPG",
+      "ÜR.İNŞ.SAN.TİC.LTD.ŞTİ",
+      "SAİPLER MH.PHİLSA CAD.",
+      "NO:203 TORBALI/İZMİR",
+      "TEL: 0534 6443045",
+      "TORBALI VD: 7160262667",
+      "MERSİS NO: 071626266700014",
+      "EPDK: BAY/939-82/36409",
+      "ADA NO: 7/8/9/10",
+      "08-08-2026",
+      "12:19",
+      "Fiş No:0014",
+      "34 UP 8195",
+      "12,50 LT X 79,99",
+      "MOTORİN",
+      "*%20 *1.000,00",
+      "KDV",
+      "*166,67",
+      "TOPLAM",
+      "*1.000,00",
+      "NAKİT",
+      "*1.000,00"
+    ]
+  }
+}

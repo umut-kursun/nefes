@@ -1,0 +1,240 @@
+{
+  "rawLines": [
+    "MIGROS",
+    "MIGROS TİCARET A.Ş.",
+    "İNONÜ CD SILVRI ISTANBUL MJET STS MGZ.",
+    "MİMAR SINAN MH İNONÜ CD NO:84/A",
+    "SILIVRI/ISTANBUL",
+    "BÜYÜK MÜKELLEFLER V.D. 620202529513",
+    "MERKEZ ADRESİ: ATAATÜRK MAH. TURGUT ÖZAL",
+    "BUL. NO:7 ATAŞEHİR/ISTANBUL",
+    "TARİH:16/08/2026",
+    "SAAT:19:33",
+    "FIŞ NO: 0347",
+    "BİLGİ FİŞİ",
+    "Tür: e-Arşiv Fatura",
+    "Fatura/İrsaliye Seri Sıra No: 9190801827672016",
+    "MÜŞTERİ TCKN: 11111111111",
+    "COCA-COLA 1.5 L",
+    "LİPTON İCE TEA SEFTA.",
+    "SFRESH PATATES 1 KG",
+    "MİGROS PLASTİK POSET",
+    "SELPAK YAĞ EMİCİ HV.",
+    "İNDİRİMLER:",
+    "*SECALPA",
+    "SELPAK YAĞ EMİCİ HV.",
+    "*20",
+    "TOPKDV",
+    "*33,99",
+    "TOPLAM",
+    "*477,90",
+    "#453360****4421 ORTAK POS",
+    "MERSİS NO: 06220252951300016",
+    "www.migros.com.tr",
+    "İRSALİYE YERİNE GEÇER",
+    "İMZA:",
+    "KASİYER 004 346529",
+    "FATURA: https://earsiv.migros.com.tr"
+  ],
+  "products": [
+    {
+      "rawName": "MIGROS",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          0
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "BÜYÜK MÜKELLEFLER V.D. 620202529513",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          5
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "BİLGİ FİŞİ",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          11
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "Tür: e-Arşiv Fatura",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          12
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "Fatura/İrsaliye Seri Sıra No: 9190801827672016",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          13
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "COCA-COLA 1.5 L",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          15
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "LİPTON İCE TEA SEFTA.",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          16
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "SFRESH PATATES 1 KG",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          17
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "MİGROS PLASTİK POSET",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          18
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "SELPAK YAĞ EMİCİ HV.",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          19
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "footer": {
+    "subtotal": null,
+    "total": 477.9,
+    "vatTotal": 33.99,
+    "payments": [
+      {
+        "type": "unknown",
+        "amount": 20,
+        "rawLabel": "Ödeme"
+      },
+      {
+        "type": "credit_card",
+        "amount": 477.9,
+        "rawLabel": "ORTAK POS"
+      }
+    ]
+  },
+  "fuel": null,
+  "footerStartIndex": 20,
+  "extractionMs": 6,
+  "vatProvenance": {
+    "value": 33.99,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      25
+    ],
+    "method": "footer:orphan-amount→vat"
+  },
+  "totalProvenance": {
+    "value": 477.9,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      27
+    ],
+    "method": "footer:post-vat-total"
+  },
+  "subtotalProvenance": null
+}

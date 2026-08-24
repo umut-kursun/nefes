@@ -1,0 +1,577 @@
+{
+  "baselineVersion": "corpus-v0",
+  "capturedAt": "2026-08-24T07:15:32.115Z",
+  "immutable": true,
+  "corpusIds": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "model": "gpt-4o-mini",
+  "promptHash": "649e08ca811c7f40d02480e50e3b7faefdc6e38429bb9173f9f5ea3116740733",
+  "flags": {
+    "USE_RECEIPT_ENGINE_V2": "true",
+    "RECEIPT_PARSER_MODE": "vision_first"
+  },
+  "preprocessNote": "Baseline captured from Node harness with raw PNG (no client preprocess). Production Trust Gate should re-run with client preprocess before rollout.",
+  "receipts": [
+    {
+      "id": "A",
+      "name": "Migros 0347",
+      "domain": "supermarket",
+      "merchant": "Migros",
+      "total": 477.9,
+      "vat": null,
+      "productCount": 10,
+      "productNames": [
+        "MIGROS",
+        "BÜYÜK MÜKELLEFLER V.D. 620202529513",
+        "BİLGİ FİŞİ",
+        "Tür: e-Arşiv Fatura",
+        "Fatura/İrsaliye Seri Sıra No: 9190801827672016",
+        "COCA-COLA 1.5 L",
+        "LİPTON İCE TEA SEFTA.",
+        "SFRESH PATATES 1 KG",
+        "MİGROS PLASTİK POSET",
+        "SELPAK YAĞ EMİCİ HV."
+      ],
+      "paymentCount": 2,
+      "paymentAmounts": [
+        20,
+        477.9
+      ],
+      "paymentMethods": [
+        null,
+        null
+      ],
+      "category": "market",
+      "subcategory": null,
+      "analysisStatus": "needs_review",
+      "parseStatus": "needs_review",
+      "isValid": false,
+      "consistent": false,
+      "score": 15,
+      "reviewReason": "PAYMENT_TOTAL_INCOHERENT, TOTAL_MISMATCH",
+      "engineUsed": "v2",
+      "engineFallback": false,
+      "parserId": "supermarket-v1",
+      "classification": {
+        "family": "supermarket",
+        "confidence": 0.55,
+        "signals": [
+          "merchant:migros"
+        ]
+      },
+      "timings": {
+        "totalMs": 45045,
+        "ocrMs": 15919,
+        "visionMs": 15919,
+        "extractionMs": 6,
+        "validationMs": 1,
+        "purchaseDraftMs": 18
+      },
+      "groundTruth": {
+        "merchantContains": "Migros",
+        "total": 477.9,
+        "vat": 33.99,
+        "paymentAmount": 477.9,
+        "categoryId": "market",
+        "date": "2026-08-16",
+        "time": "19:33"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "B",
+      "name": "5M Migros 0242",
+      "domain": "supermarket",
+      "merchant": "Migros",
+      "total": 1978.99,
+      "vat": null,
+      "productCount": 15,
+      "productNames": [
+        "BANVİT PİLİC BONFİLE",
+        "KIZILAY MADEN SUYU",
+        "İÇİM RAHA LTAKLOZSUZ",
+        "İÇİM RAHA LTAKLOZSUZ",
+        "DOMESTOS+CIF KREM",
+        "KELLOGGS CORN FLA",
+        "ALPRO BADEMLİ İÇECEK",
+        "KOTEX ULTRA DEV EKO",
+        "KECHY BADEM 100ML",
+        "KECHY GURME STEVIA",
+        "BALATLI LABNE 200G",
+        "İÇİM RAHA LTAKLOZSUZ",
+        "İÇİM RAHA LTAKLOZSUZ",
+        "MARVEL SPIDEY ÇOKLU",
+        "MERAKLI MINIK - AYLI"
+      ],
+      "paymentCount": 0,
+      "paymentAmounts": [],
+      "paymentMethods": [],
+      "category": "market",
+      "subcategory": null,
+      "analysisStatus": "needs_review",
+      "parseStatus": "needs_review",
+      "isValid": false,
+      "consistent": false,
+      "score": 85,
+      "reviewReason": "TOTAL_MISMATCH",
+      "engineUsed": "v1",
+      "engineFallback": true,
+      "parserId": null,
+      "classification": null,
+      "timings": {
+        "totalMs": 69269,
+        "ocrMs": 17949,
+        "visionMs": null,
+        "extractionMs": null,
+        "validationMs": 1,
+        "purchaseDraftMs": 69
+      },
+      "groundTruth": {
+        "merchantContains": "5M",
+        "total": 1978.99,
+        "vat": 127.22,
+        "paymentAmount": 1978.99,
+        "categoryId": "market",
+        "date": "2026-08-15",
+        "time": "21:38"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "C",
+      "name": "File Market",
+      "domain": "supermarket",
+      "merchant": "File Market",
+      "total": 1118.83,
+      "vat": null,
+      "productCount": 18,
+      "productNames": [
+        "ÇOKOMEL 180 G SADE",
+        "ZEYT.KEKİK.BAGET300G",
+        "SADE BAGET 260G",
+        "Okunamayan kalem",
+        "ALISVERIS POŞETİ",
+        "GLUTENSİZ ÜRÜN",
+        "POTKARNIŞ SALATALIK",
+        "0.366 KG",
+        "0.572 KG",
+        "HAVUÇ",
+        "0.944 KG",
+        "İTHAL MİLZ",
+        "ANANAS",
+        "FİYONK KRAKER 200G",
+        "HARRAS GZN YMRTA M",
+        "KORNİŞON TURS.HARRAS",
+        "SADE KEÇHY GLİNSZ",
+        "GLUTENSİZ ÜRÜN"
+      ],
+      "paymentCount": 1,
+      "paymentAmounts": [
+        1118.83
+      ],
+      "paymentMethods": [
+        null
+      ],
+      "category": "market",
+      "subcategory": null,
+      "analysisStatus": "needs_review",
+      "parseStatus": "needs_review",
+      "isValid": false,
+      "consistent": false,
+      "score": 85,
+      "reviewReason": "MISSING_CHARGE",
+      "engineUsed": "v1",
+      "engineFallback": true,
+      "parserId": null,
+      "classification": null,
+      "timings": {
+        "totalMs": 64590,
+        "ocrMs": 19413,
+        "visionMs": null,
+        "extractionMs": null,
+        "validationMs": 0,
+        "purchaseDraftMs": 15
+      },
+      "groundTruth": {
+        "merchantContains": "File Market",
+        "total": 1118.83,
+        "vat": 18.67,
+        "paymentAmount": 1118.83,
+        "categoryId": "market"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "D",
+      "name": "Tiki Beach",
+      "domain": "restaurant",
+      "merchant": "Çalgın Turizm",
+      "total": 365,
+      "vat": null,
+      "productCount": 4,
+      "productNames": [
+        "TİKİ BEACH BODRUM ŞUBESİ",
+        "BODRUM/MUĞLA",
+        "MARMARİS VD: 22509211112",
+        "İÇECEK"
+      ],
+      "paymentCount": 1,
+      "paymentAmounts": [
+        365
+      ],
+      "paymentMethods": [
+        null
+      ],
+      "category": "market",
+      "subcategory": null,
+      "analysisStatus": "approved",
+      "parseStatus": "pending_approval",
+      "isValid": true,
+      "consistent": true,
+      "score": 85,
+      "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+      "engineUsed": "v2",
+      "engineFallback": false,
+      "parserId": "restaurant-v1",
+      "classification": {
+        "family": "restaurant",
+        "confidence": 0.4,
+        "signals": [
+          "layout:simple_pos"
+        ]
+      },
+      "timings": {
+        "totalMs": 9718,
+        "ocrMs": 9711,
+        "visionMs": 9711,
+        "extractionMs": 1,
+        "validationMs": 0,
+        "purchaseDraftMs": 7
+      },
+      "groundTruth": {
+        "merchantContains": "Tiki",
+        "total": 365,
+        "vat": 33.18,
+        "paymentAmount": 365,
+        "categoryId": "yeme_icme",
+        "date": "2026-08-11",
+        "time": "23:46"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "E",
+      "name": "Altınkılıçlar Kahve",
+      "domain": "restaurant",
+      "merchant": "Altınkılıçlar Kahve",
+      "total": 695,
+      "vat": null,
+      "productCount": 12,
+      "productNames": [
+        "Altınkılıçlar kahve",
+        "Kakao Ürünleri Tic.ve San.A.ş",
+        "Oksijen 266-A",
+        "Marmara Kurumlar V.DQ",
+        "Füme Keten Tohumlu",
+        "*215,00",
+        "Espresso Double Ag",
+        "*125,00",
+        "Capuccino Küçük Ag",
+        "*165,00",
+        "Draft Americano Ag",
+        "*190,00"
+      ],
+      "paymentCount": 1,
+      "paymentAmounts": [
+        695
+      ],
+      "paymentMethods": [
+        null
+      ],
+      "category": "market",
+      "subcategory": null,
+      "analysisStatus": "approved",
+      "parseStatus": "pending_approval",
+      "isValid": true,
+      "consistent": true,
+      "score": 60,
+      "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+      "engineUsed": "v2",
+      "engineFallback": false,
+      "parserId": "restaurant-v1",
+      "classification": {
+        "family": "restaurant",
+        "confidence": 0.4,
+        "signals": [
+          "layout:simple_pos"
+        ]
+      },
+      "timings": {
+        "totalMs": 12231,
+        "ocrMs": 12226,
+        "visionMs": 12226,
+        "extractionMs": 0,
+        "validationMs": 0,
+        "purchaseDraftMs": 5
+      },
+      "groundTruth": {
+        "merchantContains": "Altınkılıç",
+        "total": 695,
+        "vat": 63.18,
+        "paymentAmount": 695,
+        "categoryId": "yeme_icme",
+        "date": "2026-08-08",
+        "time": "10:49"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "F",
+      "name": "Petrol Ofisi",
+      "domain": "fuel",
+      "merchant": "Petrol Ofisi",
+      "total": 2200.66,
+      "vat": null,
+      "productCount": 7,
+      "productNames": [
+        "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+        "NO:221/2/3 ALTINOVA/YALOVA",
+        "TEL: 02264656314",
+        "B. Mükellefler VD: 7290015043",
+        "LİSANS NO: BAY/939-82/48208",
+        "TİC. SİC NO: 498819",
+        "V/MAX DİESEL"
+      ],
+      "paymentCount": 1,
+      "paymentAmounts": [
+        2200.66
+      ],
+      "paymentMethods": [
+        null
+      ],
+      "category": "akaryakit",
+      "subcategory": "Benzin",
+      "analysisStatus": "approved",
+      "parseStatus": "pending_approval",
+      "isValid": true,
+      "consistent": true,
+      "score": 70,
+      "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+      "engineUsed": "v2",
+      "engineFallback": false,
+      "parserId": "fuel-v1",
+      "classification": {
+        "family": "fuel",
+        "confidence": 0.9500000000000001,
+        "signals": [
+          "merchant:fuel",
+          "layout:fuel_lt_qty_line"
+        ]
+      },
+      "timings": {
+        "totalMs": 8917,
+        "ocrMs": 8913,
+        "visionMs": 8913,
+        "extractionMs": 1,
+        "validationMs": 0,
+        "purchaseDraftMs": 4
+      },
+      "groundTruth": {
+        "merchantContains": "Petrol",
+        "total": 2200.66,
+        "vat": 366.78,
+        "paymentAmount": 2200.66,
+        "categoryId": "akaryakit"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "G",
+      "name": "Çehre Gıda",
+      "domain": "restaurant",
+      "merchant": "Çehre İnşaat",
+      "total": 3704,
+      "vat": null,
+      "productCount": 10,
+      "productNames": [
+        "ÇEHRE GIDA İNŞAAT SAN.",
+        "BODRUM MUĞLA",
+        "Akali Burger 160 Gr",
+        "Benji",
+        "Patates Kızartması",
+        "Akali Burger 160 Gr",
+        "Pepsi",
+        "Pepsi",
+        "KARAMELİZE SOĞAN",
+        "KARAMELİZE SOĞAN"
+      ],
+      "paymentCount": 0,
+      "paymentAmounts": [],
+      "paymentMethods": [],
+      "category": "yeme_icme",
+      "subcategory": null,
+      "analysisStatus": "approved",
+      "parseStatus": "pending_approval",
+      "isValid": true,
+      "consistent": true,
+      "score": 90,
+      "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+      "engineUsed": "v2",
+      "engineFallback": false,
+      "parserId": "generic-v1",
+      "classification": {
+        "family": "generic",
+        "confidence": 0.3,
+        "signals": [
+          "fallback:low_signal"
+        ]
+      },
+      "timings": {
+        "totalMs": 12600,
+        "ocrMs": 12594,
+        "visionMs": 12594,
+        "extractionMs": 0,
+        "validationMs": 0,
+        "purchaseDraftMs": 6
+      },
+      "groundTruth": {
+        "merchantContains": "Çehre",
+        "total": 3704,
+        "vat": 336.73,
+        "paymentAmount": 3704,
+        "categoryId": "yeme_icme",
+        "date": "2026-08-11",
+        "time": "21:16"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "H",
+      "name": "Şengül Hediyelik",
+      "domain": "retail",
+      "merchant": "Şengül Hediyelik Şenol Şengül",
+      "total": 1000,
+      "vat": null,
+      "productCount": 5,
+      "productNames": [
+        "ŞENGÜL HEDİYELİK",
+        "ŞENOL ŞENGÜL",
+        "BODRUM/MUĞLA",
+        "BODRUM VD 8060240966",
+        "HEDİYELİK EŞYA"
+      ],
+      "paymentCount": 1,
+      "paymentAmounts": [
+        1000
+      ],
+      "paymentMethods": [
+        null
+      ],
+      "category": "market",
+      "subcategory": null,
+      "analysisStatus": "approved",
+      "parseStatus": "pending_approval",
+      "isValid": true,
+      "consistent": true,
+      "score": 80,
+      "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+      "engineUsed": "v2",
+      "engineFallback": false,
+      "parserId": "generic-v1",
+      "classification": {
+        "family": "retail",
+        "confidence": 0.25,
+        "signals": [
+          "layout:minimal_products"
+        ]
+      },
+      "timings": {
+        "totalMs": 14113,
+        "ocrMs": 14108,
+        "visionMs": 14108,
+        "extractionMs": 0,
+        "validationMs": 0,
+        "purchaseDraftMs": 5
+      },
+      "groundTruth": {
+        "merchantContains": "Şengül",
+        "total": 1000,
+        "paymentAmount": 1000,
+        "categoryId": "diger",
+        "date": "2026-08-12",
+        "time": "00:05"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    },
+    {
+      "id": "I",
+      "name": "Özyıldız Petrol",
+      "domain": "fuel",
+      "merchant": "Özyıldız Petrol Ve Lpg Ür.inş",
+      "total": 1000,
+      "vat": null,
+      "productCount": 7,
+      "productNames": [
+        "ÖZYILDIZ PETROL VE LPG",
+        "NO:203 TORBALI/İZMİR",
+        "TEL: 0534 6443045",
+        "TORBALI VD: 7160262667",
+        "EPDK: BAY/939-82/36409",
+        "ADA NO: 7/8/9/10",
+        "MOTORİN"
+      ],
+      "paymentCount": 1,
+      "paymentAmounts": [
+        1000
+      ],
+      "paymentMethods": [
+        null
+      ],
+      "category": "akaryakit",
+      "subcategory": "Motorin",
+      "analysisStatus": "needs_review",
+      "parseStatus": "needs_review",
+      "isValid": false,
+      "consistent": false,
+      "score": 60,
+      "reviewReason": "MISSING_CHARGE",
+      "engineUsed": "v2",
+      "engineFallback": false,
+      "parserId": "fuel-v1",
+      "classification": {
+        "family": "fuel",
+        "confidence": 0.9500000000000001,
+        "signals": [
+          "merchant:fuel",
+          "layout:fuel_lt_qty_line"
+        ]
+      },
+      "timings": {
+        "totalMs": 11233,
+        "ocrMs": 11227,
+        "visionMs": 11227,
+        "extractionMs": 1,
+        "validationMs": 0,
+        "purchaseDraftMs": 6
+      },
+      "groundTruth": {
+        "merchantContains": "Özyıldız",
+        "total": 1000,
+        "paymentAmount": 1000,
+        "categoryId": "akaryakit",
+        "date": "2026-08-08",
+        "time": "12:19"
+      },
+      "capturedAt": "2026-08-24T07:15:32.115Z"
+    }
+  ]
+}

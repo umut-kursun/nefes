@@ -19,6 +19,44 @@ import {
   type GoldenOcrFixtureEntry,
 } from "../../../../fixtures/vision/ocr-golden/catalog";
 
+function normalizeMerchantTitle(title: string): string {
+  return title
+    .replace(/ı/g, "i")
+    .replace(/İ/g, "i")
+    .replace(/ş/g, "s")
+    .replace(/Ş/g, "s")
+    .replace(/ğ/g, "g")
+    .replace(/Ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/Ü/g, "u")
+    .replace(/ö/g, "o")
+    .replace(/Ö/g, "o")
+    .replace(/ç/g, "c")
+    .replace(/Ç/g, "c")
+    .toLocaleUpperCase("en-US")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function assertProductChecks(
+  products: readonly { name: string; quantity?: number; unitPrice?: number; lineTotal: number }[],
+  checks: GoldenOcrFixtureEntry["expected"]["productChecks"]
+) {
+  for (const check of checks ?? []) {
+    const product = products.find((p) => p.name.includes(check.nameMatch));
+    expect(product, `missing product: ${check.nameMatch}`).toBeDefined();
+    if (check.quantity != null) {
+      expect(product!.quantity).toBeCloseTo(check.quantity, 2);
+    }
+    if (check.unitPrice != null) {
+      expect(product!.unitPrice).toBeCloseTo(check.unitPrice, 2);
+    }
+    if (check.lineTotal != null) {
+      expect(product!.lineTotal).toBeCloseTo(check.lineTotal, 2);
+    }
+  }
+}
+
 function runPipeline(entry: GoldenOcrFixtureEntry) {
   const raw = loadGoldenOcrFixture(entry);
   const extract = coerceVisionOcrExtract(raw);
@@ -33,10 +71,13 @@ describe.each(GOLDEN_OCR_CATALOG)("$id — $label", (entry) => {
     const raw = loadGoldenOcrFixture(entry);
     const extract = coerceVisionOcrExtract(raw);
 
-    expect(extract.merchant.title).toBeTruthy();
+    expect(
+      normalizeMerchantTitle(extract.merchant.title)
+    ).toBe(normalizeMerchantTitle(entry.expected.merchantTitle));
+    expect(extract.merchant.category).toBe(entry.expected.merchantCategory);
+    expect(extract.metadata.purchaseDate).toBe(entry.expected.purchaseDate);
     expect(extract.productLines.length).toBeGreaterThan(0);
     expect(extract.footerLines.length).toBeGreaterThan(0);
-    expect(extract.metadata.purchaseDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
     for (const line of extract.productLines) {
       expect(line.text.trim()).not.toBe("");
@@ -50,7 +91,12 @@ describe.each(GOLDEN_OCR_CATALOG)("$id — $label", (entry) => {
     const { parsed } = runPipeline(entry);
 
     expect(parsed.products.length).toBeGreaterThan(0);
+    expect(parsed.metadata.purchaseDate).toBe(entry.expected.purchaseDate);
     expect(parsed.financials.totalAmount).toBeCloseTo(entry.expected.totalAmount, 2);
+    expect(
+      normalizeMerchantTitle(parsed.merchant.title)
+    ).toBe(normalizeMerchantTitle(entry.expected.merchantTitle));
+    expect(parsed.merchant.category).toBe(entry.expected.merchantCategory);
 
     for (const pattern of entry.expected.forbiddenProductPatterns) {
       expect(parsed.products.some((p) => pattern.test(p.name))).toBe(false);
@@ -67,22 +113,7 @@ describe.each(GOLDEN_OCR_CATALOG)("$id — $label", (entry) => {
     expect(normalized.products.some((p) => isStandaloneMultiplierProduct(p))).toBe(
       false
     );
-
-    for (const check of entry.expected.productChecks ?? []) {
-      const product = normalized.products.find((p) =>
-        p.name.includes(check.nameMatch)
-      );
-      expect(product, `missing product: ${check.nameMatch}`).toBeDefined();
-      if (check.quantity != null) {
-        expect(product!.quantity).toBe(check.quantity);
-      }
-      if (check.unitPrice != null) {
-        expect(product!.unitPrice).toBeCloseTo(check.unitPrice, 2);
-      }
-      if (check.lineTotal != null) {
-        expect(product!.lineTotal).toBeCloseTo(check.lineTotal, 2);
-      }
-    }
+    assertProductChecks(normalized.products, entry.expected.productChecks);
 
     if (entry.expected.bagCount != null) {
       const bags = normalized.products.filter((p) => /POSET|POŞET/i.test(p.name));
@@ -94,6 +125,11 @@ describe.each(GOLDEN_OCR_CATALOG)("$id — $label", (entry) => {
     const { finalized } = runPipeline(entry);
 
     expect(finalized.financials.totalAmount).toBeCloseTo(entry.expected.totalAmount, 2);
+    expect(finalized.metadata.purchaseDate).toBe(entry.expected.purchaseDate);
+    expect(
+      normalizeMerchantTitle(finalized.merchant.title)
+    ).toBe(normalizeMerchantTitle(entry.expected.merchantTitle));
+    expect(finalized.merchant.category).toBe(entry.expected.merchantCategory);
 
     for (const key of entry.expected.keyProducts) {
       expect(
@@ -101,6 +137,8 @@ describe.each(GOLDEN_OCR_CATALOG)("$id — $label", (entry) => {
         `expected product containing "${key}"`
       ).toBe(true);
     }
+
+    assertProductChecks(finalized.products, entry.expected.productChecks);
 
     if (entry.expected.minProductCount != null) {
       expect(finalized.products.length).toBeGreaterThanOrEqual(
@@ -112,6 +150,18 @@ describe.each(GOLDEN_OCR_CATALOG)("$id — $label", (entry) => {
         entry.expected.maxProductCount
       );
     }
+
+    if (entry.expected.discountCount != null) {
+      expect(finalized.discounts?.length ?? 0).toBe(entry.expected.discountCount);
+    }
+
+    if (entry.expected.paymentAmount != null) {
+      const paymentTotal = (finalized.payments ?? []).reduce(
+        (sum, p) => sum + p.amount,
+        0
+      );
+      expect(paymentTotal).toBeCloseTo(entry.expected.paymentAmount, 2);
+    }
   });
 
   it("e) parsedReceiptToPurchaseDraft exports purchase draft", async () => {
@@ -120,6 +170,9 @@ describe.each(GOLDEN_OCR_CATALOG)("$id — $label", (entry) => {
 
     expect(purchase.total?.amount).toBeCloseTo(entry.expected.totalAmount, 2);
     expect(purchase.products.length).toBeGreaterThan(0);
+    expect(
+      normalizeMerchantTitle(purchase.merchant ?? "")
+    ).toContain(normalizeMerchantTitle(entry.expected.merchantTitle.split(" ")[0]!));
   });
 
   it("f) validateReceiptTotal — total must match expected", async () => {

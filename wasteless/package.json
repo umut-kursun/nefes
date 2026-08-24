@@ -1,6 +1,6 @@
 {
   "name": "wasteless",
-  "version": "1.0.0-beta.82",
+  "version": "1.0.0-beta.115",
   "private": true,
   "engines": {
     "node": ">=20"
@@ -12,6 +12,13 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:corpus-contract": "vitest run src/lib/receipt-accuracy-contract",
+    "corpus:contract": "tsx scripts/corpus-contract-runner.ts --tier=frozen-baseline",
+    "corpus:contract:replay": "tsx scripts/corpus-contract-runner.ts --tier=tier-a-replay",
+    "corpus:contract:live": "tsx scripts/corpus-contract-runner.ts --tier=tier-b-live",
+    "test:v2-golden": "vitest run src/lib/receipt-engine-v2/tests/golden/golden.test.ts",
+    "golden:v2:generate": "tsx src/lib/receipt-engine-v2/tests/golden/generateExpectations.ts",
+    "benchmark:v1-v2": "tsx src/lib/receipt-engine-v2/benchmark/scripts/run-v1-v2-benchmark.ts",
     "test:v3-golden": "vitest run src/lib/receipt-engine-v3/__tests__/golden.test.ts src/lib/receipt-engine-v3/__tests__/v3-regression.test.ts",
     "corpus:build": "tsx src/lib/receipt-engine-quality/scripts/buildCorpus.ts",
     "quality:dashboard": "tsx src/lib/receipt-engine-quality/scripts/generateRegressionDashboard.ts",

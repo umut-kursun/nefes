@@ -156,6 +156,9 @@ async function analyzePreprocessedImages(
   imageDataUrl: string;
   performance: import("@/lib/receipt-engine-debug/formatStageTimings").ReceiptStageTimings;
   scanTimeline?: ScanTimelinePayload;
+  engineResult?: import("@/lib/receipt-engine-v2/engine/types").ReceiptEngineV2Result;
+  engineUsed?: "v1" | "v2";
+  engineFallback?: boolean;
 }> {
 
   const body = new FormData();
@@ -249,6 +252,16 @@ async function analyzePreprocessedImages(
     },
 
     scanTimeline,
+    engineResult:
+      json.engineResult && typeof json.engineResult === "object"
+        ? (json.engineResult as import("@/lib/receipt-engine-v2/engine/types").ReceiptEngineV2Result)
+        : undefined,
+    engineUsed:
+      json.engineUsed === "v1" || json.engineUsed === "v2"
+        ? json.engineUsed
+        : undefined,
+    engineFallback:
+      typeof json.engineFallback === "boolean" ? json.engineFallback : undefined,
   };
 }
 
@@ -401,6 +414,9 @@ export async function runBackgroundReceiptParse(
             clientTotalMs: Math.round(performance.now() - pipelineStart),
           },
           scanTimeline: result.scanTimeline ?? null,
+          engineResult: result.engineResult ?? null,
+          engineUsed: result.engineUsed ?? null,
+          engineFallback: result.engineFallback ?? false,
         },
 
         null,
@@ -413,13 +429,20 @@ export async function runBackgroundReceiptParse(
 
 
 
+    const parseStatus =
+      result.validation.analysisStatus === "approved"
+        ? "pending_approval"
+        : result.validation.analysisStatus === "needs_review"
+          ? "needs_review"
+          : "failed";
+
     const pending: Expense = {
 
       ...parsed,
 
       id: job.expenseId,
 
-      parseStatus: "pending_approval",
+      parseStatus,
 
       updatedAt: new Date().toISOString(),
 

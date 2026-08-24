@@ -1,0 +1,244 @@
+{
+  "isValid": false,
+  "consistent": false,
+  "analysisStatus": "needs_review",
+  "score": 60,
+  "errors": [
+    {
+      "id": "ReceiptTotalValidator:MISSING_CHARGE:total.amount",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "MISSING_CHARGE",
+      "message": "Ürün toplamı fiş tutarından yüksek — poşet, kargo veya servis bedeli eksik olabilir.",
+      "location": {
+        "path": "total.amount"
+      },
+      "provenance": {
+        "validatorId": "ReceiptTotalValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      },
+      "suggestedFix": "charges[] içine eksik ek ücret satırını ekleyin.",
+      "expected": 2000,
+      "actual": 1000
+    }
+  ],
+  "warnings": [
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[1]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"NO:203 TORBALI/İZMİR\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[2]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"TEL: 0534 6443045\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 2,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[3]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"TORBALI VD: 7160262667\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 3,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[4]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"EPDK: BAY/939-82/36409\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 4,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:LINE_TOTAL_MISSING:products[5]",
+      "severity": "WARNING",
+      "category": "business",
+      "code": "LINE_TOTAL_MISSING",
+      "message": "Product \"ADA NO: 7/8/9/10\" has no line total.",
+      "location": {
+        "path": "products",
+        "index": 5,
+        "field": "lineTotal"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "info": [
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[0]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"ÖZYILDIZ PETROL VE LPG\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 0,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[1]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"NO:203 TORBALI/İZMİR\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 1,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[2]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"TEL: 0534 6443045\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 2,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[3]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"TORBALI VD: 7160262667\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 3,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[4]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"EPDK: BAY/939-82/36409\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 4,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    },
+    {
+      "id": "UnknownFieldValidator:VAT_RATE_MISSING:products[5]",
+      "severity": "INFO",
+      "category": "business",
+      "code": "VAT_RATE_MISSING",
+      "message": "Product \"ADA NO: 7/8/9/10\" has no VAT rate token.",
+      "location": {
+        "path": "products",
+        "index": 5,
+        "field": "vatRate"
+      },
+      "provenance": {
+        "validatorId": "UnknownFieldValidator",
+        "purchaseConfidence": 0.55,
+        "graphNodeIds": []
+      }
+    }
+  ],
+  "confidenceAdjustment": -0.4,
+  "overallConfidence": 0.15000000000000002,
+  "provenance": {
+    "purchaseConfidence": 0.55,
+    "structuralValidators": [
+      "FinancialSafetyValidator",
+      "ReceiptTotalValidator",
+      "SubtotalValidator",
+      "PaymentSumValidator",
+      "VatSummaryValidator",
+      "LineTotalValidator",
+      "QuantityValidator",
+      "ChargeValidator",
+      "DiscountValidator"
+    ],
+    "businessValidators": [
+      "MerchantValidator",
+      "DateValidator",
+      "CurrencyValidator",
+      "ReceiptNumberValidator",
+      "MetadataCompletenessValidator",
+      "UnknownFieldValidator",
+      "AnomalyValidator"
+    ],
+    "issueCount": 12
+  },
+  "blocking": true
+}

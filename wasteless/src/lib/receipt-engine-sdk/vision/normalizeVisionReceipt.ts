@@ -14,9 +14,9 @@ import {
   attachMigrosMultiplierMetadata,
   applyExplicitMigrosQuantities,
   dedupeMigrosPlasticBag,
-  findExplicitQuantityForProduct,
   isMigrosReceipt,
   recoverSplitMigrosProducts,
+  resolveMigrosProductQuantity,
 } from "./migrosReceiptRules";
 
 import { normalizeVisionProductNames } from "./normalizeVisionProductNames";
@@ -141,11 +141,14 @@ export function normalizeVisionReceipt(parsed: ParsedReceipt): ParsedReceipt {
       ? {
           ...explicitMigros,
           products: explicitMigros.products.map((item) => {
-            const explicit = findExplicitQuantityForProduct(
+            const resolved = resolveMigrosProductQuantity(
               explicitMigros.rawText!,
-              item.name
+              item.name,
+              item.lineTotal
             );
-            if (explicit != null) return attachMigrosMultiplierMetadata(item);
+            if (resolved?.source === "multiplier") {
+              return attachMigrosMultiplierMetadata(item);
+            }
             return item;
           }),
         }

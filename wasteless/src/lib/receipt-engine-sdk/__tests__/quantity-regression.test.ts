@@ -61,14 +61,14 @@ describe("quantity regression — Migros multipliers", () => {
     const finalized = finalizeVisionParsedReceipt(raw);
 
     const algida = finalized.products.find((p) => /FRIGOLA/i.test(p.name))!;
-    expect(algida.quantity).toBe(1);
-    expect(algida.unitPrice).toBe(360);
+    expect(algida.quantity).toBe(9);
+    expect(algida.unitPrice).toBe(40);
     expect(algida.lineTotal).toBe(360);
-    expect(algida.normalizedUnitPrice).toBe(360);
+    expect(algida.normalizedUnitPrice).toBe(40);
 
     const marlboro = finalized.products.find((p) => /MARLBORO/i.test(p.name))!;
-    expect(marlboro.quantity).toBe(1);
-    expect(marlboro.unitPrice).toBe(460);
+    expect(marlboro.quantity).toBe(4);
+    expect(marlboro.unitPrice).toBeCloseTo(115, 2);
     expect(marlboro.lineTotal).toBe(460);
 
     const cola = finalized.products.find((p) => /COLA/i.test(p.name))!;
@@ -244,7 +244,7 @@ describe("quantity regression — Migros multipliers", () => {
 
     const sofra = finalized.products.find((p) => /SOFRA/i.test(p.name))!;
     expect(sofra.name).toBe("SOFRA EKMEK");
-    expect(sofra.unit).toBe("adet");
+    expect(sofra.unit).toBe("ad");
     expect(sofra.quantity).toBe(3);
     expect(sofra.unitPrice).toBeCloseTo(25.9, 2);
 

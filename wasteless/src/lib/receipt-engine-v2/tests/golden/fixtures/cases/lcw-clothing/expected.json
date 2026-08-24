@@ -1,0 +1,45 @@
+{
+  "merchant": "LC WAIKIKI MAGAZACILIK A.S.",
+  "purchaseDate": "28.07.2026",
+  "purchaseTime": "18:22",
+  "receiptNumber": null,
+  "currency": null,
+  "productCount": 2,
+  "products": [
+    {
+      "rawName": "Tişört",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 299.99,
+      "lineTotal": 299.99,
+      "vatRate": 10
+    },
+    {
+      "rawName": "Pantolon",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 499.99,
+      "lineTotal": 499.99,
+      "vatRate": 10
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 799.98,
+    "vatTotal": null,
+    "payments": [
+      {
+        "type": "credit_card",
+        "amount": 799.98,
+        "rawLabel": "Kredi Kart 799,98"
+      }
+    ]
+  },
+  "total": 799.98,
+  "vatTotal": null,
+  "payment": {
+    "type": "credit_card",
+    "amount": 799.98,
+    "rawLabel": "Kredi Kart 799,98"
+  }
+}

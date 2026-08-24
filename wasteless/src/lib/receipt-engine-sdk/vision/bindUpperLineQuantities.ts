@@ -3,8 +3,9 @@ import type { ParsedReceipt, ReceiptItem } from "../types/ParsedReceipt";
 import { roundLineTotal } from "./parsedReceiptPostProcess";
 import { parseMultiplierText } from "./mergeStandaloneMultiplierProducts";
 import {
-  findExplicitQuantityForProduct,
   isMigrosReceipt,
+  migrosMultiplierMustPreserveQuantity,
+  shouldPreserveExplicitMigrosQuantity,
 } from "./migrosReceiptRules";
 import {
   isCollapsedQuantityLine,
@@ -15,6 +16,10 @@ import {
 /** Product row ending with printed line total, e.g. `LAKTOSUZ SÜT 200ML  *99.50`. */
 const PRODUCT_LINE_WITH_TOTAL =
   /^(.+?)\s*\*+\s*(\d+(?:[.,]\d+)?)\s*$/;
+
+/** Migros row with printed qty + total: `ALGIDA FRIGOLA 60ML *1 *360,00`. */
+const PRODUCT_LINE_WITH_EXPLICIT_QTY =
+  /^(.+?)\s*\*(\d{1,2})\s*\*+\s*(\d+(?:[.,]\d+)?)\s*$/;
 
 export type UpperLineBinding = {
   readonly nameHint: string;
@@ -68,7 +73,17 @@ function parseMultiplierLine(
 }
 
 function parseProductLine(line: string): { nameHint: string; lineTotal: number } | null {
-  const match = line.trim().match(PRODUCT_LINE_WITH_TOTAL);
+  const trimmed = line.trim();
+  const explicit = trimmed.match(PRODUCT_LINE_WITH_EXPLICIT_QTY);
+  if (explicit?.[1] && explicit[3]) {
+    const lineTotal = parseTrNumber(explicit[3]);
+    const nameHint = explicit[1].trim();
+    if (nameHint && lineTotal != null && lineTotal >= 0) {
+      return { nameHint, lineTotal };
+    }
+  }
+
+  const match = trimmed.match(PRODUCT_LINE_WITH_TOTAL);
   if (!match) return null;
 
   const lineTotal = parseTrNumber(match[2]!);
@@ -140,8 +155,11 @@ function bindingImprovesItem(
   if (!nameOk && !(collapsed && lineOk)) return false;
 
   if (rawText?.trim() && nameOk) {
-    const explicit = findExplicitQuantityForProduct(rawText, item.name);
-    if (explicit != null) return false;
+    if (
+      shouldPreserveExplicitMigrosQuantity(rawText, item.name, item.lineTotal)
+    ) {
+      return false;
+    }
   }
 
   const bindingDelta = Math.abs(
@@ -188,11 +206,12 @@ function applyBinding(item: ReceiptItem, binding: UpperLineBinding): ReceiptItem
 }
 
 function bindProductsToBindings(
-  products: readonly ReceiptItem[],
-  bindings: readonly UpperLineBinding[],
-  rawText: string | null | undefined,
-  migros: boolean
+  parsed: ParsedReceipt,
+  bindings: readonly UpperLineBinding[]
 ): ReceiptItem[] {
+  const rawText = parsed.rawText;
+  const migros = isMigrosReceipt(parsed);
+  const products = parsed.products;
   const usedBindings = new Set<number>();
   const updated = products.map((item) => ({ ...item }));
 
@@ -202,11 +221,7 @@ function bindProductsToBindings(
       if (usedBindings.has(b)) continue;
       if (!namesMatch(updated[p]!.name, bindings[b]!.nameHint)) continue;
       if (!bindingImprovesItem(updated[p]!, bindings[b]!, rawText)) continue;
-      if (
-        migros &&
-        rawText?.trim() &&
-        findExplicitQuantityForProduct(rawText, updated[p]!.name) != null
-      ) {
+      if (migros && migrosMultiplierMustPreserveQuantity(parsed, updated[p]!)) {
         continue;
       }
       updated[p] = applyBinding(updated[p]!, bindings[b]!);
@@ -228,11 +243,7 @@ function bindProductsToBindings(
     }
     if (candidates.length !== 1) continue;
     const idx = candidates[0]!;
-    if (
-      migros &&
-      rawText?.trim() &&
-      findExplicitQuantityForProduct(rawText, updated[idx]!.name) != null
-    ) {
+    if (migros && migrosMultiplierMustPreserveQuantity(parsed, updated[idx]!)) {
       continue;
     }
     updated[idx] = applyBinding(updated[idx]!, binding);
@@ -253,11 +264,6 @@ export function bindUpperLineQuantities(parsed: ParsedReceipt): ParsedReceipt {
 
   return {
     ...parsed,
-    products: bindProductsToBindings(
-      parsed.products,
-      bindings,
-      parsed.rawText,
-      isMigrosReceipt(parsed)
-    ),
+    products: bindProductsToBindings(parsed, bindings),
   };
 }

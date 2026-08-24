@@ -1,0 +1,64 @@
+{
+  "id": "C",
+  "name": "File Market",
+  "domain": "supermarket",
+  "merchant": "File Market",
+  "total": 1118.83,
+  "vat": null,
+  "productCount": 18,
+  "productNames": [
+    "ÇOKOMEL 180 G SADE",
+    "ZEYT.KEKİK.BAGET300G",
+    "SADE BAGET 260G",
+    "Okunamayan kalem",
+    "ALISVERIS POŞETİ",
+    "GLUTENSİZ ÜRÜN",
+    "POTKARNIŞ SALATALIK",
+    "0.366 KG",
+    "0.572 KG",
+    "HAVUÇ",
+    "0.944 KG",
+    "İTHAL MİLZ",
+    "ANANAS",
+    "FİYONK KRAKER 200G",
+    "HARRAS GZN YMRTA M",
+    "KORNİŞON TURS.HARRAS",
+    "SADE KEÇHY GLİNSZ",
+    "GLUTENSİZ ÜRÜN"
+  ],
+  "paymentCount": 1,
+  "paymentAmounts": [
+    1118.83
+  ],
+  "paymentMethods": [
+    null
+  ],
+  "category": "market",
+  "subcategory": null,
+  "analysisStatus": "needs_review",
+  "parseStatus": "needs_review",
+  "isValid": false,
+  "consistent": false,
+  "score": 85,
+  "reviewReason": "MISSING_CHARGE",
+  "engineUsed": "v1",
+  "engineFallback": true,
+  "parserId": null,
+  "classification": null,
+  "timings": {
+    "totalMs": 64590,
+    "ocrMs": 19413,
+    "visionMs": null,
+    "extractionMs": null,
+    "validationMs": 0,
+    "purchaseDraftMs": 15
+  },
+  "groundTruth": {
+    "merchantContains": "File Market",
+    "total": 1118.83,
+    "vat": 18.67,
+    "paymentAmount": 1118.83,
+    "categoryId": "market"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

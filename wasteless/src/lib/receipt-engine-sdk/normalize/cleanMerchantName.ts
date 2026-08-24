@@ -22,6 +22,14 @@ const LOCATION_PREFIX_RE =
   /^[A-ZÇĞİÖŞÜ0-9][A-ZÇĞİÖŞÜ0-9a-zçğıöşü.\- ]+\/\s*[A-ZÇĞİÖŞÜ][A-ZÇĞİÖŞÜa-zçğıöşü.\- ]+\s+/i;
 
 const CHAIN_HINTS: ReadonlyArray<{ pattern: RegExp; display: string }> = [
+  { pattern: /\b5m\s*migros\b/i, display: "5M Migros" },
+  { pattern: /\btiki\s*beach\b/i, display: "Tiki Beach" },
+  { pattern: /\balt[ıi]nk[ıi]l[ıi][çc]lar\s*kahve\b/i, display: "Altınkılıçlar Kahve" },
+  { pattern: /\bçehre\s*g[ıi]da\b/i, display: "Çehre Gıda" },
+  { pattern: /\bçehre\b/i, display: "Çehre Gıda" },
+  { pattern: /\bşengül\s*hediyelik\b/i, display: "Şengül Hediyelik" },
+  { pattern: /\bözy[ıi]ld[ıi]z\s*petrol\b/i, display: "Özyıldız Petrol" },
+  { pattern: /\bpetrol\s*of[ıi]s[ıi]\b/i, display: "Petrol Ofisi" },
   { pattern: /\bfile\s*market\b/i, display: "File Market" },
   { pattern: /\bf[İI]le\s*market\b/i, display: "File Market" },
   { pattern: /\bmigros\b/i, display: "Migros" },

@@ -1,0 +1,79 @@
+{
+  "capturedAt": "2026-08-24T07:15:32.115Z",
+  "model": "gpt-4o-mini",
+  "promptHash": "649e08ca811c7f40d02480e50e3b7faefdc6e38429bb9173f9f5ea3116740733",
+  "ocrRawText": "ÇEHRE GIDA İNŞAAT SAN.\nVE TİCARET LMTD. ŞİRKETİ\nYALIKAVAK MAH.\nÇOKERTME CAD. MARİNA 6 EF 13\nBODRUM MUĞLA\nPENDİK V.D. 2331236531\nTARİH : 11/08/2026\nSAAT  : 21:16:59\nFIŞ NO : 0037\nAkali Burger 160 Gr  %10 *1.049,00\nBenji                %10 *229,00\nPatates Kızartması   %10 *439,00\nAkali Burger 160 Gr  %10 *1.049,00\nPepsi                %10 *240,00\nPepsi                %10 *240,00\nKARAMELİZE SOĞAN    %10 *229,00\nKARAMELİZE SOĞAN    %10 *229,00\nTOPKDV  *336,73\nTOPLAM  *3.704,00\nKREDİ  *3.704,00\nAKTİFBANK",
+  "lines": [
+    "ÇEHRE GIDA İNŞAAT SAN.",
+    "VE TİCARET LMTD. ŞİRKETİ",
+    "YALIKAVAK MAH.",
+    "ÇOKERTME CAD. MARİNA 6 EF 13",
+    "BODRUM MUĞLA",
+    "PENDİK V.D. 2331236531",
+    "TARİH : 11/08/2026",
+    "SAAT  : 21:16:59",
+    "FIŞ NO : 0037",
+    "Akali Burger 160 Gr  %10 *1.049,00",
+    "Benji                %10 *229,00",
+    "Patates Kızartması   %10 *439,00",
+    "Akali Burger 160 Gr  %10 *1.049,00",
+    "Pepsi                %10 *240,00",
+    "Pepsi                %10 *240,00",
+    "KARAMELİZE SOĞAN    %10 *229,00",
+    "KARAMELİZE SOĞAN    %10 *229,00",
+    "TOPKDV  *336,73",
+    "TOPLAM  *3.704,00",
+    "KREDİ  *3.704,00",
+    "AKTİFBANK"
+  ],
+  "merchant": {
+    "rawName": "ÇEHRE GIDA İNŞAAT SAN.",
+    "rawAddress": "VE TİCARET LMTD. ŞİRKETİ\nYALIKAVAK MAH.\nÇOKERTME CAD. MARİNA 6 EF 13\nBODRUM MUĞLA",
+    "rawTaxNumber": "PENDİK V.D. 2331236531"
+  },
+  "metadata": {
+    "receiptNumber": "0037",
+    "purchaseDate": "2026-08-11",
+    "purchaseTime": "21:16:59"
+  },
+  "rawVisionResponse": {
+    "merchant": {
+      "rawName": "ÇEHRE GIDA İNŞAAT SAN.",
+      "rawAddress": "VE TİCARET LMTD. ŞİRKETİ\nYALIKAVAK MAH.\nÇOKERTME CAD. MARİNA 6 EF 13\nBODRUM MUĞLA",
+      "rawTaxNumber": "PENDİK V.D. 2331236531"
+    },
+    "metadata": {
+      "receiptNumber": "0037",
+      "purchaseDate": "2026-08-11",
+      "purchaseTime": "21:16:59",
+      "currency": null
+    },
+    "rawText": "ÇEHRE GIDA İNŞAAT SAN.\nVE TİCARET LMTD. ŞİRKETİ\nYALIKAVAK MAH.\nÇOKERTME CAD. MARİNA 6 EF 13\nBODRUM MUĞLA\nPENDİK V.D. 2331236531\nTARİH : 11/08/2026\nSAAT  : 21:16:59\nFIŞ NO : 0037\nAkali Burger 160 Gr  %10 *1.049,00\nBenji                %10 *229,00\nPatates Kızartması   %10 *439,00\nAkali Burger 160 Gr  %10 *1.049,00\nPepsi                %10 *240,00\nPepsi                %10 *240,00\nKARAMELİZE SOĞAN    %10 *229,00\nKARAMELİZE SOĞAN    %10 *229,00\nTOPKDV  *336,73\nTOPLAM  *3.704,00\nKREDİ  *3.704,00\nAKTİFBANK",
+    "lines": [
+      "ÇEHRE GIDA İNŞAAT SAN.",
+      "VE TİCARET LMTD. ŞİRKETİ",
+      "YALIKAVAK MAH.",
+      "ÇOKERTME CAD. MARİNA 6 EF 13",
+      "BODRUM MUĞLA",
+      "PENDİK V.D. 2331236531",
+      "TARİH : 11/08/2026",
+      "SAAT  : 21:16:59",
+      "FIŞ NO : 0037",
+      "Akali Burger 160 Gr  %10 *1.049,00",
+      "Benji                %10 *229,00",
+      "Patates Kızartması   %10 *439,00",
+      "Akali Burger 160 Gr  %10 *1.049,00",
+      "Pepsi                %10 *240,00",
+      "Pepsi                %10 *240,00",
+      "KARAMELİZE SOĞAN    %10 *229,00",
+      "KARAMELİZE SOĞAN    %10 *229,00",
+      "TOPKDV  *336,73",
+      "TOPLAM  *3.704,00",
+      "KREDİ  *3.704,00",
+      "AKTİFBANK"
+    ],
+    "confidence": null
+  },
+  "preprocessApplied": false,
+  "preprocessNote": "Node harness sends raw PNG; client enhanced+threshold preprocess not applied"
+}

@@ -1,0 +1,58 @@
+{
+  "id": "H",
+  "name": "Şengül Hediyelik",
+  "domain": "retail",
+  "merchant": "Şengül Hediyelik Şenol Şengül",
+  "total": 1000,
+  "vat": null,
+  "productCount": 5,
+  "productNames": [
+    "ŞENGÜL HEDİYELİK",
+    "ŞENOL ŞENGÜL",
+    "BODRUM/MUĞLA",
+    "BODRUM VD 8060240966",
+    "HEDİYELİK EŞYA"
+  ],
+  "paymentCount": 1,
+  "paymentAmounts": [
+    1000
+  ],
+  "paymentMethods": [
+    null
+  ],
+  "category": "market",
+  "subcategory": null,
+  "analysisStatus": "approved",
+  "parseStatus": "pending_approval",
+  "isValid": true,
+  "consistent": true,
+  "score": 80,
+  "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+  "engineUsed": "v2",
+  "engineFallback": false,
+  "parserId": "generic-v1",
+  "classification": {
+    "family": "retail",
+    "confidence": 0.25,
+    "signals": [
+      "layout:minimal_products"
+    ]
+  },
+  "timings": {
+    "totalMs": 14113,
+    "ocrMs": 14108,
+    "visionMs": 14108,
+    "extractionMs": 0,
+    "validationMs": 0,
+    "purchaseDraftMs": 5
+  },
+  "groundTruth": {
+    "merchantContains": "Şengül",
+    "total": 1000,
+    "paymentAmount": 1000,
+    "categoryId": "diger",
+    "date": "2026-08-12",
+    "time": "00:05"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

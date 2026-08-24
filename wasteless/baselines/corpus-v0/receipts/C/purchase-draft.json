@@ -1,0 +1,584 @@
+{
+  "merchant": "File Market",
+  "purchaseDate": {
+    "raw": "2023-08-15",
+    "normalized": "2023-08-15"
+  },
+  "purchaseTime": {
+    "raw": "13:17:00",
+    "normalized": "13:17:00"
+  },
+  "receiptNumber": {
+    "raw": "V1082002600464533",
+    "normalized": "V1082002600464533"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "ÇOKOMEL 180 G SADE",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 84.9,
+      "lineTotal": 84.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 84.9,
+      "variantSize": "180g",
+      "productKey": "cokomel sade 180 g 180g",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "ÇOKOMEL 180 G SADE"
+        ],
+        "ocrTexts": [
+          "ÇOKOMEL 180 G SADE"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "ZEYT.KEKİK.BAGET300G",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 57.5,
+      "lineTotal": 57.5,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 57.5,
+      "variantSize": "300g",
+      "productKey": "zeyt.kekik.baget 300 g 300g",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "ZEYT.KEKİK.BAGET300G"
+        ],
+        "ocrTexts": [
+          "ZEYT.KEKİK.BAGET300G"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "SADE BAGET 260G",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 37.5,
+      "lineTotal": 37.5,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 37.5,
+      "variantSize": "260g",
+      "productKey": "sade baget 260 g 260g",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "SADE BAGET 260G"
+        ],
+        "ocrTexts": [
+          "SADE BAGET 260G"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "Okunamayan kalem",
+      "quantity": 2,
+      "unit": "adet",
+      "unitPrice": 1,
+      "lineTotal": 2,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 1,
+      "variantSize": null,
+      "productKey": "okunamayan kalem",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "Okunamayan kalem"
+        ],
+        "ocrTexts": [
+          "Okunamayan kalem"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "ALISVERIS POŞETİ",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 89.9,
+      "lineTotal": 89.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 89.9,
+      "variantSize": null,
+      "productKey": "alisveris poseti",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:4",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "ALISVERIS POŞETİ"
+        ],
+        "ocrTexts": [
+          "ALISVERIS POŞETİ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "GLUTENSİZ ÜRÜN",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 49.9,
+      "lineTotal": 49.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 49.9,
+      "variantSize": null,
+      "productKey": "glutensiz urun",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:5",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "GLUTENSİZ ÜRÜN"
+        ],
+        "ocrTexts": [
+          "GLUTENSİZ ÜRÜN"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "POTKARNIŞ SALATALIK",
+      "quantity": 0.366,
+      "unit": "kg",
+      "unitPrice": 74.9,
+      "lineTotal": 27.41,
+      "baseUnit": "kg",
+      "normalizedUnitPrice": 74.89,
+      "variantSize": null,
+      "productKey": "potkarnis salatalik",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:6",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "POTKARNIŞ SALATALIK"
+        ],
+        "ocrTexts": [
+          "POTKARNIŞ SALATALIK"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "0.366 KG",
+      "quantity": 0.366,
+      "unit": "kg",
+      "unitPrice": 74.9,
+      "lineTotal": 27.41,
+      "baseUnit": "kg",
+      "normalizedUnitPrice": 74.89,
+      "variantSize": "0,366kg",
+      "productKey": "0.366 kg 0.37 kg 0.366kg",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:7",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "0.366 KG"
+        ],
+        "ocrTexts": [
+          "0.366 KG"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "0.572 KG",
+      "quantity": 0.572,
+      "unit": "kg",
+      "unitPrice": 59.9,
+      "lineTotal": 34.26,
+      "baseUnit": "kg",
+      "normalizedUnitPrice": 59.9,
+      "variantSize": "0,572kg",
+      "productKey": "0.572 kg 0.57 kg 0.572kg",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:8",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "0.572 KG"
+        ],
+        "ocrTexts": [
+          "0.572 KG"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "HAVUÇ",
+      "quantity": 0.572,
+      "unit": "kg",
+      "unitPrice": 59.9,
+      "lineTotal": 34.26,
+      "baseUnit": "kg",
+      "normalizedUnitPrice": 59.9,
+      "variantSize": null,
+      "productKey": "havuc",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:9",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "HAVUÇ"
+        ],
+        "ocrTexts": [
+          "HAVUÇ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "0.944 KG",
+      "quantity": 0.944,
+      "unit": "kg",
+      "unitPrice": 98.9,
+      "lineTotal": 93.34,
+      "baseUnit": "kg",
+      "normalizedUnitPrice": 98.88,
+      "variantSize": "0,944kg",
+      "productKey": "0.944 kg 0.94 kg 0.944kg",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:10",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "0.944 KG"
+        ],
+        "ocrTexts": [
+          "0.944 KG"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "İTHAL MİLZ",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 94.31,
+      "lineTotal": 94.31,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 94.31,
+      "variantSize": null,
+      "productKey": "ithal milz",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:11",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "İTHAL MİLZ"
+        ],
+        "ocrTexts": [
+          "İTHAL MİLZ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "ANANAS",
+      "quantity": 1,
+      "unit": "adet",
+      "unitPrice": 98.9,
+      "lineTotal": 98.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 98.9,
+      "variantSize": null,
+      "productKey": "ananas",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:12",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "ANANAS"
+        ],
+        "ocrTexts": [
+          "ANANAS"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "FİYONK KRAKER 200G",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 21,
+      "lineTotal": 21,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 21,
+      "variantSize": "200g",
+      "productKey": "fiyonk kraker 200 g 200g",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:13",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "FİYONK KRAKER 200G"
+        ],
+        "ocrTexts": [
+          "FİYONK KRAKER 200G"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "HARRAS GZN YMRTA M",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 165,
+      "lineTotal": 165,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 165,
+      "variantSize": null,
+      "productKey": "harras gzn ymrta m",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:14",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "HARRAS GZN YMRTA M"
+        ],
+        "ocrTexts": [
+          "HARRAS GZN YMRTA M"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "KORNİŞON TURS.HARRAS",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 72.5,
+      "lineTotal": 72.5,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 72.5,
+      "variantSize": null,
+      "productKey": "kornison turs.harras",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:15",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "KORNİŞON TURS.HARRAS"
+        ],
+        "ocrTexts": [
+          "KORNİŞON TURS.HARRAS"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "SADE KEÇHY GLİNSZ",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 98.9,
+      "lineTotal": 98.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 98.9,
+      "variantSize": null,
+      "productKey": "sade kechy glinsz",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:16",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "SADE KEÇHY GLİNSZ"
+        ],
+        "ocrTexts": [
+          "SADE KEÇHY GLİNSZ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "GLUTENSİZ ÜRÜN",
+      "quantity": 1,
+      "unit": "ad",
+      "unitPrice": 98.5,
+      "lineTotal": 98.5,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 98.5,
+      "variantSize": null,
+      "productKey": "glutensiz urun",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:17",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "GLUTENSİZ ÜRÜN"
+        ],
+        "ocrTexts": [
+          "GLUTENSİZ ÜRÜN"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "KREDİ İş Bankası ****4421",
+      "amount": 1118.83,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:vision",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "vatSummary": [
+    {
+      "label": "TOPKDV",
+      "amount": 18.67,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:vision",
+        "graphNodeIds": [],
+        "semanticKind": "vat",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 1118.83,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:vision",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9
+    }
+  },
+  "confidence": 0.95,
+  "fuel": null,
+  "provenance": {
+    "metadataBlockId": "metadata:vision",
+    "footerBlockId": "footer:vision",
+    "blockDocumentConfidence": 0.95,
+    "rawTexts": [
+      "FILE VARNALI SILIVRI",
+      "FILE MARKET MAĞAZACILIK ANONİM ŞİRKETİ",
+      "YENİ MAH.VARNALI SILIVRI DREAM SİTESİ NO",
+      "32/4 SILIVRI İSTANBUL",
+      "FATURA NO:V1082002600464533 Sıra No: 17",
+      "15.08.2023 13:17",
+      "TCKN/VKN:2046006150867204017",
+      "ÇOKOMEL 180 G SADE  *84.90",
+      "ZEYT.KEKİK.BAGET300G *57.50",
+      "SADE BAGET 260G *37.50",
+      "2 AD *1.00",
+      "ALISVERIS POŞETİ *89.90",
+      "GLUTENSİZ ÜRÜN *49.90",
+      "POTKARNIŞ SALATALIK *27.41",
+      "0.366 KG X 74.90",
+      "0.572 KG X 59.90",
+      "HAVUÇ *34.26",
+      "0.944 KG X 98.90",
+      "İTHAL MİLZ *94.31",
+      "ANANAS ADET *98.90",
+      "FİYONK KRAKER 200G *21.00",
+      "HARRAS GZN YMRTA M *165.00",
+      "KORNİŞON TURS.HARRAS *72.50",
+      "SADE KEÇHY GLİNSZ *98.90",
+      "GLUTENSİZ ÜRÜN *98.50",
+      "TOPLAM KDV 18.67",
+      "ÖDENECEK KDV Dahil Tutar *1,118.83",
+      "İş Bankası Kredi Kartı (1) *1,118.83"
+    ]
+  }
+}

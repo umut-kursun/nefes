@@ -1,0 +1,85 @@
+{
+  "capturedAt": "2026-08-24T07:15:32.115Z",
+  "model": "gpt-4o-mini",
+  "promptHash": "649e08ca811c7f40d02480e50e3b7faefdc6e38429bb9173f9f5ea3116740733",
+  "ocrRawText": "PETROL OFİSİ A.Ş.\nÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ\nNO:221/2/3 ALTINOVA/YALOVA\nTEL: 02264656314\nB. Mükellefler VD: 7290015043\nMERSİS NO: 0729-0015-0430-0023\nLİSANS NO: BAY/939-82/48208\nTİC. SİC NO: 498819\n\n13-08-2026\nFIŞ NO: 0210\n\n3400UP8195\n20:30\n30,800 LT X 71,45\nV/MAX DİESEL\n%20  *2.200,66\n\nTOPKDV\nTOPLAM\n\n*366,78\n*2.200,66\n\n*2.200,66\n\nNAKİT\n",
+  "lines": [
+    "PETROL OFİSİ A.Ş.",
+    "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+    "NO:221/2/3 ALTINOVA/YALOVA",
+    "TEL: 02264656314",
+    "B. Mükellefler VD: 7290015043",
+    "MERSİS NO: 0729-0015-0430-0023",
+    "LİSANS NO: BAY/939-82/48208",
+    "TİC. SİC NO: 498819",
+    "13-08-2026",
+    "FIŞ NO: 0210",
+    "3400UP8195",
+    "20:30",
+    "30,800 LT X 71,45",
+    "V/MAX DİESEL",
+    "%20  *2.200,66",
+    "TOPKDV",
+    "TOPLAM",
+    "*366,78",
+    "*2.200,66",
+    "*2.200,66",
+    "NAKİT"
+  ],
+  "merchant": {
+    "rawName": "PETROL OFİSİ A.Ş.",
+    "rawAddress": "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ NO:221/2/3 ALTINOVA/YALOVA",
+    "rawTaxNumber": "7290015043"
+  },
+  "metadata": {
+    "receiptNumber": "0210",
+    "purchaseDate": "2026-08-13",
+    "purchaseTime": "20:30:00"
+  },
+  "rawVisionResponse": {
+    "merchant": {
+      "rawName": "PETROL OFİSİ A.Ş.",
+      "rawAddress": "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ NO:221/2/3 ALTINOVA/YALOVA",
+      "rawTaxNumber": "7290015043"
+    },
+    "metadata": {
+      "receiptNumber": "0210",
+      "purchaseDate": "2026-08-13",
+      "purchaseTime": "20:30:00",
+      "currency": null
+    },
+    "rawText": "PETROL OFİSİ A.Ş.\nÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ\nNO:221/2/3 ALTINOVA/YALOVA\nTEL: 02264656314\nB. Mükellefler VD: 7290015043\nMERSİS NO: 0729-0015-0430-0023\nLİSANS NO: BAY/939-82/48208\nTİC. SİC NO: 498819\n\n13-08-2026\nFIŞ NO: 0210\n\n3400UP8195\n20:30\n30,800 LT X 71,45\nV/MAX DİESEL\n%20  *2.200,66\n\nTOPKDV\nTOPLAM\n\n*366,78\n*2.200,66\n\n*2.200,66\n\nNAKİT\n",
+    "lines": [
+      "PETROL OFİSİ A.Ş.",
+      "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+      "NO:221/2/3 ALTINOVA/YALOVA",
+      "TEL: 02264656314",
+      "B. Mükellefler VD: 7290015043",
+      "MERSİS NO: 0729-0015-0430-0023",
+      "LİSANS NO: BAY/939-82/48208",
+      "TİC. SİC NO: 498819",
+      "",
+      "13-08-2026",
+      "FIŞ NO: 0210",
+      "",
+      "3400UP8195",
+      "20:30",
+      "30,800 LT X 71,45",
+      "V/MAX DİESEL",
+      "%20  *2.200,66",
+      "",
+      "TOPKDV",
+      "TOPLAM",
+      "",
+      "*366,78",
+      "*2.200,66",
+      "",
+      "*2.200,66",
+      "",
+      "NAKİT"
+    ],
+    "confidence": null
+  },
+  "preprocessApplied": false,
+  "preprocessNote": "Node harness sends raw PNG; client enhanced+threshold preprocess not applied"
+}

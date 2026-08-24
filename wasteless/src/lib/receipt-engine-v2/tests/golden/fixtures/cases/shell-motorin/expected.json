@@ -1,0 +1,37 @@
+{
+  "merchant": "SHELL & TURCAS PETROL A.S.",
+  "purchaseDate": "29.07.2026",
+  "purchaseTime": "09:15",
+  "receiptNumber": null,
+  "currency": null,
+  "productCount": 1,
+  "products": [
+    {
+      "rawName": "Motorin",
+      "quantity": 1,
+      "unit": "LT",
+      "unitPrice": null,
+      "lineTotal": 2356.1,
+      "vatRate": null
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 2356.1,
+    "vatTotal": null,
+    "payments": [
+      {
+        "type": "credit_card",
+        "amount": 2356.1,
+        "rawLabel": "Kredi Kart 2356,10"
+      }
+    ]
+  },
+  "total": 2356.1,
+  "vatTotal": null,
+  "payment": {
+    "type": "credit_card",
+    "amount": 2356.1,
+    "rawLabel": "Kredi Kart 2356,10"
+  }
+}

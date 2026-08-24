@@ -1,4 +1,8 @@
 import { arrayBufferToBase64 } from "@/lib/analyze-receipt-helpers";
+import {
+  isReceiptEngineV2Enabled,
+  routeReceiptEngineAnalysis,
+} from "@/lib/receipt-engine-v2-integration";
 import { analyzeReceipt } from "@/lib/receipt-engine-sdk";
 import { stripValidatedPurchase } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
@@ -129,6 +133,54 @@ export async function analyzeReceiptEngineWithDebug(
   try {
     if (parserMode === "vision_first") {
       const t0 = Date.now();
+
+      if (isReceiptEngineV2Enabled()) {
+        const routed = await routeReceiptEngineAnalysis({
+          imageDataUrl: primaryDataUrl,
+          altImageDataUrl,
+          sourceHint: hint,
+          preprocessMs: Number.isFinite(preprocessMs) ? preprocessMs : undefined,
+          apiKey: options.apiKey,
+          model: ocrModel,
+          parserMode: "vision_first",
+          scanTimeline: serverTimeline,
+        });
+
+        if ("error" in routed) {
+          return {
+            error: routed.error,
+            status: 500,
+          };
+        }
+
+        const debugExport = buildVisionFirstDebugExport({
+          purchase: routed.purchase,
+          validation: routed.validation,
+          rawOcrText: routed.ocrRawText,
+          rawVisionResponse: routed.rawVisionResponse ?? "",
+          imageMeta,
+          ocrModel,
+          ocrDurationMs: routed.performance.ocrMs ?? Date.now() - t0,
+        });
+
+        return {
+          purchase: routed.purchase,
+          validation: routed.validation,
+          imageDataUrl: displayDataUrl,
+          debugExport,
+          ocrRawText: routed.ocrRawText,
+          rawVisionResponse: routed.rawVisionResponse,
+          performance: routed.performance,
+          engineResult: routed.engineResult,
+          engineUsed: routed.engineUsed,
+          engineFallback: routed.engineFallback,
+          scanTimeline:
+            scanTraceId != null
+              ? mergeTimelines(scanTraceId, clientTimeline, serverTimeline)
+              : undefined,
+        };
+      }
+
       const result = await analyzeReceipt(
         {
           imageDataUrl: primaryDataUrl,

@@ -7,6 +7,7 @@ import { Loader2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PipelineTrace } from "@/lib/receipt-engine-debug/tracePipeline";
 import { CopyAllDebugButton } from "@/components/copy-all-debug-button";
+import { StageTimingsPanel } from "@/components/stage-timings-panel";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 
@@ -97,6 +98,7 @@ export function ReceiptEngineDebugPanel() {
               ocrText={ocrText}
               rawVisionResponse={rawVision}
               analyzeResult={trace}
+              stageTimings={trace.timings}
             />
           )}
         </div>
@@ -109,15 +111,18 @@ export function ReceiptEngineDebugPanel() {
       </div>
 
       {trace && purchase && validation && (
-        <div className="rounded-2xl border border-black/[0.05] bg-white p-3 shadow-sm text-xs text-muted-foreground">
-          <span className="font-mono">{trace.traceId}</span>
-          {trace.imageDataUrl && (
-            <img
-              src={trace.imageDataUrl}
-              alt="Receipt"
-              className="mt-3 max-h-40 rounded-lg border object-contain"
-            />
-          )}
+        <div className="space-y-3">
+          <StageTimingsPanel timings={trace.timings} />
+          <div className="rounded-2xl border border-black/[0.05] bg-white p-3 shadow-sm text-xs text-muted-foreground">
+            <span className="font-mono">{trace.traceId}</span>
+            {trace.imageDataUrl && (
+              <img
+                src={trace.imageDataUrl}
+                alt="Receipt"
+                className="mt-3 max-h-40 rounded-lg border object-contain"
+              />
+            )}
+          </div>
         </div>
       )}
     </div>

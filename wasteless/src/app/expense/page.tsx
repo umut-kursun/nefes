@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BackButton } from "@/components/back-button";
 import { ReceiptViewer } from "@/components/receipt-viewer";
@@ -18,10 +18,12 @@ import { formatDateTime } from "@/lib/datetime";
 import { displayMerchantName } from "@/lib/merchants";
 import { buildCorrectionRecords } from "@/lib/ocr-correction-memory";
 import { saveOcrCorrections } from "@/lib/db";
+import { expenseDetailRedirectTarget } from "@/lib/expense-navigation";
 import { formatMoney } from "@/lib/utils";
 
 function ExpenseDetailInner() {
   const params = useSearchParams();
+  const router = useRouter();
   const goBack = useSmartBack("/");
   const id = params.get("id");
   const {
@@ -40,14 +42,25 @@ function ExpenseDetailInner() {
     () => expenses.find((e) => e.id === id) ?? null,
     [expenses, id]
   );
+  const reviewRedirect = useMemo(
+    () => expenseDetailRedirectTarget(expense),
+    [expense]
+  );
   const meta = expense
     ? getCategoryMeta(expense.category, categories)
     : null;
 
-  if (!ready) {
+  useEffect(() => {
+    if (!ready || !reviewRedirect) return;
+    router.replace(reviewRedirect);
+  }, [ready, reviewRedirect, router]);
+
+  if (!ready || reviewRedirect) {
     return (
       <AppShell>
-        <p className="text-sm text-muted-foreground">Yükleniyor…</p>
+        <div className="flex justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
       </AppShell>
     );
   }

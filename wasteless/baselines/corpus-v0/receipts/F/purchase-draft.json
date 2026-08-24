@@ -1,0 +1,270 @@
+{
+  "merchant": "Petrol Ofisi",
+  "purchaseDate": {
+    "raw": "2026-08-13",
+    "normalized": "2026-08-13"
+  },
+  "purchaseTime": {
+    "raw": "20:30:00",
+    "normalized": "20:30:00"
+  },
+  "receiptNumber": {
+    "raw": "0210",
+    "normalized": "0210"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ"
+        ],
+        "ocrTexts": [
+          "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "NO:221/2/3 ALTINOVA/YALOVA",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          2
+        ],
+        "rawTexts": [
+          "NO:221/2/3 ALTINOVA/YALOVA"
+        ],
+        "ocrTexts": [
+          "NO:221/2/3 ALTINOVA/YALOVA"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "TEL: 02264656314",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "TEL: 02264656314"
+        ],
+        "ocrTexts": [
+          "TEL: 02264656314"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "B. Mükellefler VD: 7290015043",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          4
+        ],
+        "rawTexts": [
+          "B. Mükellefler VD: 7290015043"
+        ],
+        "ocrTexts": [
+          "B. Mükellefler VD: 7290015043"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "LİSANS NO: BAY/939-82/48208",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:4",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          6
+        ],
+        "rawTexts": [
+          "LİSANS NO: BAY/939-82/48208"
+        ],
+        "ocrTexts": [
+          "LİSANS NO: BAY/939-82/48208"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "TİC. SİC NO: 498819",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:5",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          7
+        ],
+        "rawTexts": [
+          "TİC. SİC NO: 498819"
+        ],
+        "ocrTexts": [
+          "TİC. SİC NO: 498819"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "V/MAX DİESEL",
+      "quantity": 1,
+      "unitPrice": 2200.66,
+      "lineTotal": 2200.66,
+      "vatRate": 20,
+      "confidence": 0.97,
+      "provenance": {
+        "productBlockId": "semantic:product:6",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          13,
+          14
+        ],
+        "rawTexts": [
+          "V/MAX DİESEL",
+          "%20  *2.200,66"
+        ],
+        "ocrTexts": [
+          "V/MAX DİESEL",
+          "%20  *2.200,66"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "NAKİT",
+      "amount": 2200.66,
+      "confidence": 0.82,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.82,
+        "layoutLineIndices": [],
+        "extractionMethod": "semantic:payment:0",
+        "rawLineCount": 21
+      }
+    }
+  ],
+  "vatSummary": [
+    {
+      "label": "TOPKDV",
+      "amount": 366.78,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "vat",
+        "confidence": 0.9,
+        "layoutLineIndices": [
+          17
+        ],
+        "extractionMethod": "footer:orphan-amount→vat",
+        "rawLineCount": 21
+      }
+    }
+  ],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 2200.66,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:semantic",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9,
+      "layoutLineIndices": [
+        18
+      ],
+      "extractionMethod": "footer:post-vat-total",
+      "rawLineCount": 21
+    }
+  },
+  "confidence": 0.55,
+  "fuel": {
+    "fuelType": null,
+    "liters": 30.8,
+    "pricePerLiter": 71.45,
+    "plateNumber": "00UP8195",
+    "stationName": "Petrol Ofisi"
+  },
+  "provenance": {
+    "metadataBlockId": "metadata:v2",
+    "footerBlockId": "footer:semantic",
+    "blockDocumentConfidence": 0.55,
+    "rawTexts": [
+      "PETROL OFİSİ A.Ş.",
+      "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+      "NO:221/2/3 ALTINOVA/YALOVA",
+      "TEL: 02264656314",
+      "B. Mükellefler VD: 7290015043",
+      "MERSİS NO: 0729-0015-0430-0023",
+      "LİSANS NO: BAY/939-82/48208",
+      "TİC. SİC NO: 498819",
+      "13-08-2026",
+      "FIŞ NO: 0210",
+      "3400UP8195",
+      "20:30",
+      "30,800 LT X 71,45",
+      "V/MAX DİESEL",
+      "%20  *2.200,66",
+      "TOPKDV",
+      "TOPLAM",
+      "*366,78",
+      "*2.200,66",
+      "*2.200,66",
+      "NAKİT"
+    ]
+  }
+}

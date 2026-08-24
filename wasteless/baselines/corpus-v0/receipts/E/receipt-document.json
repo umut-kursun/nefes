@@ -1,0 +1,263 @@
+{
+  "rawLines": [
+    "Altınkılıçlar kahve",
+    "Kakao Ürünleri Tic.ve San.A.ş",
+    "Oksijen 266-A",
+    "0630236290",
+    "Marmara Kurumlar V.DQ",
+    "TARİH : 08/08/2026",
+    "SAAT  : 10:49:30",
+    "FIŞ NO : 0044",
+    "Sandvic Hindi",
+    "Füme Keten Tohumlu %10",
+    "*215,00",
+    "Espresso Double Ag %10",
+    "*125,00",
+    "Capuccino Küçük Ag %10",
+    "*165,00",
+    "Draft Americano Ag %10",
+    "*190,00",
+    "TOPKDV",
+    "*63,18",
+    "TOPLAM",
+    "*695,00",
+    "KREDİ",
+    "İŞ BANKASI",
+    "************4421",
+    "T.SİCİL NO:",
+    "EKÜ NO:0001",
+    "Z NO:0758",
+    "SİPARİŞ NUMARANIZ",
+    "412",
+    "İADE KODU",
+    "D0998314"
+  ],
+  "products": [
+    {
+      "rawName": "Altınkılıçlar kahve",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          0
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "Kakao Ürünleri Tic.ve San.A.ş",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          1
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "Oksijen 266-A",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          2
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "Marmara Kurumlar V.DQ",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          4
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "Füme Keten Tohumlu",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          9
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.83
+      }
+    },
+    {
+      "rawName": "*215,00",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 215,
+      "lineTotal": 215,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          10
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.7000000000000001
+      }
+    },
+    {
+      "rawName": "Espresso Double Ag",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          11
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.83
+      }
+    },
+    {
+      "rawName": "*125,00",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 125,
+      "lineTotal": 125,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          12
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.7000000000000001
+      }
+    },
+    {
+      "rawName": "Capuccino Küçük Ag",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          13
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.83
+      }
+    },
+    {
+      "rawName": "*165,00",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 165,
+      "lineTotal": 165,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          14
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.7000000000000001
+      }
+    },
+    {
+      "rawName": "Draft Americano Ag",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          15
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.83
+      }
+    },
+    {
+      "rawName": "*190,00",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 190,
+      "lineTotal": 190,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          16
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.7000000000000001
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "footer": {
+    "subtotal": null,
+    "total": 695,
+    "vatTotal": 63.18,
+    "payments": [
+      {
+        "type": "credit_card",
+        "amount": 695,
+        "rawLabel": "KREDİ"
+      }
+    ]
+  },
+  "fuel": null,
+  "footerStartIndex": 17,
+  "extractionMs": 0,
+  "vatProvenance": {
+    "value": 63.18,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      18
+    ],
+    "method": "footer:orphan-amount→vat"
+  },
+  "totalProvenance": {
+    "value": 695,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      20
+    ],
+    "method": "footer:post-vat-total"
+  },
+  "subtotalProvenance": null
+}

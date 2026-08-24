@@ -1,0 +1,206 @@
+{
+  "merchant": "Çalgın Turizm",
+  "purchaseDate": {
+    "raw": "2026-08-11",
+    "normalized": "2026-08-11"
+  },
+  "purchaseTime": {
+    "raw": "23:46:00",
+    "normalized": "23:46:00"
+  },
+  "receiptNumber": {
+    "raw": "58",
+    "normalized": "58"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "TİKİ BEACH BODRUM ŞUBESİ",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "TİKİ BEACH BODRUM ŞUBESİ"
+        ],
+        "ocrTexts": [
+          "TİKİ BEACH BODRUM ŞUBESİ"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "BODRUM/MUĞLA",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "BODRUM/MUĞLA"
+        ],
+        "ocrTexts": [
+          "BODRUM/MUĞLA"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "MARMARİS VD: 22509211112",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          4
+        ],
+        "rawTexts": [
+          "MARMARİS VD: 22509211112"
+        ],
+        "ocrTexts": [
+          "MARMARİS VD: 22509211112"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "İÇECEK",
+      "quantity": 1,
+      "unitPrice": 365,
+      "lineTotal": 365,
+      "vatRate": 10,
+      "confidence": 0.97,
+      "provenance": {
+        "productBlockId": "semantic:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          7,
+          9
+        ],
+        "rawTexts": [
+          "İÇECEK",
+          "*365,00"
+        ],
+        "ocrTexts": [
+          "İÇECEK",
+          "*365,00"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "KREDİ KARTI",
+      "amount": 365,
+      "confidence": 0.82,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.82,
+        "layoutLineIndices": [],
+        "extractionMethod": "semantic:payment:0",
+        "rawLineCount": 29
+      }
+    }
+  ],
+  "vatSummary": [
+    {
+      "label": "TOPKDV",
+      "amount": 33.18,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "vat",
+        "confidence": 0.9,
+        "layoutLineIndices": [
+          11
+        ],
+        "extractionMethod": "footer:orphan-amount→vat",
+        "rawLineCount": 29
+      }
+    }
+  ],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 365,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:semantic",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9,
+      "layoutLineIndices": [
+        13
+      ],
+      "extractionMethod": "footer:post-vat-total",
+      "rawLineCount": 29
+    }
+  },
+  "confidence": 0.55,
+  "fuel": null,
+  "provenance": {
+    "metadataBlockId": "metadata:v2",
+    "footerBlockId": "footer:semantic",
+    "blockDocumentConfidence": 0.55,
+    "rawTexts": [
+      "ÇALGIN TURİZM TİCARET LTD. ŞTİ",
+      "TİKİ BEACH BODRUM ŞUBESİ",
+      "YAŞI MAH. ASMA SOK. NO: 38/1",
+      "BODRUM/MUĞLA",
+      "MARMARİS VD: 22509211112",
+      "11-08-2026",
+      "SAAT: 23:46",
+      "İÇECEK",
+      "%10",
+      "*365,00",
+      "TOPKDV",
+      "*33,18",
+      "TOPLAM",
+      "*365,00",
+      "KREDİ KARTI",
+      "SATIŞ",
+      "***** ***** ***** 2393",
+      "TUTAR",
+      "365,00 TL",
+      "AİD: A000000031010",
+      "VISA CREDIT",
+      "ONAY KODU: 216084",
+      "TUTAR KARŞILIĞI MAL VEYA HİZMETİ ALDIM",
+      "BU BELGEYİ SAKLAYINIZ",
+      "Visa payWave",
+      "***SADECE TEMASSIZ***",
+      "ÇALGIN TURİZM TİCARET LİMİTED",
+      "İÇMELER MAH. 331 SK. NO: 3 / Z1 48100 MARMARİS",
+      "48100/MUĞLA"
+    ]
+  }
+}

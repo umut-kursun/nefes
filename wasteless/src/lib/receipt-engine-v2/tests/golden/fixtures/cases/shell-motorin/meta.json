@@ -1,0 +1,7 @@
+{
+  "slug": "shell-motorin",
+  "label": "Shell motorin fuel receipt",
+  "category": "fuel",
+  "image": null,
+  "imageNote": "OCR-only regression fixture; image path reserved for future visual capture"
+}

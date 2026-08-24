@@ -5,11 +5,27 @@ import type {
   ValidationSeverity,
 } from "../../types/models/validation";
 
-export const MONEY_TOLERANCE = 0.02;
+import {
+  lineReconciliationTolerance,
+  receiptReconciliationTolerance,
+  LEGACY_MONEY_TOLERANCE,
+} from "./moneyPolicy";
 
-export function nearlyEqual(a: number, b: number, tolerance = MONEY_TOLERANCE): boolean {
-  return Math.abs(a - b) <= tolerance;
+/** @deprecated Use receiptReconciliationTolerance — kept for existing imports. */
+export const MONEY_TOLERANCE = LEGACY_MONEY_TOLERANCE;
+
+export function nearlyEqual(
+  a: number,
+  b: number,
+  tolerance?: number
+): boolean {
+  const tol =
+    tolerance ??
+    receiptReconciliationTolerance(Math.max(Math.abs(a), Math.abs(b)));
+  return Math.abs(a - b) <= tol;
 }
+
+export { lineReconciliationTolerance, receiptReconciliationTolerance };
 
 export function sumAmounts(values: Array<number | undefined>): number {
   return values.reduce<number>((sum, value) => sum + (value ?? 0), 0);

@@ -45,13 +45,21 @@ export function validateUnknownFields(purchase: PurchaseDraft): ValidatorResult 
   });
 
   if (purchase.products.length === 0) {
+    const hasFinancialTotal =
+      purchase.total?.amount != null && Number.isFinite(purchase.total.amount);
+    const hasFuel = purchase.fuel != null;
+    const hasCharges = purchase.charges.length > 0;
+
     issues.push(
       createIssue({
         validatorId: ID,
         category: "business",
         code: "NO_PRODUCTS",
-        severity: "CRITICAL",
-        message: "Receipt contains no product lines.",
+        severity:
+          hasFinancialTotal || hasFuel || hasCharges ? "ERROR" : "CRITICAL",
+        message: hasFinancialTotal
+          ? "Receipt total is present but product lines could not be extracted."
+          : "Receipt contains no product lines.",
         path: "products",
         purchase,
       })

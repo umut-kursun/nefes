@@ -57,6 +57,7 @@ function emptyFailureResult(
     validation: {
       isValid: false,
       consistent: false,
+      analysisStatus: "failed",
       score: 0,
       errors: [
         {

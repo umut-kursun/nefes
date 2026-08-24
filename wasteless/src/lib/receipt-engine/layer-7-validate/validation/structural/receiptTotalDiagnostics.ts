@@ -1,5 +1,6 @@
 import type { PurchaseDraft } from "../../../types/models/purchase";
 import { nearlyEqual, sumAmounts } from "../issueFactory";
+import { reconciliationProducts } from "../reconciliationProducts";
 
 export type TotalMismatchCause = {
   readonly code: string;
@@ -49,7 +50,7 @@ function productAlignmentForLine(line: PurchaseDraft["products"][number]): Total
 export function findProductAlignmentDiagnosis(
   purchase: PurchaseDraft
 ): TotalMismatchCause | null {
-  for (const line of purchase.products) {
+  for (const line of reconciliationProducts(purchase)) {
     const diagnosis = productAlignmentForLine(line);
     if (diagnosis) return diagnosis;
   }
@@ -85,7 +86,9 @@ export function diagnoseReceiptTotalMismatch(
   }
 
   if (purchase.charges.length === 0) {
-    const productSum = sumAmounts(purchase.products.map((p) => p.lineTotal));
+    const productSum = sumAmounts(
+      reconciliationProducts(purchase).map((p) => p.lineTotal)
+    );
     const discountSum = sumAmounts(purchase.discounts.map((d) => d.amount));
     const declared = purchase.total?.amount;
     if (

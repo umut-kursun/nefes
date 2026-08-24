@@ -8,6 +8,7 @@ export function stripValidatedPurchase(
   return {
     isValid: report.isValid,
     consistent: report.consistent,
+    analysisStatus: report.analysisStatus,
     score: report.score,
     errors: report.errors,
     warnings: report.warnings,

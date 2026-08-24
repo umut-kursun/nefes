@@ -1,0 +1,45 @@
+{
+  "merchant": "LEZZET RESTORAN A.S.",
+  "purchaseDate": "29.07.2026",
+  "purchaseTime": "21:30",
+  "receiptNumber": null,
+  "currency": null,
+  "productCount": 2,
+  "products": [
+    {
+      "rawName": "Corba",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 85,
+      "lineTotal": 85,
+      "vatRate": 10
+    },
+    {
+      "rawName": "Izgara",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 320,
+      "lineTotal": 320,
+      "vatRate": 10
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 405,
+    "vatTotal": null,
+    "payments": [
+      {
+        "type": "cash",
+        "amount": 405,
+        "rawLabel": "Nakit 405,00"
+      }
+    ]
+  },
+  "total": 405,
+  "vatTotal": null,
+  "payment": {
+    "type": "cash",
+    "amount": 405,
+    "rawLabel": "Nakit 405,00"
+  }
+}

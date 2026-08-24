@@ -1,0 +1,7 @@
+{
+  "slug": "lcw-clothing",
+  "label": "LC Waikiki clothing receipt",
+  "category": "clothing",
+  "image": null,
+  "imageNote": "OCR-only regression fixture; image path reserved for future visual capture"
+}

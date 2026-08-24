@@ -1,0 +1,66 @@
+{
+  "id": "A",
+  "name": "Migros 0347",
+  "domain": "supermarket",
+  "merchant": "Migros",
+  "total": 477.9,
+  "vat": null,
+  "productCount": 10,
+  "productNames": [
+    "MIGROS",
+    "BÜYÜK MÜKELLEFLER V.D. 620202529513",
+    "BİLGİ FİŞİ",
+    "Tür: e-Arşiv Fatura",
+    "Fatura/İrsaliye Seri Sıra No: 9190801827672016",
+    "COCA-COLA 1.5 L",
+    "LİPTON İCE TEA SEFTA.",
+    "SFRESH PATATES 1 KG",
+    "MİGROS PLASTİK POSET",
+    "SELPAK YAĞ EMİCİ HV."
+  ],
+  "paymentCount": 2,
+  "paymentAmounts": [
+    20,
+    477.9
+  ],
+  "paymentMethods": [
+    null,
+    null
+  ],
+  "category": "market",
+  "subcategory": null,
+  "analysisStatus": "needs_review",
+  "parseStatus": "needs_review",
+  "isValid": false,
+  "consistent": false,
+  "score": 15,
+  "reviewReason": "PAYMENT_TOTAL_INCOHERENT, TOTAL_MISMATCH",
+  "engineUsed": "v2",
+  "engineFallback": false,
+  "parserId": "supermarket-v1",
+  "classification": {
+    "family": "supermarket",
+    "confidence": 0.55,
+    "signals": [
+      "merchant:migros"
+    ]
+  },
+  "timings": {
+    "totalMs": 45045,
+    "ocrMs": 15919,
+    "visionMs": 15919,
+    "extractionMs": 6,
+    "validationMs": 1,
+    "purchaseDraftMs": 18
+  },
+  "groundTruth": {
+    "merchantContains": "Migros",
+    "total": 477.9,
+    "vat": 33.99,
+    "paymentAmount": 477.9,
+    "categoryId": "market",
+    "date": "2026-08-16",
+    "time": "19:33"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

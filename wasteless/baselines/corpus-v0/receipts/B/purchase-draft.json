@@ -1,0 +1,472 @@
+{
+  "merchant": "Migros",
+  "purchaseDate": {
+    "raw": "2026-08-15",
+    "normalized": "2026-08-15"
+  },
+  "purchaseTime": {
+    "raw": "21:38:00",
+    "normalized": "21:38:00"
+  },
+  "receiptNumber": {
+    "raw": "0242",
+    "normalized": "0242"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "BANVİT PİLİC BONFİLE",
+      "quantity": null,
+      "lineTotal": 66.7,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 66.7,
+      "variantSize": null,
+      "productKey": "banvit pilic bonfile",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "BANVİT PİLİC BONFİLE"
+        ],
+        "ocrTexts": [
+          "BANVİT PİLİC BONFİLE"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "KIZILAY MADEN SUYU",
+      "quantity": null,
+      "lineTotal": 3,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 3,
+      "variantSize": null,
+      "productKey": "kizilay maden suyu",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "KIZILAY MADEN SUYU"
+        ],
+        "ocrTexts": [
+          "KIZILAY MADEN SUYU"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "İÇİM RAHA LTAKLOZSUZ",
+      "quantity": null,
+      "lineTotal": 25.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 25.9,
+      "variantSize": null,
+      "productKey": "icim raha ltaklozsuz",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "ocrTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "İÇİM RAHA LTAKLOZSUZ",
+      "quantity": null,
+      "lineTotal": 25.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 25.9,
+      "variantSize": null,
+      "productKey": "icim raha ltaklozsuz",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "ocrTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "DOMESTOS+CIF KREM",
+      "quantity": null,
+      "lineTotal": 129.95,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 129.95,
+      "variantSize": null,
+      "productKey": "domestos cif krem",
+      "vatRate": 20,
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:4",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "DOMESTOS+CIF KREM"
+        ],
+        "ocrTexts": [
+          "DOMESTOS+CIF KREM"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "KELLOGGS CORN FLA",
+      "quantity": null,
+      "lineTotal": 225,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 225,
+      "variantSize": null,
+      "productKey": "kelloggs corn fla",
+      "vatRate": 10,
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:5",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "KELLOGGS CORN FLA"
+        ],
+        "ocrTexts": [
+          "KELLOGGS CORN FLA"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "ALPRO BADEMLİ İÇECEK",
+      "quantity": null,
+      "lineTotal": 279.95,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 279.95,
+      "variantSize": null,
+      "productKey": "alpro bademli icecek",
+      "vatRate": 10,
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:6",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "ALPRO BADEMLİ İÇECEK"
+        ],
+        "ocrTexts": [
+          "ALPRO BADEMLİ İÇECEK"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "KOTEX ULTRA DEV EKO",
+      "quantity": null,
+      "lineTotal": 125,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 125,
+      "variantSize": null,
+      "productKey": "kotex ultra dev eko",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:7",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "KOTEX ULTRA DEV EKO"
+        ],
+        "ocrTexts": [
+          "KOTEX ULTRA DEV EKO"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "KECHY BADEM 100ML",
+      "quantity": null,
+      "lineTotal": 125,
+      "baseUnit": "L",
+      "normalizedUnitPrice": 1250,
+      "variantSize": "100ml",
+      "productKey": "kechy badem 100 ml 100ml",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:8",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "KECHY BADEM 100ML"
+        ],
+        "ocrTexts": [
+          "KECHY BADEM 100ML"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "KECHY GURME STEVIA",
+      "quantity": null,
+      "lineTotal": 247.5,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 247.5,
+      "variantSize": null,
+      "productKey": "kechy gurme stevia",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:9",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "KECHY GURME STEVIA"
+        ],
+        "ocrTexts": [
+          "KECHY GURME STEVIA"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "BALATLI LABNE 200G",
+      "quantity": null,
+      "lineTotal": 250,
+      "baseUnit": "kg",
+      "normalizedUnitPrice": 1250,
+      "variantSize": "200g",
+      "productKey": "balatli labne 200 g 200g",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:10",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "BALATLI LABNE 200G"
+        ],
+        "ocrTexts": [
+          "BALATLI LABNE 200G"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "İÇİM RAHA LTAKLOZSUZ",
+      "quantity": null,
+      "lineTotal": 25.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 25.9,
+      "variantSize": null,
+      "productKey": "icim raha ltaklozsuz",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:11",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "ocrTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "İÇİM RAHA LTAKLOZSUZ",
+      "quantity": null,
+      "lineTotal": 25.9,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 25.9,
+      "variantSize": null,
+      "productKey": "icim raha ltaklozsuz",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:12",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "ocrTexts": [
+          "İÇİM RAHA LTAKLOZSUZ"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "MARVEL SPIDEY ÇOKLU",
+      "quantity": null,
+      "lineTotal": 39,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 39,
+      "variantSize": null,
+      "productKey": "marvel spidey coklu",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:13",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "MARVEL SPIDEY ÇOKLU"
+        ],
+        "ocrTexts": [
+          "MARVEL SPIDEY ÇOKLU"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    },
+    {
+      "name": "MERAKLI MINIK - AYLI",
+      "quantity": null,
+      "lineTotal": 39,
+      "baseUnit": "ad",
+      "normalizedUnitPrice": 39,
+      "variantSize": null,
+      "productKey": "merakli minik ayli",
+      "confidence": 0.9,
+      "provenance": {
+        "productBlockId": "vision:product:14",
+        "graphNodeIds": [],
+        "layoutLineIndices": [],
+        "rawTexts": [
+          "MERAKLI MINIK - AYLI"
+        ],
+        "ocrTexts": [
+          "MERAKLI MINIK - AYLI"
+        ],
+        "classificationRules": [
+          "vision:okc"
+        ],
+        "confidence": 0.9
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [
+    {
+      "label": "% 30 % İNDİRİM",
+      "amount": -127.22,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:vision",
+        "graphNodeIds": [],
+        "semanticKind": "discount",
+        "confidence": 0.9
+      }
+    }
+  ],
+  "payments": [],
+  "vatSummary": [],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 1978.99,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:vision",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9
+    }
+  },
+  "confidence": 0.95,
+  "fuel": null,
+  "provenance": {
+    "metadataBlockId": "metadata:vision",
+    "footerBlockId": "footer:vision",
+    "blockDocumentConfidence": 0.95,
+    "rawTexts": [
+      "5M MIGROS",
+      "MİGROS TİCARET A.Ş.",
+      "5M MİGROS SİLİVRİ SATIŞ MAĞAZASI",
+      "E5 KARAYOLU SİNEKLİ KAVŞAĞI KARALİ",
+      "ÇEŞME MEVKİİ SİLİVRİ TEL: 0(850)310 2952",
+      "BUYUK MÜKELLEFLER V.D. 62205295913",
+      "MERKEZ ADRESİ: ATATÜRK MAH. TURGUT ÖZAL",
+      "BULV. NO:7 ATAŞEHİR/İSTANBUL",
+      "TARİH:15/08/2026",
+      "SAAT:21:38",
+      "FİŞ NO: 0242",
+      "BİLGİ FİŞİ",
+      "TÜR: E-ARŞİV FATURA",
+      "Fatura/İrsaliye Seri Sıra No: 21450111596206815",
+      "MÜŞTERİ TCKN: 11111111111",
+      "#60020810104801290",
+      "3 AD 1,00 TL/AD",
+      "BANVİT PİLİC BONFİLE *66,70",
+      "KIZILAY MADEN SUYU *3,00",
+      "İÇİM RAHA LTAKLOZSUZ *25,90",
+      "İÇİM RAHA LTAKLOZSUZ *25,90",
+      "DOMESTOS+CIF KREM %20 *129,95",
+      "KELLOGGS CORN FLA *225,00",
+      "ALPRO BADEMLİ İÇECEK %10 *279,95",
+      "KOTEX ULTRA DEV EKO *125,00",
+      "KECHY BADEM 100ML *125,00",
+      "KECHY GURME STEVIA *247,50",
+      "BALATLI LABNE 200G *250,00",
+      "İÇİM RAHA LTAKLOZSUZ *25,90",
+      "İÇİM RAHA LTAKLOZSUZ *25,90",
+      "MARVEL SPIDEY ÇOKLU *39,00",
+      "MERAKLI MINIK - AYLI *39,00",
+      "TOPKDV",
+      "TOPLAM",
+      "*127,22",
+      "*1.978,99"
+    ]
+  }
+}

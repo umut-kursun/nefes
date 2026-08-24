@@ -1,0 +1,7 @@
+{
+  "slug": "eczane-pharmacy",
+  "label": "Pharmacy receipt with credit card payment",
+  "category": "pharmacy",
+  "image": null,
+  "imageNote": "OCR-only regression fixture; image path reserved for future visual capture"
+}

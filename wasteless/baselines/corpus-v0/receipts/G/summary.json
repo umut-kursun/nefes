@@ -1,0 +1,60 @@
+{
+  "id": "G",
+  "name": "Çehre Gıda",
+  "domain": "restaurant",
+  "merchant": "Çehre İnşaat",
+  "total": 3704,
+  "vat": null,
+  "productCount": 10,
+  "productNames": [
+    "ÇEHRE GIDA İNŞAAT SAN.",
+    "BODRUM MUĞLA",
+    "Akali Burger 160 Gr",
+    "Benji",
+    "Patates Kızartması",
+    "Akali Burger 160 Gr",
+    "Pepsi",
+    "Pepsi",
+    "KARAMELİZE SOĞAN",
+    "KARAMELİZE SOĞAN"
+  ],
+  "paymentCount": 0,
+  "paymentAmounts": [],
+  "paymentMethods": [],
+  "category": "yeme_icme",
+  "subcategory": null,
+  "analysisStatus": "approved",
+  "parseStatus": "pending_approval",
+  "isValid": true,
+  "consistent": true,
+  "score": 90,
+  "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+  "engineUsed": "v2",
+  "engineFallback": false,
+  "parserId": "generic-v1",
+  "classification": {
+    "family": "generic",
+    "confidence": 0.3,
+    "signals": [
+      "fallback:low_signal"
+    ]
+  },
+  "timings": {
+    "totalMs": 12600,
+    "ocrMs": 12594,
+    "visionMs": 12594,
+    "extractionMs": 0,
+    "validationMs": 0,
+    "purchaseDraftMs": 6
+  },
+  "groundTruth": {
+    "merchantContains": "Çehre",
+    "total": 3704,
+    "vat": 336.73,
+    "paymentAmount": 3704,
+    "categoryId": "yeme_icme",
+    "date": "2026-08-11",
+    "time": "21:16"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

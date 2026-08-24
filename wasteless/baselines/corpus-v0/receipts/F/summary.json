@@ -1,0 +1,60 @@
+{
+  "id": "F",
+  "name": "Petrol Ofisi",
+  "domain": "fuel",
+  "merchant": "Petrol Ofisi",
+  "total": 2200.66,
+  "vat": null,
+  "productCount": 7,
+  "productNames": [
+    "ÇAVUŞÇİFTLİĞİ KÖYÜ D.YOLU ÜSTÜ",
+    "NO:221/2/3 ALTINOVA/YALOVA",
+    "TEL: 02264656314",
+    "B. Mükellefler VD: 7290015043",
+    "LİSANS NO: BAY/939-82/48208",
+    "TİC. SİC NO: 498819",
+    "V/MAX DİESEL"
+  ],
+  "paymentCount": 1,
+  "paymentAmounts": [
+    2200.66
+  ],
+  "paymentMethods": [
+    null
+  ],
+  "category": "akaryakit",
+  "subcategory": "Benzin",
+  "analysisStatus": "approved",
+  "parseStatus": "pending_approval",
+  "isValid": true,
+  "consistent": true,
+  "score": 70,
+  "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+  "engineUsed": "v2",
+  "engineFallback": false,
+  "parserId": "fuel-v1",
+  "classification": {
+    "family": "fuel",
+    "confidence": 0.9500000000000001,
+    "signals": [
+      "merchant:fuel",
+      "layout:fuel_lt_qty_line"
+    ]
+  },
+  "timings": {
+    "totalMs": 8917,
+    "ocrMs": 8913,
+    "visionMs": 8913,
+    "extractionMs": 1,
+    "validationMs": 0,
+    "purchaseDraftMs": 4
+  },
+  "groundTruth": {
+    "merchantContains": "Petrol",
+    "total": 2200.66,
+    "vat": 366.78,
+    "paymentAmount": 2200.66,
+    "categoryId": "akaryakit"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

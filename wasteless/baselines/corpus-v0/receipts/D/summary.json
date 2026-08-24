@@ -1,0 +1,58 @@
+{
+  "id": "D",
+  "name": "Tiki Beach",
+  "domain": "restaurant",
+  "merchant": "Çalgın Turizm",
+  "total": 365,
+  "vat": null,
+  "productCount": 4,
+  "productNames": [
+    "TİKİ BEACH BODRUM ŞUBESİ",
+    "BODRUM/MUĞLA",
+    "MARMARİS VD: 22509211112",
+    "İÇECEK"
+  ],
+  "paymentCount": 1,
+  "paymentAmounts": [
+    365
+  ],
+  "paymentMethods": [
+    null
+  ],
+  "category": "market",
+  "subcategory": null,
+  "analysisStatus": "approved",
+  "parseStatus": "pending_approval",
+  "isValid": true,
+  "consistent": true,
+  "score": 85,
+  "reviewReason": "LINE_TOTAL_MISSING, LINE_TOTAL_MISSING, LINE_TOTAL_MISSING",
+  "engineUsed": "v2",
+  "engineFallback": false,
+  "parserId": "restaurant-v1",
+  "classification": {
+    "family": "restaurant",
+    "confidence": 0.4,
+    "signals": [
+      "layout:simple_pos"
+    ]
+  },
+  "timings": {
+    "totalMs": 9718,
+    "ocrMs": 9711,
+    "visionMs": 9711,
+    "extractionMs": 1,
+    "validationMs": 0,
+    "purchaseDraftMs": 7
+  },
+  "groundTruth": {
+    "merchantContains": "Tiki",
+    "total": 365,
+    "vat": 33.18,
+    "paymentAmount": 365,
+    "categoryId": "yeme_icme",
+    "date": "2026-08-11",
+    "time": "23:46"
+  },
+  "capturedAt": "2026-08-24T07:15:32.115Z"
+}

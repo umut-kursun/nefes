@@ -11,6 +11,7 @@ import { cn, formatMoney, formatNumber } from "@/lib/utils";
 import { AppIcon } from "@/components/icons";
 import { TagChips } from "@/components/tag-picker";
 import { useWasteLessStore } from "@/hooks/use-store";
+import { expenseNavigationHref } from "@/lib/expense-navigation";
 
 /**
  * Standard expandable Purchase Card:
@@ -47,7 +48,7 @@ export function PurchaseCard({
     <article className="rounded-2xl border border-black/[0.05] bg-white shadow-sm transition duration-200 hover:-translate-y-0.5">
       <div className="flex items-start gap-2 p-3">
         <Link
-          href={`/expense?id=${encodeURIComponent(expense.id)}`}
+          href={expenseNavigationHref(expense)}
           className="flex min-w-0 flex-1 items-start gap-3 active:scale-[0.99]"
         >
           <div
@@ -181,7 +182,7 @@ export function PurchaseCard({
 
               {hasReceipt && (
                 <Link
-                  href={`/expense?id=${encodeURIComponent(expense.id)}`}
+                  href={expenseNavigationHref(expense)}
                   className="inline-flex min-h-10 items-center text-sm font-medium text-primary"
                 >
                   Fişi aç →
@@ -207,7 +208,7 @@ export function PurchaseCardCompact({
   const meta = getCategoryMeta(expense.category, categories);
   return (
     <Link
-      href={`/expense?id=${encodeURIComponent(expense.id)}`}
+      href={expenseNavigationHref(expense)}
       className={cn(
         "flex items-center gap-3 rounded-2xl border border-black/[0.05] bg-white p-3 shadow-sm active:scale-[0.99]",
         className

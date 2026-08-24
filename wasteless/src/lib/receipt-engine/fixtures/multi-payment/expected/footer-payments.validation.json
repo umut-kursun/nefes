@@ -1,8 +1,26 @@
 {
-  "isValid": true,
-  "consistent": true,
-  "score": 85,
-  "errors": [],
+  "isValid": false,
+  "consistent": false,
+  "analysisStatus": "needs_review",
+  "score": 70,
+  "errors": [
+    {
+      "id": "FinancialSafetyValidator:PAYMENT_TOTAL_INCOHERENT:payments",
+      "severity": "ERROR",
+      "category": "structural",
+      "code": "PAYMENT_TOTAL_INCOHERENT",
+      "message": "Payment sum does not match receipt total.",
+      "location": {
+        "path": "payments"
+      },
+      "provenance": {
+        "validatorId": "FinancialSafetyValidator",
+        "purchaseConfidence": 0.775
+      },
+      "expected": 8.9,
+      "actual": 58.9
+    }
+  ],
   "warnings": [
     {
       "id": "PaymentSumValidator:PAYMENT_SUM_MISMATCH:payments",
@@ -66,11 +84,12 @@
       }
     }
   ],
-  "confidenceAdjustment": -0.15000000000000002,
-  "overallConfidence": 0.625,
+  "confidenceAdjustment": -0.3,
+  "overallConfidence": 0.47500000000000003,
   "provenance": {
     "purchaseConfidence": 0.775,
     "structuralValidators": [
+      "FinancialSafetyValidator",
       "ReceiptTotalValidator",
       "SubtotalValidator",
       "PaymentSumValidator",
@@ -78,7 +97,8 @@
       "LineTotalValidator",
       "QuantityValidator",
       "ChargeValidator",
-      "DiscountValidator"
+      "DiscountValidator",
+      "ApprovalCompletenessValidator"
     ],
     "businessValidators": [
       "MerchantValidator",
@@ -89,7 +109,7 @@
       "UnknownFieldValidator",
       "AnomalyValidator"
     ],
-    "issueCount": 4
+    "issueCount": 5
   },
-  "blocking": false
+  "blocking": true
 }

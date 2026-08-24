@@ -1,0 +1,27 @@
+{
+  "merchant": "BAKKAL",
+  "purchaseDate": null,
+  "purchaseTime": null,
+  "receiptNumber": null,
+  "currency": null,
+  "productCount": 1,
+  "products": [
+    {
+      "rawName": "CAY",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 25,
+      "lineTotal": 25,
+      "vatRate": 1
+    }
+  ],
+  "footer": {
+    "subtotal": null,
+    "total": 25,
+    "vatTotal": null,
+    "payments": []
+  },
+  "total": 25,
+  "vatTotal": null,
+  "payment": null
+}

@@ -1,5 +1,5 @@
-import { analyzeReceipt } from "@/lib/receipt-engine-sdk";
-import { stripValidatedPurchase } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
+import { routeReceiptEngineAnalysis } from "@/lib/receipt-engine-v2-integration";
+import type { ReceiptEngineV2Result } from "@/lib/receipt-engine-v2/engine/types";
 import type { PurchaseDraft } from "@/lib/receipt-engine/types/models/purchase";
 import type { ValidationReportGolden } from "@/lib/receipt-engine/layer-7-validate/stripValidatedPurchase";
 import type { ReceiptStageTimings } from "@/lib/receipt-engine-debug/formatStageTimings";
@@ -22,6 +22,10 @@ export type ReceiptEngineAnalyzeSuccess = {
   performance: ReceiptStageTimings;
   /** Wall-clock scan timeline (t0–t9). */
   scanTimeline?: ScanTimelinePayload;
+  /** V2 pipeline stage outputs for debug copy. */
+  engineResult?: ReceiptEngineV2Result;
+  engineUsed?: "v1" | "v2";
+  engineFallback?: boolean;
 };
 
 export type ReceiptEngineAnalyzeFailure = {
@@ -114,50 +118,37 @@ export async function analyzeReceiptEngineFormData(
       ? "ocr_then_deterministic"
       : "vision_first";
 
-  const result = await analyzeReceipt(
-    {
-      imageDataUrl: primaryDataUrl,
-      altImageDataUrl,
-      sourceHint: hint,
-      preprocessMs: Number.isFinite(preprocessMs) ? preprocessMs : undefined,
-      resizeMs: Number.isFinite(resizeMs) ? resizeMs : undefined,
-      base64EncodeMs: Number.isFinite(base64EncodeMs) ? base64EncodeMs : undefined,
-    },
-    {
-      debug: process.env.NODE_ENV === "development",
-      ocrProviderId: "openai",
-      parserMode,
-    },
-    {
-      ocrFactoryOptions: {
-        kind: "openai",
-        openAi: {
-          apiKey: options.apiKey,
-          model: options.model ?? process.env.OPENAI_OCR_MODEL ?? "gpt-4o-mini",
-        },
-      },
-      scanTimeline: serverTimeline,
-    }
-  );
+  const result = await routeReceiptEngineAnalysis({
+    imageDataUrl: primaryDataUrl,
+    altImageDataUrl,
+    sourceHint: hint,
+    preprocessMs: Number.isFinite(preprocessMs) ? preprocessMs : undefined,
+    resizeMs: Number.isFinite(resizeMs) ? resizeMs : undefined,
+    base64EncodeMs: Number.isFinite(base64EncodeMs) ? base64EncodeMs : undefined,
+    apiKey: options.apiKey,
+    model: options.model ?? process.env.OPENAI_OCR_MODEL ?? "gpt-4o-mini",
+    parserMode,
+    scanTimeline: serverTimeline,
+  });
 
-  if (!result.success) {
+  if ("error" in result) {
     return {
-      error: result.error?.message ?? "Receipt analysis failed.",
-      failureCode: result.error?.code,
+      error: result.error,
+      failureCode: result.failureCode,
       status: 500,
     };
   }
 
   return {
     purchase: result.purchase,
-    validation: stripValidatedPurchase({
-      ...result.validation,
-      validatedPurchase: result.purchase,
-    }),
+    validation: result.validation,
     imageDataUrl: displayDataUrl,
-    ocrRawText: result.rawOcr.rawText,
+    ocrRawText: result.ocrRawText,
     rawVisionResponse: result.rawVisionResponse,
-    performance: result.performance ?? {},
+    performance: result.performance,
+    engineResult: result.engineResult,
+    engineUsed: result.engineUsed,
+    engineFallback: result.engineFallback,
     scanTimeline:
       scanTraceId != null
         ? mergeTimelines(scanTraceId, clientTimeline, serverTimeline)

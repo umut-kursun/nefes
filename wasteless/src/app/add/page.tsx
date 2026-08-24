@@ -57,6 +57,10 @@ import {
 } from "@/lib/receipt-engine-debug/buildReceiptEngineOcrSummary";
 import { APP_VERSION } from "@/lib/app-version";
 import {
+  isPendingReceiptReview,
+  resolveReviewRoute,
+} from "@/lib/expense-navigation";
+import {
   onLaunchFile,
   takePendingLaunchFile,
 } from "@/lib/pwa-launch-handler";
@@ -112,7 +116,7 @@ function AddPageInner() {
   const searchParams = useSearchParams();
   const showWelcome = searchParams.get("welcome") === "1";
   const reviewId = searchParams.get("review");
-  const { addExpense, addExpenseOptimistic, updateExpense, removeExpense, categories, expenses } =
+  const { addExpense, addExpenseOptimistic, updateExpense, removeExpense, categories, expenses, ready } =
     useWasteLessStore();
   const { toast } = useToast();
   const cameraRef = useRef<HTMLInputElement>(null);
@@ -145,17 +149,41 @@ function AddPageInner() {
   );
   const showDebugClipboard = isDebugClipboardUiEnabled();
   const analyzeFileRef = useRef<(file: File) => Promise<void>>(async () => {});
+  const loadedReviewIdRef = useRef<string | null>(null);
+
+  const reviewRoute = useMemo(
+    () => resolveReviewRoute(reviewId, expenses, ready),
+    [reviewId, expenses, ready]
+  );
+  const awaitingReceiptReview =
+    draft != null && isPendingReceiptReview(draft.parseStatus);
 
   useEffect(() => {
-    if (!reviewId || !expenses.length) return;
-    const pending = expenses.find(
-      (e) => e.id === reviewId && e.parseStatus === "pending_approval"
-    );
-    if (!pending) return;
-    setDraft(pending);
-    setOcrBaseline(JSON.parse(JSON.stringify(pending)) as Expense);
-    setMode("review");
-  }, [reviewId, expenses]);
+    if (reviewRoute.state === "loading") return;
+
+    if (reviewRoute.state === "review") {
+      const pending = reviewRoute.expense;
+      if (loadedReviewIdRef.current !== pending.id) {
+        loadedReviewIdRef.current = pending.id;
+        setDraft(pending);
+        setOcrBaseline(JSON.parse(JSON.stringify(pending)) as Expense);
+        setMode("review");
+      }
+      return;
+    }
+
+    loadedReviewIdRef.current = null;
+
+    if (reviewRoute.state === "finalized") {
+      router.replace(`/expense?id=${encodeURIComponent(reviewRoute.expense.id)}`);
+      return;
+    }
+
+    if (reviewRoute.state === "not_found" && reviewId) {
+      toast("Onay bekleyen fiş bulunamadı.", "default");
+      router.replace("/add");
+    }
+  }, [reviewRoute, reviewId, router, toast]);
 
   useEffect(() => {
     if (mode !== "review" || !parserPayload) return;
@@ -465,7 +493,7 @@ function AddPageInner() {
         updatedAt: new Date().toISOString(),
       };
       if (
-        expense.parseStatus === "pending_approval" ||
+        isPendingReceiptReview(expense.parseStatus) ||
         expenses.some((e) => e.id === expense.id)
       ) {
         await updateExpense(approved);
@@ -476,7 +504,7 @@ function AddPageInner() {
         trackFirstReceiptSaved();
       }
       toast(
-        expense.parseStatus === "pending_approval" || reviewId
+        isPendingReceiptReview(expense.parseStatus) || reviewId
           ? "Fiş onaylandı ve kaydedildi!"
           : "Harcama kaydedildi",
         "success"
@@ -505,10 +533,20 @@ function AddPageInner() {
 
   return (
     <AppShell>
+      {reviewId && reviewRoute.state === "loading" ? (
+        <div className="flex justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        <>
       <header className="mb-5">
-        <h1 className="font-display text-2xl tracking-tight">Harcama ekle</h1>
+        <h1 className="font-display text-2xl tracking-tight">
+          {mode === "review" ? "Harcama incele" : "Harcama ekle"}
+        </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Fiş, banka ekran görüntüsü veya hızlı manuel giriş · v{APP_VERSION}
+          {mode === "review"
+            ? "Fişi kontrol edip onaylayın"
+            : `Fiş, banka ekran görüntüsü veya hızlı manuel giriş · v${APP_VERSION}`}
         </p>
       </header>
 
@@ -537,7 +575,11 @@ function AddPageInner() {
         </div>
       )}
 
-      {(mode === "chooser" || loading) && (
+      {(mode === "chooser" || loading) &&
+        !(
+          reviewId &&
+          (reviewRoute.state === "loading" || reviewRoute.state === "review")
+        ) && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-2 rounded-2xl border border-white/70 bg-white/70 p-2">
             <button
@@ -671,89 +713,74 @@ function AddPageInner() {
 
       {(mode === "review" || mode === "manual") && draft && (
         <div className="space-y-4">
-          {mode === "review" && parserPayload && (
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => {
-                setEnginePurchase(parserPayload.purchase);
-                setEngineValidation(parserPayload.validation);
-                setEngineImageUrl(draft.imageDataUrl);
-                setEngineRawVision(parserPayload.rawVisionResponse ?? "");
-                setMode("engine-result");
-              }}
-            >
-              Parser detayını göster
-            </Button>
-          )}
-          {mode === "review" &&
-            showDebugClipboard &&
-            parserPayload &&
-            draft.rawText?.trim() && (
-              <CopyAllDebugButton
-                purchase={parserPayload.purchase}
-                validation={parserPayload.validation}
-                ocrText={draft.rawText.trim()}
-                rawVisionResponse={parserPayload.rawVisionResponse ?? ""}
-                analyzeResult={parserPayload}
-                stageTimings={parserPayload.performance}
-              />
-            )}
-          {mode === "review" && ocrSummary && (
-            <OcrResultSummary
-              productCount={ocrSummary.productCount}
-              reviewCount={ocrSummary.reviewCount}
-              totalVerified={ocrSummary.totalVerified}
-              ocrConfidence={ocrSummary.ocrConfidence}
-              mathValidationPassed={ocrSummary.mathValidationPassed}
-              issues={ocrSummary.issues}
-            />
-          )}
-          {mode === "review" && draft.rawText?.trim() && (
-            <OcrTextPanel text={draft.rawText} collapsible />
-          )}
-          {mode === "review" && draft.aiResponseJson?.trim() && (
-            <OcrTextPanel
-              title="Parser sonucu"
-              text={prettyJson(draft.aiResponseJson)}
-              collapsible
-              defaultOpen
-              variant="code"
-              maxHeightClassName="max-h-72"
-            />
-          )}
-          {mode === "review" && (
-            <div className="rounded-2xl border border-white/70 bg-white/75 p-3 text-sm text-muted-foreground">
-              {draft?.parseStatus === "pending_approval"
-                ? "Fişiniz hazır. Onaylamadan önce satırları kontrol edip düzenleyebilirsiniz."
-                : "AI çıkarımı hazır. Kaydetmeden önce düzenleyebilirsiniz."}
-              {correctionsApplied > 0 && (
-                <p className="mt-1 text-teal-800">
-                  Önceki düzeltmen uygulandı ({correctionsApplied}).
-                </p>
-              )}
-            </div>
-          )}
           <ReviewForm
             initial={draft}
             saving={saving}
             deleting={deleting}
             compactProducts={mode === "review"}
+            summaryFirst={mode === "review"}
+            correctionsApplied={correctionsApplied}
+            debugSlot={
+              mode === "review" && showDebugClipboard && parserPayload ? (
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setEnginePurchase(parserPayload.purchase);
+                      setEngineValidation(parserPayload.validation);
+                      setEngineImageUrl(draft.imageDataUrl);
+                      setEngineRawVision(parserPayload.rawVisionResponse ?? "");
+                      setMode("engine-result");
+                    }}
+                  >
+                    Parser detayını göster
+                  </Button>
+                  {draft.rawText?.trim() && (
+                    <CopyAllDebugButton
+                      purchase={parserPayload.purchase}
+                      validation={parserPayload.validation}
+                      ocrText={draft.rawText.trim()}
+                      rawVisionResponse={parserPayload.rawVisionResponse ?? ""}
+                      analyzeResult={parserPayload}
+                      stageTimings={parserPayload.performance}
+                    />
+                  )}
+                  {ocrSummary && (
+                    <OcrResultSummary
+                      productCount={ocrSummary.productCount}
+                      reviewCount={ocrSummary.reviewCount}
+                      totalVerified={ocrSummary.totalVerified}
+                      ocrConfidence={ocrSummary.ocrConfidence}
+                      mathValidationPassed={ocrSummary.mathValidationPassed}
+                      issues={ocrSummary.issues}
+                    />
+                  )}
+                  {draft.rawText?.trim() && (
+                    <OcrTextPanel text={draft.rawText} collapsible />
+                  )}
+                  {draft.aiResponseJson?.trim() && (
+                    <OcrTextPanel
+                      title="Parser sonucu"
+                      text={prettyJson(draft.aiResponseJson)}
+                      collapsible
+                      defaultOpen
+                      variant="code"
+                      maxHeightClassName="max-h-72"
+                    />
+                  )}
+                </>
+              ) : undefined
+            }
             saveLabel={
-              draft?.parseStatus === "pending_approval"
-                ? "Onayla & Kaydet"
-                : undefined
+              awaitingReceiptReview ? "Onayla & Kaydet" : undefined
             }
             deleteLabel={
-              draft?.parseStatus === "pending_approval"
-                ? "Fişi Sil"
-                : "İptal Et"
+              awaitingReceiptReview ? "Fişi Sil" : "İptal Et"
             }
             onDelete={
-              draft?.parseStatus === "pending_approval"
-                ? handleDeletePending
-                : undefined
+              awaitingReceiptReview ? handleDeletePending : undefined
             }
             onCancel={() => {
               setMode("chooser");
@@ -772,6 +799,8 @@ function AddPageInner() {
             Vazgeç
           </Button>
         </div>
+      )}
+        </>
       )}
     </AppShell>
   );

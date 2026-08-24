@@ -1,0 +1,134 @@
+{
+  "rawLines": [
+    "ÇALGIN TURİZM TİCARET LTD. ŞTİ",
+    "TİKİ BEACH BODRUM ŞUBESİ",
+    "YAŞI MAH. ASMA SOK. NO: 38/1",
+    "BODRUM/MUĞLA",
+    "MARMARİS VD: 22509211112",
+    "11-08-2026",
+    "SAAT: 23:46",
+    "İÇECEK",
+    "%10",
+    "*365,00",
+    "TOPKDV",
+    "*33,18",
+    "TOPLAM",
+    "*365,00",
+    "KREDİ KARTI",
+    "SATIŞ",
+    "***** ***** ***** 2393",
+    "TUTAR",
+    "365,00 TL",
+    "AİD: A000000031010",
+    "VISA CREDIT",
+    "ONAY KODU: 216084",
+    "TUTAR KARŞILIĞI MAL VEYA HİZMETİ ALDIM",
+    "BU BELGEYİ SAKLAYINIZ",
+    "Visa payWave",
+    "***SADECE TEMASSIZ***",
+    "ÇALGIN TURİZM TİCARET LİMİTED",
+    "İÇMELER MAH. 331 SK. NO: 3 / Z1 48100 MARMARİS",
+    "48100/MUĞLA"
+  ],
+  "products": [
+    {
+      "rawName": "TİKİ BEACH BODRUM ŞUBESİ",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          1
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "BODRUM/MUĞLA",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          3
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "MARMARİS VD: 22509211112",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": null,
+      "lineTotal": null,
+      "vatRate": null,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          4
+        ],
+        "method": "semantic:product-name-only",
+        "confidence": 0.75
+      }
+    },
+    {
+      "rawName": "İÇECEK",
+      "quantity": 1,
+      "unit": "",
+      "unitPrice": 365,
+      "lineTotal": 365,
+      "vatRate": 10,
+      "discounts": [],
+      "provenance": {
+        "sourceLineIndices": [
+          7,
+          9
+        ],
+        "method": "semantic:product-line",
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "footer": {
+    "subtotal": null,
+    "total": 365,
+    "vatTotal": 33.18,
+    "payments": [
+      {
+        "type": "credit_card",
+        "amount": 365,
+        "rawLabel": "KREDİ KARTI"
+      }
+    ]
+  },
+  "fuel": null,
+  "footerStartIndex": 10,
+  "extractionMs": 1,
+  "vatProvenance": {
+    "value": 33.18,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      11
+    ],
+    "method": "footer:orphan-amount→vat"
+  },
+  "totalProvenance": {
+    "value": 365,
+    "confidence": 0.9,
+    "sourceLineIndices": [
+      13
+    ],
+    "method": "footer:post-vat-total"
+  },
+  "subtotalProvenance": null
+}

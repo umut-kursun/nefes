@@ -11,13 +11,22 @@ describe("shouldRetryWithHigherResolution", () => {
     expect(shouldRetryWithHigherResolution({ consistent: false })).toBe(true);
   });
 
-  it("retries when validation score is below threshold", () => {
+  it("retries when validation score is below threshold and math is not validated", () => {
+    expect(
+      shouldRetryWithHigherResolution({
+        validationScore: LOW_VISION_QUALITY_THRESHOLD - 1,
+        consistent: undefined,
+      })
+    ).toBe(true);
+  });
+
+  it("skips retry when math is consistent even if score is low", () => {
     expect(
       shouldRetryWithHigherResolution({
         validationScore: LOW_VISION_QUALITY_THRESHOLD - 1,
         consistent: true,
       })
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("skips retry when quality is acceptable", () => {

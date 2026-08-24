@@ -13,6 +13,7 @@ import {
 } from "@/lib/categories";
 import { isTobaccoItem } from "@/lib/tobacco-memory";
 import { normalizeTime } from "@/lib/datetime";
+import { classifyPurchaseCategory } from "@/lib/receipt-engine-v2/classification/categoryClassifier";
 import { cleanMerchantName } from "@/lib/receipt-engine-sdk/normalize/cleanMerchantName";
 import { normalizeMerchantName } from "@/lib/merchants";
 import { formatPlate, normalizePlate } from "@/lib/plate";
@@ -153,7 +154,7 @@ function sumTobaccoPackCount(lines: PurchaseLine[]): number {
     .reduce((sum, line) => sum + Math.max(line.quantity ?? 1, 1), 0);
 }
 
-function inferCategoryFromPurchase(
+function resolveCategoryFromPurchase(
   purchase: PurchaseDraft,
   categories: UserCategory[],
   hasFuel: boolean,
@@ -174,39 +175,18 @@ function inferCategoryFromPurchase(
     if (tobaccoCat) return tobaccoCat.id;
   }
 
-  const haystack = [
-    purchase.merchant ?? "",
-    ocrRawText ?? "",
-    ...purchase.provenance.rawTexts,
-  ]
-    .join("\n")
-    .toLowerCase();
+  const classification = classifyPurchaseCategory(
+    purchase,
+    ocrRawText,
+    fuelEvidence
+  );
+  if (classification.categoryId === "diger") return "diger";
 
-  const rules: Array<{ pattern: RegExp; id: string }> = [
-    { pattern: /\b(mepet|metro\s*petrol|metropetrol)\b/i, id: "market" },
-    { pattern: /\bopet\s*market\b/i, id: "market" },
-    { pattern: /\b(shell|bp\b|turcas|petrolculuk|akaryak[iı]t|petrol)\b/i, id: "akaryakit" },
-    { pattern: /\bopet\b/i, id: "market" },
-    { pattern: /\b(migros|bim\b|a101|carrefour|sok\b|macrocenter|marketler)\b/i, id: "market" },
-    {
-      pattern:
-        /\b(starbucks|cafe|kafe|restoran|restaurant|lezzet|burger|mcdonald|yemek|profiterol|profiterol|tatli|tatlı|pastane|dondurma|börek|borek|waffle|kurabiye|tatlı\s*börek)\b/i,
-      id: "yeme_icme",
-    },
-    { pattern: /\b(eczane|pharmacy)\b/i, id: "saglik" },
-    { pattern: /\b(waikiki|lcw|giyim|clothing|magazacilik)\b/i, id: "giyim" },
-    { pattern: /\b(ispark|otopark|parking)\b/i, id: "araba_otopark" },
-  ];
-
-  for (const rule of rules) {
-    if (rule.pattern.test(haystack)) {
-      const found = categories.find((c) => c.id === rule.id);
-      if (found) return found.id;
-    }
-  }
+  const found = categories.find((c) => c.id === classification.categoryId);
+  if (found) return found.id;
 
   return (
-    categories.find((c) => c.id === "market")?.id ??
+    categories.find((c) => c.id === "diger")?.id ??
     categories.find((c) => c.id === "other")?.id ??
     categories[0]?.id ??
     "other"
@@ -504,7 +484,7 @@ export function purchaseDraftToExpenseDraft(
       mergedFuel.plate != null ||
       mergedFuel.stationName != null);
 
-  const category = inferCategoryFromPurchase(purchase, categories, hasFuel, ocrRawText);
+  const category = resolveCategoryFromPurchase(purchase, categories, hasFuel, ocrRawText);
   const tobaccoCategoryId =
     categories.find((c) => isCigaretteCategory(c))?.id ??
     categories.find((c) => c.id === "sigara")?.id ??

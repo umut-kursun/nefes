@@ -1,26 +1,9 @@
 {
-  "isValid": false,
-  "consistent": false,
-  "score": 85,
-  "errors": [
-    {
-      "id": "PaymentSumValidator:PAYMENT_SUM_MISMATCH:payments",
-      "severity": "ERROR",
-      "category": "structural",
-      "code": "PAYMENT_SUM_MISMATCH",
-      "message": "Payment sum does not match receipt total.",
-      "location": {
-        "path": "payments"
-      },
-      "provenance": {
-        "validatorId": "PaymentSumValidator",
-        "purchaseConfidence": 0.714
-      },
-      "suggestedFix": "Check split payment rows against total.",
-      "expected": 61.4,
-      "actual": 60.9
-    }
-  ],
+  "isValid": true,
+  "consistent": true,
+  "analysisStatus": "approved",
+  "score": 100,
+  "errors": [],
   "warnings": [],
   "info": [
     {
@@ -38,11 +21,12 @@
       }
     }
   ],
-  "confidenceAdjustment": -0.15,
-  "overallConfidence": 0.564,
+  "confidenceAdjustment": 0,
+  "overallConfidence": 0.714,
   "provenance": {
     "purchaseConfidence": 0.714,
     "structuralValidators": [
+      "FinancialSafetyValidator",
       "ReceiptTotalValidator",
       "SubtotalValidator",
       "PaymentSumValidator",
@@ -50,7 +34,8 @@
       "LineTotalValidator",
       "QuantityValidator",
       "ChargeValidator",
-      "DiscountValidator"
+      "DiscountValidator",
+      "ApprovalCompletenessValidator"
     ],
     "businessValidators": [
       "MerchantValidator",
@@ -61,7 +46,7 @@
       "UnknownFieldValidator",
       "AnomalyValidator"
     ],
-    "issueCount": 2
+    "issueCount": 1
   },
   "blocking": false
 }

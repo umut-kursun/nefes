@@ -1,0 +1,219 @@
+{
+  "merchant": "Şengül Hediyelik Şenol Şengül",
+  "purchaseDate": {
+    "raw": "2026-08-12",
+    "normalized": "2026-08-12"
+  },
+  "purchaseTime": {
+    "raw": "00:05:00",
+    "normalized": "00:05:00"
+  },
+  "receiptNumber": {
+    "raw": "Fiş No: 0001",
+    "normalized": "Fiş No: 0001"
+  },
+  "currency": {
+    "raw": "TRY",
+    "normalized": "TRY"
+  },
+  "products": [
+    {
+      "name": "ŞENGÜL HEDİYELİK",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:0",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          0
+        ],
+        "rawTexts": [
+          "ŞENGÜL HEDİYELİK"
+        ],
+        "ocrTexts": [
+          "ŞENGÜL HEDİYELİK"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "ŞENOL ŞENGÜL",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:1",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          1
+        ],
+        "rawTexts": [
+          "ŞENOL ŞENGÜL"
+        ],
+        "ocrTexts": [
+          "ŞENOL ŞENGÜL"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "BODRUM/MUĞLA",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:2",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          3
+        ],
+        "rawTexts": [
+          "BODRUM/MUĞLA"
+        ],
+        "ocrTexts": [
+          "BODRUM/MUĞLA"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "BODRUM VD 8060240966",
+      "quantity": 1,
+      "confidence": 0.75,
+      "provenance": {
+        "productBlockId": "semantic:product:3",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          4
+        ],
+        "rawTexts": [
+          "BODRUM VD 8060240966"
+        ],
+        "ocrTexts": [
+          "BODRUM VD 8060240966"
+        ],
+        "classificationRules": [
+          "semantic:product-name-only"
+        ],
+        "confidence": 0.75
+      }
+    },
+    {
+      "name": "HEDİYELİK EŞYA",
+      "quantity": 1,
+      "unitPrice": 1000,
+      "lineTotal": 1000,
+      "vatRate": 20,
+      "confidence": 0.97,
+      "provenance": {
+        "productBlockId": "semantic:product:4",
+        "graphNodeIds": [],
+        "layoutLineIndices": [
+          8,
+          9
+        ],
+        "rawTexts": [
+          "HEDİYELİK EŞYA",
+          "%20 *1.000,00"
+        ],
+        "ocrTexts": [
+          "HEDİYELİK EŞYA",
+          "%20 *1.000,00"
+        ],
+        "classificationRules": [
+          "semantic:product-line"
+        ],
+        "confidence": 0.97
+      }
+    }
+  ],
+  "charges": [],
+  "discounts": [],
+  "payments": [
+    {
+      "label": "Banka/Kredi Kartı *1.000,00",
+      "amount": 1000,
+      "confidence": 0.82,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "payment",
+        "confidence": 0.82,
+        "layoutLineIndices": [],
+        "extractionMethod": "semantic:payment:0",
+        "rawLineCount": 20
+      }
+    }
+  ],
+  "vatSummary": [
+    {
+      "label": "TOPKDV",
+      "amount": 166.67,
+      "confidence": 0.9,
+      "provenance": {
+        "footerBlockId": "footer:semantic",
+        "graphNodeIds": [],
+        "semanticKind": "vat",
+        "confidence": 0.9,
+        "layoutLineIndices": [
+          11
+        ],
+        "extractionMethod": "footer:orphan-amount→vat",
+        "rawLineCount": 20
+      }
+    }
+  ],
+  "subtotal": null,
+  "total": {
+    "label": "TOPLAM",
+    "amount": 1000,
+    "confidence": 0.9,
+    "provenance": {
+      "footerBlockId": "footer:semantic",
+      "graphNodeIds": [],
+      "semanticKind": "total",
+      "confidence": 0.9,
+      "layoutLineIndices": [
+        13
+      ],
+      "extractionMethod": "footer:post-vat-total",
+      "rawLineCount": 20
+    }
+  },
+  "confidence": 0.55,
+  "fuel": null,
+  "provenance": {
+    "metadataBlockId": "metadata:v2",
+    "footerBlockId": "footer:semantic",
+    "blockDocumentConfidence": 0.55,
+    "rawTexts": [
+      "ŞENGÜL HEDİYELİK",
+      "ŞENOL ŞENGÜL",
+      "GÜMÜŞLÜK MAH. 5231 SK. 14/1",
+      "BODRUM/MUĞLA",
+      "BODRUM VD 8060240966",
+      "12.08.2026",
+      "Saat: 00:05",
+      "Fiş No: 0001",
+      "HEDİYELİK EŞYA",
+      "%20 *1.000,00",
+      "KDV",
+      "*166,67",
+      "TOPLAM",
+      "*1.000,00",
+      "Banka/Kredi Kartı *1.000,00",
+      "T.VAKIFLAR BANKASI T.A.O.",
+      "İŞYERİ: 02850000813674",
+      "BATCH NO: VB-000243",
+      "POS: 02089935",
+      "000001"
+    ]
+  }
+}
